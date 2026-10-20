@@ -1,52 +1,41 @@
-# CODE76 ComboPOS preview
+# CODE76 POS — interactive workspace preview
 
-Repository: https://github.com/CODE76-POS/code76-ComboPos-saas
+Open **CODE76 POS live app** in Arena's **Live Preview** panel, port **3000**. This is the actual interactive application, not a screenshot or a file preview. Use the managed preview panel; the bare sandbox host may require a hosting traffic/access token.
 
-Inspected revision: `77b5cfccf9168fa851125b7dfb564bf102aae22b` (main).
+## Test the requested routes
 
-## Open and test
+1. Open the base URL `/`: it always shows public CODE76 marketing with **Sign In / Register**, even if already signed in. `/index.html` also works.
+2. Use **⚡ CEO / Admin** for the seeded, local-only demo login, or try the sign-in/register form with test-only details.
+3. Complete or skip the guided setup. Its theme/text/company/0–3 real item workflow is retained.
+4. Inside POS, select **Business Landing Page** (or the **Business Page** shortcut). The URL becomes `/#/pos/landing_page_builder`.
+5. Open the business-page gear to edit **Settings → Business Landing Page Settings**. These settings do not alter the CODE76 website. My Company and Inventory control merchant content.
+6. Choose **CODE76 Site**: the base URL returns to public marketing while you remain signed in. **Enter POS App** explicitly opens the workspace again.
+7. Sign out, then use Back or request the internal builder URL: the public sign-in page appears, not merchant content. `?view=storefront` no longer opens a public storefront.
 
-Open **CODE76 ComboPOS** in Arena's **Live Preview** panel (port 3000). The bare sandbox URL is access-protected; use the authenticated preview panel.
+Optional sample data is under **Demo Data**. Use only test records. **One payment** replaces the old Exact Pay label. Checkout payment methods are bookkeeping fields, not a live processor. Nothing from the tool's isolated test browser populates your own preview browser.
 
-1. On the landing page, choose **⚡ CEO / Admin** under Quick 1-Click Demo Profiles.
-2. Choose **Skip setup** if you only want to explore.
-3. Choose **Demo Data → Yes, Load Rich Demo Data** to populate the 12-item catalog and sample sales, expenses, customers, and invoices.
-4. In **Sales POS**, add an item, choose **Exact Pay**, then **Complete Sale & Print Receipt**. A feedback modal also opens shortly afterward; cancel it to return to the receipt.
-5. Explore **Inventory**, **Sales History**, and **Analytics & P&L**. The navigation tabs scroll horizontally.
-
-Demo data loaded in the automated test browser does not populate your own browser. Use step 3 in your preview.
-
-## Setup / restart
+## Low-resource start / restart
 
 ```sh
 npm ci
 npm run lint
-node --import tsx --test src/utils/calculations.test.ts
+node --import tsx --test src/utils/calculations.test.ts qa/onboarding/feature.test.ts qa/routing/routing-seo.test.ts
 NODE_OPTIONS=--max-old-space-size=768 npm run build
 NODE_ENV=production DISABLE_HMR=true PORT=3000 NODE_OPTIONS=--max-old-space-size=384 npm start
 ```
 
-The preview uses a single production server, without development file watchers. No Gemini keys were saved or used. Gemini-dependent endpoints return the repository's built-in demo responses when no key is configured.
+One production server is retained, without development watchers. No supplied Gemini key was used or saved. `/api/health` reports whether an API key is loaded; current checks use no live AI.
 
-## Verified
+## Production SEO
 
-- TypeScript check: passed.
-- Existing calculation tests: 7/7 passed.
-- Production build: passed after adding the missing `react-is` runtime peer dependency used by Recharts.
-- Browser smoke test: landing page, one-click CEO login, sample data loading, checkout, receipt, inventory stock deduction (22 → 21), and analytics rendering.
-- Checkout test: one terminal for $449.25, receipt REC-7604; this was a local demo transaction, not a real payment.
-- No browser console errors during the checked app flow.
-- Local `/api/health`: healthy, `hasApiKey: false`.
-- The public sandbox URL returns an E2B traffic-token requirement outside Arena; authenticated external preview rendering was not independently verified.
+Set `PUBLIC_SITE_URL` to the verified public production origin before deploying/building; the Node server otherwise uses the validated current request origin. Local and `*.e2b.app` previews are intentionally noindex. Use `PUBLIC_SITE_INDEXING=false` for other staging environments. Public canonical/social/schema metadata, robots and sitemap must never point to a merchant hash route.
 
-## Local changes
+See [routing/SEO changes](ROUTING-SEO-UPDATE.md), [page ownership and access boundaries](docs/LANDING-PAGES.md), and [current evidence](qa/routing/README.md).
 
-- Added `react-is` to `package.json` and generated `package-lock.json`.
-- Added `.npmrc` to work around npm 10's optional-peer dependency resolver crash.
-- No application business logic changed; nothing pushed upstream.
+## Scope and limits
 
-## Important limitations
+The application serves root/index with HTTP 200 and accepts the managed preview host. Hash routing does **not** fix authorization rejected by a hosting proxy before the request reaches Node; that is an infrastructure setting.
 
-This revision is a browser-local POS prototype, not a production multi-tenant SaaS backend. Business records are saved in localStorage rather than a shared database. Demo account verification and role selection are client-side, and registered account passwords are stored in browser storage. Do not enter real passwords, customer data, or payment details. Payment methods are bookkeeping fields; no live payment processor was configured or tested. Gemini responses in this preview are templates, not live model output. Before enabling live AI, review model names, authorization, input limits, and quota controls. The marketing and insights endpoints hardcode a different model name from chat.
+This remains a browser-local prototype: merchant data lives in localStorage, auth/roles are client-side, passwords are stored in browser storage, and a full reload requires sign-in again. The builder guard is not production server/tenant security. Do not use real credentials, customer information or payment details. No public merchant storefront is published. The large initial JS bundle remains a known build warning.
 
-The build also warns about a large initial JavaScript bundle (~1.37 MB, ~345 KB gzip) and a future Vite configuration compatibility change. Neither blocked this preview.
+Changes are committed locally on `feat/guided-setup-and-landing-isolation`. GitHub publication still requires authenticated write access; no remote update is claimed.

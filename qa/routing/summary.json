@@ -1,0 +1,53 @@
+{
+  "scope": "public CODE76 root, authenticated-only internal landing_page_builder, hash routing and SEO",
+  "date": "2026-10-20",
+  "unit": {
+    "total": 120,
+    "passed": 120,
+    "new_routing_seo": 62,
+    "prior_feature_and_calculation_regressions": 58
+  },
+  "production_http": {
+    "total": 21,
+    "passed": 21
+  },
+  "development_preview_host_http": {
+    "total": 5,
+    "passed": 5
+  },
+  "browser": {
+    "raw_attempts": 33,
+    "distinct_cases": 31,
+    "final_passed": 31,
+    "final_failed": 0,
+    "console_errors": 0
+  },
+  "typecheck": "pass",
+  "production_build": "pass",
+  "remaining_build_warning": "large initial JavaScript chunk",
+  "runtime": {
+    "port": 3000,
+    "host": "0.0.0.0",
+    "mode": "production",
+    "health": {
+      "status": "ok",
+      "timestamp": "2026-10-20T13:06:18.921Z",
+      "hasApiKey": false,
+      "system": "CODE76 POS Enterprise Server"
+    }
+  },
+  "api_keys_used": false,
+  "live_payments_or_emails": false,
+  "limitations": [
+    "client-side/browser-local prototype authentication, not server/tenant authorization",
+    "upstream hosting-proxy access controls are outside React routing",
+    "production public origin must be configured/verified; previews are noindex"
+  ],
+  "initial_findings_resolved": [
+    "Vite canonical-relative-asset directory build error: source canonical is vite-ignore",
+    "missing favicon: own icon added",
+    "390px public-footer link row overflow (404px document): wrapped to fit",
+    "one registration check used the wrong button label; assertion corrected after snapshot inspection"
+  ],
+  "publication": "local feature branch; GitHub write authentication previously unavailable; no remote update claimed"
+}

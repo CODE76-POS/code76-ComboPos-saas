@@ -1,9 +1,12 @@
 import express from 'express';
-import { createServer as createViteServer } from 'vite';
+import { createServer as createViteServer, type ViteDevServer } from 'vite';
 import dotenv from 'dotenv';
 import { GoogleGenAI, ThinkingLevel } from '@google/genai';
 
 import path from 'path';
+import { readFile } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
+import { escapeMarkup, isPublicIndexable, PRIVATE_ROBOTS, renderPublicSeo, requestSiteUrl } from './src/utils/siteSeo.ts';
 import { catalogChatContext } from './src/utils/landingPages.ts';
 import { CODE76_SITE } from './src/config/code76Site.ts';
 import { businessCatalogReply } from './src/utils/storefrontChat.ts';
@@ -13,7 +16,7 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 
-// Enable Permissive CORS and cross-origin headers to prevent 403 Forbidden errors
+// Application CORS only. Upstream hosting/preview authorization is separate and cannot be fixed by CORS or React routing.
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
@@ -25,6 +28,7 @@ app.use((req, res, next) => {
 });
 
 app.use(express.json({ limit: '10mb' }));
+app.use('/api', (_req, res, next) => { res.set('X-Robots-Tag', PRIVATE_ROBOTS); next(); });
 
 // Server-side Gemini initialization
 const apiKey = process.env.GEMINI_API_KEY;
@@ -319,22 +323,77 @@ Return JSON with:
   }
 });
 
-// Mount Vite middleware for SPA frontend in development
+// API misses must never receive the marketing HTML shell.
+app.use('/api', (_req, res) => { res.status(404).json({ error: 'API endpoint not found' }); });
+
+// Explicit root/index responses and a hash-routed SPA fallback. These handlers do not
+// control a hosting proxy that rejects a request before it reaches this application.
 async function startServer() {
   const isProd = process.env.NODE_ENV === 'production';
+  const rootDir = path.dirname(fileURLToPath(import.meta.url));
+  const templatePath = path.join(rootDir, isProd ? 'dist/index.html' : 'index.html');
+  const productionTemplate = isProd ? await readFile(templatePath, 'utf8') : '';
+  let vite: ViteDevServer | undefined;
+
+  const siteInfo = (req: express.Request) => {
+    const headers = {
+      host: req.get('host'), forwardedHost: req.get('x-forwarded-host'),
+      forwardedProto: req.get('x-forwarded-proto'), encrypted: req.protocol === 'https',
+    };
+    const actualOrigin = requestSiteUrl(headers);
+    const canonical = requestSiteUrl(headers, process.env.PUBLIC_SITE_URL);
+    const indexable = isPublicIndexable(actualOrigin, process.env.PUBLIC_SITE_INDEXING)
+      && isPublicIndexable(canonical, process.env.PUBLIC_SITE_INDEXING);
+    return { canonical, indexable };
+  };
+
+  app.get('/robots.txt', (req, res) => {
+    const { canonical, indexable } = siteInfo(req);
+    const rules = indexable
+      ? `User-agent: *\nAllow: /\nDisallow: /api/\nDisallow: /pos/\nDisallow: /landing_page_builder\nSitemap: ${canonical}sitemap.xml\n`
+      : 'User-agent: *\nDisallow: /\n';
+    res.type('text/plain').send(rules);
+  });
+  app.get('/sitemap.xml', (req, res) => {
+    const { canonical } = siteInfo(req);
+    // Only the public product root is discoverable; no workspace or merchant URLs.
+    res.type('application/xml').send(`<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${escapeMarkup(canonical)}</loc></url></urlset>`);
+  });
+
   if (!isProd) {
-    const vite = await createViteServer({
+    vite = await createViteServer({
+      root: rootDir,
       server: { middlewareMode: true, hmr: process.env.DISABLE_HMR !== 'true' },
-      appType: 'spa',
+      appType: 'custom',
     });
     app.use(vite.middlewares);
-  } else {
-    app.use(express.static('dist'));
-    // Fallback to index.html for client-side SPA routing (prevents 403 / 404 on sub-paths)
-    app.get('*', (req, res) => {
-      res.sendFile(path.resolve(process.cwd(), 'dist', 'index.html'));
-    });
   }
+
+  const sendIndex: express.RequestHandler = async (req, res, next) => {
+    try {
+      const { canonical, indexable } = siteInfo(req);
+      const publicPath = req.path === '/' || req.path === '/index.html';
+      const mayIndex = indexable && publicPath;
+      let html = renderPublicSeo(isProd ? productionTemplate : await readFile(templatePath, 'utf8'), canonical, mayIndex);
+      if (vite) html = await vite.transformIndexHtml(req.originalUrl, html);
+      // A development transform must not override per-request/proxy-aware metadata.
+      html = renderPublicSeo(html, canonical, mayIndex);
+      res.set('Cache-Control', 'no-cache');
+      if (!mayIndex) res.set('X-Robots-Tag', PRIVATE_ROBOTS);
+      res.status(200).type('html').send(html);
+    } catch (error) {
+      if (vite && error instanceof Error) vite.ssrFixStacktrace(error);
+      next(error);
+    }
+  };
+
+  // Register before static files: /index.html needs the same canonical/SEO as /.
+  app.get(['/', '/index.html'], sendIndex);
+  if (isProd) app.use(express.static(path.join(rootDir, 'dist'), { index: false, redirect: false }));
+  app.get('*', (req, res, next) => {
+    if (/\.[a-z0-9]{1,8}$/i.test(req.path)) { res.status(404).type('text').send('File not found'); return; }
+    return sendIndex(req, res, next);
+  });
 
   app.listen(port, '0.0.0.0', () => {
     console.log(`CODE76 POS server running on http://0.0.0.0:${port}`);

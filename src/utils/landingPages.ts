@@ -2,7 +2,6 @@ import type { CompanyData, CustomerReview, ProductItem } from '../types/index.ts
 import { CODE76_SITE } from '../config/code76Site.ts';
 import { blankMerchantCompany, isCompanyConfigured } from './onboarding.ts';
 
-export type AppView = 'landing' | 'pos' | 'storefront';
 export type LandingSurface = 'code76' | 'business';
 export interface MerchantPageData {
   company: CompanyData;
@@ -21,21 +20,6 @@ export function landingPageData(surface: LandingSurface, merchant: MerchantPageD
     products: merchant.products,
     reviews: merchant.reviews,
   };
-}
-
-export function initialView(search: string, authenticated = false): AppView {
-  const view = new URLSearchParams(search).get('view');
-  if (view === 'storefront') return 'storefront';
-  if (view === 'landing') return 'landing';
-  if (view === 'pos') return 'pos'; // App renders the sign-in page if no user is authenticated.
-  return authenticated ? 'pos' : 'landing';
-}
-
-export function viewUrl(view: AppView, href: string): string {
-  const url = new URL(href);
-  url.searchParams.set('view', view);
-  url.hash = '';
-  return url.toString();
 }
 
 /** Only customer-visible information is sent to either landing-page assistant. */

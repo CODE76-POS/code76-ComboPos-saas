@@ -1,5 +1,7 @@
 # CODE76 ComboPOS — guided setup & independent landing pages
 
+> **Current routing/access update:** The root URL now always shows the public CODE76 marketing/sign-in site. The merchant Business Landing Page is **authenticated-only** at `/#/pos/landing_page_builder`; the old anonymous storefront design is superseded. See [the current routing/SEO update](ROUTING-SEO-UPDATE.md) and [new evidence](qa/routing/README.md). The verification counts below describe the preceding onboarding/isolation feature pass.
+
 ## Implemented
 
 - **Appearance first:** light/dark cards with real visual examples, four text sizes, a live sample and immediately saved POS preferences. Settings and the navigation theme toggle now use the same persisted theme source.
@@ -36,7 +38,7 @@ The earlier [QA checklist](QA-CHECKLIST.md) remains a historical baseline. This 
 
 ## Workspace preview
 
-The **CODE76 ComboPOS** Live Preview is running on port 3000 with the rebuilt production app. For a fresh browser, choose **CEO / Admin** on the sign-in page to try setup; for an existing session use **My Company → Open guided setup**.
+The **CODE76 POS live app** Live Preview is running on port 3000 with the rebuilt production app. For a fresh browser, choose **CEO / Admin** on the sign-in page to try setup; for an existing session use **My Company → Open guided setup**.
 
 [Dark setup preview](preview-guided-setup.png) · [Light setup preview](preview-guided-setup-light.png) · [Mobile setup](preview-guided-setup-mobile.png) · [First inventory](preview-first-inventory.png) · [Icon guide](preview-setup-icon-guide.png) · [Payment controls](preview-sales-payments.png) · [Merchant page example](preview-business-page.png)
 
@@ -56,6 +58,6 @@ git push -u origin feat/guided-setup-and-landing-isolation
 
 Do not paste credentials or API keys into chat. If applying the downloadable patch to another checkout, start from the recorded base or review any upstream conflicts.
 
-## Remaining storefront limitation
+## Current private-builder limitation
 
-The business page is still a **browser-local prototype**. Its preview URL selects the correct page but does not publish one browser’s catalog to other visitors/devices. Public storefront publishing, secure tenant storage and a real product-site lead backend require backend work outside this UI/separation update. Previously mixed historical leads/metrics were preserved rather than guessed at, moved or deleted; new writes are isolated going forward.
+The Business Landing Page is an authenticated, internal POS preview, not a public storefront. Its private link does not publish one browser’s catalog to other visitors/devices. Client-side authentication is still a browser-local prototype, not production server/tenant security. Historical mixed leads/metrics were preserved rather than guessed at, moved or deleted; new writes remain isolated. See [current access boundaries](docs/LANDING-PAGES.md).

@@ -152,7 +152,7 @@ export const CompanyQAOnboardingModal: React.FC = () => {
               {stage === 'appearance' ? 'Make yourself comfortable.' : stage === 'company' ? 'Introduce your business.' : stage === 'inventory' ? 'Your first sale starts here.' : 'You’re ready. Here’s your map.'}
             </h2>
             <p id="setup-description">
-              {stage === 'appearance' ? 'Choose a look and text size that feel right. These preferences apply to your POS workspace—not either public landing page.'
+              {stage === 'appearance' ? 'Choose a look and text size that feel right. These preferences apply to your POS workspace—not the CODE76 website or your Business Landing Page.'
                 : stage === 'company' ? 'Your details personalize receipts, invoices and your own Business Landing Page. They never replace the CODE76 main site.'
                 : stage === 'inventory' ? 'Add up to three products or services now. One is a great start; all of this can also be done later in Inventory.'
                 : 'Keep these icons in mind. Settings, platform guidance and the full manual are always available in the navigation.'}

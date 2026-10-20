@@ -477,7 +477,7 @@ export const SettingsPlatform: React.FC = () => {
             <div className="space-y-4">
               <div>
                 <h3 className="text-base font-bold text-slate-100">Business Landing Page & Chatbot Settings</h3>
-                <p className="text-xs text-slate-400 mt-2">These settings affect only your merchant storefront. They never change the CODE76 main site or its sign-in page.</p>
+                <p className="text-xs text-slate-400 mt-2">These settings affect only your private Business Landing Page inside the POS. They never change the CODE76 main site or its sign-in page, and do not publish a public storefront.</p>
                 <p className="text-xs text-slate-400">
                   Configure hero headlines, AI sales assistant, slideshow speed, and referral reward text.
                 </p>

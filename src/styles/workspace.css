@@ -1,4 +1,4 @@
-/* POS preferences are deliberately scoped. Neither public landing page inherits them. */
+/* POS preferences are deliberately scoped. Neither landing-page surface inherits them. */
 .pos-workspace { --pos-text-scale: 1; --pos-bg: #020617; --pos-panel: #0f172a; --pos-soft: #172239; --pos-line: #2a3950; --pos-ink: #edf4ff; --pos-muted: #9aadc3; --pos-accent: #5eead4; --pos-accent-soft: #113a39; }
 .pos-workspace[data-text-size="compact"] { --pos-text-scale: .9; }
 .pos-workspace[data-text-size="large"] { --pos-text-scale: 1.15; }

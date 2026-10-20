@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import {
   AppSettings,
   AuditLog,
@@ -34,7 +34,7 @@ import {
 
 import { mergeAppSettings } from '../utils/businessPageSettings.ts';
 import { EMPTY_BUSINESS_METRICS } from '../config/businessPage.ts';
-import { initialView, viewUrl } from '../utils/landingPages.ts';
+import { AppRoute, AppView, parseAppRoute, viewUrl } from '../utils/appRouting.ts';
 import { isCompanyConfigured, readSetupProgress } from '../utils/onboarding.ts';
 
 interface POSContextType {
@@ -73,8 +73,8 @@ interface POSContextType {
   // App & View State
   currentUser: AuthUser | null;
   setCurrentUser: React.Dispatch<React.SetStateAction<AuthUser | null>>;
-  activeView: 'pos' | 'landing' | 'storefront';
-  setActiveView: (view: 'pos' | 'landing' | 'storefront') => void;
+  activeView: AppView;
+  setActiveView: (view: AppView) => void;
   activePlatform: PlatformId;
   setActivePlatform: (p: PlatformId) => void;
   viewportMode: 'desktop' | 'laptop' | 'tablet' | 'phone';
@@ -176,26 +176,43 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const theme = settings.appearance.theme;
   const [settingsSection, setSettingsSection] = useState<SettingsSection>('payments');
 
-  // Active user: defaults to null on clean load, landing page first
-  const [currentUser, setCurrentUser] = useState<AuthUser | null>(initial?.currentUser || null);
+  // Authentication stays explicit. Saved merchant data is not an authenticated session.
+  const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
 
-  const [activeView, setActiveViewState] = useState<'pos' | 'landing' | 'storefront'>(() =>
-    initialView(typeof window === 'undefined' ? '' : window.location.search, !!initial?.currentUser)
-  );
-  const setActiveView = useCallback((view: 'pos' | 'landing' | 'storefront') => {
-    setActiveViewState(view);
+  // A small hash router: no hosting rewrite is needed for /#/pos/... links.
+  // The base URL and normal marketing section anchors always select the public site.
+  const [route, setRoute] = useState<AppRoute>(() => parseAppRoute(typeof window === 'undefined' ? '' : window.location.hash));
+  const routeRef = useRef(route);
+  const activeView = route.view;
+  const activePlatform = route.platform;
+  const navigate = useCallback((nextRoute: AppRoute) => {
+    routeRef.current = nextRoute;
+    setRoute(nextRoute);
     if (typeof window !== 'undefined') {
-      const next = viewUrl(view, window.location.href);
-      if (next !== window.location.href) window.history.pushState({ view }, '', next);
+      const next = viewUrl(nextRoute.view, window.location.href, nextRoute.platform);
+      if (next !== window.location.href) window.history.pushState({ route: nextRoute }, '', next);
       window.scrollTo({ top: 0 });
     }
   }, []);
+  const setActiveView = useCallback((view: AppView) => {
+    navigate({ view, platform: view === 'pos' ? routeRef.current.platform : 'selling' });
+  }, [navigate]);
+  const setActivePlatform = useCallback((platform: PlatformId) => {
+    navigate({ view: 'pos', platform });
+  }, [navigate]);
   useEffect(() => {
-    const onPopState = () => setActiveViewState(initialView(window.location.search, !!currentUser));
-    window.addEventListener('popstate', onPopState);
-    return () => window.removeEventListener('popstate', onPopState);
-  }, [currentUser]);
-  const [activePlatform, setActivePlatform] = useState<PlatformId>('selling');
+    const readRoute = () => {
+      const next = parseAppRoute(window.location.hash);
+      routeRef.current = next;
+      setRoute(next);
+    };
+    window.addEventListener('popstate', readRoute);
+    window.addEventListener('hashchange', readRoute);
+    return () => {
+      window.removeEventListener('popstate', readRoute);
+      window.removeEventListener('hashchange', readRoute);
+    };
+  }, []);
   const [viewportMode, setViewportMode] = useState<'desktop' | 'laptop' | 'tablet' | 'phone'>('desktop');
 
   // Modals
@@ -1048,6 +1065,13 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const logoutUser = () => {
     logAuditAction('User Logged Out', `User ${currentUser?.email} signed out`);
     setCurrentUser(null);
+    setCompanyQAModalOpen(false);
+    setDemoWarningOpen(false);
+    setHoverHelpPlatform(null);
+    setMarketingModalItem(null);
+    setReceiptModalSale(null);
+    setReviewModalSale(null);
+    setLoginModalOpen(false);
     setActiveView('landing');
   };
 

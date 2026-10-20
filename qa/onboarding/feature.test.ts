@@ -2,7 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { blankMerchantCompany, emptyStarterProduct, isCompanyConfigured, makeStarterProduct, readSetupProgress, SETUP_STORAGE_KEY, TEXT_SIZE_OPTIONS, writeSetupProgress } from '../../src/utils/onboarding.ts';
-import { catalogChatContext, initialView, landingPageData, viewUrl } from '../../src/utils/landingPages.ts';
+import { catalogChatContext, landingPageData } from '../../src/utils/landingPages.ts';
+import { parseAppRoute, resolveAppSurface, viewUrl } from '../../src/utils/appRouting.ts';
 import { BUSINESS_PAGE_DEFAULTS, LEGACY_CODE76_PAGE_DEFAULTS } from '../../src/config/businessPage.ts';
 import { CODE76_SITE, CODE76_SITE_STORAGE_KEY } from '../../src/config/code76Site.ts';
 import { mergeAppSettings, migrateBusinessPageSettings } from '../../src/utils/businessPageSettings.ts';
@@ -111,12 +112,16 @@ test('public marketing configuration has no import dependency on merchant page d
   assert.ok(!source('src/config/code76Site.ts').includes("initialData.ts"));
   assert.ok(!source('src/data/code76SiteContent.ts').includes("initialData.ts"));
 });
-test('storefront query opens the business page without a POS login', () => assert.equal(initialView('?view=storefront', false), 'storefront'));
-test('CODE76 query always selects the product site', () => assert.equal(initialView('?view=landing', true), 'landing'));
-test('invalid routes fall back safely', () => { assert.equal(initialView('?view=bogus', false), 'landing'); assert.equal(initialView('', true), 'pos'); });
-test('page links preserve deployment paths, select the correct view and clear old anchors', () => {
-  const url = new URL(viewUrl('storefront', 'https://example.com/preview/?locale=en#portal'));
-  assert.equal(url.pathname, '/preview/'); assert.equal(url.searchParams.get('view'), 'storefront'); assert.equal(url.searchParams.get('locale'), 'en'); assert.equal(url.hash, '');
+test('legacy storefront query cannot select an anonymous business page', () => assert.equal(resolveAppSurface(parseAppRoute(''), false), 'code76'));
+test('base URL always selects the CODE76 product site, including for signed-in users', () => assert.equal(resolveAppSurface(parseAppRoute(''), true), 'code76'));
+test('invalid routes and unauthenticated POS requests safely show the public site', () => {
+  assert.equal(parseAppRoute('#/bogus').view, 'landing');
+  assert.equal(resolveAppSurface(parseAppRoute('#/pos/landing_page_builder'), false), 'code76');
+});
+test('private page links preserve deployment paths and unrelated parameters using hash routing', () => {
+  const url = new URL(viewUrl('pos', 'https://example.com/preview/?locale=en&view=storefront#portal', 'landing_page_builder'));
+  assert.equal(url.pathname, '/preview/'); assert.equal(url.searchParams.has('view'), false);
+  assert.equal(url.searchParams.get('locale'), 'en'); assert.equal(url.hash, '#/pos/landing_page_builder');
 });
 test('business chat excludes cost prices, tax IDs and non-public reviews', () => {
   const context = catalogChatContext('business', merchant);

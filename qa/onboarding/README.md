@@ -1,5 +1,7 @@
 # Guided setup and landing-page separation verification
 
+> **Historical feature evidence:** The anonymous-storefront route in the original browser pass has been superseded by the authenticated-only `/#/pos/landing_page_builder` requirement. Current route/SEO tests and evidence are in [../routing/README.md](../routing/README.md). The four route expectations in `feature.test.ts` now follow that policy; other feature regressions are retained.
+
 This is a **focused feature pass**, not a production-readiness certification.
 
 | Check | Final result |

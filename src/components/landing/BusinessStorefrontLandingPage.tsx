@@ -43,7 +43,8 @@ import {
   getCustomerReviewAvatar,
   getDefaultCatalogImageAndEmoji,
 } from '../../data/catalogKnowledgeBase.ts';
-import { landingPageData, viewUrl } from '../../utils/landingPages.ts';
+import { landingPageData } from '../../utils/landingPages.ts';
+import { viewUrl } from '../../utils/appRouting.ts';
 
 export const BusinessStorefrontLandingPage: React.FC = () => {
   const {
@@ -119,18 +120,19 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
     return () => clearInterval(interval);
   }, [slideshowItems, settings.landingPage.slideshowSpeedMs]);
 
-  // Track page visit once on mount
+  // Private owner-preview visits only; this component never tracks anonymous visitors.
   useEffect(() => {
+    if (!currentUser) return;
     setLandingMetrics((prev) => ({
       ...prev,
       visitors: prev.visitors + 1,
     }));
-  }, [setLandingMetrics]);
+  }, [currentUser, setLandingMetrics]);
 
   const handleGenerateReferral = (e: React.FormEvent) => {
     e.preventDefault();
     if (!referralName.trim()) return;
-    const url = new URL(getPublicShareUrl());
+    const url = new URL(getInternalPreviewUrl());
     url.searchParams.set('ref', referralName.trim());
     setGeneratedReferralLink(url.toString());
   };
@@ -208,11 +210,17 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
     }, 1400);
   };
 
-  // This selects the business page. It does not publish browser-local data to other devices.
-  const getPublicShareUrl = () => typeof window === 'undefined' ? '' : viewUrl('storefront', window.location.href);
+  // This link remains inside the authenticated POS. It is NOT a public storefront.
+  const getInternalPreviewUrl = () => typeof window === 'undefined' ? '' : viewUrl('pos', window.location.href, 'landing_page_builder');
+
+  // Native #section links would overwrite the hash route; scroll without leaving the builder.
+  const scrollToSection = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    document.getElementById(event.currentTarget.hash.slice(1))?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
 
   const handleCopyStoreLink = () => {
-    const url = getPublicShareUrl();
+    const url = getInternalPreviewUrl();
     navigator.clipboard?.writeText(url);
     setCopiedStoreLink(true);
     setTimeout(() => setCopiedStoreLink(false), 2000);
@@ -239,6 +247,9 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
   const approvedReviews = displayReviews.filter((r) => r.isApprovedForLanding);
   const averageRating = approvedReviews.length ? (approvedReviews.reduce((total, review) => total + review.rating, 0) / approvedReviews.length).toFixed(1) : null;
 
+  // Defence in depth if this component is accidentally mounted outside App's guard.
+  if (!currentUser) return null;
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-teal-500 selection:text-white pb-24">
       {/* Top Announcement Bar */}
@@ -251,7 +262,7 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
         </span>
       </div>}
 
-      {/* Storefront Public Navigation Bar */}
+      {/* Authenticated Business Landing Page preview navigation */}
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-wrap gap-3 items-center justify-between border-b border-slate-800/80 sticky top-0 bg-slate-950/90 backdrop-blur-md z-40">
         <div className="flex items-center gap-3">
           {displayCompany.logoUrl ? (
@@ -277,24 +288,24 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
 
         {/* Top Storefront Menu */}
         <div className="hidden lg:flex items-center gap-6 text-xs text-slate-300 font-medium">
-          <a href="#featured" className="hover:text-teal-400 transition">Featured Items</a>
-          <a href="#matcher" className="hover:text-teal-400 transition">Browse Catalog</a>
-          <a href="#matcher" className="hover:text-teal-400 transition">Product Catalog</a>
-          <a href="#reviews" className="hover:text-teal-400 transition">Customer Reviews</a>
-          {settings.landingPage.referralBonusText.trim() && <a href="#referrals" className="hover:text-teal-400 transition">Referral Rewards</a>}
-          <a href="#contact" className="hover:text-teal-400 transition">Contact Store</a>
+          <a href="#featured" onClick={scrollToSection} className="hover:text-teal-400 transition">Featured Items</a>
+          <a href="#matcher" onClick={scrollToSection} className="hover:text-teal-400 transition">Browse Catalog</a>
+          <a href="#matcher" onClick={scrollToSection} className="hover:text-teal-400 transition">Product Catalog</a>
+          <a href="#reviews" onClick={scrollToSection} className="hover:text-teal-400 transition">Customer Reviews</a>
+          {settings.landingPage.referralBonusText.trim() && <a href="#referrals" onClick={scrollToSection} className="hover:text-teal-400 transition">Referral Rewards</a>}
+          <a href="#contact" onClick={scrollToSection} className="hover:text-teal-400 transition">Contact Store</a>
         </div>
 
         {/* Quick Actions */}
         <div className="flex items-center gap-2">
           <button
-            aria-label="Open business page preview link"
+            aria-label="Open private business page link"
             onClick={() => setShareModalOpen(true)}
             className="px-3 py-2 rounded-xl bg-teal-500/15 hover:bg-teal-500/25 text-teal-300 border border-teal-500/40 text-xs font-bold transition flex items-center gap-1.5 shadow-xs cursor-pointer active:scale-95"
-            title="Share this public store catalog link"
+            title="Copy a private workspace link — sign-in required"
           >
             <Share2 className="w-3.5 h-3.5 text-teal-400" />
-            <span className="hidden sm:inline">Share Store</span>
+            <span className="hidden sm:inline">Private Link</span>
           </button>
 
           {currentUser ? (
@@ -328,6 +339,10 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
           )}
         </div>
       </nav>
+
+      <div className="border-b border-teal-800/60 bg-teal-950/70 px-4 py-3 text-center text-xs text-teal-100" role="note">
+        <strong>Private Business Landing Page preview.</strong> Only signed-in POS users can access this screen. This page is not published to the public website.
+      </div>
 
       {/* Clean State Info Banner */}
       {isCleanEmptyCatalog && (
@@ -380,14 +395,14 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
 
           <div className="pt-4 flex flex-wrap items-center justify-center gap-3">
             <a
-              href="#featured"
+              href="#featured" onClick={scrollToSection}
               className="px-6 py-3 rounded-2xl bg-teal-600 hover:bg-teal-500 text-white font-extrabold text-xs shadow-lg shadow-teal-600/30 transition flex items-center gap-2 cursor-pointer"
             >
               <ShoppingBag className="w-4 h-4" />
               <span>Browse Featured Items</span>
             </a>
             <a
-              href="#matcher"
+              href="#matcher" onClick={scrollToSection}
               className="px-6 py-3 rounded-2xl bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700 font-bold text-xs transition flex items-center gap-2 cursor-pointer"
             >
               <Sparkles className="w-4 h-4 text-teal-400" />
@@ -761,12 +776,13 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
               <Gift className="w-6 h-6" />
             </div>
             <h2 className="text-2xl sm:text-3xl font-black text-slate-100">
-              Share with a Friend
+              Referral Section Preview
             </h2>
             <p className="text-xs sm:text-sm text-slate-300 max-w-xl mx-auto leading-relaxed">
               {settings.landingPage.referralBonusText}
             </p>
 
+            <p className="text-xs text-amber-200">Links generated here are private previews requiring POS sign-in, not published customer referral links.</p>
             <form onSubmit={handleGenerateReferral} className="flex flex-col sm:flex-row gap-2 max-w-md mx-auto pt-2">
               <input
                 type="text"
@@ -780,7 +796,7 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
                 type="submit"
                 className="px-5 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs shadow-md transition cursor-pointer"
               >
-                Generate Link
+                Generate Private Preview Link
               </button>
             </form>
 
@@ -993,7 +1009,7 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
         </div>
       )}
 
-      {/* SHARE STOREFRONT MODAL */}
+      {/* INTERNAL WORKSPACE LINK — NEVER PUBLIC PUBLISHING */}
       {shareModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-xs p-4">
           <div className="relative w-full max-w-md rounded-3xl bg-slate-900 border border-slate-700 shadow-2xl p-6 text-white text-center">
@@ -1006,13 +1022,13 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
             </button>
 
             <Share2 className="w-10 h-10 text-teal-400 mx-auto mb-3" />
-            <h3 className="text-lg font-black text-slate-100">Business Page Preview Link</h3>
+            <h3 className="text-lg font-black text-slate-100">Private Business Page Link</h3>
             <p className="text-xs text-slate-400 mt-1">
-              This link opens the Business Landing Page. Data is stored in this browser; publishing your catalog for other people or devices requires a connected backend.
+              Sign-in is required. This link opens the internal landing_page_builder screen inside the POS, not a public storefront. Merchant data remains browser-local.
             </p>
 
             <div className="mt-4 p-3 bg-slate-950 rounded-xl border border-teal-500/30 flex items-center justify-between gap-2 text-xs">
-              <span className="font-mono text-teal-300 truncate">{getPublicShareUrl()}</span>
+              <span className="font-mono text-teal-300 truncate">{getInternalPreviewUrl()}</span>
               <button
                 onClick={handleCopyStoreLink}
                 className="px-3 py-1.5 rounded-lg bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs shrink-0 cursor-pointer"

@@ -28,9 +28,9 @@ const USER_MANUAL_SECTIONS = [
 • First choose light/dark appearance and text size, then save your own company profile.
 • Add zero to three starter products or services. Only saved items are added; skip and add more later in Inventory (Package icon).
 • Settings uses the gear icon. Platform guidance uses the question-mark circle (HelpCircle). About & Manual uses the information-circle icon (Info).
-• CODE76 main site: product information and sign-in. Merchant company and inventory changes never edit this website.
-• Your Business Landing Page: uses My Company, Inventory, approved reviews and Settings → Business Landing Page Settings. Its assistant, leads and metrics are separate.
-• Browser-local prototype: a storefront link selects the page but does not publish merchant data to other browsers. A backend is required for real public storefront publishing.`,
+• CODE76 main site: the base URL always shows product information and sign-in/register, even if you are already signed in. Merchant company and inventory changes never edit this website.
+• Your Business Landing Page: signed-in users only, inside POS → Business Landing Page (#/pos/landing_page_builder). It uses My Company, Inventory, approved reviews and Settings → Business Landing Page Settings. Its assistant, leads and metrics are separate.
+• Private workspace links require sign-in. There is no standalone public storefront or ?view=storefront access. This browser-local prototype does not publish merchant data to other browsers; its client-side authentication is not production server/tenant security.`,
   },
   {
     id: 's1',

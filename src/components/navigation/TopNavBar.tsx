@@ -260,14 +260,14 @@ export const TopNavBar: React.FC = () => {
               <span>Demo Data</span>
             </button>
 
-            {/* View Switching: Storefront vs CODE76 Main Site */}
+            {/* Internal business preview and the separate public CODE76 website */}
             {currentUser && (
               <div className="flex items-center gap-1">
                 <button
-                  onClick={() => setActiveView('storefront')}
-                  title="View your customer-facing business storefront & inventory showcase"
+                  onClick={() => setActivePlatform('landing_page_builder')}
+                  title="Open your private Business Landing Page inside the POS"
                   className={`px-2.5 sm:px-3 py-1.5 rounded-xl text-[11px] sm:text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer shadow-xs ${
-                    activeView === 'storefront'
+                    activePlatform === 'landing_page_builder'
                       ? 'bg-emerald-600 text-white'
                       : isLight
                       ? 'bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300'
@@ -275,7 +275,7 @@ export const TopNavBar: React.FC = () => {
                   }`}
                 >
                   <ShoppingBag className="w-3.5 h-3.5 text-teal-400" />
-                  <span className="hidden sm:inline">Storefront</span>
+                  <span className="hidden sm:inline">Business Page</span>
                 </button>
 
                 <button

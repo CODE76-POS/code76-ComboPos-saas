@@ -1,4 +1,6 @@
 import React, { useEffect } from 'react';
+import { resolveAppSurface } from './utils/appRouting.ts';
+import { applyDocumentSeo } from './utils/siteSeo.ts';
 import { Code76SiteProvider } from './context/Code76SiteContext.tsx';
 import { POSProvider, usePOS } from './context/POSContext.tsx';
 import { TopNavBar } from './components/navigation/TopNavBar.tsx';
@@ -29,12 +31,11 @@ import { CompanyQAOnboardingModal } from './components/modals/CompanyQAOnboardin
 const POSContent: React.FC = () => {
   const { activeView, activePlatform, viewportMode, setViewportMode, settings, theme, currentUser } = usePOS();
   const isLight = theme === 'light';
-  const surface = activeView === 'storefront' || (currentUser && activeView === 'pos' && activePlatform === 'landing_page_builder')
-    ? 'business' : currentUser && activeView === 'pos' ? 'pos' : 'code76';
+  const authenticatedWorkspace = !!currentUser && activeView === 'pos';
+  const surface = resolveAppSurface({ view: activeView, platform: activePlatform }, !!currentUser);
   useEffect(() => {
-    document.title = surface === 'business' ? 'Business storefront | CODE76 POS' : surface === 'pos'
-      ? 'CODE76 POS — Workspace' : 'CODE76 POS — Enterprise Point of Sale & ERP';
-  }, [surface]);
+    if (authenticatedWorkspace) applyDocumentSeo(document, true, activePlatform === 'landing_page_builder');
+  }, [authenticatedWorkspace, activePlatform]);
 
   // Viewport mode sizing wrapper
   const getViewportClass = () => {
@@ -184,28 +185,24 @@ const POSContent: React.FC = () => {
 
       <div className={getViewportClass()}>
         {/* Navigation Bar (Protected Internal POS Routes Only) */}
-        {currentUser && activeView === 'pos' && <TopNavBar />}
+        {authenticatedWorkspace && <TopNavBar />}
 
-        {/* Content Body: Public Landing Page vs Business Storefront vs Protected POS Platforms */}
+        {/* All merchant screens, including the builder, share the same authentication guard. */}
         <main className="min-w-0">
-          {activeView === 'storefront' ? (
-            <BusinessStorefrontLandingPage />
-          ) : !currentUser || activeView === 'landing' ? (
-            <LandingPage />
-          ) : (
-            renderActivePlatform()
-          )}
+          {authenticatedWorkspace ? renderActivePlatform() : <LandingPage requiresSignIn={activeView === 'pos'} />}
         </main>
       </div>
 
-      {/* Global Interactive Modals */}
-      <DemoWarningModal />
-      <HoverHelpModal />
-      <MarketingCampaignModal />
-      <ReceiptModal />
-      <ReviewCaptureModal />
-      <LoginModal />
-      <CompanyQAOnboardingModal />
+      {/* Private dialogs must never mount on the public website or after sign-out. */}
+      {authenticatedWorkspace && <>
+        <DemoWarningModal />
+        <HoverHelpModal />
+        <MarketingCampaignModal />
+        <ReceiptModal />
+        <ReviewCaptureModal />
+        <LoginModal />
+        <CompanyQAOnboardingModal />
+      </>}
     </div>
   );
 };
