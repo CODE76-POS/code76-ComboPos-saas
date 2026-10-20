@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { Code76SiteProvider } from './context/Code76SiteContext.tsx';
 import { POSProvider, usePOS } from './context/POSContext.tsx';
 import { TopNavBar } from './components/navigation/TopNavBar.tsx';
 import { SalesPlatform } from './components/platforms/SalesPlatform.tsx';
@@ -28,6 +29,12 @@ import { CompanyQAOnboardingModal } from './components/modals/CompanyQAOnboardin
 const POSContent: React.FC = () => {
   const { activeView, activePlatform, viewportMode, setViewportMode, settings, theme, currentUser } = usePOS();
   const isLight = theme === 'light';
+  const surface = activeView === 'storefront' || (currentUser && activeView === 'pos' && activePlatform === 'landing_page_builder')
+    ? 'business' : currentUser && activeView === 'pos' ? 'pos' : 'code76';
+  useEffect(() => {
+    document.title = surface === 'business' ? 'Business storefront | CODE76 POS' : surface === 'pos'
+      ? 'CODE76 POS — Workspace' : 'CODE76 POS — Enterprise Point of Sale & ERP';
+  }, [surface]);
 
   // Viewport mode sizing wrapper
   const getViewportClass = () => {
@@ -58,20 +65,6 @@ const POSContent: React.FC = () => {
         return { fontFamily: '"Playfair Display", serif' };
       default:
         return { fontFamily: '"Inter", sans-serif' };
-    }
-  };
-
-  // Text scale class
-  const getTextSizingClass = () => {
-    switch (settings.textSizing) {
-      case 'compact':
-        return 'text-xs';
-      case 'large':
-        return 'text-base';
-      case 'xlarge':
-        return 'text-lg';
-      default:
-        return 'text-sm';
     }
   };
 
@@ -153,10 +146,13 @@ const POSContent: React.FC = () => {
 
   return (
     <div
-      style={getFontStyle()}
-      className={`min-h-screen transition-colors duration-200 ${
-        isLight ? 'bg-slate-100 text-slate-900' : 'bg-slate-950 text-slate-100'
-      } ${getTextSizingClass()}`}
+      data-surface={surface}
+      data-pos-theme={surface === 'pos' ? theme : undefined}
+      data-text-size={surface === 'pos' ? settings.textSizing : undefined}
+      style={surface === 'pos' ? getFontStyle() : { fontFamily: 'Inter, sans-serif' }}
+      className={`min-h-screen transition-colors duration-200 ${surface === 'pos' ? 'pos-workspace' : ''} ${
+        surface === 'pos' && isLight ? 'bg-slate-100 text-slate-900' : 'bg-slate-950 text-slate-100'
+      }`}
     >
       {/* Device Simulation Banner when in non-desktop viewport */}
       {viewportMode !== 'desktop' && (
@@ -216,8 +212,10 @@ const POSContent: React.FC = () => {
 
 export default function App() {
   return (
-    <POSProvider>
-      <POSContent />
-    </POSProvider>
+    <Code76SiteProvider>
+      <POSProvider>
+        <POSContent />
+      </POSProvider>
+    </Code76SiteProvider>
   );
 }

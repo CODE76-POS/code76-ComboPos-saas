@@ -1,0 +1,10 @@
+{
+  "review_date": "2026-10-20",
+  "revision": "77b5cfccf9168fa851125b7dfb564bf102aae22b",
+  "automated_cases": 54,
+  "passed": 45,
+  "failed": 9,
+  "production_signoff": "BLOCKED",
+  "gemini_requests": 0,
+  "business_logic_changes_this_qa_pass": false
+}

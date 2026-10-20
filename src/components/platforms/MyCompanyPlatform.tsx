@@ -13,18 +13,27 @@ import {
   Clock,
   Sparkles,
 } from 'lucide-react';
+import { isCompanyConfigured, blankMerchantCompany, readSetupProgress, writeSetupProgress } from '../../utils/onboarding.ts';
 import { CompanyData } from '../../types/index.ts';
 import { UniversalPhotoInput } from '../common/UniversalPhotoInput.tsx';
 
 export const MyCompanyPlatform: React.FC = () => {
-  const { company, setCompany, setHoverHelpPlatform, logAuditAction } = usePOS();
+  const { company, setCompany, setHoverHelpPlatform, logAuditAction, products, setCompanyQAModalOpen, settings } = usePOS();
 
-  const [formData, setFormData] = useState<CompanyData>(company);
+  const [formData, setFormData] = useState<CompanyData>(() => isCompanyConfigured(company) ? company : blankMerchantCompany(settings.payments.defaultCurrency));
   const [savedSuccess, setSavedSuccess] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setCompany(formData);
+    if (!formData.name.trim()) return;
+    const saved = { ...formData, name: formData.name.trim(), isConfiguredByMerchant: true };
+    setCompany(saved);
+    setFormData(saved);
+    if (products.length === 0) {
+      const previous = readSetupProgress();
+      writeSetupProgress({ version: 2, stage: 'inventory', status: 'in_progress', addedProductIds: previous?.addedProductIds || [], draftCompany: saved });
+      setCompanyQAModalOpen(true);
+    }
     logAuditAction('Updated Company Profile', `Updated brand profile for ${formData.name}`);
     setSavedSuccess(true);
     setTimeout(() => setSavedSuccess(false), 2000);
@@ -46,10 +55,11 @@ export const MyCompanyPlatform: React.FC = () => {
             </button>
           </div>
           <p className="text-xs text-slate-400">
-            Define corporate identity, tax registration, official contacts, and vision showcased on the landing page and receipts.
+            Define your business identity, contacts and legal details for your Business Landing Page and receipts. This does not edit the CODE76 main site.
           </p>
         </div>
 
+        <button type="button" onClick={() => setCompanyQAModalOpen(true)} className="px-4 py-2 rounded-xl border border-teal-500/40 text-teal-400 text-xs font-bold flex items-center gap-2 cursor-pointer"><Sparkles className="w-4 h-4" />Open guided setup</button>
         {savedSuccess && (
           <div className="bg-emerald-950/60 border border-emerald-800/60 rounded-xl px-3 py-1.5 text-xs text-emerald-300 flex items-center gap-1.5">
             <CheckCircle2 className="w-4 h-4 text-emerald-400" />
@@ -75,10 +85,9 @@ export const MyCompanyPlatform: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-400 mb-1">Company Slogan / Tagline *</label>
+                <label className="block text-xs font-semibold text-slate-400 mb-1">Company Slogan / Tagline</label>
                 <input
                   type="text"
-                  required
                   value={formData.slogan}
                   onChange={(e) => setFormData({ ...formData, slogan: e.target.value })}
                   className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-teal-500"
@@ -87,10 +96,9 @@ export const MyCompanyPlatform: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-400 mb-1">Mission & Vision Statement *</label>
+              <label className="block text-xs font-semibold text-slate-400 mb-1">Mission & Vision Statement</label>
               <textarea
                 rows={2}
-                required
                 value={formData.vision}
                 onChange={(e) => setFormData({ ...formData, vision: e.target.value })}
                 className="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-xs text-slate-100 focus:outline-none focus:border-teal-500 leading-relaxed"
@@ -109,10 +117,9 @@ export const MyCompanyPlatform: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-400 mb-1">Tax / VAT PIN *</label>
+                <label className="block text-xs font-semibold text-slate-400 mb-1">Tax / VAT PIN</label>
                 <input
                   type="text"
-                  required
                   value={formData.taxPin}
                   onChange={(e) => setFormData({ ...formData, taxPin: e.target.value })}
                   className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100 font-mono"
@@ -125,7 +132,6 @@ export const MyCompanyPlatform: React.FC = () => {
                 <label className="block text-xs font-semibold text-slate-400 mb-1">Primary Telephone *</label>
                 <input
                   type="text"
-                  required
                   value={formData.tel1}
                   onChange={(e) => setFormData({ ...formData, tel1: e.target.value })}
                   className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100"
@@ -155,10 +161,9 @@ export const MyCompanyPlatform: React.FC = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="sm:col-span-2">
-                <label className="block text-xs font-semibold text-slate-400 mb-1">Primary Email Address *</label>
+                <label className="block text-xs font-semibold text-slate-400 mb-1">Primary Email Address</label>
                 <input
                   type="email"
-                  required
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100"
@@ -178,10 +183,9 @@ export const MyCompanyPlatform: React.FC = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-400 mb-1">Physical Address *</label>
+                <label className="block text-xs font-semibold text-slate-400 mb-1">Physical Address</label>
                 <input
                   type="text"
-                  required
                   value={formData.address}
                   onChange={(e) => setFormData({ ...formData, address: e.target.value })}
                   className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100"
@@ -189,10 +193,9 @@ export const MyCompanyPlatform: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-400 mb-1">City / Region *</label>
+                <label className="block text-xs font-semibold text-slate-400 mb-1">City / Region</label>
                 <input
                   type="text"
-                  required
                   value={formData.location}
                   onChange={(e) => setFormData({ ...formData, location: e.target.value })}
                   className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100"
@@ -200,10 +203,9 @@ export const MyCompanyPlatform: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-400 mb-1">Country *</label>
+                <label className="block text-xs font-semibold text-slate-400 mb-1">Country</label>
                 <input
                   type="text"
-                  required
                   value={formData.country}
                   onChange={(e) => setFormData({ ...formData, country: e.target.value })}
                   className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100"
@@ -216,7 +218,7 @@ export const MyCompanyPlatform: React.FC = () => {
                 label="Official Company Logo / Stamp (Link, Google Drive, Device Upload / Drag, Live Camera Snapshot)"
                 value={formData.logoUrl}
                 onChange={(url) => setFormData({ ...formData, logoUrl: url })}
-                helperText="Brand logo appears on thermal receipts, PDF commercial invoices, and landing page hero bar."
+                helperText="Brand logo appears on thermal receipts, PDF commercial invoices, and Business Landing Page header."
               />
             </div>
 
@@ -246,7 +248,7 @@ export const MyCompanyPlatform: React.FC = () => {
         <div className="lg:col-span-4 space-y-4">
           <div className="bg-slate-900 border border-slate-800 rounded-3xl p-5 shadow-xl text-center">
             <span className="text-[10px] font-bold uppercase tracking-wider text-teal-400 block mb-3">
-              Landing Page & Receipt Brand Preview
+              Business Page & Receipt Brand Preview
             </span>
 
             {formData.logoUrl && (
@@ -289,7 +291,7 @@ export const MyCompanyPlatform: React.FC = () => {
                 <Sparkles className="w-3 h-3 text-teal-300" />
                 Autonomous Sync Active
               </div>
-              This data feeds directly to the public e-commerce landing page, PDF vouchers, and printable receipts.
+              This data feeds your Business Landing Page, PDF vouchers and receipts. It never edits the CODE76 main website.
             </div>
           </div>
         </div>

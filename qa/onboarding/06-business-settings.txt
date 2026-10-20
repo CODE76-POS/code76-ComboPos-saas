@@ -1,0 +1,104 @@
+### Page
+- Page URL: http://127.0.0.1:3000/?view=pos
+- Page Title: CODE76 POS — Workspace
+### Snapshot
+```yaml
+- generic [ref=f1e4]:
+  - banner [ref=f1e789]:
+    - generic [ref=f1e790]:
+      - button "76 CODE76 POS Enterprise Product & Service SaaS ERP System" [ref=f1e792] [cursor=pointer]:
+        - generic [ref=f1e793]: "76"
+        - generic [ref=f1e794]:
+          - generic [ref=f1e795]:
+            - generic [ref=f1e796]: CODE76 POS
+            - generic [ref=f1e797]: Enterprise
+          - paragraph [ref=f1e798]: Product & Service SaaS ERP System
+      - generic [ref=f1e799]:
+        - generic [ref=f1e800]:
+          - button "Desktop View (Full Width)" [ref=f1e801] [cursor=pointer]
+          - button "Laptop View (1024px)" [ref=f1e804] [cursor=pointer]
+          - button "Tablet View (768px)" [ref=f1e807] [cursor=pointer]
+          - button "Phone Mobile View (390px)" [ref=f1e810] [cursor=pointer]
+        - generic [ref=f1e813]:
+          - button "Dark" [ref=f1e1174] [cursor=pointer]
+          - button "Demo Data" [ref=f1e822] [cursor=pointer]
+          - generic [ref=f1e828]:
+            - button "Storefront" [ref=f1e829] [cursor=pointer]
+            - button "CODE76 Site" [ref=f1e834] [cursor=pointer]
+          - button "Click to view help guide and settings for this platform" [ref=f1e839] [cursor=pointer]
+          - generic [ref=f1e843]:
+            - 'button "TE TEST Guided Setup Owner Role: CEO" [ref=f1e844] [cursor=pointer]':
+              - generic [ref=f1e845]: TE
+              - generic [ref=f1e846]:
+                - generic [ref=f1e847]: TEST Guided Setup Owner
+                - generic [ref=f1e848]: "Role: CEO"
+            - button "Sign out and return to landing page" [ref=f1e849] [cursor=pointer]
+    - generic [ref=f1e854]:
+      - button "Sales POS" [ref=f1e855] [cursor=pointer]
+      - button "Sales History" [ref=f1e859] [cursor=pointer]
+      - button "Inventory" [ref=f1e864] [cursor=pointer]
+      - button "Expenses" [ref=f1e869] [cursor=pointer]
+      - button "Invoices" [ref=f1e873] [cursor=pointer]
+      - button "Analytics & P&L" [ref=f1e877] [cursor=pointer]
+      - button "Customers" [ref=f1e880] [cursor=pointer]
+      - button "Vendors" [ref=f1e886] [cursor=pointer]
+      - button "Transporters" [ref=f1e891] [cursor=pointer]
+      - button "Marketing Team" [ref=f1e897] [cursor=pointer]
+      - button "Company Members" [ref=f1e901] [cursor=pointer]
+      - button "My Company" [ref=f1e907] [cursor=pointer]
+      - button "Messaging" [ref=f1e911] [cursor=pointer]
+      - button "Business Landing Page" [ref=f1e914] [cursor=pointer]
+      - button "Settings" [ref=f1e919] [cursor=pointer]
+      - button "Audit & Access Logs" [ref=f1e923] [cursor=pointer]
+      - button "About & Manual" [ref=f1e927] [cursor=pointer]
+  - main [ref=f1e5]:
+    - generic [ref=f1e1622]:
+      - generic [ref=f1e1624]:
+        - generic [ref=f1e1625]:
+          - heading "System Settings Platform" [level=1] [ref=f1e1626]
+          - button "Click for platform guidance & settings" [ref=f1e1627] [cursor=pointer]
+        - paragraph [ref=f1e1631]: Configure payment methods, responsive text sizing, landing page rules, receipts, appearance, font families, backups, privileges, and PDF/Excel import pipeline.
+      - generic [ref=f1e1632]:
+        - generic [ref=f1e1633]:
+          - button "Payment Settings" [ref=f1e1634] [cursor=pointer]
+          - button "Text Sizing Settings" [ref=f1e1638] [cursor=pointer]
+          - button "Business Landing Page Settings" [ref=f1e1642] [cursor=pointer]
+          - button "Receipts Settings" [ref=f1e1647] [cursor=pointer]
+          - button "Color / Appearance Settings" [ref=f1e1652] [cursor=pointer]
+          - button "Font Text Settings" [ref=f1e1660] [cursor=pointer]
+          - button "Data Backup Settings" [ref=f1e1665] [cursor=pointer]
+          - button "App User Privilege Settings" [ref=f1e1669] [cursor=pointer]
+          - button "PDF & Excel Settings (CSV Import)" [ref=f1e1673] [cursor=pointer]
+          - button "Email Marketing Templates" [ref=f1e1678] [cursor=pointer]
+          - button "Audit Logs & Login History" [ref=f1e1683] [cursor=pointer]
+        - generic [ref=f1e1688]:
+          - generic [ref=f1e1689]:
+            - generic [ref=f1e1690]:
+              - heading "Business Landing Page & Chatbot Settings" [level=3] [ref=f1e1691]
+              - paragraph [ref=f1e1692]: These settings affect only your merchant storefront. They never change the CODE76 main site or its sign-in page.
+              - paragraph [ref=f1e1693]: Configure hero headlines, AI sales assistant, slideshow speed, and referral reward text.
+            - generic [ref=f1e1694]:
+              - generic [ref=f1e1695]: Hero Main Headline
+              - textbox [ref=f1e1696]
+            - generic [ref=f1e1697]:
+              - generic [ref=f1e1698]: Hero Subtitle
+              - textbox [ref=f1e1699]
+            - generic [ref=f1e1700]:
+              - generic [ref=f1e1701]:
+                - generic [ref=f1e1702]: Slideshow Transition Speed (ms)
+                - spinbutton [ref=f1e1703]: "4000"
+              - generic [ref=f1e1704]:
+                - generic [ref=f1e1705]: Featured Grid Items Count
+                - spinbutton [ref=f1e1706]: "6"
+            - generic [ref=f1e1707]:
+              - generic [ref=f1e1708]: Referral Reward Text (Shown to visitors if they hesitate to buy)
+              - textbox [ref=f1e1709]
+            - generic [ref=f1e1710]:
+              - generic [ref=f1e1711] [cursor=pointer]:
+                - checkbox "Enable Gemini Live AI Sales Chatbot" [checked] [ref=f1e1712]
+                - generic [ref=f1e1713]: Enable Gemini Live AI Sales Chatbot
+              - generic [ref=f1e1714] [cursor=pointer]:
+                - checkbox "Showcase Verified Testimonials & Reviews" [checked] [ref=f1e1715]
+                - generic [ref=f1e1716]: Showcase Verified Testimonials & Reviews
+          - button "Save All Settings Changes" [ref=f1e1718] [cursor=pointer]
+```

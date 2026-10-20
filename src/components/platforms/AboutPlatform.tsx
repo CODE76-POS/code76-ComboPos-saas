@@ -22,9 +22,21 @@ import { EmailExportModal } from '../modals/EmailExportModal.tsx';
 
 const USER_MANUAL_SECTIONS = [
   {
+    id: 'setup',
+    title: 'Getting started: guided setup & the two landing pages',
+    content: `• Open My Company → Open guided setup to resume the assistant.
+• First choose light/dark appearance and text size, then save your own company profile.
+• Add zero to three starter products or services. Only saved items are added; skip and add more later in Inventory (Package icon).
+• Settings uses the gear icon. Platform guidance uses the question-mark circle (HelpCircle). About & Manual uses the information-circle icon (Info).
+• CODE76 main site: product information and sign-in. Merchant company and inventory changes never edit this website.
+• Your Business Landing Page: uses My Company, Inventory, approved reviews and Settings → Business Landing Page Settings. Its assistant, leads and metrics are separate.
+• Browser-local prototype: a storefront link selects the page but does not publish merchant data to other browsers. A backend is required for real public storefront publishing.`,
+  },
+  {
     id: 's1',
     title: 'Section 1: Point of Sale & Checkout Operations',
     content: `• Autocomplete Search: Start typing SKU, name, or scan barcode. The autocomplete dropdown displays the product photo, live price, available stock count, and an instant "+ Add 1" button.
+• One payment: Fills one Cash payment with the full total. Add extra payment methods to split the amount; use the trash icon to delete an added payment row.
 • Multi-Payment Split: Click "+ Add Method" in the cart to split customer bill across Cash, M-Pesa, Card, Bank Wire, and Credit/Debt simultaneously.
 • Extra Charges: Select charge reason (Tax, Transportation, Packaging, Delivery, Service Fee) and enter custom amount. It itemizes automatically.
 • Discounts: Apply percentage or dollar discounts per line item, or apply a cart-wide promotional discount to the entire subtotal.
@@ -87,11 +99,13 @@ const USER_MANUAL_SECTIONS = [
   },
   {
     id: 's9',
-    title: 'Section 9: Public E-Commerce Landing Page & AI Sales Chatbot',
-    content: `• Data Integrity Gate: Automatically verifies that inventory, company members, company info, sales, reviews, and analytics exist.
-• Featured 6 Items & Interactive Slideshow: First 6 items show in primary cards; remaining catalog items cycle in an interactive slideshow.
-• Live Sales Counter & Social Proof: Displays real-time sales completed and verified 5-star customer testimonials.
-• Live AI Sales Concierge: Powered by Gemini with live inventory grounding. Matches visitor needs, handles price questions, closes sales, and offers referral rewards if they hesitate to buy!`,
+    title: 'Section 9: Your Business Landing Page & catalog assistant',
+    content: `• Merchant data only: Company identity, real inventory and approved reviews. Empty inventory stays empty—no implicit CODE76 demo catalog.
+• Featured items and slideshow: Choose featured products in Inventory; configure count and speed in Business Landing Page Settings.
+• Honest social proof: Ratings are calculated from approved reviews. No invented five-star reviews are substituted.
+• Catalog assistant: Uses this business’s products, prices and contacts. It cannot confirm appointments, reserve stock, send email or assign rewards.
+• The CODE76 main site is a separate product website. This business-page editor does not change it.
+• A preview link is not a publication mechanism: this prototype stores business data in the current browser.`,
   },
   {
     id: 's10',

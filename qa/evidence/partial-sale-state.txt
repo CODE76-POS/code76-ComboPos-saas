@@ -1,0 +1,16 @@
+### Result
+{
+  "receipt": "REC-7604",
+  "customer": "Michael Ouma",
+  "cashier": "Peter Nick (Cashier)",
+  "netTotal": 90.1,
+  "amountPaid": 20,
+  "debtAmount": 70.1,
+  "status": "debt_pending",
+  "scannerStock": 34,
+  "loggedInName": "lytics & P&LCustomersVendorsTransportersMarketing TeamCompany MembersMy CompanyMessagingBusiness Landing PageSettingsAudit & Access LogsAbout & Manual"
+}
+### Ran Playwright code
+```js
+await page.evaluate('() => {const s=JSON.parse(localStorage.getItem(\'code76_pos_state_v1\'));const x=s.sales[0];return {receipt:x.receiptNo,customer:x.customerName,cashier:x.cashierName,netTotal:x.netTotal,amountPaid:x.amountPaid,debtAmount:x.debtAmount,status:x.status,scannerStock:s.products.find(p=>p.id===\'prod-03\').stock,loggedInName:document.querySelector(\'header\')?.textContent?.slice(-150)}}');
+```

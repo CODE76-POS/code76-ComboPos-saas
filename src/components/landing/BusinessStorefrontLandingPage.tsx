@@ -34,6 +34,8 @@ import {
   Building,
   DollarSign,
   Package,
+  Settings,
+  X,
 } from 'lucide-react';
 import { AIChatbotWidget, InquiryLeadData } from './AIChatbotWidget.tsx';
 import { ProductItem } from '../../types/index.ts';
@@ -41,13 +43,7 @@ import {
   getCustomerReviewAvatar,
   getDefaultCatalogImageAndEmoji,
 } from '../../data/catalogKnowledgeBase.ts';
-import {
-  INITIAL_COMPANY,
-  INITIAL_PRODUCTS,
-  INITIAL_REVIEWS,
-  INITIAL_SALES,
-  INITIAL_CUSTOMERS,
-} from '../../data/initialData.ts';
+import { landingPageData, viewUrl } from '../../utils/landingPages.ts';
 
 export const BusinessStorefrontLandingPage: React.FC = () => {
   const {
@@ -62,6 +58,7 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
     settings,
     setActiveView,
     setActivePlatform,
+    setSettingsSection,
     loadDemoData,
     setLandingMetrics,
     addPerson,
@@ -98,18 +95,20 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
   const [generatedReferralLink, setGeneratedReferralLink] = useState('');
   const [copiedLink, setCopiedLink] = useState(false);
 
-  // Fallback to rich built-in catalog data if inventory is in clean empty state
-  const displayCompany = company.name ? company : INITIAL_COMPANY;
-  const displayProducts = products.length > 0 ? products : INITIAL_PRODUCTS;
-  const displayReviews = reviews.length > 0 ? reviews : INITIAL_REVIEWS;
-  const displaySales = sales.length > 0 ? sales : INITIAL_SALES;
-  const displayCustomers = customers.length > 0 ? customers : INITIAL_CUSTOMERS;
-  const isCleanEmptyCatalog = products.length === 0;
-
-  // Split products: First 6 for featured cards, remaining for slideshow
+  // Merchant-owned data only. An empty catalog is an empty catalog, never a CODE76 demo.
+  const { company: displayCompany, products: displayProducts, reviews: displayReviews } = landingPageData('business', { company, products, reviews });
+  const isCleanEmptyCatalog = displayProducts.length === 0;
+  const currency = displayCompany.currency || settings.payments.defaultCurrency;
   const featuredLimit = settings.landingPage.featuredCount || 6;
-  const featuredSix = displayProducts.slice(0, featuredLimit);
-  const slideshowItems = displayProducts.slice(featuredLimit);
+  const featuredSix = displayProducts.filter(product => product.isFeatured !== false).slice(0, featuredLimit);
+  const featuredIds = new Set(featuredSix.map(product => product.id));
+  const slideshowItems = displayProducts.filter(product => !featuredIds.has(product.id));
+  const catalogCategories = [...new Set(displayProducts.map(product => product.category).filter(Boolean))];
+  const openOwnerPlatform = (platform: 'inventory' | 'settings' | 'selling') => {
+    if (platform === 'settings') setSettingsSection('landingPage');
+    setActivePlatform(platform);
+    setActiveView('pos');
+  };
 
   // Slideshow auto-advance
   useEffect(() => {
@@ -131,8 +130,9 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
   const handleGenerateReferral = (e: React.FormEvent) => {
     e.preventDefault();
     if (!referralName.trim()) return;
-    const code = referralName.toUpperCase().replace(/\s+/g, '') + '76';
-    setGeneratedReferralLink(`https://code76pos.com/ref?code=${code}`);
+    const url = new URL(getPublicShareUrl());
+    url.searchParams.set('ref', referralName.trim());
+    setGeneratedReferralLink(url.toString());
   };
 
   const handleCopyLink = () => {
@@ -149,10 +149,10 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
     }
 
     const leadFullName = `${inquiryFirstName.trim()} ${inquirySecondName.trim()}`.trim();
-    const primaryPhone = inquiryPhone.trim() || '+1 (555) 000-0000';
-    const primaryEmail = inquiryEmail.trim() || `${inquiryFirstName.toLowerCase()}@lead.storefront.com`;
+    const primaryPhone = inquiryPhone.trim();
+    const primaryEmail = inquiryEmail.trim();
 
-    // 1. SAVE LEAD SECURELY IN CRM CUSTOMER DIRECTORY
+    // 1. Save this merchant inquiry in the browser-local merchant CRM.
     addPerson('customer', {
       firstName: inquiryFirstName.trim(),
       secondName: inquirySecondName.trim() || '',
@@ -164,10 +164,10 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
       address: inquiryLocation.trim() || 'Store Location Pending',
       location: inquiryLocation.trim() || displayCompany.location || 'Retail Hub',
       country: displayCompany.country || 'Global',
-      photoUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80',
+      photoUrl: '',
       photoConsentForLanding: false,
       category: 'customer',
-      notes: `Storefront Quotation Request for ${inquiryModalProduct.name} ($${inquiryModalProduct.sellingPrice}). Channel: ${inquiryPreferredContact.toUpperCase()}. Customer Notes: ${inquiryNotes || 'None provided'}`,
+      notes: `Business page inquiry for ${inquiryModalProduct.name} (${currency} ${inquiryModalProduct.sellingPrice}). Channel: ${inquiryPreferredContact.toUpperCase()}. Customer Notes: ${inquiryNotes || 'None provided'}`,
     });
 
     // 2. LOG AUDIT ACTION FOR ENTERPRISE SECURITY
@@ -208,15 +208,8 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
     }, 1400);
   };
 
-  // Helper to get public shareable URL
-  const getPublicShareUrl = () => {
-    if (typeof window === 'undefined') return 'https://code76pos.com/?view=storefront';
-    let url = `${window.location.origin}?view=storefront`;
-    if (url.includes('ais-dev-')) {
-      url = url.replace('ais-dev-', 'ais-pre-');
-    }
-    return url;
-  };
+  // This selects the business page. It does not publish browser-local data to other devices.
+  const getPublicShareUrl = () => typeof window === 'undefined' ? '' : viewUrl('storefront', window.location.href);
 
   const handleCopyStoreLink = () => {
     const url = getPublicShareUrl();
@@ -227,10 +220,7 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
 
   // Filter products for the Interactive Commercial Matcher
   const filteredMatcherProducts = displayProducts.filter((p) => {
-    const matchesCat =
-      selectedMatcherCategory === 'all' ||
-      p.category.toLowerCase().includes(selectedMatcherCategory.toLowerCase()) ||
-      (p.subCategory && p.subCategory.toLowerCase().includes(selectedMatcherCategory.toLowerCase()));
+    const matchesCat = selectedMatcherCategory === 'all' || `category:${p.category}` === selectedMatcherCategory;
     const matchesSearch =
       !matcherSearch.trim() ||
       p.name.toLowerCase().includes(matcherSearch.toLowerCase()) ||
@@ -240,28 +230,29 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
   });
 
   // Top Referrers for Social Proof
-  const topReferrers = [...displayCustomers, ...marketingTeam, ...companyMembers]
+  const topReferrers = [...customers, ...marketingTeam, ...companyMembers]
     .filter((p) => (p.referralCount || 0) > 0)
     .sort((a, b) => (b.referralCount || 0) - (a.referralCount || 0))
     .slice(0, settings.landingPage.topReferrersLimit || 4);
 
   // Verified reviews
   const approvedReviews = displayReviews.filter((r) => r.isApprovedForLanding);
+  const averageRating = approvedReviews.length ? (approvedReviews.reduce((total, review) => total + review.rating, 0) / approvedReviews.length).toFixed(1) : null;
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-teal-500 selection:text-white pb-24">
       {/* Top Announcement Bar */}
-      <div className="bg-gradient-to-r from-teal-900 via-slate-900 to-emerald-950 border-b border-teal-800/40 text-center py-2 px-4 text-xs font-medium text-teal-200">
+      {settings.landingPage.referralBonusText.trim() && <div className="bg-gradient-to-r from-teal-900 via-slate-900 to-emerald-950 border-b border-teal-800/40 text-center py-2 px-4 text-xs font-medium text-teal-200">
         <span className="inline-flex items-center gap-2">
           <Sparkles className="w-3.5 h-3.5 text-teal-400" />
           <span>
             <strong>Store Special Offer:</strong> {settings.landingPage.referralBonusText}
           </span>
         </span>
-      </div>
+      </div>}
 
       {/* Storefront Public Navigation Bar */}
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between border-b border-slate-800/80 sticky top-0 bg-slate-950/90 backdrop-blur-md z-40">
+      <nav className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-wrap gap-3 items-center justify-between border-b border-slate-800/80 sticky top-0 bg-slate-950/90 backdrop-blur-md z-40">
         <div className="flex items-center gap-3">
           {displayCompany.logoUrl ? (
             <img
@@ -271,7 +262,7 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
             />
           ) : (
             <div className="w-10 h-10 rounded-xl bg-teal-600 text-white font-black text-lg flex items-center justify-center shadow-md">
-              76
+              <Store className="w-5 h-5" aria-hidden="true" />
             </div>
           )}
           <div>
@@ -279,24 +270,25 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
               {displayCompany.name}
             </span>
             <span className="text-[10px] text-teal-400 block font-semibold">
-              {displayCompany.slogan || 'Authorized Point of Sale & ERP Hardware Catalog'}
+              {displayCompany.slogan || 'Products & services from our business'}
             </span>
           </div>
         </div>
 
         {/* Top Storefront Menu */}
         <div className="hidden lg:flex items-center gap-6 text-xs text-slate-300 font-medium">
-          <a href="#featured" className="hover:text-teal-400 transition">Featured Equipment</a>
-          <a href="#matcher" className="hover:text-teal-400 transition">Business Matcher</a>
-          <a href="#slideshow" className="hover:text-teal-400 transition">Product Catalog</a>
+          <a href="#featured" className="hover:text-teal-400 transition">Featured Items</a>
+          <a href="#matcher" className="hover:text-teal-400 transition">Browse Catalog</a>
+          <a href="#matcher" className="hover:text-teal-400 transition">Product Catalog</a>
           <a href="#reviews" className="hover:text-teal-400 transition">Customer Reviews</a>
-          <a href="#referrals" className="hover:text-teal-400 transition">Referral Rewards</a>
+          {settings.landingPage.referralBonusText.trim() && <a href="#referrals" className="hover:text-teal-400 transition">Referral Rewards</a>}
           <a href="#contact" className="hover:text-teal-400 transition">Contact Store</a>
         </div>
 
         {/* Quick Actions */}
         <div className="flex items-center gap-2">
           <button
+            aria-label="Open business page preview link"
             onClick={() => setShareModalOpen(true)}
             className="px-3 py-2 rounded-xl bg-teal-500/15 hover:bg-teal-500/25 text-teal-300 border border-teal-500/40 text-xs font-bold transition flex items-center gap-1.5 shadow-xs cursor-pointer active:scale-95"
             title="Share this public store catalog link"
@@ -316,8 +308,9 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
                   <div className="text-[9px] text-teal-400 leading-tight">{currentUser.roles[0]}</div>
                 </div>
               </div>
+              <button type="button" onClick={() => openOwnerPlatform('settings')} title="Edit your Business Landing Page settings — not the CODE76 main site" aria-label="Business page settings" className="p-2 rounded-xl border border-slate-700 text-teal-400 hover:bg-slate-800 cursor-pointer"><Settings className="w-4 h-4" /></button>
               <button
-                onClick={() => setActiveView('pos')}
+                onClick={() => openOwnerPlatform('selling')}
                 className="px-4 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-md shadow-teal-600/30 cursor-pointer"
               >
                 <Store className="w-3.5 h-3.5" />
@@ -341,7 +334,7 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
         <div className="bg-amber-950/40 border-b border-amber-800/40 px-4 py-2.5 text-center text-xs text-amber-300 flex items-center justify-center gap-2">
           <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
           <span>
-            <strong>Store Catalog in Preview Mode:</strong> Click <strong>"Demo Data"</strong> in the top navigation bar to populate enterprise dummy catalog items, or sign in to build your live store inventory.
+            <strong>This catalog is being prepared.</strong> Products and services will appear here when the business adds them to Inventory.
           </span>
         </div>
       )}
@@ -351,15 +344,15 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
         <div className="max-w-4xl mx-auto text-center space-y-5">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-teal-500/10 border border-teal-500/30 text-teal-300 text-xs font-semibold">
             <ShieldCheck className="w-4 h-4 text-teal-400" />
-            <span>Authorized Commercial Point of Sale & ERP Hardware Solutions</span>
+            <span>Our products & services</span>
           </div>
 
           <h1 className="text-3xl sm:text-5xl font-black text-slate-100 tracking-tight leading-tight">
-            {settings.landingPage.heroTitle}
+            {settings.landingPage.heroTitle || displayCompany.name}
           </h1>
 
           <p className="text-sm sm:text-base text-slate-400 leading-relaxed max-w-2xl mx-auto">
-            {settings.landingPage.heroSubtitle}
+            {settings.landingPage.heroSubtitle || displayCompany.slogan || 'Explore our products and services. Contact us for availability and more information.'}
           </p>
 
           <div className="pt-2 flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-xs text-slate-300">
@@ -373,14 +366,14 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
             <div className="flex items-center gap-2 bg-slate-900/90 px-3.5 py-2 rounded-2xl border border-slate-800 shadow-md">
               <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
               <span>
-                <strong className="text-slate-100 font-extrabold">4.9 / 5.0</strong> Verified Rating ({displayReviews.length} Reviews)
+                <strong className="text-slate-100 font-extrabold">{averageRating ? `${averageRating} / 5.0` : 'No reviews yet'}</strong>{approvedReviews.length > 0 && ` · ${approvedReviews.length} approved reviews`}
               </span>
             </div>
 
             <div className="flex items-center gap-2 bg-slate-900/90 px-3.5 py-2 rounded-2xl border border-slate-800 shadow-md">
               <Clock className="w-4 h-4 text-sky-400" />
               <span>
-                Hours: <strong className="text-slate-100">{displayCompany.operatingHours || 'Mon-Sat 8AM - 8PM'}</strong>
+                Hours: <strong className="text-slate-100">{displayCompany.operatingHours || 'Contact us for hours'}</strong>
               </span>
             </div>
           </div>
@@ -391,14 +384,14 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
               className="px-6 py-3 rounded-2xl bg-teal-600 hover:bg-teal-500 text-white font-extrabold text-xs shadow-lg shadow-teal-600/30 transition flex items-center gap-2 cursor-pointer"
             >
               <ShoppingBag className="w-4 h-4" />
-              <span>Browse Featured Equipment</span>
+              <span>Browse Featured Items</span>
             </a>
             <a
               href="#matcher"
               className="px-6 py-3 rounded-2xl bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700 font-bold text-xs transition flex items-center gap-2 cursor-pointer"
             >
               <Sparkles className="w-4 h-4 text-teal-400" />
-              <span>Interactive Business Matcher</span>
+              <span>Browse the Catalog</span>
             </a>
           </div>
         </div>
@@ -410,17 +403,18 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
           <div>
             <span className="text-xs uppercase font-extrabold tracking-widest text-teal-400 flex items-center gap-1.5 mb-1">
               <Package className="w-4 h-4" />
-              Primary Live Catalog (Items 1 to {featuredLimit})
+              From our Inventory
             </span>
             <h2 className="text-2xl sm:text-3xl font-black text-slate-100">
-              Featured Equipment & Solutions
+              Featured Products & Services
             </h2>
           </div>
           <p className="text-xs text-slate-400 max-w-md">
-            Live pricing directly synchronized with our backend ERP inventory. Guaranteed manufacturer warranty.
+            Products, prices and stock from this business’s Inventory. Contact the business to confirm availability.
           </p>
         </div>
 
+        {isCleanEmptyCatalog && <div className="rounded-2xl border border-dashed border-slate-700 bg-slate-900 p-10 text-center" role="status"><Package className="w-9 h-9 mx-auto mb-3 text-teal-400" /><h3 className="font-bold text-lg">No products or services yet</h3><p className="text-sm text-slate-400 mt-2">This business has not added any catalog items. There are no sample products here.</p>{currentUser && <button type="button" onClick={() => openOwnerPlatform('inventory')} className="mt-5 px-5 py-2 rounded-xl bg-teal-600 text-white text-xs font-bold cursor-pointer">Add your first item in Inventory</button>}</div>}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {featuredSix.map((item) => {
             const hasPromo = item.isOnPromo && item.promoDiscountPrice;
@@ -453,12 +447,12 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
                     <div className="absolute top-2.5 left-2.5">
                       {item.type === 'service' ? (
                         <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-purple-950/80 text-purple-300 border border-purple-800/80 backdrop-blur-md">
-                          Commercial Service
+                          Service
                         </span>
                       ) : item.stock <= item.minStockAlert ? (
                         <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-rose-950/90 text-rose-300 border border-rose-800/90 backdrop-blur-md flex items-center gap-1">
                           <AlertTriangle className="w-3 h-3 text-rose-400" />
-                          Low Stock ({item.stock} left)
+                          {item.stock === 0 ? 'Out of stock' : `Low Stock (${item.stock} left)`}
                         </span>
                       ) : (
                         <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-950/90 text-emerald-300 border border-emerald-800/90 backdrop-blur-md flex items-center gap-1">
@@ -504,15 +498,15 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
                     {hasPromo ? (
                       <div className="flex items-baseline gap-1.5">
                         <span className="text-lg font-black text-emerald-400 font-mono">
-                          ${item.promoDiscountPrice?.toFixed(2)}
+                          {currency} {item.promoDiscountPrice?.toFixed(2)}
                         </span>
                         <span className="text-xs text-slate-500 line-through font-mono">
-                          ${item.sellingPrice.toFixed(2)}
+                          {currency} {item.sellingPrice.toFixed(2)}
                         </span>
                       </div>
                     ) : (
                       <span className="text-lg font-black text-slate-100 font-mono">
-                        ${item.sellingPrice.toFixed(2)}
+                        {currency} {item.sellingPrice.toFixed(2)}
                       </span>
                     )}
                     <span className="text-[9px] text-slate-500 block">Excl. applicable tax</span>
@@ -541,24 +535,17 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
               Interactive Commercial Matcher
             </span>
             <h2 className="text-2xl sm:text-3xl font-black text-slate-100">
-              What Fits Your Business Needs Best?
+              Find What You’re Looking For
             </h2>
             <p className="text-xs sm:text-sm text-slate-400 mt-1.5">
-              Filter by category or keyword to quickly match the exact hardware setup, scanner speed, or cloud solution for your store.
+              Browse this business’s categories, or search for a product or service by name, description or SKU.
             </p>
           </div>
 
           {/* Filter Bar & Search */}
           <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 mb-6">
             <div className="flex flex-wrap items-center gap-2 text-xs">
-              {[
-                { id: 'all', label: 'All Equipment' },
-                { id: 'hardware', label: 'Terminals & Tills' },
-                { id: 'scanner', label: 'Barcode Scanners' },
-                { id: 'printer', label: 'Receipt Printers' },
-                { id: 'accessory', label: 'Cash Drawers & Scales' },
-                { id: 'service', label: 'Cloud Services & Setup' },
-              ].map((tab) => (
+              {[{ id: 'all', label: 'All Items' }, ...catalogCategories.map(category => ({ id: `category:${category}`, label: category }))].map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => setSelectedMatcherCategory(tab.id)}
@@ -606,7 +593,7 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
                 </div>
 
                 <div className="pt-3 mt-3 border-t border-slate-800/60 flex items-center justify-between">
-                  <span className="font-extrabold text-sm text-emerald-400 font-mono">${p.sellingPrice.toFixed(2)}</span>
+                  <span className="font-extrabold text-sm text-emerald-400 font-mono">{currency} {p.sellingPrice.toFixed(2)}</span>
                   <button
                     onClick={() => setInquiryModalProduct(p)}
                     className="px-2.5 py-1.5 rounded-lg bg-teal-600/20 hover:bg-teal-600 text-teal-300 hover:text-white text-[11px] font-bold transition cursor-pointer"
@@ -627,14 +614,14 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
             <div>
               <span className="text-xs uppercase font-extrabold tracking-widest text-teal-400 flex items-center gap-1.5 mb-1">
                 <Layers className="w-4 h-4" />
-                Extended Catalog Slideshow (Items {featuredLimit + 1}+)
+                Explore our full collection
               </span>
               <h2 className="text-2xl sm:text-3xl font-black text-slate-100">
-                Additional Hardware & Specialized Accessories
+                More from Our Catalog
               </h2>
             </div>
             <p className="text-xs text-slate-400 max-w-md">
-              Complete your point of sale terminal setup with specialized scales, kitchen displays, and barcode ribbons.
+              Discover more products and services from this business.
             </p>
           </div>
 
@@ -659,7 +646,7 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
                       </span>
                       <span className="font-mono text-slate-400 text-xs">SKU: {currentItem.sku}</span>
                       <span className="text-emerald-400 text-xs font-semibold">
-                        • {currentItem.type === 'service' ? 'Fulfillment Available' : `Stock: ${currentItem.stock} units`}
+                        • {currentItem.type === 'service' ? 'Contact to arrange' : `Stock: ${currentItem.stock} units`}
                       </span>
                     </div>
 
@@ -670,7 +657,7 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
                     <div className="pt-2 flex flex-wrap items-center justify-between gap-4">
                       <div>
                         <span className="text-[10px] text-slate-400 block uppercase font-bold">Live Inventory Price</span>
-                        <span className="text-2xl font-black text-emerald-400 font-mono">${currentItem.sellingPrice.toFixed(2)}</span>
+                        <span className="text-2xl font-black text-emerald-400 font-mono">{currency} {currentItem.sellingPrice.toFixed(2)}</span>
                       </div>
 
                       <div className="flex items-center gap-2">
@@ -705,6 +692,7 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
                   {slideshowItems.slice(0, 12).map((_, idx) => (
                     <button
                       key={idx}
+                      aria-label={`Show catalog item ${idx + 1}`}
                       onClick={() => setCurrentSlideIndex(idx)}
                       className={`h-2 rounded-full transition-all cursor-pointer ${
                         currentSlideIndex === idx ? 'w-8 bg-teal-400' : 'w-2 bg-slate-800'
@@ -723,7 +711,7 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
         <section id="reviews" className="max-w-7xl mx-auto px-4 py-12">
           <div className="text-center max-w-2xl mx-auto mb-10">
             <span className="text-xs font-bold uppercase tracking-wider text-amber-400 block mb-1">
-              Verified Social Proof
+              Customer Reviews
             </span>
             <h2 className="text-2xl sm:text-3xl font-black text-slate-100">
               What Customers Say About {displayCompany.name}
@@ -756,7 +744,7 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
                       {rev.customerName}
                       <ShieldCheck className="w-3.5 h-3.5 text-teal-400" />
                     </div>
-                    <div className="text-[10px] text-slate-400">{rev.customerLocation || 'Verified Buyer'}</div>
+                    <div className="text-[10px] text-slate-400">{rev.customerLocation || 'Customer'}</div>
                   </div>
                 </div>
               </div>
@@ -766,14 +754,14 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
       )}
 
       {/* 5. STORE REFERRAL REWARDS */}
-      <section id="referrals" className="max-w-7xl mx-auto px-4 py-12">
+      {settings.landingPage.referralBonusText.trim() && <section id="referrals" className="max-w-7xl mx-auto px-4 py-12">
         <div className="bg-gradient-to-r from-amber-950/40 via-slate-900 to-purple-950/40 border border-amber-800/40 rounded-3xl p-6 sm:p-10 shadow-2xl">
           <div className="max-w-3xl mx-auto text-center space-y-4">
             <div className="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center mx-auto border border-amber-500/30">
               <Gift className="w-6 h-6" />
             </div>
             <h2 className="text-2xl sm:text-3xl font-black text-slate-100">
-              Earn Store Credit When You Refer A Business
+              Share with a Friend
             </h2>
             <p className="text-xs sm:text-sm text-slate-300 max-w-xl mx-auto leading-relaxed">
               {settings.landingPage.referralBonusText}
@@ -809,7 +797,7 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
             )}
           </div>
         </div>
-      </section>
+      </section>}
 
       {/* 6. STORE OFFICIAL CONTACT & LOCATION DETAILS */}
       <section id="contact" className="max-w-7xl mx-auto px-4 py-12 scroll-mt-20">
@@ -821,14 +809,14 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
                 <h3 className="font-extrabold text-base text-slate-100">{displayCompany.name}</h3>
               </div>
               <p className="text-slate-400 leading-relaxed">{displayCompany.vision || displayCompany.slogan}</p>
-              <div className="font-mono text-[11px] text-teal-400">TAX PIN: {displayCompany.taxPin}</div>
+              <div className="font-mono text-[11px] text-teal-400">TAX PIN: {displayCompany.taxPin || 'Not provided'}</div>
             </div>
 
             <div className="space-y-2">
               <h4 className="font-bold text-slate-200 uppercase tracking-wider text-[11px]">Direct Contacts</h4>
               <div className="flex items-center gap-2 text-slate-300">
                 <Phone className="w-3.5 h-3.5 text-teal-400" />
-                <span>{displayCompany.tel1}</span>
+                <span>{displayCompany.tel1 || 'Phone not provided'}</span>
               </div>
               {displayCompany.whatsapp && (
                 <div className="flex items-center gap-2 text-emerald-400">
@@ -838,7 +826,7 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
               )}
               <div className="flex items-center gap-2 text-slate-300">
                 <Mail className="w-3.5 h-3.5 text-teal-400" />
-                <span>{displayCompany.email}</span>
+                <span>{displayCompany.email || 'Email not provided'}</span>
               </div>
             </div>
 
@@ -846,11 +834,11 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
               <h4 className="font-bold text-slate-200 uppercase tracking-wider text-[11px]">Store Hours & Location</h4>
               <div className="flex items-center gap-2 text-slate-300">
                 <MapPin className="w-3.5 h-3.5 text-teal-400" />
-                <span>{displayCompany.address}, {displayCompany.location}, {displayCompany.country}</span>
+                <span>{[displayCompany.address, displayCompany.location, displayCompany.country].filter(Boolean).join(', ') || 'Location not provided'}</span>
               </div>
               <div className="flex items-center gap-2 text-slate-300">
                 <Clock className="w-3.5 h-3.5 text-sky-400" />
-                <span>{displayCompany.operatingHours || 'Mon-Sat 8:00 AM - 8:00 PM'}</span>
+                <span>{displayCompany.operatingHours || 'Contact us for hours'}</span>
               </div>
             </div>
           </div>
@@ -862,6 +850,7 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-xs p-4">
           <div className="relative w-full max-w-lg rounded-3xl bg-slate-900 border border-slate-700 shadow-2xl p-6 text-white max-h-[90vh] overflow-y-auto">
             <button
+              aria-label="Close product inquiry"
               onClick={() => setInquiryModalProduct(null)}
               className="absolute top-4 right-4 text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800"
             >
@@ -875,7 +864,7 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
               <div>
                 <span className="text-[10px] uppercase font-bold text-teal-400 tracking-wider">Instant Quote Request</span>
                 <h3 className="text-lg font-black text-slate-100">{inquiryModalProduct.name}</h3>
-                <span className="font-mono text-emerald-400 text-xs font-bold">${inquiryModalProduct.sellingPrice.toFixed(2)}</span>
+                <span className="font-mono text-emerald-400 text-xs font-bold">{currency} {inquiryModalProduct.sellingPrice.toFixed(2)}</span>
               </div>
             </div>
 
@@ -1009,6 +998,7 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-xs p-4">
           <div className="relative w-full max-w-md rounded-3xl bg-slate-900 border border-slate-700 shadow-2xl p-6 text-white text-center">
             <button
+              aria-label="Close business page link dialog"
               onClick={() => setShareModalOpen(false)}
               className="absolute top-4 right-4 text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800"
             >
@@ -1016,9 +1006,9 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
             </button>
 
             <Share2 className="w-10 h-10 text-teal-400 mx-auto mb-3" />
-            <h3 className="text-lg font-black text-slate-100">Share Public Storefront</h3>
+            <h3 className="text-lg font-black text-slate-100">Business Page Preview Link</h3>
             <p className="text-xs text-slate-400 mt-1">
-              Give your retail or B2B customers this direct link to view your live catalog and request quotations:
+              This link opens the Business Landing Page. Data is stored in this browser; publishing your catalog for other people or devices requires a connected backend.
             </p>
 
             <div className="mt-4 p-3 bg-slate-950 rounded-xl border border-teal-500/30 flex items-center justify-between gap-2 text-xs">
@@ -1036,7 +1026,7 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
 
       {/* FLOATING AI CHATBOT CONCIERGE */}
       {settings.landingPage.showChatbot && (
-        <AIChatbotWidget inquiryLead={activeInquiryLead} />
+        <AIChatbotWidget surface="business" inquiryLead={activeInquiryLead} />
       )}
     </div>
   );

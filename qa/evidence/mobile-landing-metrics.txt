@@ -1,0 +1,10 @@
+### Result
+{
+  "viewport": 390,
+  "documentWidth": 404,
+  "unlabeledControls": 7
+}
+### Ran Playwright code
+```js
+await page.evaluate('() => ({viewport:innerWidth,documentWidth:document.documentElement.scrollWidth,unlabeledControls:[...document.querySelectorAll(\'input:not([type=hidden]),textarea,select\')].filter(e=>!e.labels?.length&&!e.getAttribute(\'aria-label\')&&!e.getAttribute(\'aria-labelledby\')).length})');
+```

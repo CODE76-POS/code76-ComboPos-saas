@@ -814,13 +814,13 @@ export const SalesPlatform: React.FC = () => {
                   <button
                     onClick={autoFillFullPayment}
                     className="px-2.5 py-1 rounded-full bg-slate-800/90 hover:bg-slate-700 text-slate-300 text-[11px] font-semibold border border-slate-700 transition cursor-pointer shadow-xs"
-                    title="Automatically fill total balance into payment method"
+                    title="Replace split payments with one Cash payment for the full total"
                   >
-                    Exact Pay
+                    One payment
                   </button>
                   <button
                     onClick={addPaymentMethod}
-                    className="px-3 py-1 rounded-full bg-teal-500/25 hover:bg-teal-500/40 text-teal-200 border-2 border-teal-400/80 shadow-[0_0_15px_rgba(20,184,166,0.4)] hover:shadow-[0_0_20px_rgba(20,184,166,0.6)] text-[11px] font-black flex items-center gap-1.5 transition-all duration-200 cursor-pointer active:scale-95 animate-pulse hover:animate-none"
+                    className="payment-add-button px-3 py-1 rounded-full bg-teal-500/25 hover:bg-teal-500/40 text-teal-200 border-2 border-teal-400/80 shadow-[0_0_15px_rgba(20,184,166,0.4)] hover:shadow-[0_0_20px_rgba(20,184,166,0.6)] text-[11px] font-black flex items-center gap-1.5 transition-all duration-200 cursor-pointer active:scale-95 animate-pulse hover:animate-none"
                     title="Add another split payment method (Cash, M-Pesa, Card, Wire, Credit)"
                   >
                     <Plus className="w-3.5 h-3.5 text-teal-300" />
@@ -832,6 +832,7 @@ export const SalesPlatform: React.FC = () => {
               {payments.map((p, idx) => (
                 <div key={idx} className="flex items-center gap-1.5 text-xs">
                   <select
+                    aria-label={`Payment ${idx + 1} method`}
                     value={p.method}
                     onChange={(e) => updatePaymentRow(idx, 'method', e.target.value)}
                     className="w-28 bg-slate-950 border border-slate-800 rounded-lg px-2 py-1 text-slate-200"
@@ -849,6 +850,7 @@ export const SalesPlatform: React.FC = () => {
                       type="number"
                       step="0.01"
                       min="0"
+                      aria-label={`Payment ${idx + 1} amount`}
                       value={p.amount || ''}
                       placeholder="0.00"
                       onChange={(e) =>
@@ -862,9 +864,11 @@ export const SalesPlatform: React.FC = () => {
                   {payments.length > 1 && (
                     <button
                       onClick={() => removePaymentRow(idx)}
-                      className="text-rose-400 hover:text-rose-300 p-1"
+                      aria-label={`Delete payment ${idx + 1} (${p.method})`}
+                      title={`Delete this ${p.method} payment`}
+                      className="text-rose-400 hover:text-rose-300 p-2 rounded-lg hover:bg-rose-500/10 cursor-pointer"
                     >
-                      ×
+                      <Trash2 className="w-4 h-4" aria-hidden="true" />
                     </button>
                   )}
                 </div>

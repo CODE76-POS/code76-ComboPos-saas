@@ -288,6 +288,8 @@ export interface EmailTemplate {
   body: string;
 }
 
+export type SettingsSection = 'payments' | 'textSizing' | 'landingPage' | 'receipts' | 'appearance' | 'font' | 'backup' | 'privileges' | 'pdfExcel' | 'emailTemplates' | 'auditLogs' | 'dataEraser';
+
 export interface AppSettings {
   payments: {
     acceptedMethods: string[];
@@ -296,7 +298,9 @@ export interface AppSettings {
     allowDebtSales: boolean;
   };
   textSizing: 'compact' | 'normal' | 'large' | 'xlarge';
+  /** Merchant Business Landing Page ONLY. CODE76 public-site content lives in config/code76Site.ts. */
   landingPage: {
+    contentVersion?: number;
     heroTitle: string;
     heroSubtitle: string;
     featuredCount: number;

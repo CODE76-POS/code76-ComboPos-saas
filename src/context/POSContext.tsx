@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import {
   AppSettings,
   AuditLog,
@@ -13,6 +13,7 @@ import {
   ProductItem,
   SaleTransaction,
   UserRole,
+  SettingsSection,
 } from '../types/index.ts';
 import {
   INITIAL_AUDIT_LOGS,
@@ -30,6 +31,11 @@ import {
   INITIAL_TRANSPORTERS,
   INITIAL_VENDORS,
 } from '../data/initialData.ts';
+
+import { mergeAppSettings } from '../utils/businessPageSettings.ts';
+import { EMPTY_BUSINESS_METRICS } from '../config/businessPage.ts';
+import { initialView, viewUrl } from '../utils/landingPages.ts';
+import { isCompanyConfigured, readSetupProgress } from '../utils/onboarding.ts';
 
 interface POSContextType {
   // Data
@@ -60,6 +66,9 @@ interface POSContextType {
   setLandingMetrics: React.Dispatch<React.SetStateAction<LandingMetrics>>;
   settings: AppSettings;
   setSettings: React.Dispatch<React.SetStateAction<AppSettings>>;
+
+  settingsSection: SettingsSection;
+  setSettingsSection: (section: SettingsSection) => void;
 
   // App & View State
   currentUser: AuthUser | null;
@@ -160,20 +169,32 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [companyMembers, setCompanyMembers] = useState<PersonRecord[]>(initial?.companyMembers || []);
   const [reviews, setReviews] = useState<CustomerReview[]>(initial?.reviews || []);
   const [auditLogs, setAuditLogs] = useState<AuditLog[]>(initial?.auditLogs || []);
-  const [landingMetrics, setLandingMetrics] = useState<LandingMetrics>(initial?.landingMetrics || INITIAL_LANDING_METRICS);
-  const [settings, setSettings] = useState<AppSettings>(initial?.settings || INITIAL_SETTINGS);
+  const [landingMetrics, setLandingMetrics] = useState<LandingMetrics>(initial?.landingMetrics || EMPTY_BUSINESS_METRICS);
+  const [settings, setSettings] = useState<AppSettings>(() => mergeAppSettings(INITIAL_SETTINGS, initial?.settings));
 
-  // High contrast theme state ('dark' or 'light')
-  const [theme, setTheme] = useState<'dark' | 'light'>(
-    initial?.theme || initial?.settings?.appearance?.theme || 'dark'
-  );
+  // One persisted source of truth for both Settings and the setup assistant.
+  const theme = settings.appearance.theme;
+  const [settingsSection, setSettingsSection] = useState<SettingsSection>('payments');
 
   // Active user: defaults to null on clean load, landing page first
   const [currentUser, setCurrentUser] = useState<AuthUser | null>(initial?.currentUser || null);
 
-  const [activeView, setActiveView] = useState<'pos' | 'landing' | 'storefront'>(
-    initial?.activeView || (initial?.currentUser ? 'pos' : 'landing')
+  const [activeView, setActiveViewState] = useState<'pos' | 'landing' | 'storefront'>(() =>
+    initialView(typeof window === 'undefined' ? '' : window.location.search, !!initial?.currentUser)
   );
+  const setActiveView = useCallback((view: 'pos' | 'landing' | 'storefront') => {
+    setActiveViewState(view);
+    if (typeof window !== 'undefined') {
+      const next = viewUrl(view, window.location.href);
+      if (next !== window.location.href) window.history.pushState({ view }, '', next);
+      window.scrollTo({ top: 0 });
+    }
+  }, []);
+  useEffect(() => {
+    const onPopState = () => setActiveViewState(initialView(window.location.search, !!currentUser));
+    window.addEventListener('popstate', onPopState);
+    return () => window.removeEventListener('popstate', onPopState);
+  }, [currentUser]);
   const [activePlatform, setActivePlatform] = useState<PlatformId>('selling');
   const [viewportMode, setViewportMode] = useState<'desktop' | 'laptop' | 'tablet' | 'phone'>('desktop');
 
@@ -196,10 +217,8 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // Trigger company Q&A modal if company data is missing or not entered by merchant
   useEffect(() => {
     if (currentUser && activeView === 'pos' && !hasDismissedCompanyQA) {
-      const isMissingCompanyData =
-        !company.isConfiguredByMerchant &&
-        (!company.name || company.name === 'CODE76 ENTERPRISE SOLUTIONS' || !company.address || !company.tel1);
-      if (isMissingCompanyData) {
+      const needsSetup = !isCompanyConfigured(company) || readSetupProgress()?.status === 'in_progress';
+      if (needsSetup) {
         const timer = setTimeout(() => {
           setCompanyQAModalOpen(true);
         }, 700);
@@ -284,7 +303,7 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // Load Demo Data
   const loadDemoData = () => {
-    setCompany(INITIAL_COMPANY);
+    setCompany({ ...INITIAL_COMPANY, isConfiguredByMerchant: true });
     setProducts(INITIAL_PRODUCTS);
     setSales(INITIAL_SALES);
     setExpenses(INITIAL_EXPENSES);
@@ -627,18 +646,9 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // Theme toggle
   const toggleTheme = () => {
-    setTheme((prev) => {
-      const next = prev === 'dark' ? 'light' : 'dark';
-      setSettings((s) => ({
-        ...s,
-        appearance: {
-          ...s.appearance,
-          theme: next,
-        },
-      }));
-      logAuditAction('Theme Toggled', `Switched theme high-contrast mode to ${next.toUpperCase()}`);
-      return next;
-    });
+    const next = theme === 'dark' ? 'light' : 'dark';
+    setSettings(previous => ({ ...previous, appearance: { ...previous.appearance, theme: next } }));
+    logAuditAction('Theme Toggled', `Switched POS theme to ${next.toUpperCase()}`);
   };
 
   // Adjust product stock with audit logging
@@ -1071,6 +1081,8 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setLandingMetrics,
         settings,
         setSettings,
+        settingsSection,
+        setSettingsSection,
         currentUser,
         setCurrentUser,
         activeView,

@@ -1,0 +1,18 @@
+### Result
+{
+  "expenseCount": 6,
+  "createdExpense": {
+    "title": "QA ONLY - test expense",
+    "category": "Rent",
+    "amount": 12.34,
+    "date": "2026-10-20",
+    "vendorName": "QA fixture vendor",
+    "paymentMethod": "Bank Transfer",
+    "description": "",
+    "id": "exp-1792493007334"
+  }
+}
+### Ran Playwright code
+```js
+await page.evaluate('() => {const s=JSON.parse(localStorage.getItem(\'code76_pos_state_v1\'));return {expenseCount:s.expenses.length,createdExpense:s.expenses.find(e=>e.title===\'QA ONLY - test expense\')}}');
+```

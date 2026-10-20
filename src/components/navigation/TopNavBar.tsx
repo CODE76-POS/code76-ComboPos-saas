@@ -68,6 +68,7 @@ export const TopNavBar: React.FC = () => {
     logoutUser,
     theme,
     toggleTheme,
+    setSettingsSection,
   } = usePOS();
 
   const isLight = theme === 'light';
@@ -278,8 +279,8 @@ export const TopNavBar: React.FC = () => {
                 </button>
 
                 <button
-                  onClick={() => setActiveView(activeView === 'pos' ? 'landing' : 'pos')}
-                  title="Toggle CODE76 POS product main site"
+                  onClick={() => setActiveView('landing')}
+                  title="CODE76 main site — product information and sign-in, separate from your business page"
                   className={`px-2.5 sm:px-3 py-1.5 rounded-xl text-[11px] sm:text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer shadow-xs ${
                     activeView === 'landing'
                       ? 'bg-teal-600 text-white'

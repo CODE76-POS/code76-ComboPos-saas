@@ -1,0 +1,85 @@
+### Result
+{
+  "products": 12,
+  "sales": 3,
+  "expenses": 5,
+  "customers": 3,
+  "inventory": [
+    {
+      "id": "prod-01",
+      "name": "CODE76 Touch POS Terminal 15.6\"",
+      "stock": 22,
+      "price": 599
+    },
+    {
+      "id": "prod-02",
+      "name": "UltraSpeed Thermal Receipt Printer 80mm",
+      "stock": 45,
+      "price": 129
+    },
+    {
+      "id": "prod-03",
+      "name": "Hands-Free 2D Omnidirectional Barcode Scanner",
+      "stock": 35,
+      "price": 89
+    },
+    {
+      "id": "prod-04",
+      "name": "Heavy-Duty Steel Electronic Cash Drawer",
+      "stock": 19,
+      "price": 95
+    },
+    {
+      "id": "prod-05",
+      "name": "Enterprise Cloud ERP Setup & Staff Onboarding",
+      "stock": 999,
+      "price": 350
+    },
+    {
+      "id": "prod-06",
+      "name": "Annual Priority Hardware & System Maintenance",
+      "stock": 999,
+      "price": 480
+    },
+    {
+      "id": "prod-07",
+      "name": "Wireless Handheld Smart POS 4G / NFC",
+      "stock": 14,
+      "price": 219
+    },
+    {
+      "id": "prod-08",
+      "name": "Biometric Face & Fingerprint Attendance Timeclock",
+      "stock": 16,
+      "price": 179
+    },
+    {
+      "id": "prod-09",
+      "name": "BPA-Free Premium Thermal Paper Rolls (50-Pack)",
+      "stock": 120,
+      "price": 48
+    },
+    {
+      "id": "prod-10",
+      "name": "PCI-DSS & Security Penetration Testing",
+      "stock": 999,
+      "price": 590
+    },
+    {
+      "id": "prod-11",
+      "name": "Dual-Screen Self-Checkout Kiosk 21.5\"",
+      "stock": 8,
+      "price": 980
+    },
+    {
+      "id": "prod-12",
+      "name": "Custom ERP API Integration & Inventory Automation",
+      "stock": 999,
+      "price": 750
+    }
+  ]
+}
+### Ran Playwright code
+```js
+await page.evaluate('() => {const s=JSON.parse(localStorage.getItem(\'code76_pos_state_v1\'));return {products:s.products.length,sales:s.sales.length,expenses:s.expenses.length,customers:s.customers.length,inventory:s.products.map(p=>({id:p.id,name:p.name,stock:p.stock,price:p.sellingPrice}))}}');
+```

@@ -4,7 +4,7 @@ import { Lock, Mail, KeyRound, Shield, X, UserPlus, LogIn, CheckCircle2, AlertCi
 import { ALL_ROLES, UserRole } from '../../types/index.ts';
 
 export const LoginModal: React.FC = () => {
-  const { loginModalOpen, setLoginModalOpen, currentUser, loginUser, logoutUser } = usePOS();
+  const { loginModalOpen, setLoginModalOpen, currentUser, loginUser, logoutUser, registerUser } = usePOS();
 
   const [mode, setMode] = useState<'login' | 'register'>('login');
   const [email, setEmail] = useState<string>('');
@@ -43,7 +43,8 @@ export const LoginModal: React.FC = () => {
         setErrorMsg('Password must be at least 4 characters.');
         return;
       }
-      loginUser(email, password, role);
+      const result = registerUser(fullName, email, password, role);
+      if (!result.success) { setErrorMsg(result.message); return; }
       setSuccessMsg(`User account registered with role: ${role}!`);
       setTimeout(() => {
         setSuccessMsg('');

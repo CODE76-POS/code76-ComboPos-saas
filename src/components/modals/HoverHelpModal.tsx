@@ -20,7 +20,7 @@ import {
   ChevronDown,
   ChevronUp,
 } from 'lucide-react';
-import { PlatformId } from '../../types/index.ts';
+import { PlatformId, SettingsSection } from '../../types/index.ts';
 
 const PLATFORM_HELP_MAP: Record<
   PlatformId,
@@ -106,7 +106,7 @@ const PLATFORM_HELP_MAP: Record<
       'Top Referrers Leaderboard: Recognize top customers, marketers, and staff driving referral sales.',
       'AI CFO Insights: Run Gemini analysis for strategic profit expansion recommendations.',
     ],
-    settingsLocation: 'Settings > Landing Page Settings',
+    settingsLocation: 'Settings > Business Landing Page Settings',
     settingsTab: 'landingPage',
     manualSection: 'Section 6: Analytics, P&L & Conversion Metrics',
   },
@@ -172,10 +172,10 @@ const PLATFORM_HELP_MAP: Record<
     title: 'My Company Profile',
     description: 'Corporate identity, vision, logo, tax registration PIN, and official contact credentials.',
     whatItDoes: [
-      'Power the Public Landing Page with your genuine company slogan, logo, and vision.',
+      'Power your Business Landing Page with your genuine company slogan, logo, and vision.',
       'Appears on all printed sales receipts, PDF reports, and invoice headers.',
     ],
-    settingsLocation: 'Settings > Landing Page Settings',
+    settingsLocation: 'Settings > Business Landing Page Settings',
     settingsTab: 'landingPage',
     manualSection: 'Section 9: Company Setup & Public Brand Presence',
   },
@@ -191,14 +191,14 @@ const PLATFORM_HELP_MAP: Record<
     manualSection: 'Section 10: Multi-Channel Messaging',
   },
   landing_page_builder: {
-    title: 'Landing Page & Data Gate Checker',
+    title: 'Business Landing Page',
     description: 'E-commerce showcase builder connected directly to your live POS data and AI sales chatbot.',
     whatItDoes: [
-      'Data Integrity Gate: Validates that inventory, company members, reviews, and company profile exist.',
+      'Uses only your My Company profile, real Inventory and approved reviews; empty catalogs show no demo products.',
       'First 6 items displayed in prominent cards; remaining items displayed in dynamic interactive slideshow.',
-      'Live AI Sales Chatbot: Recommends products, closes deals, and invites non-buyers to refer friends.',
+      'Business assistant: answers from your catalog and contacts, separate from the CODE76 product-site assistant.',
     ],
-    settingsLocation: 'Settings > Landing Page Settings',
+    settingsLocation: 'Settings > Business Landing Page Settings',
     settingsTab: 'landingPage',
     manualSection: 'Section 11: High-Conversion E-Commerce Landing Page & AI Bot',
   },
@@ -242,7 +242,7 @@ const PLATFORM_HELP_MAP: Record<
 };
 
 export const HoverHelpModal: React.FC = () => {
-  const { hoverHelpPlatform, setHoverHelpPlatform, setActivePlatform } = usePOS();
+  const { hoverHelpPlatform, setHoverHelpPlatform, setActivePlatform, setSettingsSection } = usePOS();
   const [showIconGlossary, setShowIconGlossary] = useState(true);
 
   if (!hoverHelpPlatform) return null;
@@ -250,6 +250,7 @@ export const HoverHelpModal: React.FC = () => {
   const info = PLATFORM_HELP_MAP[hoverHelpPlatform] || PLATFORM_HELP_MAP.selling;
 
   const navigateToSettings = () => {
+    setSettingsSection(info.settingsTab as SettingsSection);
     setActivePlatform('settings');
     setHoverHelpPlatform(null);
   };

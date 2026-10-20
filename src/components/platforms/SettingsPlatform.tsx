@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { usePOS } from '../../context/POSContext.tsx';
 import {
   Settings,
@@ -37,6 +37,8 @@ export const SettingsPlatform: React.FC = () => {
   const {
     settings,
     setSettings,
+    settingsSection: activeTab,
+    setSettingsSection: setActiveTab,
     currentUser,
     hasPrivilege,
     addProduct,
@@ -59,22 +61,12 @@ export const SettingsPlatform: React.FC = () => {
     auditLogs,
   } = usePOS();
 
-  const [activeTab, setActiveTab] = useState<
-    | 'payments'
-    | 'textSizing'
-    | 'landingPage'
-    | 'receipts'
-    | 'appearance'
-    | 'font'
-    | 'backup'
-    | 'privileges'
-    | 'pdfExcel'
-    | 'emailTemplates'
-    | 'auditLogs'
-    | 'dataEraser'
-  >('payments');
+
 
   const [formSettings, setFormSettings] = useState<AppSettings>(settings);
+  useEffect(() => {
+    setFormSettings(previous => ({ ...previous, textSizing: settings.textSizing, appearance: { ...previous.appearance, theme: settings.appearance.theme } }));
+  }, [settings.appearance.theme, settings.textSizing]);
   const [saveAlert, setSaveAlert] = useState<string>('');
 
   // CSV Import State in PDF & Excel Settings
@@ -316,7 +308,7 @@ export const SettingsPlatform: React.FC = () => {
           {[
             { id: 'payments', label: 'Payment Settings', icon: CreditCard },
             { id: 'textSizing', label: 'Text Sizing Settings', icon: Type },
-            { id: 'landingPage', label: 'Landing Page Settings', icon: Globe },
+            { id: 'landingPage', label: 'Business Landing Page Settings', icon: Globe },
             { id: 'receipts', label: 'Receipts Settings', icon: Receipt },
             { id: 'appearance', label: 'Color / Appearance Settings', icon: Palette },
             { id: 'font', label: 'Font Text Settings', icon: FileText },
@@ -484,7 +476,8 @@ export const SettingsPlatform: React.FC = () => {
           {activeTab === 'landingPage' && (
             <div className="space-y-4">
               <div>
-                <h3 className="text-base font-bold text-slate-100">Landing Page & Chatbot Settings</h3>
+                <h3 className="text-base font-bold text-slate-100">Business Landing Page & Chatbot Settings</h3>
+                <p className="text-xs text-slate-400 mt-2">These settings affect only your merchant storefront. They never change the CODE76 main site or its sign-in page.</p>
                 <p className="text-xs text-slate-400">
                   Configure hero headlines, AI sales assistant, slideshow speed, and referral reward text.
                 </p>
@@ -494,6 +487,7 @@ export const SettingsPlatform: React.FC = () => {
                 <label className="block text-xs font-semibold text-slate-400 mb-1">Hero Main Headline</label>
                 <input
                   type="text"
+                  aria-label="Business page headline"
                   value={formSettings.landingPage.heroTitle}
                   onChange={(e) =>
                     setFormSettings({
@@ -509,6 +503,7 @@ export const SettingsPlatform: React.FC = () => {
                 <label className="block text-xs font-semibold text-slate-400 mb-1">Hero Subtitle</label>
                 <textarea
                   rows={2}
+                  aria-label="Business page subtitle"
                   value={formSettings.landingPage.heroSubtitle}
                   onChange={(e) =>
                     setFormSettings({
@@ -569,6 +564,7 @@ export const SettingsPlatform: React.FC = () => {
                 </label>
                 <input
                   type="text"
+                  aria-label="Business page referral offer"
                   value={formSettings.landingPage.referralBonusText}
                   onChange={(e) =>
                     setFormSettings({
@@ -829,7 +825,7 @@ export const SettingsPlatform: React.FC = () => {
             <div className="space-y-4">
               <div>
                 <h3 className="text-base font-bold text-slate-100">Font Typography Settings</h3>
-                <p className="text-xs text-slate-400">Configure global font typeface for the entire POS and landing page.</p>
+                <p className="text-xs text-slate-400">Configure the POS workspace typeface. CODE76 main-site styling is maintained separately.</p>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">

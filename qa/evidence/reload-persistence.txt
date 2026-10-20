@@ -1,0 +1,20 @@
+### Result
+{
+  "savedExpense": {
+    "title": "QA ONLY - test expense",
+    "category": "Rent",
+    "amount": 12.34,
+    "date": "2026-10-20",
+    "vendorName": "QA fixture vendor",
+    "paymentMethod": "Bank Transfer",
+    "description": "",
+    "id": "exp-1792493007334"
+  },
+  "savedSale": "completed",
+  "scannerStock": 34,
+  "currentUserPersisted": false
+}
+### Ran Playwright code
+```js
+await page.evaluate('() => {const s=JSON.parse(localStorage.getItem(\'code76_pos_state_v1\'));return {savedExpense:s.expenses.find(e=>e.title===\'QA ONLY - test expense\'),savedSale:s.sales.find(x=>x.receiptNo===\'REC-7604\')?.status,scannerStock:s.products.find(p=>p.id===\'prod-03\').stock,currentUserPersisted:!!s.currentUser}}');
+```

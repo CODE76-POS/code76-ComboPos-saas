@@ -1,0 +1,191 @@
+### Page
+- Page URL: http://127.0.0.1:3000/?view=pos
+- Page Title: CODE76 POS — Workspace
+### Snapshot
+```yaml
+- generic [ref=f1e3]:
+  - generic [ref=f1e4]:
+    - banner [ref=f1e789]:
+      - generic [ref=f1e790]:
+        - button "76 CODE76 POS Enterprise Product & Service SaaS ERP System" [ref=f1e792] [cursor=pointer]:
+          - generic [ref=f1e793]: "76"
+          - generic [ref=f1e794]:
+            - generic [ref=f1e795]:
+              - generic [ref=f1e796]: CODE76 POS
+              - generic [ref=f1e797]: Enterprise
+            - paragraph [ref=f1e798]: Product & Service SaaS ERP System
+        - generic [ref=f1e799]:
+          - generic [ref=f1e800]:
+            - button "Desktop View (Full Width)" [ref=f1e801] [cursor=pointer]
+            - button "Laptop View (1024px)" [ref=f1e804] [cursor=pointer]
+            - button "Tablet View (768px)" [ref=f1e807] [cursor=pointer]
+            - button "Phone Mobile View (390px)" [ref=f1e810] [cursor=pointer]
+          - generic [ref=f1e813]:
+            - button "Dark" [ref=f1e1174] [cursor=pointer]
+            - button "Demo Data" [ref=f1e822] [cursor=pointer]
+            - generic [ref=f1e828]:
+              - button "Storefront" [ref=f1e829] [cursor=pointer]
+              - button "CODE76 Site" [ref=f1e834] [cursor=pointer]
+            - button "Click to view help guide and settings for this platform" [ref=f1e839] [cursor=pointer]
+            - generic [ref=f1e843]:
+              - 'button "TE TEST Guided Setup Owner Role: CEO" [ref=f1e844] [cursor=pointer]':
+                - generic [ref=f1e845]: TE
+                - generic [ref=f1e846]:
+                  - generic [ref=f1e847]: TEST Guided Setup Owner
+                  - generic [ref=f1e848]: "Role: CEO"
+              - button "Sign out and return to landing page" [ref=f1e849] [cursor=pointer]
+      - generic [ref=f1e854]:
+        - button "Sales POS" [ref=f1e855] [cursor=pointer]
+        - button "Sales History" [ref=f1e859] [cursor=pointer]
+        - button "Inventory" [ref=f1e864] [cursor=pointer]
+        - button "Expenses" [ref=f1e869] [cursor=pointer]
+        - button "Invoices" [ref=f1e873] [cursor=pointer]
+        - button "Analytics & P&L" [ref=f1e877] [cursor=pointer]
+        - button "Customers" [ref=f1e880] [cursor=pointer]
+        - button "Vendors" [ref=f1e886] [cursor=pointer]
+        - button "Transporters" [ref=f1e891] [cursor=pointer]
+        - button "Marketing Team" [ref=f1e897] [cursor=pointer]
+        - button "Company Members" [ref=f1e901] [cursor=pointer]
+        - button "My Company" [ref=f1e907] [cursor=pointer]
+        - button "Messaging" [ref=f1e911] [cursor=pointer]
+        - button "Business Landing Page" [ref=f1e914] [cursor=pointer]
+        - button "Settings" [ref=f1e919] [cursor=pointer]
+        - button "Audit & Access Logs" [ref=f1e923] [cursor=pointer]
+        - button "About & Manual" [ref=f1e927] [cursor=pointer]
+    - main [ref=f1e5]:
+      - generic [ref=f1e1303]:
+        - generic [ref=f1e1304]:
+          - generic [ref=f1e1305]:
+            - generic [ref=f1e1306]:
+              - heading "My Company Profile" [level=1] [ref=f1e1307]
+              - button "Click for platform guidance & settings" [ref=f1e1308] [cursor=pointer]
+            - paragraph [ref=f1e1312]: Define your business identity, contacts and legal details for your Business Landing Page and receipts. This does not edit the CODE76 main site.
+          - button "Open guided setup" [ref=f1e1313] [cursor=pointer]
+        - generic [ref=f1e1317]:
+          - generic [ref=f1e1319]:
+            - generic [ref=f1e1320]:
+              - generic [ref=f1e1321]:
+                - generic [ref=f1e1322]: Company Legal Name *
+                - textbox [ref=f1e1323]: TEST Acacia Market
+              - generic [ref=f1e1324]:
+                - generic [ref=f1e1325]: Company Slogan / Tagline
+                - textbox [ref=f1e1326]: Fresh essentials, close to home
+            - generic [ref=f1e1327]:
+              - generic [ref=f1e1328]: Mission & Vision Statement
+              - textbox [ref=f1e1329]
+            - generic [ref=f1e1330]:
+              - generic [ref=f1e1331]:
+                - generic [ref=f1e1332]: Business Registration No
+                - textbox [ref=f1e1333]
+              - generic [ref=f1e1334]:
+                - generic [ref=f1e1335]: Tax / VAT PIN
+                - textbox [ref=f1e1336]
+            - generic [ref=f1e1337]:
+              - generic [ref=f1e1338]:
+                - generic [ref=f1e1339]: Primary Telephone *
+                - textbox [ref=f1e1340]: "+254700123456"
+              - generic [ref=f1e1341]:
+                - generic [ref=f1e1342]: Secondary Telephone
+                - textbox [ref=f1e1343]
+              - generic [ref=f1e1344]:
+                - generic [ref=f1e1345]: Official WhatsApp
+                - textbox [ref=f1e1346]
+            - generic [ref=f1e1347]:
+              - generic [ref=f1e1348]:
+                - generic [ref=f1e1349]: Primary Email Address
+                - textbox [ref=f1e1350]: acacia@example.test
+              - generic [ref=f1e1351]:
+                - generic [ref=f1e1352]: Operating Currency
+                - textbox [ref=f1e1353]: KES
+            - generic [ref=f1e1354]:
+              - generic [ref=f1e1355]:
+                - generic [ref=f1e1356]: Physical Address
+                - textbox [ref=f1e1357]: TEST Market Road
+              - generic [ref=f1e1358]:
+                - generic [ref=f1e1359]: City / Region *
+                - textbox [ref=f1e1360]: Nairobi
+              - generic [ref=f1e1361]:
+                - generic [ref=f1e1362]: Country
+                - textbox [ref=f1e1363]: Kenya
+            - generic [ref=f1e1365]:
+              - generic [ref=f1e1366]: Official Company Logo / Stamp (Link, Google Drive, Device Upload / Drag, Live Camera Snapshot)
+              - generic [ref=f1e1368]:
+                - button "Device / Drag" [ref=f1e1369] [cursor=pointer]
+                - button "Camera" [ref=f1e1374] [cursor=pointer]
+                - button "Photo Link" [ref=f1e1379] [cursor=pointer]
+                - button "Google Drive" [ref=f1e1384] [cursor=pointer]
+              - generic [ref=f1e1393] [cursor=pointer]:
+                - generic [ref=f1e1394]: Drag & Drop photo here, or Browse Device
+                - text: Supports JPEG, PNG, WEBP, GIF, SVG (Up to 10MB)
+              - paragraph [ref=f1e1395]: Brand logo appears on thermal receipts, PDF commercial invoices, and landing page hero bar.
+            - generic [ref=f1e1396]:
+              - generic [ref=f1e1397]: Operating Hours
+              - textbox [ref=f1e1398]
+            - button "Save Company Changes" [ref=f1e1400] [cursor=pointer]
+          - generic [ref=f1e1406]:
+            - generic [ref=f1e1407]: Landing Page & Receipt Brand Preview
+            - heading "TEST Acacia Market" [level=3] [ref=f1e1408]
+            - paragraph [ref=f1e1409]: Fresh essentials, close to home
+            - generic [ref=f1e1410]:
+              - generic [ref=f1e1411]: TEST Market Road, Nairobi
+              - generic [ref=f1e1416]: "+254700123456"
+              - generic [ref=f1e1420]: acacia@example.test
+            - generic [ref=f1e1429]:
+              - generic [ref=f1e1430]: Autonomous Sync Active
+              - text: This data feeds directly to the public e-commerce landing page, PDF vouchers, and printable receipts.
+  - dialog [ref=f1e1547]:
+    - banner [ref=f1e1436]:
+      - generic [ref=f1e1437]: "76"
+      - generic [ref=f1e1439]:
+        - text: A good start, your way
+        - paragraph [ref=f1e1440]: CODE76 workspace setup
+      - button "Save progress and close setup" [ref=f1e1441] [cursor=pointer]
+    - list "Setup progress" [ref=f1e1445]:
+      - listitem [ref=f1e1446]:
+        - generic [ref=f1e1450]: Your workspace
+      - listitem [ref=f1e1451]:
+        - generic [ref=f1e1455]: My Company
+      - listitem [ref=f1e1456]:
+        - generic [ref=f1e1458]: First inventory
+      - listitem [ref=f1e1459]:
+        - generic [ref=f1e1460]: "4"
+        - generic [ref=f1e1461]: Find your way
+    - generic [ref=f1e1462]:
+      - generic [ref=f1e1463]:
+        - generic [ref=f1e1464]: Step 4 of 4 · Find your way
+        - heading "You’re ready. Here’s your map." [active] [level=2] [ref=f1e1550]
+        - paragraph [ref=f1e1466]: Keep these icons in mind. Settings, platform guidance and the full manual are always available in the navigation.
+      - status [ref=f1e1523]: TEST Gift wrapping saved to Inventory. 3 of 3 starter items added.
+      - generic [ref=f1e1551]:
+        - button [ref=f1e1552] [cursor=pointer]:
+          - strong [ref=f1e1557]: Inventory
+          - paragraph [ref=f1e1558]: Add, edit, price and restock products or services. Your starter items are already here.
+          - generic [ref=f1e1559]: Open Inventory
+        - button [ref=f1e1562] [cursor=pointer]:
+          - strong [ref=f1e1566]: Settings
+          - paragraph [ref=f1e1567]: Look for the gear. Change payments, appearance, text size, receipts and more.
+          - generic [ref=f1e1568]: Open Settings
+        - button [ref=f1e1571] [cursor=pointer]:
+          - strong [ref=f1e1575]: Platform guidance
+          - paragraph [ref=f1e1576]: Look for the question-mark circle beside a platform title or in the top bar.
+          - generic [ref=f1e1577]: See a help guide
+        - button [ref=f1e1580] [cursor=pointer]:
+          - strong [ref=f1e1583]: About & Manual
+          - paragraph [ref=f1e1584]: Look for the information-circle icon in navigation for the full app guide.
+          - generic [ref=f1e1585]: Read the manual
+      - generic [ref=f1e1593]:
+        - strong [ref=f1e1594]: Your Business Landing Page is yours.
+        - paragraph [ref=f1e1595]:
+          - text: It uses My Company, Inventory and Settings → Business Landing Page. The
+          - strong [ref=f1e1596]: CODE76 main site
+          - text: is the separate product and sign-in website.
+      - generic [ref=f1e1597]:
+        - button "Text Sizing" [ref=f1e1598] [cursor=pointer]
+        - button "Business page settings" [ref=f1e1601] [cursor=pointer]
+        - button "My Company" [ref=f1e1606] [cursor=pointer]
+    - contentinfo [ref=f1e1510]:
+      - generic [ref=f1e1610]:
+        - button "Back" [ref=f1e1611] [cursor=pointer]
+        - button "Done, start selling" [ref=f1e1614] [cursor=pointer]
+      - paragraph [ref=f1e1618]: Saved preferences, company details and inventory items stay in this browser. You can reopen this assistant from My Company.
+```

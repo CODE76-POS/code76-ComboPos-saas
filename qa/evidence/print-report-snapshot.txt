@@ -1,0 +1,48 @@
+### Open tabs
+- 0: [CODE76 POS - Enterprise Point of Sale & ERP Commerce Platform](http://127.0.0.1:3000/)
+- 1: (current) [Operational Expenses Audit Report - CODE76 ENTERPRISE SOLUTIONS](about:blank)
+### Page
+- Page URL: about:blank
+- Page Title: Operational Expenses Audit Report - CODE76 ENTERPRISE SOLUTIONS
+### Snapshot
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - button "Print / Save as PDF" [ref=e3] [cursor=pointer]
+    - button "Close" [ref=e4] [cursor=pointer]
+  - generic [ref=e5]:
+    - generic [ref=e6]:
+      - heading "CODE76 ENTERPRISE SOLUTIONS" [level=1] [ref=e7]
+      - paragraph [ref=e8]: Precision Point of Sale, ERP & Next-Gen Commerce
+      - paragraph [ref=e9]: Suite 76, Silicon Boulevard, Tech District, Nairobi Hub / Global Online, Kenya / International
+      - paragraph [ref=e10]: "Tel: +1 (800) 760-7676 | Email: code76pos@gmail.com"
+      - paragraph [ref=e11]:
+        - text: "Tax/VAT PIN:"
+        - strong [ref=e12]: P051982736Z
+    - generic [ref=e13]:
+      - heading "Operational Expenses Audit Report" [level=2] [ref=e14]
+      - paragraph [ref=e15]: "Generated: 10/20/2026, 10:43:44 AM"
+      - paragraph [ref=e16]: "System: CODE76 POS Enterprise"
+      - paragraph [ref=e17]: "Total Records: 1"
+  - table [ref=e18]:
+    - rowgroup [ref=e19]:
+      - row [ref=e20]:
+        - columnheader "Date" [ref=e21]
+        - columnheader "Title" [ref=e22]
+        - columnheader "Category" [ref=e23]
+        - columnheader "Vendor" [ref=e24]
+        - columnheader "Channel" [ref=e25]
+        - columnheader "Amount ($)" [ref=e26]
+    - rowgroup [ref=e27]:
+      - row [ref=e28]:
+        - cell "2026-10-20" [ref=e29]
+        - cell "QA ONLY - test expense" [ref=e30]
+        - cell "Rent" [ref=e31]
+        - cell "QA fixture vendor" [ref=e32]
+        - cell "Bank Transfer" [ref=e33]
+        - cell "12.34" [ref=e34]
+  - generic [ref=e35]:
+    - generic [ref=e36]: CODE76 POS - Official System Generated Document
+    - generic [ref=e37]: "Authorized Signature / Stamp: ______________________"
+    - generic [ref=e38]: Page 1 of 1
+```

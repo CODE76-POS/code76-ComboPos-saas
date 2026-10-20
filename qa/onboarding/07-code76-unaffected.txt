@@ -1,0 +1,423 @@
+### Page
+- Page URL: http://127.0.0.1:3000/?view=landing
+- Page Title: CODE76 POS — Enterprise Point of Sale & ERP
+### Snapshot
+```yaml
+- main [ref=f1e5]:
+  - generic [ref=f1e1727]:
+    - generic [ref=f1e1733]:
+      - strong [ref=f1e1734]: "Official CODE76 POS Release:"
+      - text: Enterprise Retail, Supermarket & Restaurant Point of Sale Suite. Refer a fellow business owner and earn $50 instant cash reward!
+    - navigation [ref=f1e1735]:
+      - generic [ref=f1e1736]:
+        - generic [ref=f1e1737]: "76"
+        - generic [ref=f1e1738]:
+          - generic [ref=f1e1739]:
+            - generic [ref=f1e1740]: CODE76 POS
+            - generic [ref=f1e1741]: Official
+          - generic [ref=f1e1742]: Enterprise Point of Sale & ERP SaaS Software
+      - generic [ref=f1e1743]:
+        - link "About CODE76" [ref=f1e1744] [cursor=pointer]:
+          - /url: "#about"
+        - link "Businesses Supported" [ref=f1e1745] [cursor=pointer]:
+          - /url: "#businesses"
+        - link "Top 12 Features" [ref=f1e1746] [cursor=pointer]:
+          - /url: "#features"
+        - link "Companies Using CODE76" [ref=f1e1747] [cursor=pointer]:
+          - /url: "#companies"
+        - link "Customer Proof" [ref=f1e1748] [cursor=pointer]:
+          - /url: "#reviews"
+        - link "Referral Rewards" [ref=f1e1749] [cursor=pointer]:
+          - /url: "#referrals"
+        - link "Contact Sales" [ref=f1e1750] [cursor=pointer]:
+          - /url: "#contact"
+      - generic [ref=f1e1751]:
+        - button "Storefront Showcase" [ref=f1e1752] [cursor=pointer]
+        - generic [ref=f1e1757]:
+          - generic [ref=f1e1758]:
+            - generic [ref=f1e1759]: TE
+            - generic [ref=f1e1760]:
+              - generic [ref=f1e1761]: TEST Guided Setup Owner
+              - generic [ref=f1e1762]: CEO
+          - button "Enter POS App" [ref=f1e1763] [cursor=pointer]
+          - button "Sign Out" [ref=f1e1769] [cursor=pointer]
+    - generic [ref=f1e1775]:
+      - generic [ref=f1e1776]:
+        - generic [ref=f1e1777]: Enterprise Point of Sale & Commercial ERP Platform
+        - heading "Next-Generation Point of Sale & Retail Management Suite" [level=1] [ref=f1e1782]
+        - paragraph [ref=f1e1783]: Engineered for high-velocity supermarkets, busy restaurants, pharmacies, wholesale distributors, and retail boutiques. Experience lightning-fast barcode checkout, dual-role staff permissions, automated stock deduplication, and multi-split payments.
+        - generic [ref=f1e1784]:
+          - generic [ref=f1e1785]: "Multi-Split Payment: Cash, M-Pesa, Card & Wire"
+          - generic [ref=f1e1790]: Real-Time Stock Adjustment & Protected PIN Authorization
+          - generic [ref=f1e1795]: B2B Sales Invoices & Purchase Stock Auto-Sync
+          - generic [ref=f1e1800]: High-Contrast Light/Dark Themes & Multi-Device Views
+        - generic [ref=f1e1805]:
+          - generic [ref=f1e1810]:
+            - strong [ref=f1e1811]: 7603+
+            - text: Sales Logged
+          - generic [ref=f1e1815]:
+            - strong [ref=f1e1816]: 4.9 / 5.0
+            - text: Client Satisfaction
+          - generic [ref=f1e1821]:
+            - strong [ref=f1e1822]: 24/7
+            - text: AI Sales Concierge
+      - generic [ref=f1e1824]:
+        - generic [ref=f1e1825]:
+          - generic [ref=f1e1831]:
+            - heading "CODE76 POS Portal Access" [level=3] [ref=f1e1832]
+            - paragraph [ref=f1e1833]: Enterprise Authentication Gate
+          - generic [ref=f1e1834]: Encrypted
+        - generic [ref=f1e1835]:
+          - generic [ref=f1e1836]:
+            - generic [ref=f1e1837]: TE
+            - generic [ref=f1e1838]:
+              - heading "TEST Guided Setup Owner" [level=4] [ref=f1e1839]
+              - paragraph [ref=f1e1840]: qa-guided-setup@example.test
+              - generic [ref=f1e1841]: "Primary Role: CEO"
+            - paragraph [ref=f1e1842]: You are authenticated. Launch the terminal to process sales, manage stock, and view analytics.
+          - generic [ref=f1e1843]:
+            - button "Launch POS Terminal" [ref=f1e1844] [cursor=pointer]
+            - button "Sign Out" [ref=f1e1849] [cursor=pointer]
+    - generic [ref=f1e1852]:
+      - generic [ref=f1e1853]: About CODE76 POS System
+      - heading "Engineered for High-Velocity Modern Commerce" [level=2] [ref=f1e1857]
+      - paragraph [ref=f1e1858]: CODE76 POS is an enterprise-grade Point of Sale and ERP management suite crafted specifically for supermarkets, pharmacies, restaurants, wholesale distributors, and retail businesses. From multi-split checkouts to automated stock deduction and compliance audit trails, we empower businesses with uncompromised speed and transparency.
+      - generic [ref=f1e1859]:
+        - generic [ref=f1e1860]:
+          - heading "Zero Downtime Checkout" [level=3] [ref=f1e1864]
+          - paragraph [ref=f1e1865]: Multi-split payments (Cash, M-Pesa, Card, Wire) process in under 3 seconds per customer lane.
+        - generic [ref=f1e1866]:
+          - heading "Automated Stock Sync" [level=3] [ref=f1e1872]
+          - paragraph [ref=f1e1873]: Every sale cross-references inventory in real-time, preventing duplicate reconciliation and stockouts.
+        - generic [ref=f1e1874]:
+          - heading "Audit-Grade Security" [level=3] [ref=f1e1879]
+          - paragraph [ref=f1e1880]: Role-based privilege enforcement, manager PIN verification, and one-click PDF/CSV audit trail export.
+    - generic [ref=f1e1881]:
+      - generic [ref=f1e1882]:
+        - generic [ref=f1e1883]: Commercial Versatility
+        - heading "Different Businesses CODE76 Powers & Works On" [level=2] [ref=f1e1888]
+        - paragraph [ref=f1e1889]: Explore how CODE76 adapts to the distinct workflows, hardware setups, and compliance rules of each commercial sector.
+      - generic [ref=f1e1890]:
+        - button "Supermarkets & Retail Stores" [ref=f1e1891] [cursor=pointer]
+        - button "Restaurants, Cafés & Hospitality" [ref=f1e1897] [cursor=pointer]
+        - button "Pharmacies & Healthcare Dispensaries" [ref=f1e1902] [cursor=pointer]
+        - button "Wholesale, Warehousing & Logistics" [ref=f1e1907] [cursor=pointer]
+        - button "Hardware, Electronics & Boutiques" [ref=f1e1914] [cursor=pointer]
+        - button "Salons, Spas & Professional Services" [ref=f1e1919] [cursor=pointer]
+      - generic [ref=f1e1925]:
+        - generic [ref=f1e1926]:
+          - generic [ref=f1e1933]:
+            - text: High-Volume Lanes
+            - heading "Supermarkets & Retail Stores" [level=3] [ref=f1e1934]
+          - paragraph [ref=f1e1935]: Engineered for rapid barcode scanning, electronic scale integrations, weight barcodes, dual display customer pricing, and low-stock automatic reorder triggers.
+          - generic [ref=f1e1936]:
+            - generic [ref=f1e1937]: High-speed barcode scanner & scale barcode support
+            - generic [ref=f1e1942]: Multi-cashier lane management with independent shifts
+            - generic [ref=f1e1947]: Automatic low-stock threshold triggers & reorder alerts
+            - generic [ref=f1e1952]: Promotional discount codes & bulk pricing rules
+          - generic [ref=f1e1957]:
+            - generic [ref=f1e1958]:
+              - generic [ref=f1e1959]: "Recommended Hardware Ecosystem:"
+              - text: 15.6" Touch Terminal + 80mm High-Speed Thermal Printer + 2D Hands-Free Barcode Scanner
+            - link "Get Setup for My Business" [ref=f1e1960] [cursor=pointer]:
+              - /url: "#contact"
+        - generic [ref=f1e1964]:
+          - button "Supermarkets High-Volume Lanes" [ref=f1e1965] [cursor=pointer]:
+            - generic [ref=f1e1966]: Supermarkets
+            - paragraph [ref=f1e1972]: High-Volume Lanes
+          - button "Restaurants, Cafés Table & Kitchen Routing" [ref=f1e1973] [cursor=pointer]:
+            - generic [ref=f1e1974]: Restaurants, Cafés
+            - paragraph [ref=f1e1979]: Table & Kitchen Routing
+          - button "Pharmacies Batch & Expiry Safe" [ref=f1e1980] [cursor=pointer]:
+            - generic [ref=f1e1981]: Pharmacies
+            - paragraph [ref=f1e1986]: Batch & Expiry Safe
+          - button "Wholesale, Warehousing B2B & Credit Ledgers" [ref=f1e1987] [cursor=pointer]:
+            - generic [ref=f1e1988]: Wholesale, Warehousing
+            - paragraph [ref=f1e1995]: B2B & Credit Ledgers
+          - button "Hardware, Electronics Serial & IMEI Tracking" [ref=f1e1996] [cursor=pointer]:
+            - generic [ref=f1e1997]: Hardware, Electronics
+            - paragraph [ref=f1e2002]: Serial & IMEI Tracking
+          - button "Salons, Spas Appointments & Staff Pay" [ref=f1e2003] [cursor=pointer]:
+            - generic [ref=f1e2004]: Salons, Spas
+            - paragraph [ref=f1e2009]: Appointments & Staff Pay
+    - generic [ref=f1e2010]:
+      - generic [ref=f1e2011]:
+        - generic [ref=f1e2012]: Platform Capabilities
+        - heading "Top 12 Powerful Features of CODE76 POS" [level=2] [ref=f1e2016]
+        - paragraph [ref=f1e2017]: Every feature is designed to eliminate tedious retail overhead, prevent stock loss, and elevate customer experience.
+      - generic [ref=f1e2018]:
+        - generic [ref=f1e2019]:
+          - generic [ref=f1e2020]:
+            - generic [ref=f1e2021]: Checkout & POS
+            - heading "Lightning Fast Multi-Split Checkout" [level=3] [ref=f1e2026]
+            - paragraph [ref=f1e2027]: Accept multi-split payments simultaneously across Cash, M-Pesa, Card, Bank Wire, and Store Credit on a single transaction.
+          - generic [ref=f1e2028]: "Feature #1 Included"
+        - generic [ref=f1e2032]:
+          - generic [ref=f1e2033]:
+            - generic [ref=f1e2034]: Inventory Sync
+            - heading "Automated Real-Time Stock Deduction Trigger" [level=3] [ref=f1e2041]
+            - paragraph [ref=f1e2042]: Finalizing a sale cross-references catalog quantities instantly and reconciles stock levels without duplicate manual adjustments.
+          - generic [ref=f1e2043]: "Feature #2 Included"
+        - generic [ref=f1e2047]:
+          - generic [ref=f1e2048]:
+            - generic [ref=f1e2049]: Enterprise Security
+            - heading "Dual-Role Staff Security & PIN Authorization" [level=3] [ref=f1e2055]
+            - paragraph [ref=f1e2056]: Fine-grained permissions for Cashiers, Managers, Accountants, and Auditors with supervisor PIN protection for price edits and refunds.
+          - generic [ref=f1e2057]: "Feature #3 Included"
+        - generic [ref=f1e2061]:
+          - generic [ref=f1e2062]:
+            - generic [ref=f1e2063]: Billing Engine
+            - heading "Commercial B2B Sales & Purchase Invoicing" [level=3] [ref=f1e2069]
+            - paragraph [ref=f1e2070]: Issue official commercial invoices, manage accounts receivable & payable, print PDF statements, and auto-sync vendor restocks.
+          - generic [ref=f1e2071]: "Feature #4 Included"
+        - generic [ref=f1e2075]:
+          - generic [ref=f1e2076]:
+            - generic [ref=f1e2077]: Analytics & Profit
+            - heading "Real-Time Financial Intelligence & P&L" [level=3] [ref=f1e2082]
+            - paragraph [ref=f1e2083]: Instant calculations of COGS, gross margin, operating overhead, and net profitability charts powered by interactive Recharts and D3.
+          - generic [ref=f1e2084]: "Feature #5 Included"
+        - generic [ref=f1e2088]:
+          - generic [ref=f1e2089]:
+            - generic [ref=f1e2090]: Audit & Governance
+            - heading "Compliance Audit Trail & Security Logs" [level=3] [ref=f1e2096]
+            - paragraph [ref=f1e2097]: Cryptographically track every login, price adjustment, sale deletion, and export with one-click official PDF and CSV audit trail downloads.
+          - generic [ref=f1e2098]: "Feature #6 Included"
+        - generic [ref=f1e2102]:
+          - generic [ref=f1e2103]:
+            - generic [ref=f1e2104]: Communication
+            - heading "Universal Multi-Party Email Dispatch" [level=3] [ref=f1e2110]
+            - paragraph [ref=f1e2111]: Email single receipts or entire platform tables in .PDF, .TXT, and .CSV formats to customers, marketers, staff, vendors, and transporters.
+          - generic [ref=f1e2112]: "Feature #7 Included"
+        - generic [ref=f1e2116]:
+          - generic [ref=f1e2117]:
+            - generic [ref=f1e2118]: CRM & Loyalty
+            - heading "Customer CRM Directory & Debt Tracking" [level=3] [ref=f1e2126]
+            - paragraph [ref=f1e2127]: Track customer purchase history, outstanding debt balances with WhatsApp and email reminders, and lifetime value rankings.
+          - generic [ref=f1e2128]: "Feature #8 Included"
+        - generic [ref=f1e2132]:
+          - generic [ref=f1e2133]:
+            - generic [ref=f1e2134]: Cost Control
+            - heading "Operating Expense & Overhead Management" [level=3] [ref=f1e2140]
+            - paragraph [ref=f1e2141]: Record and categorize operational disbursements (rent, utilities, salaries, maintenance) with automatic deductions from net profit.
+          - generic [ref=f1e2142]: "Feature #9 Included"
+        - generic [ref=f1e2146]:
+          - generic [ref=f1e2147]:
+            - generic [ref=f1e2148]: Growth Automation
+            - heading "Viral Friend & Customer Referral Engine" [level=3] [ref=f1e2155]
+            - paragraph [ref=f1e2156]: Built-in referral tracking engine giving advocates custom codes and rewarding $50 credits to drive organic word-of-mouth retail growth.
+          - generic [ref=f1e2157]: "Feature #10 Included"
+        - generic [ref=f1e2161]:
+          - generic [ref=f1e2162]:
+            - generic [ref=f1e2163]: Any Device
+            - heading "Multi-Device Responsive Portals" [level=3] [ref=f1e2168]
+            - paragraph [ref=f1e2169]: Engineered with flexible responsive grid layouts optimized for mobile phones (390px), tablets (768px), laptops (1024px), and wide monitors.
+          - generic [ref=f1e2170]: "Feature #11 Included"
+        - generic [ref=f1e2174]:
+          - generic [ref=f1e2175]:
+            - generic [ref=f1e2176]: Data Administration
+            - heading "Selective Platform Wipe & Modular Reset" [level=3] [ref=f1e2180]
+            - paragraph [ref=f1e2181]: Selectively purge individual databases (products, sales, expenses, invoices, CRM) without losing your corporate configuration or theme.
+          - generic [ref=f1e2182]: "Feature #12 Included"
+    - generic [ref=f1e2186]:
+      - generic [ref=f1e2187]:
+        - generic [ref=f1e2188]:
+          - generic [ref=f1e2189]: Enterprise Adoption
+          - heading "Companies Using CODE76 POS" [level=2] [ref=f1e2194]
+        - paragraph [ref=f1e2195]: Over 850+ stores, supermarkets, pharmacies, cafes, and logistics hubs run their daily checkout on CODE76.
+      - generic [ref=f1e2196]:
+        - generic [ref=f1e2197]:
+          - generic [ref=f1e2198]:
+            - generic [ref=f1e2199]: APEX
+            - generic [ref=f1e2200]:
+              - text: Supermarket & FMCG
+              - heading "Apex Supermarket & Hyperstore" [level=3] [ref=f1e2201]
+              - paragraph [ref=f1e2202]: 8 Locations • 45,000 SKUs
+            - generic [ref=f1e2203]: 65% Faster Checkout
+          - generic [ref=f1e2208]:
+            - blockquote [ref=f1e2220]: "\"CODE76 transformed our peak weekend rushes. Real-time barcode scanning and instant M-Pesa & Card reconciliation cut checkout queues in half.\""
+            - generic [ref=f1e2221]:
+              - generic [ref=f1e2222]: Samuel M. • Operations Director
+              - generic [ref=f1e2223]:
+                - button "Previous Company" [ref=f1e2224] [cursor=pointer]
+                - button "Next Company" [ref=f1e2227] [cursor=pointer]
+        - generic [ref=f1e2230]:
+          - button "Slide 1" [ref=f1e2231] [cursor=pointer]
+          - button "Slide 2" [ref=f1e2232] [cursor=pointer]
+          - button "Slide 3" [ref=f1e2233] [cursor=pointer]
+          - button "Slide 4" [ref=f1e2234] [cursor=pointer]
+          - button "Slide 5" [ref=f1e2235] [cursor=pointer]
+          - button "Slide 6" [ref=f1e2236] [cursor=pointer]
+      - generic [ref=f1e2237]:
+        - button "APEX Apex Supermarket" [ref=f1e2238] [cursor=pointer]:
+          - generic [ref=f1e2239]: APEX
+          - generic [ref=f1e2240]: Apex
+          - generic [ref=f1e2241]: Supermarket
+        - button "JAVA Java Restaurant" [ref=f1e2242] [cursor=pointer]:
+          - generic [ref=f1e2243]: JAVA
+          - generic [ref=f1e2244]: Java
+          - generic [ref=f1e2245]: Restaurant
+        - button "MEDI MediCare Healthcare" [ref=f1e2246] [cursor=pointer]:
+          - generic [ref=f1e2247]: MEDI
+          - generic [ref=f1e2248]: MediCare
+          - generic [ref=f1e2249]: Healthcare
+        - button "SKY Skyline Wholesale" [ref=f1e2250] [cursor=pointer]:
+          - generic [ref=f1e2251]: SKY
+          - generic [ref=f1e2252]: Skyline
+          - generic [ref=f1e2253]: Wholesale
+        - button "NEXT NexGen Hardware" [ref=f1e2254] [cursor=pointer]:
+          - generic [ref=f1e2255]: NEXT
+          - generic [ref=f1e2256]: NexGen
+          - generic [ref=f1e2257]: Hardware
+        - button "PRIME Prime Automotive" [ref=f1e2258] [cursor=pointer]:
+          - generic [ref=f1e2259]: PRIME
+          - generic [ref=f1e2260]: Prime
+          - generic [ref=f1e2261]: Automotive
+    - generic [ref=f1e2262]:
+      - generic [ref=f1e2263]:
+        - generic [ref=f1e2264]: Verified Social Proof
+        - heading "Trusted by Retailers & Modern Businesses" [level=2] [ref=f1e2265]
+      - generic [ref=f1e2266]:
+        - generic [ref=f1e2267]:
+          - paragraph [ref=f1e2280]: "\"CODE76 POS transformed our grocery retail operations! Checkout lines move 3x faster, stock alerts saved us from stockouts, and the analytics show exactly where our profit comes from every evening.\""
+          - generic [ref=f1e2281]:
+            - img "Michael Ouma" [ref=f1e2282]
+            - generic [ref=f1e2283]:
+              - generic [ref=f1e2284]: Michael Ouma
+              - generic [ref=f1e2288]: Kilimani, Nairobi
+        - generic [ref=f1e2289]:
+          - paragraph [ref=f1e2302]: "\"The cloud onboarding was seamless. Even our new cashiers grasped the interface in under 15 minutes. Truly reliable hardware and top-tier support team!\""
+          - generic [ref=f1e2303]:
+            - img "Grace Ndung'u" [ref=f1e2304]
+            - generic [ref=f1e2305]:
+              - generic [ref=f1e2306]: Grace Ndung'u
+              - generic [ref=f1e2310]: CBD Hub
+        - generic [ref=f1e2311]:
+          - paragraph [ref=f1e2324]: "\"Best investment for our pharmacy. The barcode scanner and split payment features handle cash, card, and M-Pesa simultaneously with zero errors.\""
+          - generic [ref=f1e2325]:
+            - img "David Njoroge" [ref=f1e2326]
+            - generic [ref=f1e2327]:
+              - generic [ref=f1e2328]: David Njoroge
+              - generic [ref=f1e2332]: Westlands Plaza
+    - generic [ref=f1e2335]:
+      - heading "Earn $50 Every Time You Refer a Friend or Relative" [level=2] [ref=f1e2341]
+      - paragraph [ref=f1e2342]: Even if you are not purchasing equipment today, you probably know a fellow retailer, friend, or relative who needs a reliable POS terminal. Generate your referral link below!
+      - generic [ref=f1e2343]:
+        - textbox "Enter your name or business..." [ref=f1e2344]
+        - button "Generate Link" [ref=f1e2345] [cursor=pointer]
+      - generic [ref=f1e2346]:
+        - generic [ref=f1e2347]: Our Top Community Referrers
+        - generic [ref=f1e2348]:
+          - generic [ref=f1e2349]:
+            - generic [ref=f1e2352]: Jane Wanjiku
+            - generic [ref=f1e2353]: (22 refs)
+          - generic [ref=f1e2354]:
+            - generic [ref=f1e2357]: Jane Wanjiku
+            - generic [ref=f1e2358]: (22 refs)
+          - generic [ref=f1e2359]:
+            - generic [ref=f1e2362]: Michael Ouma
+            - generic [ref=f1e2363]: (18 refs)
+          - generic [ref=f1e2364]:
+            - generic [ref=f1e2367]: Kevin Kiplagat
+            - generic [ref=f1e2368]: (15 refs)
+          - generic [ref=f1e2369]:
+            - generic [ref=f1e2372]: Peter Nick
+            - generic [ref=f1e2373]: (14 refs)
+    - generic [ref=f1e2376]:
+      - generic [ref=f1e2377]:
+        - generic [ref=f1e2378]: Direct Official Inquiries
+        - heading "Contact CODE76 POS Official Support & Sales" [level=2] [ref=f1e2382]
+        - paragraph [ref=f1e2383]:
+          - text: Have questions about hardware compatibility, barcode scanners, multi-branch licensing, or bespoke deployments? Fill out the form below or write directly to
+          - link "code76pos@gmail.com" [ref=f1e2384] [cursor=pointer]:
+            - /url: mailto:code76pos@gmail.com
+          - text: .
+      - generic [ref=f1e2385]:
+        - generic [ref=f1e2386]:
+          - generic [ref=f1e2387]:
+            - generic [ref=f1e2388]: Your Full Name *
+            - textbox "e.g. Samuel Kiprono" [ref=f1e2389]
+          - generic [ref=f1e2390]:
+            - generic [ref=f1e2391]: Email Address *
+            - textbox "e.g. samuel@business.com" [ref=f1e2392]
+        - generic [ref=f1e2393]:
+          - generic [ref=f1e2394]:
+            - generic [ref=f1e2395]: Phone / WhatsApp Number
+            - textbox "e.g. +254 700 000 000" [ref=f1e2396]
+          - generic [ref=f1e2397]:
+            - generic [ref=f1e2398]: Company / Business Name
+            - textbox "e.g. Apex Hypermarket Ltd" [ref=f1e2399]
+        - generic [ref=f1e2400]:
+          - generic [ref=f1e2401]: Inquiry Subject / Topic
+          - textbox "e.g. POS Hardware Pricing & Multi-Cashier Setup Consultation" [ref=f1e2402]
+        - generic [ref=f1e2403]:
+          - generic [ref=f1e2404]: Message Details *
+          - textbox "Describe your current store setup, number of tills, expected daily sales volume, or questions..." [ref=f1e2405]
+        - button "Send Message to code76pos@gmail.com" [ref=f1e2407] [cursor=pointer]
+        - generic [ref=f1e2412]:
+          - generic [ref=f1e2413]: 🔒 Direct delivery to code76pos@gmail.com
+          - link "code76pos@gmail.com" [ref=f1e2414] [cursor=pointer]:
+            - /url: mailto:code76pos@gmail.com
+    - generic [ref=f1e2420]:
+      - generic [ref=f1e2421]:
+        - generic [ref=f1e2422]: Connect & Follow CODE76 POS
+        - heading "Stay Updated Across Our Social Channels" [level=3] [ref=f1e2423]
+        - paragraph [ref=f1e2424]: Join our retailer community, watch video walkthroughs, or chat live on WhatsApp.
+      - generic [ref=f1e2425]:
+        - link "💬 WhatsApp" [ref=f1e2426] [cursor=pointer]:
+          - /url: https://wa.me/?text=Hello%20CODE76%20POS%20Team%2C%20I%20would%20like%20to%20inquire%20about%20point%20of%20sale%20setup%20for%20my%20shop.
+        - link "🐦 Twitter / X" [ref=f1e2428] [cursor=pointer]:
+          - /url: https://twitter.com
+        - link "💼 LinkedIn" [ref=f1e2430] [cursor=pointer]:
+          - /url: https://linkedin.com
+        - 'link "✉️ Email: code76pos@gmail.com" [ref=f1e2432] [cursor=pointer]':
+          - /url: mailto:code76pos@gmail.com
+    - generic [ref=f1e2434]:
+      - generic [ref=f1e2435]:
+        - generic [ref=f1e2436]:
+          - generic [ref=f1e2437]:
+            - generic [ref=f1e2438]: "76"
+            - generic [ref=f1e2439]: CODE76 POS Systems Inc.
+          - paragraph [ref=f1e2440]: Empowering supermarkets, restaurants, pharmacies, wholesale depots, and retail enterprises worldwide with lightning-fast checkout and audit-grade commercial ERP architecture.
+          - generic [ref=f1e2441]: "TAX PIN: C76-ENTERPRISE-REG-84729"
+        - generic [ref=f1e2442]:
+          - generic [ref=f1e2443]: Direct Technical Contacts
+          - list [ref=f1e2444]:
+            - listitem [ref=f1e2445]:
+              - generic [ref=f1e2448]: +1 (800) 76-CODE76
+            - listitem [ref=f1e2449]:
+              - link "code76pos@gmail.com" [ref=f1e2453] [cursor=pointer]:
+                - /url: mailto:code76pos@gmail.com
+            - listitem [ref=f1e2454]:
+              - generic [ref=f1e2458]: 24/7 Global Operations & Technical Desk
+        - generic [ref=f1e2459]:
+          - generic [ref=f1e2460]: Global Headquarters & Showroom
+          - paragraph [ref=f1e2461]:
+            - generic [ref=f1e2465]: CODE76 Technology Towers, 76 Silicon Avenue, Enterprise District, Global Hub
+        - generic [ref=f1e2466]:
+          - generic [ref=f1e2467]: Enterprise License Tier
+          - paragraph [ref=f1e2468]:
+            - text: "Authorized installation key:"
+            - strong [ref=f1e2469]: C76-PRO-9842
+          - generic [ref=f1e2470]:
+            - button "Open POS Terminal" [ref=f1e2471] [cursor=pointer]
+            - button "View Business Page" [ref=f1e2472] [cursor=pointer]
+      - generic [ref=f1e2473]:
+        - generic [ref=f1e2474]: © 2026 CODE76 POS Systems Inc. All Rights Reserved. Enterprise Edition.
+        - generic [ref=f1e2475]:
+          - link "About" [ref=f1e2476] [cursor=pointer]:
+            - /url: "#about"
+          - link "Businesses" [ref=f1e2477] [cursor=pointer]:
+            - /url: "#businesses"
+          - link "Features" [ref=f1e2478] [cursor=pointer]:
+            - /url: "#features"
+          - link "Companies" [ref=f1e2479] [cursor=pointer]:
+            - /url: "#companies"
+          - link "Contact Sales" [ref=f1e2480] [cursor=pointer]:
+            - /url: "#contact"
+          - link "code76pos@gmail.com" [ref=f1e2481] [cursor=pointer]:
+            - /url: mailto:code76pos@gmail.com
+    - button "Open CODE76 assistant" [ref=f1e2482] [cursor=pointer]:
+      - generic [ref=f1e2488]:
+        - generic [ref=f1e2489]: AI Sales Concierge
+        - generic [ref=f1e2494]: CODE76 products & pricing
+```

@@ -1,3 +1,4 @@
+import { BUSINESS_PAGE_DEFAULTS } from '../config/businessPage.ts';
 import {
   AppSettings,
   AuditLog,
@@ -904,21 +905,7 @@ export const INITIAL_SETTINGS: AppSettings = {
     allowDebtSales: true,
   },
   textSizing: 'normal',
-  landingPage: {
-    heroTitle: 'Transform Every Retail & Service Transaction into Predictable Profit',
-    heroSubtitle: 'Complete POS hardware, real-time inventory synchronization, automated debt tracking, and AI sales conversion for ambitious businesses.',
-    featuredCount: 6,
-    slideshowSpeedMs: 4000,
-    showSocialProof: true,
-    showChatbot: true,
-    referralBonusText: 'Refer a fellow business owner or friend! When they purchase a terminal, both of you get $50 credit or 10% discount on next restock.',
-    topReferrersLimit: 5,
-    showPromoCountdown: true,
-    customInstagram: '@code76_pos',
-    customTwitter: '@code76pos',
-    customWhatsappDirect: '+18007607676',
-    shareableLinkSlogan: 'Exclusive Enterprise Commercial POS & ERP Hardware Special',
-  },
+  landingPage: { ...BUSINESS_PAGE_DEFAULTS },
   receipts: {
     headerTitle: 'CODE76 ENTERPRISE SOLUTIONS',
     subtitle: 'Official Customer Sales Receipt',

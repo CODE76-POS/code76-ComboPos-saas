@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { usePOS } from '../../context/POSContext.tsx';
+import { useCode76Site } from '../../context/Code76SiteContext.tsx';
+import { CODE76_SITE } from '../../config/code76Site.ts';
 import {
   ShoppingBag,
   Star,
@@ -56,13 +58,7 @@ import {
   getCustomerReviewAvatar,
   getDefaultCatalogImageAndEmoji,
 } from '../../data/catalogKnowledgeBase.ts';
-import {
-  INITIAL_COMPANY,
-  INITIAL_PRODUCTS,
-  INITIAL_REVIEWS,
-  INITIAL_SALES,
-  INITIAL_CUSTOMERS,
-} from '../../data/initialData.ts';
+
 
 // Real-World Commercial Businesses CODE76 Powers & Works On
 export const BUSINESS_SECTORS = [
@@ -311,26 +307,11 @@ export const COMPANIES_USING_CODE76 = [
 ];
 
 export const LandingPage: React.FC = () => {
-  const {
-    company,
-    products,
-    companyMembers,
-    marketingTeam,
-    sales,
-    reviews,
-    customers,
-    landingMetrics,
-    settings,
-    setActiveView,
-    setActivePlatform,
-    loadDemoData,
-    setLandingMetrics,
-    addPerson,
-    logAuditAction,
-    currentUser,
-    loginUser,
-    logoutUser,
-  } = usePOS();
+  // Only authentication and navigation are shared with the POS. No merchant data or settings here.
+  const { setActiveView, setActivePlatform, currentUser, loginUser, logoutUser, registerUser } = usePOS();
+  const { metrics: landingMetrics, setMetrics: setLandingMetrics, addSiteLead, logSiteEvent } = useCode76Site();
+  const { company, products, companyMembers, marketingTeam, reviews, customers } = CODE76_SITE;
+  const settings = { landingPage: CODE76_SITE.landingPage };
 
   // Selected business type for "Find What Fits Your Needs" guided matcher
   const [businessType, setBusinessType] = useState<string>('retail');
@@ -358,13 +339,12 @@ export const LandingPage: React.FC = () => {
   const [generatedReferralLink, setGeneratedReferralLink] = useState('');
   const [copiedLink, setCopiedLink] = useState(false);
 
-  // Fallback to rich built-in catalog data if inventory is in clean empty state
-  const displayCompany = company.name ? company : INITIAL_COMPANY;
-  const displayProducts = products.length > 0 ? products : INITIAL_PRODUCTS;
-  const displayReviews = reviews.length > 0 ? reviews : INITIAL_REVIEWS;
-  const displaySales = sales.length > 0 ? sales : INITIAL_SALES;
-  const displayCustomers = customers.length > 0 ? customers : INITIAL_CUSTOMERS;
-  const isCleanEmptyCatalog = products.length === 0;
+  // CODE76 illustrative catalogue. Merchant edits cannot replace this website's content.
+  const displayCompany = company;
+  const displayProducts = products;
+  const displayReviews = reviews;
+  const displayCustomers = customers;
+  const isCleanEmptyCatalog = false;
 
   // Split products: First 6 for featured cards, remaining for slideshow
   const featuredSix = displayProducts.slice(0, settings.landingPage.featuredCount || 6);
@@ -437,8 +417,8 @@ export const LandingPage: React.FC = () => {
 
     setContactSubmitting(true);
 
-    // 1. Save lead into CRM Directory
-    addPerson('customer', {
+    // 1. Save to the independent CODE76 product-site lead store (not merchant CRM).
+    addSiteLead({
       firstName: contactName.trim().split(' ')[0] || contactName.trim(),
       secondName: contactName.trim().split(' ').slice(1).join(' ') || '',
       tel1: contactPhone.trim() || '+1 (555) 000-0000',
@@ -456,7 +436,7 @@ export const LandingPage: React.FC = () => {
     });
 
     // 2. Audit Trail Logging
-    logAuditAction(
+    logSiteEvent(
       'Contact Form Submitted',
       `Direct message to code76pos@gmail.com by ${contactName} (${contactEmail}) - Subject: ${contactSubject || 'General Inquiry'}`
     );
@@ -489,7 +469,7 @@ export const LandingPage: React.FC = () => {
     const primaryEmail = inquiryEmail.trim() || `${inquiryFirstName.toLowerCase()}@lead.code76pos.com`;
 
     // 1. SAVE LEAD SECURELY IN CRM CUSTOMER DIRECTORY
-    addPerson('customer', {
+    addSiteLead({
       firstName: inquiryFirstName.trim(),
       secondName: inquirySecondName.trim() || '',
       tel1: primaryPhone,
@@ -507,7 +487,7 @@ export const LandingPage: React.FC = () => {
     });
 
     // 2. LOG AUDIT ACTION FOR ENTERPRISE SECURITY
-    logAuditAction(
+    logSiteEvent(
       'Landing Lead Captured',
       `Captured quotation inquiry from ${leadFullName} (${primaryPhone} / ${primaryEmail}) for ${inquiryModalProduct.name}`
     );
@@ -572,7 +552,9 @@ export const LandingPage: React.FC = () => {
       return;
     }
 
-    const res = loginUser(authEmail.trim(), authPassword, authRole);
+    const res = authMode === 'register'
+      ? registerUser(authFullName, authEmail.trim(), authPassword, authRole)
+      : loginUser(authEmail.trim(), authPassword, authRole);
     if (res.success) {
       setAuthSuccess(
         authMode === 'register'
@@ -644,7 +626,7 @@ export const LandingPage: React.FC = () => {
           <button
             onClick={() => setActiveView('storefront')}
             className="px-3 py-2 rounded-xl bg-teal-500/15 hover:bg-teal-500/25 text-teal-300 border border-teal-500/40 text-xs font-bold transition flex items-center gap-1.5 shadow-xs cursor-pointer active:scale-95"
-            title="Explore live customer-facing business storefront created by CODE76 POS"
+            title="Open your separate merchant Business Landing Page"
           >
             <ShoppingBag className="w-3.5 h-3.5 text-teal-400" />
             <span className="hidden sm:inline">Storefront Showcase</span>
@@ -732,7 +714,7 @@ export const LandingPage: React.FC = () => {
                   <div className="flex items-center gap-2 bg-slate-900/90 px-3.5 py-2 rounded-2xl border border-slate-800 shadow-md">
                     <CheckCircle2 className="w-4 h-4 text-emerald-400" />
                     <span>
-                      <strong className="text-slate-100 font-extrabold">{displaySales.length + 7600}+</strong> Sales Logged
+                      <strong className="text-slate-100 font-extrabold">{CODE76_SITE.exampleSalesCount + 7600}+</strong> Sales Logged
                     </span>
                   </div>
 
@@ -1723,7 +1705,7 @@ export const LandingPage: React.FC = () => {
                     onClick={() => setActiveView('storefront')}
                     className="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 font-semibold transition cursor-pointer text-center"
                   >
-                    View Storefront Demo
+                    View Business Page
                   </button>
                 </div>
               </div>
@@ -1745,7 +1727,7 @@ export const LandingPage: React.FC = () => {
           </footer>
 
           {/* 8. EMBEDDED LIVE AI SALES CHATBOT WITH PSYCHOLOGICAL PERSUASION */}
-          <AIChatbotWidget inquiryLead={activeInquiryLead} />
+          <AIChatbotWidget surface="code76" inquiryLead={activeInquiryLead} />
     </div>
   );
 };
