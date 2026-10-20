@@ -1,6 +1,8 @@
 # CODE76 POS — interactive workspace preview
 
-Open **CODE76 POS live app** in Arena's **Live Preview** panel, port **3000**. This is the actual interactive application, not a screenshot or a file preview. Use the managed preview panel; the bare sandbox host may require a hosting traffic/access token.
+Open **CODE76 POS — Workspace Preview** in Arena's **Live Preview** panel, port **5173**. This is the actual interactive application, not a screenshot or a file preview. A fresh preview instance was opened and checked on this port; the old port-3000 instance was stopped to retain only one app server. Use the managed preview panel; the bare sandbox host may require a hosting traffic/access token.
+
+The restart commands below use the application's default port 3000 as an example. Set `PORT=5173` instead to match the current workspace preview.
 
 ## Test the requested routes
 
