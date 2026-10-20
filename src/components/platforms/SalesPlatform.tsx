@@ -1,3 +1,4 @@
+import {calendarDate} from '../../utils/regional.ts';
 import { acceptedPaymentMethods } from '../../config/paymentMethods.ts';
 import { serviceUnitLabel } from '../../utils/serviceUnits.ts';
 import React, { useState, useMemo } from 'react';
@@ -47,6 +48,7 @@ export const SalesPlatform: React.FC = () => {
 
   const availableMethods = acceptedPaymentMethods(settings.payments.acceptedMethods, hasFeature('debts') && settings.payments.allowDebtSales);
   const [checkoutError,setCheckoutError] = useState('');
+  const [debtDueDate,setDebtDueDate]=useState('');
   // Cart state
   const [cart, setCart] = useState<CartItem[]>([]);
   const [selectedCustomerId, setSelectedCustomerId] = useState<string>('');
@@ -269,6 +271,7 @@ export const SalesPlatform: React.FC = () => {
     if (cart.length === 0) return;
     if (!hasFeature('debts') && paymentAnalysis.remainingDebt > 0) { setCheckoutError('The Free plan requires full payment. Debt creation and handling need a paid demo plan.'); return; }
 
+    if(debtDueDate && !/^\d{4}-\d{2}-\d{2}$/.test(debtDueDate)){setCheckoutError('Choose a valid optional debt due date.');return;}
     setCheckoutError('');
     const currentCustomer = customers.find((c) => c.id === selectedCustomerId);
     const customerName = currentCustomer
@@ -291,8 +294,9 @@ export const SalesPlatform: React.FC = () => {
       payments,
       amountPaid: paymentAnalysis.totalPaid,
       debtAmount: paymentAnalysis.remainingDebt,
+      debtDueDate:paymentAnalysis.remainingDebt>0?debtDueDate||undefined:undefined,
       referredBy: selectedReferrer ? selectedReferrer : undefined,
-      status: paymentAnalysis.remainingDebt > 0 ? 'debt_pending' : 'completed',
+      status: paymentAnalysis.remainingDebt > 0 ? paymentAnalysis.totalPaid>0?'debt_partial':'debt_pending' : 'completed',
       hasReview: false,
     });
 
@@ -303,7 +307,7 @@ export const SalesPlatform: React.FC = () => {
     if (hasFeature('business_landing')) setTimeout(() => { setReviewModalSale(completed); }, 1200);
 
     // Reset cart
-    clearCart();
+    clearCart();setDebtDueDate('');
   };
 
   const isCartOnLeft = settings.appearance.cartPosition === 'left';
@@ -908,6 +912,7 @@ export const SalesPlatform: React.FC = () => {
 
             {/* Complete Checkout Buttons */}
             <div className="space-y-2 mt-4">
+              {hasFeature('debts')&&paymentAnalysis.remainingDebt>0&&<label className="mb-3 block text-xs text-slate-400">Optional credit due date<input aria-label="Credit sale due date" type="date" className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2" value={debtDueDate} onChange={event=>setDebtDueDate(event.target.value)}/><span className="mt-1 block text-[10px]">No date is assumed. This records terms only; it sends no reminder.</span></label>}
               <button
                 onClick={handleCompleteSale}
                 disabled={cart.length === 0}

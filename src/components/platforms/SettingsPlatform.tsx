@@ -1,3 +1,4 @@
+import {DemoTrainingSettings} from '../common/DemoTrainingSettings.tsx';
 import { TeamServicesPanel } from '../common/TeamServicesPanel.tsx';
 import { canOpenSettings, planTier } from '../../utils/plans.ts';
 import { regional, validTimeZone } from '../../utils/regional.ts';
@@ -37,6 +38,7 @@ import {
   Building,
   Truck,
   RotateCcw,
+  Database,
   Sun,
   Moon,
 } from 'lucide-react';
@@ -79,6 +81,7 @@ export const SettingsPlatform: React.FC = () => {
   useEffect(() => {
     setFormSettings(previous => ({ ...previous, textSizing: settings.textSizing, appearance: { ...previous.appearance, theme: settings.appearance.theme } }));
   }, [settings.appearance.theme, settings.textSizing]);
+  const [settingsSearch,setSettingsSearch]=useState('');
   const [saveAlert, setSaveAlert] = useState<string>('');
 
   // CSV Import State in PDF & Excel Settings
@@ -337,9 +340,10 @@ export const SettingsPlatform: React.FC = () => {
       {/* Main Settings Tabs */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Navigation Sidebar */}
-        <div className="lg:col-span-3 space-y-1">
+        <div className="lg:col-span-3 space-y-1"><input aria-label="Find settings" placeholder="Find a setting…" value={settingsSearch} onChange={event=>setSettingsSearch(event.target.value)} className="mb-2 w-full rounded-xl border border-slate-700 bg-slate-900 px-3 py-2 text-sm"/>
           {[
             { id: 'plans', label: 'Demo Plan Settings', icon: Shield },
+            { id: 'demoData', label: 'Demo Data & Training', icon: Database },
             { id: 'teamServices', label: 'CODE76 Team Services', icon: Users },
             { id: 'payments', label: 'Payment Settings', icon: CreditCard },
             { id: 'regional', label: 'Currency, Date & Time', icon: Globe },
@@ -354,7 +358,7 @@ export const SettingsPlatform: React.FC = () => {
             { id: 'pdfExcel', label: 'PDF & Excel Settings (CSV Import)', icon: FileSpreadsheet },
             { id: 'emailTemplates', label: 'Email Marketing Templates', icon: Mail },
             { id: 'auditLogs', label: 'Audit Logs & Login History', icon: ShieldCheck },
-          ].filter(tab=>canOpenSettings(settings,tab.id as any)).map((tab) => {
+          ].filter(tab=>canOpenSettings(settings,tab.id as any)&&tab.label.toLowerCase().includes(settingsSearch.toLowerCase())).map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
             return (
@@ -1347,6 +1351,7 @@ export const SettingsPlatform: React.FC = () => {
           )}
 
           {activeTab === 'plans' && <DemoPlanSettings />}
+          {activeTab === 'demoData' && <DemoTrainingSettings />}
           {activeTab === 'teamServices' && <TeamServicesPanel />}
           {activeTab === 'regional' && <RegionalSettingsForm settings={formSettings} onChange={setFormSettings} />}
           {activeTab === 'dataEraser' && <section className="space-y-4"><h2 className="font-bold text-xl text-rose-400">Delete all business data</h2><p className="text-sm text-slate-400">Deletes inventory, sales, expenses, invoices, contacts/companies, reviews and recorded salary payments. Your account, demo plan, preferences and audit history are retained. Export any permitted backups first. This cannot be undone.</p>{currentUser?.isAdmin ? <><label className="block text-sm">Type DELETE to confirm<input aria-label="Delete all confirmation" className="mt-2 w-full rounded-xl border border-rose-900 bg-slate-800 px-3 py-2" value={deleteConfirmation} onChange={event=>setDeleteConfirmation(event.target.value)}/></label><button type="button" disabled={deleteConfirmation!=='DELETE'} className="rounded-xl bg-rose-700 px-4 py-2 font-bold text-white disabled:opacity-40" onClick={()=>{if(deleteConfirmation==='DELETE' && confirm('Permanently delete all business records, including payroll and related-company directories?')) {wipeDataToCleanState();setDeleteConfirmation('');setSaveAlert('Business records deleted. Plan/preferences and audit history retained.');}}}>Permanently delete business records</button></> : <p className="text-sm text-amber-300">Only an administrator can delete all business records.</p>}</section>}

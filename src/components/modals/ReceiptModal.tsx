@@ -1,3 +1,4 @@
+import { Code76Credit } from '../common/Code76Credit.tsx';
 import { useRegionalFormat } from '../../hooks/useRegionalFormat.ts';
 import { serviceUnitLabel } from '../../utils/serviceUnits.ts';
 import React from 'react';
@@ -16,8 +17,8 @@ export const ReceiptModal: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-xs p-4">
-      <div className="relative w-full max-w-md max-h-[95vh] overflow-y-auto rounded-2xl bg-white text-slate-900 border border-slate-300 shadow-2xl p-6 animate-in fade-in zoom-in-95 duration-200">
+    <div data-code76-receipt-overlay="true" className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-xs p-4">
+      <div data-code76-receipt-shell="true" className="relative w-full max-w-md max-h-[95vh] overflow-y-auto rounded-2xl bg-white text-slate-900 border border-slate-300 shadow-2xl p-6 animate-in fade-in zoom-in-95 duration-200">
         <button
           onClick={() => setReceiptModalSale(null)}
           className="absolute top-4 right-4 text-slate-500 hover:text-slate-900 p-1 rounded-lg hover:bg-slate-100 transition no-print"
@@ -135,7 +136,7 @@ export const ReceiptModal: React.FC = () => {
           {/* Payment Methods */}
           <div className="py-2.5 border-b border-dashed border-slate-400 space-y-1 text-[11px]">
             <div className="font-bold text-slate-700 uppercase text-[10px] mb-1">Payment Breakdown:</div>
-            {receiptModalSale.payments.map((p, idx) => (
+            {receiptModalSale.payments.filter(payment=>payment.method!=='Credit / Debt').map((p, idx) => (
               <div key={idx} className="flex justify-between">
                 <span>
                   {p.method} {p.referenceNo ? `(${p.referenceNo})` : ''}:
@@ -157,6 +158,9 @@ export const ReceiptModal: React.FC = () => {
             )}
           </div>
 
+          {receiptModalSale.payments.some(payment=>payment.method==='Credit / Debt')&&<p className="mt-2 text-[9px] text-slate-600">Credit/debt at checkout is an unpaid allocation, not a received payment. Only actual received channels are listed above.</p>}
+          {!!receiptModalSale.debtPayments?.length&&<div className="mt-3 border-t border-dashed border-slate-400 pt-2 text-[9px]"><strong>Recorded debt-payment history</strong>{receiptModalSale.debtPayments.map(payment=><p key={payment.id} className="mt-1">{regionalFormat.dateTime(payment.timestamp)} · {currency} {payment.amount.toFixed(2)} · {payment.method} · Ref: {payment.reference||'not supplied'} · Balance: {currency} {payment.balanceAfter.toFixed(2)}</p>)}</div>}
+
           {/* Barcode & Notice */}
           <div className="pt-4 text-center space-y-2">
             {settings.receipts.showBarcode && (
@@ -170,6 +174,7 @@ export const ReceiptModal: React.FC = () => {
 
             <p className="text-[10px] text-slate-600 font-sans">{settings.receipts.footerNotice}</p>
             <p className="text-[9px] text-slate-500 font-sans italic">{settings.receipts.returnPolicy}</p>
+            <Code76Credit compact />
           </div>
         </div>
 

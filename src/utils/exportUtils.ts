@@ -1,3 +1,5 @@
+import { CODE76_BRAND, creditHtml, withExportCredit } from '../config/code76Brand.ts';
+import { serializeCsvRows, parseCsvRecords } from './csv.ts';
 import { dateTime } from './regional.ts';
 import { PersonRecord, ProductItem, SaleTransaction, ExpenseItem, InvoiceItem, AuditLog, CompanyData } from '../types/index.ts';
 
@@ -12,25 +14,9 @@ export function exportToCSV<T extends Record<string, any>>(data: T[], filename: 
     return;
   }
 
-  const headers = Object.keys(data[0]);
-  const csvRows = [headers.join(',')];
-
-  for (const row of data) {
-    const values = headers.map((header) => {
-      let val = row[header];
-      if (val === null || val === undefined) {
-        return '""';
-      }
-      if (typeof val === 'object') {
-        val = JSON.stringify(val);
-      }
-      const stringVal = String(val).replace(/"/g, '""');
-      return `"${stringVal}"`;
-    });
-    csvRows.push(values.join(','));
-  }
-
-  const csvContent = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvRows.join('\n'));
+  const branded=data.map(row=>withExportCredit(row));
+  const headers=[...new Set(branded.flatMap(row=>Object.keys(row)))];
+  const csvContent='data:text/csv;charset=utf-8,'+encodeURIComponent(serializeCsvRows(headers,branded.map(row=>headers.map(header=>row[header]))));
   const link = document.createElement('a');
   link.setAttribute('href', csvContent);
   link.setAttribute('download', `${filename}.csv`);
@@ -43,49 +29,7 @@ export function exportToCSV<T extends Record<string, any>>(data: T[], filename: 
  * Parses CSV text into records.
  */
 export function parseCSV(csvText: string): Record<string, string>[] {
-  const lines = csvText.trim().split(/\r\n|\n/);
-  if (lines.length < 2) return [];
-
-  // Parse header
-  const headers = parseCSVLine(lines[0]);
-  const results: Record<string, string>[] = [];
-
-  for (let i = 1; i < lines.length; i++) {
-    if (!lines[i].trim()) continue;
-    const values = parseCSVLine(lines[i]);
-    const obj: Record<string, string> = {};
-    headers.forEach((header, index) => {
-      obj[header.trim()] = values[index] ? values[index].trim() : '';
-    });
-    results.push(obj);
-  }
-
-  return results;
-}
-
-function parseCSVLine(line: string): string[] {
-  const values: string[] = [];
-  let current = '';
-  let inQuotes = false;
-
-  for (let i = 0; i < line.length; i++) {
-    const char = line[i];
-    if (char === '"') {
-      if (inQuotes && line[i + 1] === '"') {
-        current += '"';
-        i++;
-      } else {
-        inQuotes = !inQuotes;
-      }
-    } else if (char === ',' && !inQuotes) {
-      values.push(current);
-      current = '';
-    } else {
-      current += char;
-    }
-  }
-  values.push(current);
-  return values;
+  return parseCsvRecords(csvText);
 }
 
 /**
@@ -170,6 +114,7 @@ export function printPDFReport(
             <p>${escapeReportText(company.slogan || 'Business Solutions & Point of Sale')}</p>
             <p>${escapeReportText(company.address)}, ${escapeReportText(company.location)}, ${escapeReportText(company.country)}</p>
             <p>Tel: ${escapeReportText(company.tel1)} | Email: ${escapeReportText(company.email)}</p>
+            ${company.isDemo ? `<p><strong>DEMO DATA — fictional records, not an actual payment or endorsement.</strong></p>` : ''}
             ${company.taxPin ? `<p>Tax/VAT PIN: <strong>${escapeReportText(company.taxPin)}</strong></p>` : ''}
           </div>
           <div class="report-meta">
@@ -188,10 +133,11 @@ export function printPDFReport(
         </table>
 
         <div class="footer">
-          <span>CODE76 POS - Official System Generated Document</span>
+          <span>Generated from the current workspace records</span>
           <span>Authorized Signature / Stamp: ______________________</span>
-          <span>Page 1 of 1</span>
+
         </div>
+        ${creditHtml()}
       </body>
     </html>
   `;

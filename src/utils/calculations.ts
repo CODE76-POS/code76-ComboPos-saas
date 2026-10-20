@@ -100,7 +100,7 @@ export function calculatePaymentsAndDebt(
   changeDue: number;
   isFullyPaid: boolean;
 } {
-  const totalPaid = payments.reduce((acc, curr) => acc + Math.max(0, curr.amount || 0), 0);
+  const totalPaid = payments.reduce((acc,curr)=>acc+(curr.method==='Credit / Debt'?0:Math.max(0,curr.amount||0)),0);
   const diff = netTotal - totalPaid;
 
   const remainingDebt = diff > 0.001 ? Math.round(diff * 100) / 100 : 0;

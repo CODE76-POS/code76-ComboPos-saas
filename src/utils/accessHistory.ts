@@ -1,3 +1,4 @@
+import { CODE76_CREDIT_TEXT, CODE76_EXPORT_FIELDS, withBackupCredit } from '../config/code76Brand.ts';
 import { hasPlanFeature, planTier } from './plans.ts';
 import type { AppSettings, AuditLog, AuthUser } from '../types/index.ts';
 
@@ -24,11 +25,11 @@ export function safeCsvCell(value: string): string {
   return `"${safe.replace(/"/g, '""')}"`;
 }
 export function accessHistoryCsv(logs: readonly AuditLog[]): string {
-  return '\uFEFF' + [AUDIT_EXPORT_HEADERS, ...auditExportRows(logs)].map(row => row.map(safeCsvCell).join(',')).join('\r\n') + '\r\n';
+  return '\uFEFF' + [[...AUDIT_EXPORT_HEADERS,...Object.keys(CODE76_EXPORT_FIELDS)], ...auditExportRows(logs).map(row=>[...row,...Object.values(CODE76_EXPORT_FIELDS)])].map(row => row.map(safeCsvCell).join(',')).join('\r\n') + '\r\n';
 }
 export function accessHistoryText(logs: readonly AuditLog[], officer: string, generatedAt = new Date().toISOString()): string {
   const header = `CODE76 POS — User access history\nGenerated: ${generatedAt}\nExported by: ${JSON.stringify(officer)}\nFiltered records: ${logs.length}\nBrowser-local activity records; not a tamper-proof server audit.\n`;
-  return header + auditExportRows(logs).map((row, index) => `\n--- Record ${index + 1} ---\n` + AUDIT_EXPORT_HEADERS.map((label, i) => `${label}: ${JSON.stringify(row[i])}`).join('\n')).join('\n') + '\n';
+  return header + auditExportRows(logs).map((row, index) => `\n--- Record ${index + 1} ---\n` + AUDIT_EXPORT_HEADERS.map((label, i) => `${label}: ${JSON.stringify(row[i])}`).join('\n')).join('\n') + `\n\n${CODE76_CREDIT_TEXT}\n`;
 }
 
 export function downloadReport(data: BlobPart, mime: string, filename: string): void {
@@ -50,5 +51,5 @@ export function permittedBackup(serialized: string, user: AuthUser | null, setti
   if (!canManage) { delete state.salaryPayments; for (const key of ['customers','vendors','transporters','marketingTeam','companyMembers','relatedCompanies']) if(Array.isArray(state[key])) state[key]=state[key].map(({salaryRate,salaryBasis,...record}:Record<string,unknown>)=>record); }
   const canViewExpenses = user && (user.isAdmin || user.roles.some(role=>settings.privileges[role]?.canViewExpenses));
   if(!canManage && !canViewExpenses && Array.isArray(state.expenses)) state.expenses=state.expenses.filter((expense:{category?:string;salaryPaymentId?:string})=>expense.category!=='Salaries'&&!expense.salaryPaymentId);
-  return JSON.stringify(state, null, 2);
+  return JSON.stringify(withBackupCredit(state), null, 2);
 }

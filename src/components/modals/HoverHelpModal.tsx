@@ -229,11 +229,11 @@ const PLATFORM_HELP_MAP: Record<
   },
   about: {
     title: 'About CODE76 POS & User Manual',
-    description: 'System documentation, verified enterprise license key, terms of service, and full guides.',
+    description: 'Searchable workflow guides, support contact, demo-plan status and safe-use information.',
     whatItDoes: [
       'Comprehensive searchable user manual for every single section of CODE76 POS.',
-      'Displays authorized enterprise license key: C76-PRO-9842-ENTERPRISE-VALID.',
-      'Legal terms and conditions for commercial software usage.',
+      'Shows the selected demo tier without pretending a paid licence is verified.',
+      'Explains preview limits and where to confirm actual commercial terms with CODE76.',
     ],
     settingsLocation: 'Settings > App User Privilege Settings',
     settingsTab: 'privileges',

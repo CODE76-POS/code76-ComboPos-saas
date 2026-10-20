@@ -75,7 +75,7 @@ const POSContent: React.FC = () => {
     if (!canOpenPlatform(settings, activePlatform)) return <PlanNotice feature={activePlatform.replace(/_/g, ' ')} />;
     const platformPermissions: Partial<Record<typeof activePlatform, Parameters<typeof hasPrivilege>[0]>> = { selling:'canSell', sales_history:'canSell', inventory:'canViewInventory', expenses:'canViewExpenses', invoices:'canViewInvoices', analytics:'canViewAnalytics', company_members:'canManagePeople' };
     const permission = platformPermissions[activePlatform];
-    if(permission && !hasPrivilege(permission)) return <div role="alert" className="m-8 rounded-xl border border-amber-800 p-6">Your current role does not have permission to open this platform. Ask your administrator.</div>;
+    if(permission && !hasPrivilege(permission) && !(activePlatform==='sales_history'&&hasPrivilege('canViewInvoices'))) return <div role="alert" className="m-8 rounded-xl border border-amber-800 p-6">Your current role does not have permission to open this platform. Ask your administrator.</div>;
     switch (activePlatform) {
       case 'selling':
         return <SalesPlatform />;

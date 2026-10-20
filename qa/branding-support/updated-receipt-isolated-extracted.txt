@@ -1,0 +1,38 @@
+DEMO HORIZON RETAIL &
+SERVICES
+Fictional workspace for learning the workflow
+DEMO Market Road, DEMO district
+Tel: | demo-store@example.test
+TAX PIN: DEMO-TAX-NOT-VALID
+RECEIPT NO: DEMO-REC-1002
+DATE: 19/10/2026 20:14:33 (UTC)
+CASHIER: DEMO Alex Sample
+CUSTOMER: DEMO Customer 14 Sample
+ITEM QTY PRICE TOTAL
+DEMO Office
+Chair 2 USD108.00 USD216.00
+SUBTOTAL: USD 216.00
+TOTAL DUE: USD 216.00
+PAYMENT BREAKDOWN:
+M-Pesa : USD 108.00
+M-Pesa (TEST-REP-1): USD 40.00
+Bank Transfer (TEST-REP-2): USD 68.00
+AMOUNT PAID: USD 216.00
+Credit/debt at checkout is an unpaid allocation,
+not a received payment. Only actual received
+channels are listed above.
+Recorded debt-payment history
+20/10/2026 21:15:59 (UTC) · USD 40.00 · M-Pesa ·
+Ref: TEST-REP-1 · Balance: USD 68.00
+20/10/2026 21:16:03 (UTC) · USD 68.00 · Bank
+Transfer · Ref: TEST-REP-2 · Balance: USD 0.00
+| | |  |  | | | |  |
+| | |  | |  | | |  |
+*DEMO-REC-1002*
+DEMO ONLY — no actual payment or purchase.
+Training record only; not a real returns or warranty policy.
+Website created by CODE76.
+email: code76pos@gmail.com
+youtube: https://www.youtube.com/@CODE76-
+fn4fj
+Create your website with CODE76

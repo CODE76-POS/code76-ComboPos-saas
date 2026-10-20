@@ -1,3 +1,4 @@
+import { brandAssetUrl } from '../../config/code76Brand.ts';
 import { useMeasuredHeader } from '../../hooks/useMeasuredHeader.ts';
 import { canOpenPlatform, PLAN_INFO, planTier } from '../../utils/plans.ts';
 import { LinkCopyField } from '../common/LinkCopyField.tsx';
@@ -69,6 +70,7 @@ export const TopNavBar: React.FC = () => {
     setLoginModalOpen,
     theme,
     settings,
+    company,
     setSettingsSection,
   } = usePOS();
 
@@ -98,7 +100,7 @@ export const TopNavBar: React.FC = () => {
             className="flex items-center gap-2 text-left group cursor-pointer"
           >
             <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-tr from-teal-600 to-emerald-400 flex items-center justify-center font-black text-white text-sm sm:text-base shadow-lg shadow-teal-500/20 group-hover:scale-105 transition">
-              76
+              <img src={brandAssetUrl()} alt="CODE76 POS logo" className="w-full h-full rounded-xl object-contain"/>
             </div>
             <div>
               <div className="flex items-center gap-1.5 sm:gap-2">
@@ -317,6 +319,8 @@ export const TopNavBar: React.FC = () => {
           Browser-local records and sessions do not sync between browsers.
         </p>
       </div>
+
+      {company.isDemo&&<p role="note" className="max-w-7xl mx-auto px-3 sm:px-6 pb-2 text-[10px] font-bold text-amber-300">DEMO DATA · Fictional records, contacts, reviews and bookkeeping amounts—not real business activity.</p>}
 
       {/* Lower Platform Navigation Strip (Only shown when authenticated in POS view) */}
       {currentUser && activeView === 'pos' && (

@@ -1,3 +1,4 @@
+import {CODE76_BRAND,brandAssetUrl} from './code76Brand.ts';
 import { CODE76_MARKETING_CONTENT } from '../data/code76SiteContent.ts';
 
 /**
@@ -17,7 +18,7 @@ const CODE76_WEBSITE_SETTINGS = {
 };
 
 export const CODE76_SITE = Object.freeze({
-  company: Object.freeze({ ...CODE76_MARKETING_CONTENT.company }),
+  company: Object.freeze({ ...CODE76_MARKETING_CONTENT.company,name:'CODE76 POS',logoUrl:brandAssetUrl(),email:CODE76_BRAND.email,regNumber:'',taxPin:'',tel1:'',tel2:'',whatsapp:'',address:'',location:'',country:'',operatingHours:'' }),
   products: Object.freeze(CODE76_MARKETING_CONTENT.products.map(item => Object.freeze({ ...item }))),
   reviews: Object.freeze(CODE76_MARKETING_CONTENT.reviews.map(review => Object.freeze({ ...review }))),
   exampleSalesCount: CODE76_MARKETING_CONTENT.exampleSalesCount,

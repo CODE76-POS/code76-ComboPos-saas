@@ -1,3 +1,4 @@
+import { createSupportRouter } from './server/supportMail.ts';
 import { code76SiteReply, softwareOfferSummary, softwarePlanReply } from './src/utils/code76Offers.ts';
 import { TEAM_SERVICE_SCOPE } from './src/config/teamServices.ts';
 import { serviceUnitLabel } from './src/utils/serviceUnits.ts';
@@ -32,6 +33,7 @@ app.use((req, res, next) => {
 
 app.use(express.json({ limit: '10mb' }));
 app.use('/api', (_req, res, next) => { res.set('X-Robots-Tag', PRIVATE_ROBOTS); next(); });
+app.use('/api/support',createSupportRouter());
 
 // Server-side Gemini initialization
 const apiKey = process.env.GEMINI_API_KEY;
@@ -174,13 +176,22 @@ app.post('/api/gemini/marketing', async (req, res) => {
     const { templateType, product, customer, marketer, company, customDiscount, customNotes } = req.body;
 
     if (!ai) {
-      const discount = customDiscount || 10;
+      const discount=Number.isFinite(Number(customDiscount))?Math.max(0,Math.min(100,Number(customDiscount))):0;
       const subject = `Special ${discount}% VIP Savings on ${product?.name || 'POS Systems'} - from ${company?.name || 'CODE76'}`;
-      const body = `Dear ${customer?.firstName || 'Valued Customer'},\n\nWe hope your business is thriving! As an exclusive appreciation for your partnership, ${marketer?.firstName || 'Our Growth Team'} has arranged a special ${discount}% discount on ${product?.name || 'our flagship solutions'}.\n\nWith only ${product?.stock || 15} units remaining in stock, we invite you to secure your order this week.\n\nWarm regards,\n${marketer?.firstName || 'Sales Team'}\n${company?.name || 'CODE76 ENTERPRISE SOLUTIONS'}\nTel: ${company?.tel1 || '+1 (800) 760-7676'}`;
+      const availability=product?.type==='service'?'Service scope and timing must be confirmed.':Number.isFinite(product?.stock)?`Recorded stock: ${product.stock}. Confirm current availability before ordering.`:'Current availability has not been supplied.';
+      const body=`Dear ${customer?.firstName||'Customer'},
+
+Here is a draft inquiry about ${product?.name||'the selected item'} from ${company?.name||'the business'}. ${discount>0?`The operator selected a ${discount}% draft offer; confirm its terms before use.`:'Confirm the current price directly with the business.'}
+
+${availability}
+
+No stock, delivery or appointment has been reserved, and no message has been sent.
+
+${company?.email||company?.tel1||'Contact details not supplied.'}`;
       return res.json({ subject, body });
     }
 
-    const prompt = `Write an ultra-persuasive, professional marketing email for:
+    const prompt = `Write a clear, respectful marketing-email draft using only the supplied facts. Do not invent urgency, stock, warranties, endorsements or delivered messages. Offer choices and no result guarantee. Details:
 Template Type: ${templateType}
 Target Customer: ${customer?.firstName} ${customer?.secondName} (${customer?.location}, ${customer?.country})
 Product/Service: ${product?.name} (Price: $${product?.sellingPrice}, Stock: ${product?.stock})

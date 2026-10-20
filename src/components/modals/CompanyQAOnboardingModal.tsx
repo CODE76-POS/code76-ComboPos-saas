@@ -1,3 +1,4 @@
+import { brandAssetUrl } from '../../config/code76Brand.ts';
 import { SERVICE_UNITS, serviceUnitLabel } from '../../utils/serviceUnits.ts';
 import React, { useEffect, useRef, useState } from 'react';
 import { usePOS } from '../../context/POSContext.tsx';
@@ -134,7 +135,7 @@ export const CompanyQAOnboardingModal: React.FC = () => {
     <div className="setup-backdrop">
       <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="setup-heading" aria-describedby="setup-description" className="setup-dialog" onKeyDown={onDialogKeyDown}>
         <header className="setup-header">
-          <div className="setup-brand-mark"><span>76</span></div>
+          <div className="setup-brand-mark"><img src={brandAssetUrl()} alt="CODE76 POS logo" style={{width:34,height:34,objectFit:'contain',borderRadius:8}}/></div>
           <div className="setup-header-copy"><span className="setup-eyebrow">A good start, your way</span><p>CODE76 workspace setup</p></div>
           <button type="button" className="setup-icon-button" onClick={() => dismiss()} aria-label="Save progress and close setup" title="Continue later from My Company"><X size={20} /></button>
         </header>

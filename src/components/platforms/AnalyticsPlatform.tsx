@@ -1775,7 +1775,7 @@ export const AnalyticsPlatform: React.FC = () => {
                   Historical Data Verdict: Peak Hours, Day-of-Week Trends & Repeat Buying
                 </h3>
                 <p className="text-xs text-slate-300 leading-relaxed max-w-3xl mb-4">
-                  Historical analysis across your past transactions demonstrates that <strong>62%</strong> of daily revenue is generated between <strong>8:00 AM - 11:00 AM</strong> and <strong>4:00 PM - 8:00 PM</strong>. Aligning cashier shift rosters to these high-velocity windows eliminates checkout queues.
+                  This legacy illustration assumes <strong>62%</strong> of daily revenue falls between <strong>8:00 AM - 11:00 AM</strong> and <strong>4:00 PM - 8:00 PM</strong>. This is not measured from your receipts. Check your recorded transactions before changing staff schedules; queue reductions are not guaranteed.
                 </p>
 
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">

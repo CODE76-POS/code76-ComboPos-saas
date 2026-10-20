@@ -1,0 +1,23 @@
+
+> react-example@0.0.0 build
+> vite build --outDir dist-staging
+
+vite v8.3.4 building client environment for production...
+transforming...
+✓ 2876 modules transformed.
+rendering chunks...
+computing gzip size...
+dist-staging/index.html                           4.08 kB │ gzip:   1.27 kB
+dist-staging/assets/index-Cr4lQpF8.css          126.72 kB │ gzip:  18.84 kB
+dist-staging/assets/purify.es-BZxk_wWO.js        29.02 kB │ gzip:  11.45 kB
+dist-staging/assets/index.es-1OQ2Evvv.js        151.42 kB │ gzip:  48.91 kB
+dist-staging/assets/html2canvas-D0z5rRhs.js     199.45 kB │ gzip:  46.76 kB
+dist-staging/assets/jspdf.es.min-B4bE67Ao.js    399.68 kB │ gzip: 129.90 kB
+dist-staging/assets/index-CXYurD_c.js         1,454.59 kB │ gzip: 389.05 kB
+
+✓ built in 1.47s
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.

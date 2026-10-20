@@ -77,8 +77,8 @@ export const MarketingCampaignModal: React.FC = () => {
 
   const handleSend = () => {
     logAuditAction(
-      'Dispatched Marketing Email',
-      `Sent campaign "${customSubject}" to ${currentCustomer?.firstName || 'Customer'} via marketer ${currentMarketer?.firstName || 'Team'}`
+      'Prepared Marketing Email Draft',
+      `Prepared campaign "${customSubject}" to ${currentCustomer?.firstName || 'Customer'} via marketer ${currentMarketer?.firstName || 'Team'}`
     );
     setSentSuccess(true);
     setTimeout(() => {
@@ -141,9 +141,9 @@ export const MarketingCampaignModal: React.FC = () => {
         {sentSuccess ? (
           <div className="bg-emerald-950/60 border border-emerald-800/60 rounded-xl p-8 text-center my-6">
             <CheckCircle2 className="w-12 h-12 text-emerald-400 mx-auto mb-3" />
-            <h4 className="text-lg font-bold text-emerald-200">Marketing Campaign Dispatched!</h4>
+            <h4 className="text-lg font-bold text-emerald-200">Campaign draft prepared</h4>
             <p className="text-sm text-emerald-300/90 mt-1">
-              Email & notification logged and queued for {currentCustomer?.firstName} {currentCustomer?.secondName}.
+              No email or notification was delivered. This preview was prepared for {currentCustomer?.firstName} {currentCustomer?.secondName}.
             </p>
           </div>
         ) : (

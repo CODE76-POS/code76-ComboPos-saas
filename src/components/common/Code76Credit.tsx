@@ -1,0 +1,8 @@
+import React from 'react';
+import {CODE76_BRAND,brandAssetUrl,websiteRequestUrl} from '../../config/code76Brand.ts';
+export function Code76Credit({compact=false,logo=true}:{compact?:boolean;logo?:boolean}){
+ return <div data-code76-credit="true" className={compact?'mt-4 border-t border-slate-300 pt-3 text-[9px] leading-relaxed break-words':'mt-6 rounded-2xl border border-slate-800 p-5 text-sm break-words'} style={{overflowWrap:'anywhere'}}>
+  <div className="flex items-start gap-3">{logo&&<img src={brandAssetUrl()} alt="CODE76 POS logo" className={compact?'w-7 h-7 shrink-0 rounded-md object-contain':'w-11 h-11 shrink-0 rounded-lg object-contain'}/>}<div className="min-w-0"><p className="font-bold">{CODE76_BRAND.credit}</p><p>email: <a href={CODE76_BRAND.emailUrl} className="underline">{CODE76_BRAND.email}</a></p><p>youtube: <a href={CODE76_BRAND.youtube} target="_blank" rel="noopener noreferrer" className="underline">{CODE76_BRAND.youtube}</a></p><a href={websiteRequestUrl()} className="mt-2 inline-block font-bold underline">{CODE76_BRAND.cta}</a></div></div>
+ </div>;
+}
+export function Code76SocialLinks(){return <div className="flex flex-wrap gap-3" aria-label="CODE76 social and contact links"><a href={CODE76_BRAND.youtube} target="_blank" rel="noopener noreferrer" className="rounded-lg border border-slate-700 px-3 py-2 text-sm text-teal-300 hover:bg-slate-900">YouTube</a><a href={CODE76_BRAND.facebook} target="_blank" rel="noopener noreferrer" className="rounded-lg border border-slate-700 px-3 py-2 text-sm text-teal-300 hover:bg-slate-900">Facebook</a><a href={CODE76_BRAND.emailUrl} className="rounded-lg border border-slate-700 px-3 py-2 text-sm text-teal-300 hover:bg-slate-900">{CODE76_BRAND.email}</a></div>;}

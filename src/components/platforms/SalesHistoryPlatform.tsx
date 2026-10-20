@@ -1,3 +1,4 @@
+import { calendarDate } from '../../utils/regional.ts';
 import { useRegionalFormat } from '../../hooks/useRegionalFormat.ts';
 import React, { useState } from 'react';
 import { usePOS } from '../../context/POSContext.tsx';
@@ -63,7 +64,7 @@ export const SalesHistoryPlatform: React.FC = () => {
 
   const [searchQuery, setSearchQuery] = useState('');
   const [categoryFilter, setCategoryFilter] = useState<'all' | 'normal_sale' | 'sales_invoice'>('all');
-  const [statusFilter, setStatusFilter] = useState<'all' | 'completed' | 'debt_pending' | 'debt_partial'>('all');
+  const [statusFilter, setStatusFilter] = useState<'all' | 'completed' | 'debt_pending' | 'debt_partial' | 'outstanding' | 'overdue'>('all');
 
   const filteredSales = sales.filter((s) => {
     const matchesCategory =
@@ -71,7 +72,7 @@ export const SalesHistoryPlatform: React.FC = () => {
       (categoryFilter === 'sales_invoice' && s.saleType === 'sales_invoice') ||
       (categoryFilter === 'normal_sale' && s.saleType !== 'sales_invoice');
 
-    const matchesStatus = statusFilter === 'all' || s.status === statusFilter;
+    const matchesStatus=statusFilter==='all'||(statusFilter==='outstanding'?s.debtAmount>0:statusFilter==='overdue'?s.debtAmount>0&&!!s.debtDueDate&&s.debtDueDate<calendarDate(new Date(),settings):s.status===statusFilter);
     const q = searchQuery.toLowerCase().trim();
     const matchesQuery =
       !q ||
@@ -90,6 +91,8 @@ export const SalesHistoryPlatform: React.FC = () => {
   });
 
   const handleDeleteSale = (sale: SaleTransaction) => {
+    if(!hasFeature('debts')&&sale.debtAmount>0){alert('Debt changes are not included in this plan. The record is retained.');return;}
+    if(sale.debtPayments?.length){alert('This sale has repayment history. Retain the original financial record and review corrections with your administrator.');return;}
     if (confirm(`Are you sure you want to delete transaction ${sale.receiptNo}?`)) {
       setSales((prev) => prev.filter((s) => s.id !== sale.id));
       logAuditAction('Deleted Sale Transaction', `Removed sale #${sale.receiptNo} from system records`);
@@ -196,6 +199,7 @@ export const SalesHistoryPlatform: React.FC = () => {
         </div>
       </div>
 
+      <div className="grid sm:grid-cols-3 gap-3 mb-5"><div className="rounded-xl border border-slate-800 bg-slate-900 p-4"><p className="text-xs text-slate-400">Recorded sales (not cash receipts)</p><strong className="mt-2 block text-xl">{currency} {sales.reduce((sum,sale)=>sum+sale.netTotal,0).toFixed(2)}</strong></div><div className="rounded-xl border border-slate-800 bg-slate-900 p-4"><p className="text-xs text-slate-400">Amount applied to sales</p><strong className="mt-2 block text-xl">{currency} {sales.reduce((sum,sale)=>sum+Math.min(sale.netTotal,sale.amountPaid),0).toFixed(2)}</strong></div><div className="rounded-xl border border-amber-900 bg-slate-900 p-4"><p className="text-xs text-slate-400">Recorded outstanding balance</p><strong className="mt-2 block text-xl text-amber-300">{currency} {sales.reduce((sum,sale)=>sum+sale.debtAmount,0).toFixed(2)}</strong></div></div>
       {/* Filter and Search Bar */}
       <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 mb-6 flex flex-col lg:flex-row gap-3 justify-between items-center">
         <div className="relative w-full lg:w-72 shrink-0">
@@ -237,7 +241,9 @@ export const SalesHistoryPlatform: React.FC = () => {
         <div className="flex items-center gap-1.5 overflow-x-auto w-full lg:w-auto">
           {(
             [
-              { id: 'all', label: 'All Status' },
+              { id: 'all', label: 'All statuses' },
+              { id: 'outstanding', label: 'All outstanding' },
+              { id: 'overdue', label: 'Past due date' },
               { id: 'completed', label: 'Paid / Completed' },
               { id: 'debt_pending', label: 'Pending Debt' },
               { id: 'debt_partial', label: 'Partial Debt' },
@@ -526,6 +532,7 @@ export const SalesHistoryPlatform: React.FC = () => {
               </div>
             </div>
 
+            {!!selectedSaleDetail.debtPayments?.length&&<section className="mt-4 rounded-xl border border-teal-900 p-3"><h4 className="font-bold text-sm">Recorded repayments</h4>{selectedSaleDetail.debtPayments.map(payment=><p key={payment.id} className="mt-2 text-xs text-slate-400">{regionalFormat.dateTime(payment.timestamp)} · {currency} {payment.amount.toFixed(2)} · {payment.method} · {payment.reference||'No reference'} · Balance after: {currency} {payment.balanceAfter.toFixed(2)}</p>)}</section>}
             <div className="flex justify-end gap-2 mt-4">
               <button
                 onClick={() => {

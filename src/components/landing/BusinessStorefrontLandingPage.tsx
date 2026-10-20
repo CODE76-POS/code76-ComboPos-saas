@@ -1,3 +1,4 @@
+import { Code76Credit } from '../common/Code76Credit.tsx';
 import { LandingSectionNav } from './LandingSectionNav.tsx';
 import { useMeasuredHeader } from '../../hooks/useMeasuredHeader.ts';
 import { directoryPhoto } from '../../utils/directory.ts';
@@ -848,6 +849,8 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
           </div>
         </div>
       </section>
+
+      <footer className="max-w-7xl mx-auto px-4 pb-8" aria-label="Website creator credit"><Code76Credit /></footer>
 
       {/* PRODUCT QUOTATION INQUIRY MODAL */}
       {inquiryModalProduct && (

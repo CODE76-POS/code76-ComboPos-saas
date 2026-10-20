@@ -1,3 +1,4 @@
+import { CODE76_BRAND, websiteRequestUrl } from '../config/code76Brand.ts';
 import type { AuditLog } from '../types/index.ts';
 import { AUDIT_EXPORT_HEADERS, auditExportRows } from './accessHistory.ts';
 
@@ -23,7 +24,7 @@ export async function accessHistoryPdf(logs: readonly AuditLog[], officer: strin
   const doc = new jsPDF({ compress: true, putOnlyUsedFonts: true });
   doc.addFileToVFS('AuditSans.ttf', font); doc.addFont('AuditSans.ttf', 'AuditSans', 'normal'); doc.setFont('AuditSans');
   doc.setProperties({ title: 'CODE76 POS - User access history', author: 'CODE76 POS', subject: 'Filtered browser-local activity export' });
-  const margin = 15, width = 180, bottom = 278;
+  const margin = 15, width = 180, bottom = 255;
   let y = 20;
   const line = (text: string, size = 9, color = '#0f172a') => {
     doc.setFontSize(size); doc.setTextColor(color);
@@ -40,7 +41,7 @@ export async function accessHistoryPdf(logs: readonly AuditLog[], officer: strin
   line(`Filtered records: ${logs.length}`);
   line('Browser-local activity records; not a tamper-proof server audit.', 8, '#64748b'); y += 4;
   auditExportRows(logs).forEach((row, index) => {
-    if (y > 240) { doc.addPage(); y = 20; }
+    if (y > 222) { doc.addPage(); y = 20; }
     line(`Record ${index + 1}`, 11, '#0f766e');
     AUDIT_EXPORT_HEADERS.forEach((header, i) => line(`${header}: ${row[i]}`));
     y += 5;
@@ -49,7 +50,11 @@ export async function accessHistoryPdf(logs: readonly AuditLog[], officer: strin
   const pages = doc.getNumberOfPages();
   for (let page = 1; page <= pages; page++) {
     doc.setPage(page); doc.setFontSize(8); doc.setTextColor('#64748b');
-    doc.text(`Page ${page} of ${pages}`, margin, 289);
+    doc.text(CODE76_BRAND.credit,margin,267);
+    doc.textWithLink(`email: ${CODE76_BRAND.email}`,margin,272,{url:CODE76_BRAND.emailUrl});
+    doc.textWithLink(`youtube: ${CODE76_BRAND.youtube}`,margin,277,{url:CODE76_BRAND.youtube});
+    doc.textWithLink(CODE76_BRAND.cta,margin,282,{url:websiteRequestUrl()});
+    doc.text(`Page ${page} of ${pages}`,margin,291);
   }
   return new Uint8Array(doc.output('arraybuffer'));
 }

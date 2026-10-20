@@ -1,3 +1,6 @@
+import { calendarDate } from '../utils/regional.ts';
+import {createDemoWorkspace} from '../data/demoWorkspace.ts';
+import {applyDebtPayment,type DebtPaymentOptions} from '../utils/debt.ts';
 import { TEAM_SERVICES } from '../config/teamServices.ts';
 import { invoiceDraftTotals } from '../utils/invoiceDraft.ts';
 import { hasPlanFeature, planTier, requirePlanFeature, PLAN_TIERS, type Feature } from '../utils/plans.ts';
@@ -123,7 +126,7 @@ interface POSContextType {
   logAuditAction: (action: string, details: string) => void;
   hasPrivilege: (permission: keyof AppSettings['privileges'][UserRole]) => boolean;
   addSale: (sale: Omit<SaleTransaction, 'id' | 'receiptNo' | 'timestamp'>) => SaleTransaction;
-  settleDebt: (saleId: string, amount: number, method: string) => void;
+  settleDebt: (saleId: string, amount: number, method: string, options?:DebtPaymentOptions) => SaleTransaction;
   addPerson: (category: PersonRecord['category'], person: Omit<PersonRecord, 'id' | 'createdAt'>) => PersonRecord;
   updatePerson: (category: PersonRecord['category'], person: PersonRecord) => void;
   deletePerson: (category: PersonRecord['category'], id: string) => void;
@@ -195,6 +198,7 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const directoriesRef = useRef<DirectoryCollections>({ customers, vendors, transporters, marketingTeam, companyMembers, relatedCompanies });
   directoriesRef.current = { customers, vendors, transporters, marketingTeam, companyMembers, relatedCompanies };
   const salaryRef = useRef(salaryPayments); salaryRef.current = salaryPayments;
+  const salesRef=useRef(sales);salesRef.current=sales;
   const hasFeature = (feature: Feature) => hasPlanFeature(planTier(settings), feature);
   const applyDirectories = (next: DirectoryCollections) => {
     directoriesRef.current = next;
@@ -357,41 +361,25 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return priv1 || priv2;
   };
 
-  // Load Demo Data
-  const loadDemoData = () => {
-    setCompany({ ...INITIAL_COMPANY, isConfiguredByMerchant: true });
-    setProducts(INITIAL_PRODUCTS);
-    setSales(INITIAL_SALES);
-    setExpenses(INITIAL_EXPENSES);
-    setInvoices(INITIAL_INVOICES);
-    setCustomers(INITIAL_CUSTOMERS);
-    setVendors(INITIAL_VENDORS);
-    setTransporters(INITIAL_TRANSPORTERS);
-    setMarketingTeam(INITIAL_MARKETING_TEAM);
-    setCompanyMembers(INITIAL_COMPANY_MEMBERS);
-    setReviews(INITIAL_REVIEWS);
-    setAuditLogs(INITIAL_AUDIT_LOGS);
-    setLandingMetrics(INITIAL_LANDING_METRICS);
-    setSettings(previous => ({ ...INITIAL_SETTINGS, planTier: previous.planTier, regional: previous.regional }));
-
-    if (!currentUser) {
-      setCurrentUser({
-        id: 'user-demo-admin',
-        email: 'code76pos@gmail.com',
-        name: 'CODE76 Developer Admin',
-        roles: ['Developer', 'Manager'],
-        avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80',
-        isAdmin: true,
-      });
-    }
-
-    logAuditAction('Loaded Demo Data', 'Populated rich system demo data across all platforms.');
+  // Opt-in administrator confirmation occurs in DemoWarningModal.
+  const loadDemoData=()=>{
+    if(!currentUser?.isAdmin)throw new Error('Only an administrator can replace business records with demo data.');
+    const demo=createDemoWorkspace(settings);
+    setCompany(demo.company);setProducts(demo.products);setSales(demo.sales);salesRef.current=demo.sales;
+    setExpenses(demo.expenses);setInvoices(demo.invoices);applyDirectories(demo.directories);
+    setSalaryPayments(demo.salaryPayments);salaryRef.current=demo.salaryPayments;
+    setReviews(demo.reviews);setLandingMetrics(demo.landingMetrics);setTeamServiceBriefs([]);
+    setAuditLogs(previous=>[...demo.auditLogs,...previous]);
+    setSettings(previous=>({...previous,landingPage:{...previous.landingPage,heroTitle:demo.company.name,heroSubtitle:'DEMO ONLY — synthetic inventory, contacts and feedback. No real orders or results are represented.',referralBonusText:'',showPromoCountdown:false},receipts:{...previous.receipts,headerTitle:demo.company.name,footerNotice:'DEMO ONLY — no actual payment or purchase.',returnPolicy:'Training record only; not a real returns or warranty policy.'}}));
+    setHasDismissedCompanyQA(true);setCompanyQAModalOpen(false);setMarketingModalItem(null);setReceiptModalSale(null);setReviewModalSale(null);
+    logAuditAction('Loaded Synthetic Demo Workspace','Administrator-confirmed replacement with fictional training records; tier/preferences retained; no real funds, emails or endorsements created.');
     setDemoWarningOpen(false);
   };
 
   // Clear to blank
   const wipeDataToCleanState = () => {
     if (!currentUser?.isAdmin) throw new Error('Only an administrator can delete all business records.');
+    setCompany(previous=>previous.isDemo?{...previous,isDemo:false,isConfiguredByMerchant:false,name:'',slogan:'',logoUrl:''}:previous);
     setTeamServiceBriefs([]);
     setRelatedCompanies([]); setSalaryPayments([]); salaryRef.current = [];
     directoriesRef.current = { customers: [], vendors: [], transporters: [], marketingTeam: [], companyMembers: [], relatedCompanies: [] };
@@ -539,26 +527,19 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return newSale;
   };
 
-  // Settle Debt
-  const settleDebt = (saleId: string, amount: number, method: string) => {
-    requirePlanFeature(settings, 'debts');
-    setSales((prev) =>
-      prev.map((sale) => {
-        if (sale.id !== saleId) return sale;
-        const newPaid = sale.amountPaid + amount;
-        const remainingDebt = Math.max(0, sale.netTotal - newPaid);
-        const status = remainingDebt <= 0 ? 'completed' : 'debt_partial';
-        return {
-          ...sale,
-          amountPaid: newPaid,
-          debtAmount: remainingDebt,
-          status,
-          debtSettledDate: remainingDebt <= 0 ? new Date().toISOString() : undefined,
-          payments: [...sale.payments, { method: method as any, amount }],
-        };
-      })
-    );
-    logAuditAction('Debt Settled', `Received debt payment of $${amount} for Sale ID: ${saleId} via ${method}`);
+  // Record an already-received payment, never a new sale or money transfer.
+  const settleDebt=(saleId:string,amount:number,method:string,options:DebtPaymentOptions={}):SaleTransaction=>{
+    requirePlanFeature(settings,'debts');
+    if(!hasPrivilege('canSell')&&!hasPrivilege('canViewInvoices'))throw new Error('Recording debt collections requires Sales or Invoices role permission.');
+    const original=salesRef.current.find(sale=>sale.id===saleId);if(!original)throw new Error('The original sale no longer exists.');
+    const linked=invoices.find(invoice=>invoice.type==='sales'&&(invoice.id===original.invoiceId||invoice.saleId===saleId));
+    if(linked&&(Math.abs(linked.total-original.netTotal)>0.01||Math.abs(linked.amountPaid-original.amountPaid)>0.01))throw new Error('The linked invoice and sale balances disagree. Review the original records before collecting another payment.');
+    const result=applyDebtPayment(original,amount,method,{...options,recordedBy:currentUser?.name||'User'});
+    if(result.duplicate)return result.sale;
+    salesRef.current=salesRef.current.map(sale=>sale.id===saleId?result.sale:sale);setSales(salesRef.current);
+    setInvoices(previous=>previous.map(invoice=>invoice.type==='sales'&&(invoice.id===original.invoiceId||invoice.saleId===saleId)?{...invoice,amountPaid:result.sale.amountPaid,status:result.sale.debtAmount===0?'paid':invoice.dueDate<calendarDate(new Date(),settings)?'overdue':'pending'}:invoice));
+    logAuditAction('Recorded Debt Payment',`Recorded ${result.payment.amount} ${company.currency} for ${original.receiptNo}; remaining ${result.sale.debtAmount}. Bookkeeping only; no transfer initiated.`);
+    return result.sale;
   };
 
   // Stable identities project into selected directories; historical snapshots remain immutable.

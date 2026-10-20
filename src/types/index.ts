@@ -211,6 +211,8 @@ export interface SaleTransaction {
   amountPaid: number;
   debtAmount: number;
   debtSettledDate?: string;
+  debtDueDate?: string;
+  debtPayments?: import('../utils/debt.ts').DebtPaymentRecord[];
   referredBy?: {
     id: string;
     name: string;
@@ -259,6 +261,7 @@ export interface InvoiceItem {
 }
 
 export interface CustomerReview {
+  isDemo?: boolean;
   avatarStyle?: AvatarStyle;
   id: string;
   customerName: string;
@@ -302,6 +305,7 @@ export interface CompanyData {
   currency: string;
   operatingHours: string;
   isConfiguredByMerchant?: boolean;
+  isDemo?: boolean;
 }
 
 export interface FinancialHealth {
@@ -348,7 +352,7 @@ export interface EmailTemplate {
   body: string;
 }
 
-export type SettingsSection = 'payments' | 'textSizing' | 'landingPage' | 'receipts' | 'appearance' | 'font' | 'backup' | 'privileges' | 'pdfExcel' | 'emailTemplates' | 'auditLogs' | 'dataEraser' | 'regional' | 'plans' | 'teamServices';
+export type SettingsSection = 'payments' | 'textSizing' | 'landingPage' | 'receipts' | 'appearance' | 'font' | 'backup' | 'privileges' | 'pdfExcel' | 'emailTemplates' | 'auditLogs' | 'dataEraser' | 'regional' | 'plans' | 'teamServices' | 'demoData';
 
 export interface AppSettings {
   /** Demo entitlements only, not a verified paid subscription. */

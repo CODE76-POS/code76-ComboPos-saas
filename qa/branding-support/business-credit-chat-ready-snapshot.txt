@@ -1,0 +1,451 @@
+### Page
+- Page URL: http://127.0.0.1:5173/#/pos/landing_page_builder
+- Page Title: Business Landing Page | CODE76 POS — Private Workspace
+### Snapshot
+```yaml
+- generic [ref=f1e4]:
+  - banner [ref=f1e695]:
+    - generic [ref=f1e696]:
+      - button "CODE76 POS logo CODE76 POS Enterprise Product & Service SaaS ERP System" [ref=f1e698] [cursor=pointer]:
+        - img "CODE76 POS logo" [ref=f1e700]
+        - generic [ref=f1e701]:
+          - generic [ref=f1e702]:
+            - generic [ref=f1e703]: CODE76 POS
+            - generic [ref=f1e704]: Enterprise
+          - paragraph [ref=f1e705]: Product & Service SaaS ERP System
+      - generic [ref=f1e706]:
+        - generic [ref=f1e707]:
+          - button "Desktop View (Full Width)" [ref=f1e708] [cursor=pointer]
+          - button "Laptop View (1024px)" [ref=f1e711] [cursor=pointer]
+          - button "Tablet View (768px)" [ref=f1e714] [cursor=pointer]
+          - button "Phone Mobile View (390px)" [ref=f1e717] [cursor=pointer]
+        - generic [ref=f1e720]:
+          - button "Demo Data" [ref=f1e721] [cursor=pointer]
+          - button "Business Page" [ref=f1e728] [cursor=pointer]
+          - button "Click to view help guide and settings for this platform" [ref=f1e733] [cursor=pointer]
+          - button "Active user session and access controls" [ref=f1e738] [cursor=pointer]:
+            - generic [ref=f1e739]: DR
+            - generic [ref=f1e740]:
+              - generic [ref=f1e741]: Dr. David Kimani
+              - generic [ref=f1e742]: "Role: CEO"
+    - generic [ref=f1e743]:
+      - generic [ref=f1e744]:
+        - generic [ref=f1e748]: App link
+        - generic [ref=f1e749]:
+          - generic [ref=f1e750]:
+            - generic [ref=f1e751]: App link
+            - textbox "App link" [ref=f1e752]: http://127.0.0.1:5173/
+            - button "Copy app link" [ref=f1e753] [cursor=pointer]:
+              - generic [ref=f1e757]: Copy link
+            - link "Open app link in a new tab" [ref=f1e758] [cursor=pointer]:
+              - /url: http://127.0.0.1:5173/
+          - status [ref=f1e763]
+        - button "Current demo plan" [ref=f1e764]: Max · demo
+      - paragraph [ref=f1e765]: Open this root link to reach CODE76 sign-in/register. Browser-local records and sessions do not sync between browsers.
+    - note [ref=f1e766]: DEMO DATA · Fictional records, contacts, reviews and bookkeeping amounts—not real business activity.
+    - generic [ref=f1e768]:
+      - button "Sales POS" [ref=f1e769] [cursor=pointer]
+      - button "Sales History" [ref=f1e773] [cursor=pointer]
+      - button "Inventory" [ref=f1e778] [cursor=pointer]
+      - button "Expenses" [ref=f1e783] [cursor=pointer]
+      - button "Invoices" [ref=f1e787] [cursor=pointer]
+      - button "Analytics & P&L" [ref=f1e791] [cursor=pointer]
+      - button "Customers" [ref=f1e794] [cursor=pointer]
+      - button "Vendors" [ref=f1e800] [cursor=pointer]
+      - button "Transporters" [ref=f1e805] [cursor=pointer]
+      - button "Marketing Team" [ref=f1e811] [cursor=pointer]
+      - button "Company Members" [ref=f1e815] [cursor=pointer]
+      - button "My Company" [ref=f1e821] [cursor=pointer]
+      - button "Messaging" [ref=f1e825] [cursor=pointer]
+      - button "Business Landing Page" [ref=f1e828] [cursor=pointer]
+      - button "Settings" [ref=f1e833] [cursor=pointer]
+      - button "Audit & Access Logs" [ref=f1e837] [cursor=pointer]
+      - button "About & Manual" [ref=f1e841] [cursor=pointer]
+  - main [ref=f1e5]:
+    - generic [ref=f1e3353]:
+      - generic [ref=f1e3354]:
+        - navigation "Business identity and private actions" [ref=f1e3355]:
+          - generic [ref=f1e3356]:
+            - img "DEMO Horizon Retail & Services" [ref=f1e3357]
+            - generic [ref=f1e3358]:
+              - generic [ref=f1e3359]: DEMO Horizon Retail & Services
+              - generic [ref=f1e3360]: Fictional workspace for learning the workflow
+          - generic [ref=f1e3361]:
+            - button "Open private business page link" [ref=f1e3362] [cursor=pointer]:
+              - generic [ref=f1e3369]: Private Link
+            - generic [ref=f1e3370]:
+              - generic [ref=f1e3371]:
+                - generic [ref=f1e3372]: DR
+                - generic [ref=f1e3373]:
+                  - generic [ref=f1e3374]: Dr. David Kimani
+                  - generic [ref=f1e3375]: CEO
+              - button "Business page settings" [ref=f1e3376] [cursor=pointer]
+              - button "Return to POS" [ref=f1e3380] [cursor=pointer]
+        - navigation "Business page sections" [ref=f1e3386]:
+          - generic [ref=f1e3387]:
+            - link "Overview" [ref=f1e3388] [cursor=pointer]:
+              - /url: "#business-start"
+            - link "Featured" [ref=f1e3389] [cursor=pointer]:
+              - /url: "#featured"
+            - link "Catalog" [ref=f1e3390] [cursor=pointer]:
+              - /url: "#matcher"
+            - link "How to choose" [ref=f1e3391] [cursor=pointer]:
+              - /url: "#buying-guide"
+            - link "Reviews" [ref=f1e3392] [cursor=pointer]:
+              - /url: "#reviews"
+            - link "Ask the business" [ref=f1e3393] [cursor=pointer]:
+              - /url: "#assistant"
+            - link "Contact" [ref=f1e3394] [cursor=pointer]:
+              - /url: "#contact"
+      - note [ref=f1e3395]:
+        - strong [ref=f1e3396]: Private Business Landing Page preview.
+        - text: Only signed-in POS users can access this screen. This page is not published to the public website. Its content is managed separately from CODE76 product marketing.
+      - generic [ref=f1e3398]:
+        - generic [ref=f1e3399]: Our products & services
+        - heading "DEMO Horizon Retail & Services" [level=1] [ref=f1e3404]
+        - paragraph [ref=f1e3405]: DEMO ONLY — synthetic inventory, contacts and feedback. No real orders or results are represented.
+        - generic [ref=f1e3406]:
+          - generic [ref=f1e3412]:
+            - strong [ref=f1e3413]: "28"
+            - text: catalog entries from Inventory
+          - generic [ref=f1e3417]:
+            - strong [ref=f1e3418]: 4.5 / 5.0
+            - text: · 4 approved reviews
+          - generic [ref=f1e3423]:
+            - text: "Hours:"
+            - strong [ref=f1e3424]: "DEMO schedule: weekdays 08:00–17:00"
+        - generic [ref=f1e3425]:
+          - link "Explore featured items" [ref=f1e3426] [cursor=pointer]:
+            - /url: "#featured"
+          - link "Find the right product or service" [ref=f1e3431] [cursor=pointer]:
+            - /url: "#matcher"
+      - generic [ref=f1e3437]:
+        - article [ref=f1e3438]:
+          - heading "1. Find a good fit" [level=2] [ref=f1e3439]
+          - paragraph [ref=f1e3440]: Browse the actual catalog, compare descriptions and check the displayed price or service billing unit.
+        - article [ref=f1e3441]:
+          - heading "2. Confirm the details" [level=2] [ref=f1e3442]
+          - paragraph [ref=f1e3443]: Ask about current availability, service scope, timing and any applicable terms before making a decision.
+        - article [ref=f1e3444]:
+          - heading "3. Choose your next step" [level=2] [ref=f1e3445]
+          - paragraph [ref=f1e3446]: Use the business contact details to arrange an order or service. This preview does not take payment, reserve stock or confirm appointments.
+      - generic [ref=f1e3447]:
+        - generic [ref=f1e3448]:
+          - generic [ref=f1e3449]:
+            - generic [ref=f1e3450]: From our Inventory
+            - heading "Featured Products & Services" [level=2] [ref=f1e3455]
+          - paragraph [ref=f1e3456]: Products, prices and stock from this business’s Inventory. Contact the business to confirm availability.
+        - generic [ref=f1e3457]:
+          - generic [ref=f1e3458]:
+            - generic [ref=f1e3459]:
+              - generic [ref=f1e3460]:
+                - img "DEMO Notebook A5" [ref=f1e3461]
+                - generic [ref=f1e3462]: In Stock (49 units)
+              - generic [ref=f1e3466]:
+                - generic [ref=f1e3467]:
+                  - generic [ref=f1e3468]: DEMO-P-001
+                  - generic [ref=f1e3469]: Stationery
+                - heading "DEMO Notebook A5" [level=3] [ref=f1e3470]
+                - paragraph [ref=f1e3471]: DEMO ONLY — synthetic product. Price, stock and contact details are for training, not an actual offer.
+            - generic [ref=f1e3472]:
+              - generic [ref=f1e3473]:
+                - generic [ref=f1e3474]: USD 4.00
+                - generic [ref=f1e3475]: Excl. applicable tax
+              - button "Request Quote" [ref=f1e3476] [cursor=pointer]
+          - generic [ref=f1e3480]:
+            - generic [ref=f1e3481]:
+              - generic [ref=f1e3482]:
+                - img "DEMO Office Chair" [ref=f1e3483]
+                - generic [ref=f1e3484]: In Stock (46 units)
+                - generic [ref=f1e3488]: SALE PROMO
+              - generic [ref=f1e3493]:
+                - generic [ref=f1e3494]:
+                  - generic [ref=f1e3495]: DEMO-P-002
+                  - generic [ref=f1e3496]: Office
+                - heading "DEMO Office Chair" [level=3] [ref=f1e3497]
+                - paragraph [ref=f1e3498]: DEMO ONLY — synthetic product. Price, stock and contact details are for training, not an actual offer.
+            - generic [ref=f1e3499]:
+              - generic [ref=f1e3500]:
+                - generic [ref=f1e3501]:
+                  - generic [ref=f1e3502]: USD 108.00
+                  - generic [ref=f1e3503]: USD 120.00
+                - generic [ref=f1e3504]: Excl. applicable tax
+              - button "Request Quote" [ref=f1e3505] [cursor=pointer]
+          - generic [ref=f1e3509]:
+            - generic [ref=f1e3510]:
+              - generic [ref=f1e3511]:
+                - img "DEMO Coffee Pack" [ref=f1e3512]
+                - generic [ref=f1e3513]: In Stock (47 units)
+              - generic [ref=f1e3517]:
+                - generic [ref=f1e3518]:
+                  - generic [ref=f1e3519]: DEMO-P-003
+                  - generic [ref=f1e3520]: Groceries
+                - heading "DEMO Coffee Pack" [level=3] [ref=f1e3521]
+                - paragraph [ref=f1e3522]: DEMO ONLY — synthetic product. Price, stock and contact details are for training, not an actual offer.
+            - generic [ref=f1e3523]:
+              - generic [ref=f1e3524]:
+                - generic [ref=f1e3525]: USD 12.00
+                - generic [ref=f1e3526]: Excl. applicable tax
+              - button "Request Quote" [ref=f1e3527] [cursor=pointer]
+          - generic [ref=f1e3531]:
+            - generic [ref=f1e3532]:
+              - generic [ref=f1e3533]:
+                - img "DEMO Printer Paper" [ref=f1e3534]
+                - generic [ref=f1e3535]: In Stock (48 units)
+              - generic [ref=f1e3539]:
+                - generic [ref=f1e3540]:
+                  - generic [ref=f1e3541]: DEMO-P-004
+                  - generic [ref=f1e3542]: Stationery
+                - heading "DEMO Printer Paper" [level=3] [ref=f1e3543]
+                - paragraph [ref=f1e3544]: DEMO ONLY — synthetic product. Price, stock and contact details are for training, not an actual offer.
+            - generic [ref=f1e3545]:
+              - generic [ref=f1e3546]:
+                - generic [ref=f1e3547]: USD 7.00
+                - generic [ref=f1e3548]: Excl. applicable tax
+              - button "Request Quote" [ref=f1e3549] [cursor=pointer]
+          - generic [ref=f1e3553]:
+            - generic [ref=f1e3554]:
+              - generic [ref=f1e3555]:
+                - img "DEMO Desk Lamp" [ref=f1e3556]
+                - generic [ref=f1e3557]: In Stock (46 units)
+              - generic [ref=f1e3561]:
+                - generic [ref=f1e3562]:
+                  - generic [ref=f1e3563]: DEMO-P-005
+                  - generic [ref=f1e3564]: Office
+                - heading "DEMO Desk Lamp" [level=3] [ref=f1e3565]
+                - paragraph [ref=f1e3566]: DEMO ONLY — synthetic product. Price, stock and contact details are for training, not an actual offer.
+            - generic [ref=f1e3567]:
+              - generic [ref=f1e3568]:
+                - generic [ref=f1e3569]: USD 18.00
+                - generic [ref=f1e3570]: Excl. applicable tax
+              - button "Request Quote" [ref=f1e3571] [cursor=pointer]
+          - generic [ref=f1e3575]:
+            - generic [ref=f1e3576]:
+              - generic [ref=f1e3577]:
+                - img "DEMO Water Bottle" [ref=f1e3578]
+                - generic [ref=f1e3579]: In Stock (47 units)
+              - generic [ref=f1e3583]:
+                - generic [ref=f1e3584]:
+                  - generic [ref=f1e3585]: DEMO-P-006
+                  - generic [ref=f1e3586]: Home
+                - heading "DEMO Water Bottle" [level=3] [ref=f1e3587]
+                - paragraph [ref=f1e3588]: DEMO ONLY — synthetic product. Price, stock and contact details are for training, not an actual offer.
+            - generic [ref=f1e3589]:
+              - generic [ref=f1e3590]:
+                - generic [ref=f1e3591]: USD 6.00
+                - generic [ref=f1e3592]: Excl. applicable tax
+              - button "Request Quote" [ref=f1e3593] [cursor=pointer]
+      - generic [ref=f1e3598]:
+        - generic [ref=f1e3599]:
+          - generic [ref=f1e3600]: Interactive Commercial Matcher
+          - heading "Find What You’re Looking For" [level=2] [ref=f1e3604]
+          - paragraph [ref=f1e3605]: Browse this business’s categories, or search for a product or service by name, description or SKU.
+        - generic [ref=f1e3606]:
+          - generic [ref=f1e3607]:
+            - button "All Items" [ref=f1e3608] [cursor=pointer]
+            - button "Stationery" [ref=f1e3609] [cursor=pointer]
+            - button "Office" [ref=f1e3610] [cursor=pointer]
+            - button "Groceries" [ref=f1e3611] [cursor=pointer]
+            - button "Home" [ref=f1e3612] [cursor=pointer]
+            - button "Electronics" [ref=f1e3613] [cursor=pointer]
+            - button "Services" [ref=f1e3614] [cursor=pointer]
+          - textbox "Search catalog SKUs..." [ref=f1e3619]
+        - generic [ref=f1e3620]:
+          - generic [ref=f1e3621]:
+            - generic [ref=f1e3622]:
+              - img "DEMO Notebook A5" [ref=f1e3624]
+              - generic [ref=f1e3625]: DEMO-P-001
+              - heading "DEMO Notebook A5" [level=4] [ref=f1e3626]
+              - paragraph [ref=f1e3627]: DEMO ONLY — synthetic product. Price, stock and contact details are for training, not an actual offer.
+            - generic [ref=f1e3628]:
+              - generic [ref=f1e3629]: USD 4.00
+              - button "Match Quote" [ref=f1e3630] [cursor=pointer]
+          - generic [ref=f1e3631]:
+            - generic [ref=f1e3632]:
+              - img "DEMO Office Chair" [ref=f1e3634]
+              - generic [ref=f1e3635]: DEMO-P-002
+              - heading "DEMO Office Chair" [level=4] [ref=f1e3636]
+              - paragraph [ref=f1e3637]: DEMO ONLY — synthetic product. Price, stock and contact details are for training, not an actual offer.
+            - generic [ref=f1e3638]:
+              - generic [ref=f1e3639]: USD 120.00
+              - button "Match Quote" [ref=f1e3640] [cursor=pointer]
+          - generic [ref=f1e3641]:
+            - generic [ref=f1e3642]:
+              - img "DEMO Coffee Pack" [ref=f1e3644]
+              - generic [ref=f1e3645]: DEMO-P-003
+              - heading "DEMO Coffee Pack" [level=4] [ref=f1e3646]
+              - paragraph [ref=f1e3647]: DEMO ONLY — synthetic product. Price, stock and contact details are for training, not an actual offer.
+            - generic [ref=f1e3648]:
+              - generic [ref=f1e3649]: USD 12.00
+              - button "Match Quote" [ref=f1e3650] [cursor=pointer]
+          - generic [ref=f1e3651]:
+            - generic [ref=f1e3652]:
+              - img "DEMO Printer Paper" [ref=f1e3654]
+              - generic [ref=f1e3655]: DEMO-P-004
+              - heading "DEMO Printer Paper" [level=4] [ref=f1e3656]
+              - paragraph [ref=f1e3657]: DEMO ONLY — synthetic product. Price, stock and contact details are for training, not an actual offer.
+            - generic [ref=f1e3658]:
+              - generic [ref=f1e3659]: USD 7.00
+              - button "Match Quote" [ref=f1e3660] [cursor=pointer]
+          - generic [ref=f1e3661]:
+            - generic [ref=f1e3662]:
+              - img "DEMO Desk Lamp" [ref=f1e3664]
+              - generic [ref=f1e3665]: DEMO-P-005
+              - heading "DEMO Desk Lamp" [level=4] [ref=f1e3666]
+              - paragraph [ref=f1e3667]: DEMO ONLY — synthetic product. Price, stock and contact details are for training, not an actual offer.
+            - generic [ref=f1e3668]:
+              - generic [ref=f1e3669]: USD 18.00
+              - button "Match Quote" [ref=f1e3670] [cursor=pointer]
+          - generic [ref=f1e3671]:
+            - generic [ref=f1e3672]:
+              - img "DEMO Water Bottle" [ref=f1e3674]
+              - generic [ref=f1e3675]: DEMO-P-006
+              - heading "DEMO Water Bottle" [level=4] [ref=f1e3676]
+              - paragraph [ref=f1e3677]: DEMO ONLY — synthetic product. Price, stock and contact details are for training, not an actual offer.
+            - generic [ref=f1e3678]:
+              - generic [ref=f1e3679]: USD 6.00
+              - button "Match Quote" [ref=f1e3680] [cursor=pointer]
+          - generic [ref=f1e3681]:
+            - generic [ref=f1e3682]:
+              - img "DEMO USB Cable" [ref=f1e3684]
+              - generic [ref=f1e3685]: DEMO-P-007
+              - heading "DEMO USB Cable" [level=4] [ref=f1e3686]
+              - paragraph [ref=f1e3687]: DEMO ONLY — synthetic product. Price, stock and contact details are for training, not an actual offer.
+            - generic [ref=f1e3688]:
+              - generic [ref=f1e3689]: USD 5.00
+              - button "Match Quote" [ref=f1e3690] [cursor=pointer]
+          - generic [ref=f1e3691]:
+            - generic [ref=f1e3692]:
+              - img "DEMO Keyboard" [ref=f1e3694]
+              - generic [ref=f1e3695]: DEMO-P-008
+              - heading "DEMO Keyboard" [level=4] [ref=f1e3696]
+              - paragraph [ref=f1e3697]: DEMO ONLY — synthetic product. Price, stock and contact details are for training, not an actual offer.
+            - generic [ref=f1e3698]:
+              - generic [ref=f1e3699]: USD 20.00
+              - button "Match Quote" [ref=f1e3700] [cursor=pointer]
+      - generic [ref=f1e3701]:
+        - generic [ref=f1e3702]:
+          - generic [ref=f1e3703]:
+            - generic [ref=f1e3704]: Explore our full collection
+            - heading "More from Our Catalog" [level=2] [ref=f1e3709]
+          - paragraph [ref=f1e3710]: Discover more products and services from this business.
+        - generic [ref=f1e3711]:
+          - generic [ref=f1e3712]:
+            - img "DEMO Keyboard" [ref=f1e3963]
+            - generic [ref=f1e3715]:
+              - generic [ref=f1e3716]:
+                - generic [ref=f1e3717]: Electronics
+                - generic [ref=f1e3718]: "SKU: DEMO-P-008"
+                - generic [ref=f1e3719]: "• Stock: 48 units"
+              - heading "DEMO Keyboard" [level=3] [ref=f1e3964]
+              - paragraph [ref=f1e3721]: DEMO ONLY — synthetic product. Price, stock and contact details are for training, not an actual offer.
+              - generic [ref=f1e3722]:
+                - generic [ref=f1e3723]:
+                  - generic [ref=f1e3724]: Live Inventory Price
+                  - generic [ref=f1e3725]: USD 20.00
+                - generic [ref=f1e3726]:
+                  - button "Previous Item" [ref=f1e3727] [cursor=pointer]
+                  - button "Next Item" [ref=f1e3730] [cursor=pointer]
+                  - button "Request Quotation" [ref=f1e3733] [cursor=pointer]
+          - generic [ref=f1e3737]:
+            - button "Show catalog item 1" [ref=f1e3738] [cursor=pointer]
+            - button "Show catalog item 2" [ref=f1e3739] [cursor=pointer]
+            - button "Show catalog item 3" [ref=f1e3740] [cursor=pointer]
+            - button "Show catalog item 4" [ref=f1e3741] [cursor=pointer]
+            - button "Show catalog item 5" [ref=f1e3742] [cursor=pointer]
+            - button "Show catalog item 6" [ref=f1e3743] [cursor=pointer]
+            - button "Show catalog item 7" [ref=f1e3744] [cursor=pointer]
+            - button "Show catalog item 8" [ref=f1e3745] [cursor=pointer]
+            - button "Show catalog item 9" [ref=f1e3746] [cursor=pointer]
+            - button "Show catalog item 10" [ref=f1e3747] [cursor=pointer]
+            - button "Show catalog item 11" [ref=f1e3748] [cursor=pointer]
+            - button "Show catalog item 12" [ref=f1e3749] [cursor=pointer]
+      - generic [ref=f1e3750]:
+        - generic [ref=f1e3751]:
+          - generic [ref=f1e3752]: Customer Reviews
+          - heading "What Customers Say About DEMO Horizon Retail & Services" [level=2] [ref=f1e3753]
+        - generic [ref=f1e3754]:
+          - generic [ref=f1e3755]:
+            - paragraph [ref=f1e3768]: "\"DEMO REVIEW 1 — illustrative feedback for practising review approval; not a real customer endorsement.\""
+            - generic [ref=f1e3769]:
+              - img "DEMO Business Customer" [ref=f1e3770]
+              - generic [ref=f1e3771]:
+                - generic [ref=f1e3772]: DEMO Business Customer
+                - generic [ref=f1e3776]: DEMO location
+          - generic [ref=f1e3777]:
+            - paragraph [ref=f1e3788]: "\"DEMO REVIEW 2 — illustrative feedback for practising review approval; not a real customer endorsement.\""
+            - generic [ref=f1e3789]:
+              - img "DEMO Customer 14 Sample" [ref=f1e3790]
+              - generic [ref=f1e3791]:
+                - generic [ref=f1e3792]: DEMO Customer 14 Sample
+                - generic [ref=f1e3796]: DEMO location
+          - generic [ref=f1e3797]:
+            - paragraph [ref=f1e3810]: "\"DEMO REVIEW 3 — illustrative feedback for practising review approval; not a real customer endorsement.\""
+            - generic [ref=f1e3811]:
+              - img "DEMO Customer 13 Sample" [ref=f1e3812]
+              - generic [ref=f1e3813]:
+                - generic [ref=f1e3814]: DEMO Customer 13 Sample
+                - generic [ref=f1e3818]: DEMO location
+          - generic [ref=f1e3819]:
+            - paragraph [ref=f1e3830]: "\"DEMO REVIEW 4 — illustrative feedback for practising review approval; not a real customer endorsement.\""
+            - generic [ref=f1e3831]:
+              - img "DEMO Customer 12 Sample" [ref=f1e3832]
+              - generic [ref=f1e3833]:
+                - generic [ref=f1e3834]: DEMO Customer 12 Sample
+                - generic [ref=f1e3838]: DEMO location
+      - generic [ref=f1e3840]:
+        - generic [ref=f1e3841]:
+          - heading "A question before you decide?" [level=2] [ref=f1e3842]
+          - paragraph [ref=f1e3843]: Ask about this business's actual catalog and contacts. Confirm availability and terms directly; the assistant does not take payment, reserve stock or confirm appointments.
+        - generic [ref=f1e3902]:
+          - generic [ref=f1e3903]:
+            - generic [ref=f1e3909]:
+              - generic [ref=f1e3910]: DEMO Horizon Retail & Services assistant
+              - generic [ref=f1e3913]: Catalog questions & contacts
+            - generic [ref=f1e3914]:
+              - button "Thinking" [ref=f1e3915]
+              - button "Close assistant" [ref=f1e3920] [cursor=pointer]
+          - generic [ref=f1e3924]: Hello! Welcome to **DEMO Horizon Retail & Services**. I can help you explore this business’s products and services, prices and contact details. What are you looking for?
+          - generic [ref=f1e3932]:
+            - button "Book Appointment" [ref=f1e3933] [cursor=pointer]
+            - button "Location & hours" [ref=f1e3936] [cursor=pointer]
+            - button "Custom Suggestions" [ref=f1e3940] [cursor=pointer]
+            - button "Alternative Options" [ref=f1e3943] [cursor=pointer]
+            - button "Referral details" [ref=f1e3947] [cursor=pointer]
+          - generic [ref=f1e3953]:
+            - textbox "Email for an inquiry" [ref=f1e3954]:
+              - /placeholder: Your email for an inquiry...
+            - button "Get Quote" [ref=f1e3955] [cursor=pointer]
+          - generic [ref=f1e3957]:
+            - textbox "Message the assistant" [ref=f1e3958]:
+              - /placeholder: Ask about products, prices or contact details...
+            - button "Send message" [disabled] [ref=f1e3959] [cursor=pointer]
+      - generic [ref=f1e3859]:
+        - generic [ref=f1e3860]:
+          - heading "DEMO Horizon Retail & Services" [level=3] [ref=f1e3865]
+          - paragraph [ref=f1e3866]: "DEMO ONLY: explore records, not a real merchant or promise of results."
+          - generic [ref=f1e3867]: "TAX PIN: DEMO-TAX-NOT-VALID"
+        - generic [ref=f1e3868]:
+          - heading "Direct Contacts" [level=4] [ref=f1e3869]
+          - generic [ref=f1e3870]: Phone not provided
+          - generic [ref=f1e3874]: demo-store@example.test
+        - generic [ref=f1e3879]:
+          - heading "Store Hours & Location" [level=4] [ref=f1e3880]
+          - generic [ref=f1e3881]: DEMO Market Road, DEMO district, Demo region
+          - generic [ref=f1e3886]: "DEMO schedule: weekdays 08:00–17:00"
+      - generic "Website creator credit" [ref=f1e3891]:
+        - generic [ref=f1e3893]:
+          - img "CODE76 POS logo" [ref=f1e3894]
+          - generic [ref=f1e3895]:
+            - paragraph [ref=f1e3896]: Website created by CODE76.
+            - paragraph [ref=f1e3897]:
+              - text: "email:"
+              - link "code76pos@gmail.com" [ref=f1e3898] [cursor=pointer]:
+                - /url: mailto:code76pos@gmail.com
+            - paragraph [ref=f1e3899]:
+              - text: "youtube:"
+              - link "https://www.youtube.com/@CODE76-fn4fj" [ref=f1e3900] [cursor=pointer]:
+                - /url: https://www.youtube.com/@CODE76-fn4fj
+            - link "Create your website with CODE76" [ref=f1e3901] [cursor=pointer]:
+              - /url: mailto:code76pos@gmail.com?subject=Website%20creation%20inquiry
+```

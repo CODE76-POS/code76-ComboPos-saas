@@ -44,7 +44,7 @@ test('Starter retains companies, payroll, messaging and promotions with four exp
 test('context-level paid actions reject Free as well as hiding its menu',()=>{
   assert.throws(()=>requirePlanFeature(prefs('free'),'payroll'),/not included/);
   const text=source('src/context/POSContext.tsx');
-  for(const feature of ['directory','payroll','expenses','invoices','debts'])assert.ok(text.includes(`requirePlanFeature(settings, '${feature}')`));
+  for(const feature of ['directory','payroll','expenses','invoices','debts'])assert.ok(text.replace(/\s+/g,'').includes(`requirePlanFeature(settings,'${feature}')`),`Missing plan guard: ${feature}`);
   assert.ok(text.includes('saleData.amountPaid + 0.001 < saleData.netTotal'));
 });
 test('only an admin can select a valid demo tier; save preferences cannot revert it',()=>{

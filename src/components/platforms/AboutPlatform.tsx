@@ -1,3 +1,8 @@
+import { CODE76_BRAND,brandAssetUrl } from '../../config/code76Brand.ts';
+import { Code76Credit,Code76SocialLinks } from '../common/Code76Credit.tsx';
+import { SupportContactForm } from '../common/SupportContactForm.tsx';
+import { PLAN_INFO,planTier } from '../../utils/plans.ts';
+import { PlanPrice } from '../common/PlanPrice.tsx';
 import { AuditLogPlatform } from './AuditLogPlatform.tsx';
 import { accessHistoryPermissions } from '../../utils/accessHistory.ts';
 import React, { useState } from 'react';
@@ -21,6 +26,13 @@ import {
 } from 'lucide-react';
 
 const USER_MANUAL_SECTIONS = [
+ {id:'support-branding-demo',title:'Support, creator credits, richer demo data and debt records',content:`• SUPPORT: About & Manual → Contact support. Recipient is code76pos@gmail.com. In-app sending uses the server's configured SMTP service. Until configured, the form clearly reports delivery unavailable and can open a pre-addressed email draft. Do not include passwords, tokens or private customer/payroll data. No real message is sent by merely opening the form.
+• CREDIT: Generated receipts, printable reports/invoices, direct PDFs, TXT, CSV and JSON backups carry Website created by CODE76, code76pos@gmail.com and the official YouTube URL. CSV uses metadata columns, JSON uses a _code76 object—never invalid trailing lines. Raw uploaded/camera photos and merchant logos are not watermarked.
+• SOCIAL / LOGO: CODE76-owned navigation, About and public footer use the supplied local logo. YouTube: https://www.youtube.com/@CODE76-fn4fj. Facebook: https://www.facebook.com/profile.php?id=61552639386192. This does not replace the merchant's own identity.
+• DEMO: Demo Data is opt-in and administrator-confirmed. The expanded synthetic dataset includes products/services, history, partial/unpaid debt examples, companies/branches, staff/pay records, utilities and invoices. The demo badge stays visible. It is training data, not real customer proof, payments or business performance. Your plan and display preferences are retained.
+• DEBT: Eligible plan/role required. Open Pay Debt from Sales History, enter a positive amount no greater than the current balance, choose the actual channel and optional reference, then record it. Credit/Debt is not a repayment method. Partial/full balances and any linked sales invoice are updated; a payment ID prevents repeated posting. No bank transfer or customer email occurs automatically.
+• DEBT HISTORY: Receipt/detail views show dated repayment records. Use a debt-payment voucher or updated receipt for your own records. Old balances that disagree with their amount-paid/total fields must be reviewed, not silently repaired.
+• BUSINESS ASSISTANT: The merchant catalog is separate from CODE76 subscription offers. Ask by product name/SKU/category, budget, service billing unit or contact/location. Only valid active promotions are quoted. Unknown policies, bookings, fulfilment and rewards must be confirmed directly with that business.`},
   {
     id: 'plans-companies-payroll',
     title: 'Plans, related companies, pictures, staff schedules & salary payments',
@@ -76,7 +88,7 @@ const USER_MANUAL_SECTIONS = [
     title: 'Section 2: Sales History & Debt Reconciliation',
     content: `• Drilldown: Click the eye icon on any transaction row to inspect all products and services sold in that sale.
 • Debt Operations: With a paid plan and appropriate privileges, if a customer owes a balance, click "Pay Debt" to accept partial or complete settlement and record the payment channel.
-• Appreciation & Review Email: Click the email icon to send a polite follow-up appreciation email. You can preview and edit the template before dispatch.
+• Appreciation & Review Email: Click the email icon to prepare a polite follow-up email draft. You can preview and edit the template before sending in your email app.
 • Action Columns: Action icons appear at BOTH the beginning and the end of every table for ergonomic access.
 • PDF Voucher: Click the download icon to generate a formatted printable sales voucher.`,
   },
@@ -85,7 +97,7 @@ const USER_MANUAL_SECTIONS = [
     title: 'Section 3: Inventory Control & Marketing Dispatch',
     content: `• Product vs Service: Physical goods track stock and minimum stock alert thresholds; commercial services provide infinite fulfillment.
 • Direct Marketing Widget: Click the purple Megaphone icon on any inventory row to open the direct sales marketing widget. Select a target customer and marketer, choose a template (Discount, New Product, Low Stock Urgency), preview the message, and send!
-• Gemini Copy Polish: Click "AI Polish with Gemini" in the marketing widget to automatically generate high-converting promotional email copy.
+• Gemini Copy Polish: Click "AI Polish with Gemini" in the marketing widget to prepare draft copy when an AI provider is configured. No conversion result is guaranteed.
 • Inventory export: paid plans and export privilege are required; inventory promotion editing is available in Starter; emailing/referrals are excluded there. Free inventory remains usable without marketing/export.`,
   },
   {
@@ -155,246 +167,27 @@ const USER_MANUAL_SECTIONS = [
 • 📢 Marketing Icon (Megaphone): Triggers the direct marketing widget to compose and send targeted promotional blasts with AI Gemini copy enhancement.
 • 📷 Photo Attachment (Camera / Upload / HardDrive / Link2): Five-in-one photo ingestion widget supporting direct URL, Google Drive link converter, local file browse, drag-and-drop, and live camera snapshot.
 • 🔄 Sync / Refresh Icon (RefreshCw): Manually refreshes database records, updates inventory counts, or recalculates financial health scores.
-• 🔒 Lock & Security (Lock / Shield): Signifies encrypted credentials, privilege restrictions, and manager PIN authorization gates.
+• 🔒 Lock & Security (Lock / Shield): Marks role-restricted actions. The preview does not claim encrypted account storage or production authorization.
 • ⚠️ Warning & Alert (AlertTriangle): Alerts staff to critical events like low inventory stock thresholds, debt overdue balances, or system warnings.
 • ⭐ Star Rating & Referrer (Star): Displays verified customer review scores (1-5 stars) and highlights top-performing community referrers.`,
   },
 ];
 
-export const AboutPlatform: React.FC = () => {
-  const { company, currentUser, settings } = usePOS();
-
-  const [activeTab, setActiveTab] = useState<'manual' | 'about' | 'license' | 'terms' | 'audit'>('manual');
-  const [searchManual, setSearchManual] = useState('');
-  const [expandedSection, setExpandedSection] = useState<string>('s1');
-
-  const filteredManual = USER_MANUAL_SECTIONS.filter(
-    (s) =>
-      s.title.toLowerCase().includes(searchManual.toLowerCase()) ||
-      s.content.toLowerCase().includes(searchManual.toLowerCase())
-  );
-
-  const canViewAudit = accessHistoryPermissions(currentUser, settings).canView;
-  const openAccessHistory = () => setActiveTab('audit');
-
-  return (
-    <div className="max-w-7xl mx-auto px-4 py-6">
-      {/* Platform Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-        <div>
-          <h1 className="text-2xl font-black text-slate-100 tracking-tight">About CODE76 POS & Manual</h1>
-          <p className="text-xs text-slate-400">
-            System documentation for every section, verified commercial license key, audit activity tracking, and terms of service.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-2">
-          {canViewAudit && (
-            <>
-              <button
-                onClick={openAccessHistory}
-                className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-teal-300 border border-slate-700 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
-              >
-                <Download className="w-4 h-4" />
-                <span>Access history & exports</span>
-              </button>
-            </>
-          )}
-        </div>
-      </div>
-
-      {/* Tabs */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Sidebar */}
-        <div className="lg:col-span-3 space-y-1">
-          {[
-            { id: 'manual', label: 'User Manual (All Sections)', icon: BookOpen },
-            { id: 'about', label: 'About CODE76 POS', icon: Info },
-            { id: 'license', label: 'License & Product Key', icon: KeyRound },
-            { id: 'audit', label: 'User Activity & Audit Logs', icon: Clock },
-            { id: 'terms', label: 'Terms & Conditions', icon: FileText },
-          ].map((tab) => {
-            const Icon = tab.icon;
-            const isActive = activeTab === tab.id;
-            return (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
-                className={`w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-2.5 transition cursor-pointer ${
-                  isActive
-                    ? 'bg-teal-600 text-white shadow-md'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900 border border-transparent'
-                }`}
-              >
-                <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-slate-500'}`} />
-                <span>{tab.label}</span>
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Tab Panel */}
-        <div className="lg:col-span-9 bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl text-white">
-          {/* TAB 1: USER MANUAL */}
-          {activeTab === 'manual' && (
-            <div className="space-y-4">
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-                <div>
-                  <h3 className="text-base font-bold text-slate-100">Complete Application User Manual</h3>
-                  <p className="text-xs text-slate-400">Exhaustive operational guides for every platform section.</p>
-                </div>
-                <div className="relative w-full sm:w-64">
-                  <Search className="w-3.5 h-3.5 absolute left-3 top-2.5 text-slate-500" />
-                  <input
-                    type="text"
-                    placeholder="Search manual guides..."
-                    value={searchManual}
-                    onChange={(e) => setSearchManual(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-8 pr-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-teal-500"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-3 pt-2">
-                {filteredManual.map((sec) => {
-                  const isOpen = expandedSection === sec.id;
-                  return (
-                    <div
-                      key={sec.id}
-                      className="bg-slate-950/70 border border-slate-800 rounded-2xl overflow-hidden transition"
-                    >
-                      <button
-                        onClick={() => setExpandedSection(isOpen ? '' : sec.id)}
-                        className="w-full text-left p-4 flex items-center justify-between text-xs font-bold text-slate-200 hover:text-teal-300 transition cursor-pointer"
-                      >
-                        <span className="flex items-center gap-2">
-                          <BookOpen className="w-4 h-4 text-teal-400" />
-                          {sec.title}
-                        </span>
-                        {isOpen ? <ChevronDown className="w-4 h-4 text-slate-400" /> : <ChevronRight className="w-4 h-4 text-slate-500" />}
-                      </button>
-
-                      {isOpen && (
-                        <div className="px-4 pb-4 pt-1 border-t border-slate-800/80 text-xs text-slate-300 leading-relaxed font-sans whitespace-pre-line">
-                          {sec.content}
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          )}
-
-          {/* TAB 2: ABOUT THE APP */}
-          {activeTab === 'about' && (
-            <div className="space-y-4">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-teal-600 to-emerald-400 flex items-center justify-center font-black text-xl text-white shadow-lg shadow-teal-500/20">
-                  76
-                </div>
-                <div>
-                  <h3 className="text-xl font-black text-slate-100">CODE76 POS Enterprise Edition</h3>
-                  <p className="text-xs text-teal-400 font-semibold">Version 4.8.2 (Production Stable)</p>
-                </div>
-              </div>
-
-              <p className="text-sm text-slate-300 leading-relaxed">
-                CODE76 POS is a unified service and product Point of Sale, ERP inventory, and AI-powered lead-to-buyer conversion ecosystem.
-                Designed for retail supermarkets, hardware distributors, pharmacies, restaurants, and technical service providers.
-              </p>
-
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
-                <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800">
-                  <div className="text-xs font-bold text-teal-400 mb-1">Dual-Sided Architecture</div>
-                  <p className="text-xs text-slate-400">
-                    High-conversion public e-commerce landing page synced real-time with backend ERP POS terminal.
-                  </p>
-                </div>
-
-                <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800">
-                  <div className="text-xs font-bold text-sky-400 mb-1">Autonomous Gemini AI Sales</div>
-                  <p className="text-xs text-slate-400">
-                    AI sales concierge matches customer needs, addresses objections, closes deals, and triggers viral referral rewards.
-                  </p>
-                </div>
-
-                <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800">
-                  <div className="text-xs font-bold text-amber-400 mb-1">P&L Financial Clarity</div>
-                  <p className="text-xs text-slate-400">
-                    Tracks expenses vs sales vs inventory costs difference to give business owners guaranteed profit or loss visibility.
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* TAB 3: LICENSE & PRODUCT KEY */}
-          {activeTab === 'license' && (
-            <div className="space-y-4">
-              <div>
-                <h3 className="text-base font-bold text-slate-100">App License & Product Key Verification</h3>
-                <p className="text-xs text-slate-400">Authorized commercial deployment credentials.</p>
-              </div>
-
-              <div className="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-slate-400">License Status:</span>
-                  <span className="px-2.5 py-0.5 rounded-full text-xs font-bold uppercase bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                    Active Enterprise License
-                  </span>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-slate-400">Registered Business Entity:</span>
-                  <span className="text-xs font-bold text-slate-100">{company.name}</span>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-slate-400">Product Registration Key:</span>
-                  <span className="font-mono text-sm font-black text-amber-300 tracking-wider bg-slate-900 px-3 py-1 rounded-lg border border-amber-500/30">
-                    C76-PRO-9842-ENTERPRISE-VALID
-                  </span>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-slate-400">Access Control Model:</span>
-                  <span className="text-xs text-slate-200 font-mono">Hierarchical RBAC (Encrypted Passwords)</span>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-slate-400">Security Signature:</span>
-                  <span className="text-[10px] text-slate-500 font-mono">SHA256: 76f9c088219ae0891bf76e9821</span>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* One consistent permission-checked history/export surface. */}
-          {activeTab === 'audit' && <AuditLogPlatform />}
-
-          {/* TAB 5: TERMS AND CONDITIONS */}
-          {activeTab === 'terms' && (
-            <div className="space-y-3 text-xs text-slate-300 leading-relaxed font-sans">
-              <h3 className="text-base font-bold text-slate-100">Terms & Conditions of Software Use</h3>
-              <p>
-                1. <strong>License Grant:</strong> CODE76 POS grants the licensee a non-exclusive, commercial license to install, operate, and manage transactions across authorized retail and service terminals.
-              </p>
-              <p>
-                2. <strong>Financial Reconciliation:</strong> The business owner maintains ultimate fiduciary responsibility for verifying physical cash drawer balances against the automated Profit & Loss records.
-              </p>
-              <p>
-                3. <strong>Data Privacy & Consent:</strong> Customer photos, reviews, and referrals displayed on the public landing page require explicit consent via the directory checkbox.
-              </p>
-              <p>
-                4. <strong>Security Integrity:</strong> All master administrative operations including CSV file imports and system restores require verification to prevent unintended data overwrites.
-              </p>
-            </div>
-          )}
-        </div>
-      </div>
-
-
-    </div>
-  );
+export const AboutPlatform:React.FC=()=>{
+ const {company,currentUser,settings,setActivePlatform,setSettingsSection}=usePOS();
+ const [activeTab,setActiveTab]=useState<'manual'|'about'|'support'|'license'|'terms'|'audit'>('manual');
+ const [searchManual,setSearchManual]=useState('');const [expandedSection,setExpandedSection]=useState('support-branding-demo');
+ const canViewAudit=accessHistoryPermissions(currentUser,settings).canView;
+ const sections=USER_MANUAL_SECTIONS.filter(section=>`${section.id} ${section.title} ${section.content}`.toLowerCase().includes(searchManual.toLowerCase()));
+ const tabs=[{id:'manual',label:'User manual & guidelines'},{id:'about',label:'About CODE76 POS'},{id:'support',label:'Contact support'},{id:'license',label:'Plan & demo status'},{id:'audit',label:'User Activity & Audit Logs'},{id:'terms',label:'Safe-use guidelines'}] as const;
+ return <div className="max-w-7xl mx-auto px-4 py-6"><div className="flex flex-wrap items-start justify-between gap-4 mb-6"><div className="flex items-center gap-4"><img src={brandAssetUrl()} alt="CODE76 POS logo" className="w-16 h-16 rounded-2xl object-contain"/><div><h1 className="text-2xl font-black">CODE76 POS · About, help & support</h1><p className="mt-1 text-xs text-slate-400">Clear workflows, honest demo status and direct support contact.</p></div></div><button className="rounded-xl bg-teal-700 px-4 py-2 text-sm font-bold text-white" onClick={()=>setActiveTab('support')}>Contact the support team</button></div>
+ <div className="grid lg:grid-cols-12 gap-5"><aside className="lg:col-span-3 min-w-0 flex lg:block gap-2 overflow-x-auto lg:overflow-visible pb-2" aria-label="About and help sections">{tabs.map(tab=><button key={tab.id} aria-current={activeTab===tab.id?'page':undefined} onClick={()=>setActiveTab(tab.id)} className={`shrink-0 lg:w-full whitespace-nowrap rounded-xl border px-4 py-3 text-left text-sm font-semibold ${activeTab===tab.id?'border-teal-600 bg-teal-700 text-white':'border-slate-800 text-slate-400 hover:bg-slate-900'}`}>{tab.label}</button>)}</aside><div className="lg:col-span-9 min-w-0 rounded-3xl border border-slate-800 bg-slate-900 p-5 sm:p-7">
+ {activeTab==='manual'&&<section><h2 className="text-xl font-bold">Application user manual</h2><p className="mt-2 text-sm text-slate-400">Search by task, such as debt, camera, company, payroll, branding, plans or support.</p><input aria-label="Search manual guides" placeholder="Search manual guides..." value={searchManual} onChange={event=>setSearchManual(event.target.value)} className="my-4 w-full rounded-xl border border-slate-700 bg-slate-800 px-3 py-2 text-sm"/>{!sections.length&&<p className="text-sm text-slate-400">No guide matched. Try a broader term or contact support.</p>}<div className="space-y-3">{sections.map(section=><article className="overflow-hidden rounded-xl border border-slate-700" key={section.id}><button className="w-full px-4 py-3 text-left text-sm font-bold" aria-expanded={expandedSection===section.id} onClick={()=>setExpandedSection(expandedSection===section.id?'':section.id)}>{section.title}</button>{expandedSection===section.id&&<div className="border-t border-slate-700 px-4 py-4 whitespace-pre-line text-sm leading-relaxed text-slate-400">{section.content}</div>}</article>)}</div></section>}
+ {activeTab==='about'&&<section className="space-y-5"><div className="flex items-center gap-4"><img src={brandAssetUrl()} alt="CODE76 POS logo" className="w-20 h-20 rounded-2xl object-contain"/><div><h2 className="text-2xl font-black">CODE76 POS</h2><p className="mt-1 text-xs text-teal-400">Products, services and business records · workspace preview</p></div></div><p className="text-sm leading-relaxed text-slate-400">Explore checkout, receipts, product/service inventory, linked companies, expenses/invoices, staff schedules/pay records and role-scoped reporting. The public CODE76 product site and your private business-page preview have separate content and settings.</p><div className="grid sm:grid-cols-2 gap-3">{[{title:'A workflow you can inspect',copy:'Use clearly marked demo records or enter test records of your own. Prices, amounts and plan restrictions remain visible.'},{title:'Your records, clearly bounded',copy:'Business records currently live in this browser. This is not a server-backed, production multi-tenant deployment or a bank/payment processor.'},{title:'Assistance without false promises',copy:'A catalog assistant can explain supplied data and contacts. It does not reserve stock, guarantee results or perform team services automatically.'},{title:'Support you can reach',copy:'Use Contact support or the email/social links below. Direct server mail needs administrator SMTP configuration; fallback drafts are not sent until you send them.'}].map(card=><article key={card.title} className="rounded-xl border border-slate-700 p-4"><h3 className="font-bold text-teal-400">{card.title}</h3><p className="mt-2 text-sm text-slate-400">{card.copy}</p></article>)}</div><Code76SocialLinks/></section>}
+ {activeTab==='support'&&<SupportContactForm initialName={currentUser?.name||''} initialEmail={currentUser?.email||''}/>}
+ {activeTab==='license'&&<section className="space-y-4"><h2 className="text-xl font-bold">Plan & demo status</h2><p className="text-sm text-slate-400">Selected tier: <strong className="text-teal-400">{PLAN_INFO[planTier(settings)].name}</strong>. This is a client-side demo entitlement, not a verified purchase, active subscription, registration key or security certificate.</p><PlanPrice tier={planTier(settings)}/><dl className="grid sm:grid-cols-2 gap-3 text-sm"><div className="rounded-xl border border-slate-700 p-4"><dt className="text-slate-400">Business profile</dt><dd>{company.isConfiguredByMerchant?company.name:'Not configured by the merchant'}</dd></div><div className="rounded-xl border border-slate-700 p-4"><dt className="text-slate-400">Dataset</dt><dd>{company.isDemo?'Synthetic demo records loaded':'Your current browser workspace'}</dd></div></dl><p className="text-sm text-slate-400">Production use requires server-side authentication/tenant controls, secure account storage, actual billing/communications services, verified backups and independent accounting/security review. No fabricated licence key, encrypted-password claim or verification hash is shown.</p><button className="rounded-xl border border-teal-700 px-4 py-2 text-sm" onClick={()=>{setSettingsSection('plans');setActivePlatform('settings');}}>View plan comparison</button></section>}
+ {activeTab==='audit'&&(canViewAudit?<AuditLogPlatform />:<p role="alert" className="text-sm text-amber-300">Access history needs an eligible plan and Audit Logs role permission. Downloads also require Export Reports. Ask your administrator.</p>)}
+ {activeTab==='terms'&&<section className="space-y-4 text-sm leading-relaxed text-slate-400"><h2 className="text-xl font-bold text-slate-100">Safe-use guidelines</h2><p>Use synthetic or non-sensitive test data in this preview. Current roles and plans are demonstration controls, not production tenant isolation. Do not enter real passwords, private customer/payroll records, card data or access tokens.</p><p>Recorded sales, debt collections and salary entries are bookkeeping only. No funds are transferred. Review figures and source documents independently before financial use.</p><p>Demo loading replaces the business records in this browser only after administrator confirmation. Create permitted backups before replacing or deleting records. Uploaded/captured customer pictures are not watermarked by the creator credit.</p><p>Support delivery is available only when SMTP is configured. A prepared draft, local message log, service brief or displayed email address is not evidence that a message or service was delivered.</p><p>Actual commercial licence terms, privacy requirements and the scope of any team engagement must be agreed with CODE76 separately. These guidelines do not create a paid licence, professional certification or result guarantee.</p><a className="font-bold text-teal-400 underline" href={CODE76_BRAND.emailUrl}>Ask CODE76 about your deployment</a></section>}
+ <Code76Credit/>
+ </div></div></div>;
 };

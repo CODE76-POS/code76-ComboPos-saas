@@ -1,3 +1,5 @@
+import { CODE76_BRAND,brandAssetUrl } from '../../config/code76Brand.ts';
+import { Code76Credit,Code76SocialLinks } from '../common/Code76Credit.tsx';
 import { LandingSectionNav } from './LandingSectionNav.tsx';
 import { MaxServicesSection } from './MaxServicesSection.tsx';
 import { GrowthPlanner } from './GrowthPlanner.tsx';
@@ -170,7 +172,7 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
     addSiteLead({
       firstName: contactName.trim().split(' ')[0] || contactName.trim(),
       secondName: contactName.trim().split(' ').slice(1).join(' ') || '',
-      tel1: contactPhone.trim() || '+1 (555) 000-0000',
+      tel1: contactPhone.trim(),
       tel2: '',
       whatsappNo: contactPhone.trim() || '',
       email1: contactEmail.trim(),
@@ -214,7 +216,7 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
     }
 
     const leadFullName = `${inquiryFirstName.trim()} ${inquirySecondName.trim()}`.trim();
-    const primaryPhone = inquiryPhone.trim() || '+1 (555) 000-0000';
+    const primaryPhone = inquiryPhone.trim();
     const primaryEmail = inquiryEmail.trim() || `${inquiryFirstName.toLowerCase()}@lead.code76pos.com`;
 
     // 1. SAVE LEAD SECURELY IN CRM CUSTOMER DIRECTORY
@@ -330,7 +332,7 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
       <nav aria-label="CODE76 product navigation" className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-3">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-teal-600 to-emerald-400 text-white font-black text-lg flex items-center justify-center shadow-lg shadow-teal-500/25">
-            76
+            <img src={brandAssetUrl()} alt="CODE76 POS logo" className="w-full h-full rounded-xl object-contain"/>
           </div>
           <div>
             <div className="flex items-center gap-2">
@@ -910,132 +912,9 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
           </section>
 
           {/* 8. SOCIAL MEDIAS BAR */}
-          <section className="max-w-7xl mx-auto px-4 py-8">
-            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
-              <div>
-                <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-teal-400 block mb-1">
-                  Connect & Follow CODE76 POS
-                </span>
-                <h3 className="text-lg font-black text-slate-100">
-                  Stay Updated Across Our Social Channels
-                </h3>
-                <p className="text-xs text-slate-400 mt-0.5">
-                  Join our retailer community, watch video walkthroughs, or chat live on WhatsApp.
-                </p>
-              </div>
+          <section className="max-w-7xl mx-auto px-4 py-8"><h2 className="text-2xl font-bold mb-4">Connect with CODE76</h2><p className="mb-4 text-sm text-slate-400">Watch tutorials, follow updates or contact the team using the supplied official links.</p><Code76SocialLinks/></section>
 
-              <div className="flex flex-wrap items-center gap-2.5">
-                <a
-                  href={`https://wa.me/?text=${encodeURIComponent('Hello CODE76 POS Team, I would like to inquire about point of sale setup for my shop.')}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-4 py-2.5 rounded-xl bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-700/60 text-emerald-300 font-bold text-xs flex items-center gap-2 transition"
-                >
-                  <span>💬 WhatsApp</span>
-                </a>
-                <a
-                  href="https://twitter.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-4 py-2.5 rounded-xl bg-sky-950/80 hover:bg-sky-900 border border-sky-700/60 text-sky-300 font-bold text-xs flex items-center gap-2 transition"
-                >
-                  <span>🐦 Twitter / X</span>
-                </a>
-                <a
-                  href="https://linkedin.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-4 py-2.5 rounded-xl bg-blue-950/80 hover:bg-blue-900 border border-blue-700/60 text-blue-300 font-bold text-xs flex items-center gap-2 transition"
-                >
-                  <span>💼 LinkedIn</span>
-                </a>
-                <a
-                  href="mailto:code76pos@gmail.com"
-                  className="px-4 py-2.5 rounded-xl bg-teal-950/80 hover:bg-teal-900 border border-teal-700/60 text-teal-300 font-bold text-xs flex items-center gap-2 transition"
-                >
-                  <span>✉️ Email: code76pos@gmail.com</span>
-                </a>
-              </div>
-            </div>
-          </section>
-
-          {/* 9. CODE76 POS CORPORATE FOOTER */}
-          <footer className="border-t border-slate-800 bg-slate-950 mt-12 pt-12 pb-8 px-4">
-            <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 mb-10 text-xs">
-              <div className="space-y-3">
-                <div className="font-extrabold text-base text-slate-100 flex items-center gap-2">
-                  <div className="w-7 h-7 rounded-lg bg-teal-600 text-white font-black text-xs flex items-center justify-center">
-                    76
-                  </div>
-                  <span>CODE76 POS Systems Inc.</span>
-                </div>
-                <p className="text-slate-400 leading-relaxed">
-                  Empowering supermarkets, restaurants, pharmacies, wholesale depots, and retail enterprises worldwide with lightning-fast checkout and audit-grade commercial ERP architecture.
-                </p>
-                <div className="text-[11px] text-teal-400 font-mono">
-                  TAX PIN: C76-ENTERPRISE-REG-84729
-                </div>
-              </div>
-
-              <div>
-                <div className="font-bold text-slate-200 text-sm mb-3">Direct Technical Contacts</div>
-                <ul className="space-y-2 text-slate-400">
-                  <li className="flex items-center gap-1.5">
-                    <Phone className="w-3.5 h-3.5 text-teal-400" />
-                    <span>+1 (800) 76-CODE76</span>
-                  </li>
-                  <li className="flex items-center gap-1.5">
-                    <Mail className="w-3.5 h-3.5 text-teal-400" />
-                    <a href="mailto:code76pos@gmail.com" className="text-teal-300 hover:underline">
-                      code76pos@gmail.com
-                    </a>
-                  </li>
-                  <li className="flex items-center gap-1.5">
-                    <Clock className="w-3.5 h-3.5 text-amber-400" />
-                    <span>CODE76 product and service inquiries</span>
-                  </li>
-                </ul>
-              </div>
-
-              <div>
-                <div className="font-bold text-slate-200 text-sm mb-3">Global Headquarters & Showroom</div>
-                <p className="text-slate-400 leading-relaxed flex items-start gap-1.5">
-                  <MapPin className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
-                  <span>
-                    CODE76 Technology Towers, 76 Silicon Avenue, Enterprise District, Global Hub
-                  </span>
-                </p>
-              </div>
-
-              <div>
-                <div className="font-bold text-slate-200 text-sm mb-3">Enterprise License Tier</div>
-                <p className="text-slate-400 leading-relaxed">
-                  Authorized installation key: <strong className="text-amber-300 font-mono">C76-PRO-9842</strong>
-                </p>
-                <div className="mt-3 flex flex-col gap-2">
-                  <button
-                    onClick={() => setActiveView('pos')}
-                    className="px-4 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-bold transition cursor-pointer text-center"
-                  >
-                    Open POS Terminal
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <div className="max-w-7xl mx-auto pt-6 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between gap-3 text-slate-500 text-[11px]">
-              <div>
-                &copy; {new Date().getFullYear()} CODE76 POS Systems Inc. All Rights Reserved. Enterprise Edition.
-              </div>
-              <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-slate-400">
-                <a href="#about" className="hover:text-teal-400">About</a>
-                <a href="#features" className="hover:text-teal-400">Platforms & Features</a>
-                <a href="#companies" className="hover:text-teal-400">Companies</a>
-                <a href="#contact" className="hover:text-teal-400">Contact Sales</a>
-                <a href="mailto:code76pos@gmail.com" className="text-teal-400 hover:underline">code76pos@gmail.com</a>
-              </div>
-            </div>
-          </footer>
+          <footer className="border-t border-slate-800 bg-slate-950 mt-12 px-4 py-10"><div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-7"><div><div className="flex items-center gap-3"><img src={brandAssetUrl()} alt="CODE76 POS logo" className="w-14 h-14 rounded-xl object-contain"/><strong className="text-xl">CODE76 POS</strong></div><p className="mt-4 text-sm leading-relaxed text-slate-400">A workspace for sales, products, services and business records. Explore clear plan limits and scoped team assistance before deciding what fits.</p></div><div><h2 className="font-bold mb-3">Watch, follow or contact CODE76</h2><Code76SocialLinks/><p className="mt-3 text-xs text-slate-500">Use the links provided by the CODE76 team. No generic social profile, office address, tax number or verified licence is implied.</p></div><div><h2 className="font-bold mb-3">Explore at your pace</h2><div className="flex flex-wrap gap-3 text-sm text-slate-400"><a href="#features">Platforms</a><a href="#plans">Plans & prices</a><a href="#max-services">Team services</a><a href="#contact">Contact</a></div><button className="mt-5 rounded-xl bg-teal-700 px-4 py-2 text-sm font-bold text-white" onClick={()=>setActiveView('pos')}>Open POS account access</button><p className="mt-3 text-xs text-slate-500">Demo billing is not connected. Browser-local records do not sync between browsers.</p></div></div><div className="max-w-7xl mx-auto"><Code76Credit/><p className="mt-5 text-[11px] text-slate-500">© {new Date().getFullYear()} CODE76 POS · Workspace preview</p></div></footer>
 
           {/* 8. EMBEDDED LIVE AI SALES CHATBOT WITH PSYCHOLOGICAL PERSUASION */}
 
