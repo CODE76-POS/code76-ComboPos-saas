@@ -1,3 +1,4 @@
+import { canOpenPlatform, PLAN_INFO, planTier } from '../../utils/plans.ts';
 import { LinkCopyField } from '../common/LinkCopyField.tsx';
 import { applicationUrl, isWorkspacePreview } from '../../utils/clipboard.ts';
 import { accessHistoryPermissions } from '../../utils/accessHistory.ts';
@@ -67,6 +68,7 @@ export const TopNavBar: React.FC = () => {
     setLoginModalOpen,
     theme,
     settings,
+    setSettingsSection,
   } = usePOS();
 
   const isLight = theme === 'light';
@@ -230,7 +232,7 @@ export const TopNavBar: React.FC = () => {
             </button>
 
             {/* Internal business-page shortcut; public return is through session sign-out */}
-            {currentUser && (
+            {currentUser && canOpenPlatform(settings,'landing_page_builder') && (
               <div className="flex items-center gap-1">
                 <button
                   onClick={() => setActivePlatform('landing_page_builder')}
@@ -305,6 +307,7 @@ export const TopNavBar: React.FC = () => {
           <Link2 className="w-4 h-4 shrink-0 text-teal-500" aria-hidden="true" />
           <span className="hidden sm:block shrink-0 text-xs font-semibold">App link</span>
           <LinkCopyField value={appUrl} label="App link" compact openLink />
+          <button type="button" aria-label="Current demo plan" className="shrink-0 rounded-lg border border-teal-700 px-2 py-2 text-[10px] font-bold text-teal-400" onClick={()=>{setSettingsSection('plans');setActivePlatform('settings');}}>{PLAN_INFO[planTier(settings)].name} · demo</button>
         </div>
         <p className={`mt-1 text-[10px] ${isLight ? 'text-slate-600' : 'text-slate-400'}`}>
           {isWorkspacePreview(appUrl) ? 'Workspace preview: another browser may need authorized Arena preview access. ' : 'Open this root link to reach CODE76 sign-in/register. '}
@@ -316,7 +319,7 @@ export const TopNavBar: React.FC = () => {
       {currentUser && activeView === 'pos' && (
         <div className="border-t border-slate-800/80 bg-slate-950/60 overflow-x-auto scrollbar-thin">
           <div className="max-w-7xl mx-auto px-4 flex items-center gap-1 py-1.5 min-w-max">
-            {PLATFORMS.filter(platform => platform.id !== 'audit_logs' || historyAccess.canView).map((plat) => {
+            {PLATFORMS.filter(platform => canOpenPlatform(settings,platform.id) && (platform.id !== 'audit_logs' || historyAccess.canView)).map((plat) => {
               const Icon = plat.icon;
               const isActive = activePlatform === plat.id;
               return (

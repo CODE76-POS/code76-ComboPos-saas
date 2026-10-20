@@ -64,6 +64,18 @@ export type PlatformId =
   | 'audit_logs'
   | 'about';
 
+export type AvatarStyle = 'neutral' | 'masculine' | 'feminine';
+export type DirectoryCategory = 'customer' | 'vendor' | 'transporter' | 'marketer' | 'company_member' | 'related_company';
+export type CompanyFunction = 'vendor' | 'transporter' | 'marketer';
+export type PayBasis = 'month' | 'week' | 'day' | 'hour' | 'task' | 'delivery' | 'session' | 'project';
+export type PlanTier = 'free' | 'starter' | 'pro' | 'lifetime';
+export interface RegionalSettings {
+  timeZone: string;
+  dateFormat: 'DD/MM/YYYY' | 'MM/DD/YYYY' | 'YYYY-MM-DD';
+  timeFormat: '12h' | '24h';
+  holidayDates: string[];
+}
+
 export interface PersonRecord {
   id: string;
   firstName: string;
@@ -78,7 +90,24 @@ export interface PersonRecord {
   country: string;
   photoUrl: string;
   photoConsentForLanding: boolean;
-  category: 'customer' | 'vendor' | 'transporter' | 'marketer' | 'company_member';
+  category: DirectoryCategory;
+  entityType?: 'person' | 'company' | 'branch';
+  avatarStyle?: AvatarStyle;
+  organisationName?: string;
+  companyType?: string;
+  companyFunctions?: CompanyFunction[];
+  parentCompanyId?: string;
+  regNumber?: string;
+  taxPin?: string;
+  sourceCategory?: DirectoryCategory;
+  companyMember?: boolean;
+  customerCompany?: boolean;
+  shiftPreset?: string;
+  shiftStart?: string;
+  shiftEnd?: string;
+  offDays?: string[];
+  salaryRate?: number;
+  salaryBasis?: PayBasis;
   roles?: [UserRole, UserRole]; // Exactly 2 roles for company members
   workingDays?: string[]; // e.g. ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
   workingHours?: string; // e.g. '08:00 AM - 05:00 PM'
@@ -127,8 +156,24 @@ export interface CartItem {
   total: number;
 }
 
+export type PaymentMethod = 'Cash' | 'M-Pesa' | 'Airtel Money' | 'T-Kash' | 'Credit Card' | 'Bank Transfer' | 'Debit Card' | 'Credit / Debt' | 'Cheque' | 'PayPal' | 'Gift Card' | 'Voucher' | 'Crypto' | 'Other' | 'Card' | 'Bank Wire';
+export interface PartySnapshot {
+  id: string; name: string; entityType: string; companyType: string;
+  parentCompanyName?: string; address: string; location: string; country: string;
+  tel: string; whatsapp: string; email: string; regNumber: string; taxPin: string;
+}
+export interface SalaryPayment {
+  id: string; memberId: string; memberName: string; amount: number; currency: string;
+  basis: PayBasis; paidOn: string; paidFor: string; method: string; reference: string;
+  recordedAt: string; recordedBy: string; expenseId?: string;
+}
+export interface SalaryPaymentDraft {
+  id: string; memberId: string; amount: number; basis: PayBasis; paidOn: string;
+  paidFor: string; method: string; reference: string; recordExpense: boolean;
+}
+
 export interface PaymentSplit {
-  method: 'Cash' | 'M-Pesa' | 'Credit Card' | 'Bank Transfer' | 'Debit Card' | 'Credit / Debt' | 'Crypto' | 'Other';
+  method: PaymentMethod;
   amount: number;
   referenceNo?: string;
 }
@@ -182,6 +227,9 @@ export interface ExpenseItem {
   paymentMethod: string;
   description: string;
   receiptUrl?: string;
+  relatedCompanyId?: string;
+  partySnapshot?: PartySnapshot;
+  salaryPaymentId?: string;
 }
 
 export interface InvoiceItem {
@@ -191,6 +239,8 @@ export interface InvoiceItem {
   saleId?: string;
   partyName: string;
   partyType: 'Customer' | 'Vendor';
+  relatedCompanyId?: string;
+  partySnapshot?: PartySnapshot;
   date: string;
   dueDate: string;
   items: { description: string; quantity: number; unitPrice: number; total: number }[];
@@ -203,6 +253,7 @@ export interface InvoiceItem {
 }
 
 export interface CustomerReview {
+  avatarStyle?: AvatarStyle;
   id: string;
   customerName: string;
   customerPhotoUrl?: string;
@@ -291,9 +342,12 @@ export interface EmailTemplate {
   body: string;
 }
 
-export type SettingsSection = 'payments' | 'textSizing' | 'landingPage' | 'receipts' | 'appearance' | 'font' | 'backup' | 'privileges' | 'pdfExcel' | 'emailTemplates' | 'auditLogs' | 'dataEraser';
+export type SettingsSection = 'payments' | 'textSizing' | 'landingPage' | 'receipts' | 'appearance' | 'font' | 'backup' | 'privileges' | 'pdfExcel' | 'emailTemplates' | 'auditLogs' | 'dataEraser' | 'regional' | 'plans';
 
 export interface AppSettings {
+  /** Demo entitlements only, not a verified paid subscription. */
+  planTier?: PlanTier;
+  regional?: RegionalSettings;
   payments: {
     acceptedMethods: string[];
     defaultCurrency: string;

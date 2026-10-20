@@ -1,3 +1,4 @@
+import { useRegionalFormat } from '../../hooks/useRegionalFormat.ts';
 import React, { useState } from 'react';
 import { usePOS } from '../../context/POSContext.tsx';
 import {
@@ -24,8 +25,9 @@ import { printPDFReport } from '../../utils/exportUtils.ts';
 import { EmailExportModal } from '../modals/EmailExportModal.tsx';
 
 export const SalesHistoryPlatform: React.FC = () => {
-  const { sales, setSales, company, setReceiptModalSale, setReviewModalSale, setHoverHelpPlatform, logAuditAction } =
-    usePOS();
+  const regionalFormat = useRegionalFormat();
+  const { sales, setSales, company, setReceiptModalSale, setReviewModalSale, setHoverHelpPlatform, logAuditAction, hasFeature, settings } = usePOS();
+  const currency = company.currency || 'USD';
 
   const [selectedSaleDetail, setSelectedSaleDetail] = useState<SaleTransaction | null>(null);
   const [debtModalSale, setDebtModalSale] = useState<SaleTransaction | null>(null);
@@ -48,11 +50,13 @@ export const SalesHistoryPlatform: React.FC = () => {
   ];
 
   const handleOpenBulkEmail = () => {
+    if (!hasFeature('email')) return;
     setSelectedSaleForUniversalEmail(null);
     setUniversalEmailModalOpen(true);
   };
 
   const handleOpenRowEmail = (sale: SaleTransaction) => {
+    if (!hasFeature('email')) return;
     setSelectedSaleForUniversalEmail(sale);
     setUniversalEmailModalOpen(true);
   };
@@ -123,6 +127,7 @@ export const SalesHistoryPlatform: React.FC = () => {
   };
 
   const handleExportFullHistoryPDF = () => {
+    if (!hasFeature('data_export')) return;
     printPDFReport(
       'Complete Sales History Ledger',
       company,
@@ -141,7 +146,7 @@ export const SalesHistoryPlatform: React.FC = () => {
       filteredSales.map((s) => ({
         receiptNo: s.receiptNo,
         saleCategory: s.saleType === 'sales_invoice' ? 'Sales Invoice' : 'Normal Sale',
-        date: new Date(s.timestamp).toLocaleDateString(),
+        date: regionalFormat.date(s.timestamp),
         customer: s.customerName,
         cashier: s.cashierName,
         referrer: s.referredBy?.role || 'Direct',
@@ -174,20 +179,20 @@ export const SalesHistoryPlatform: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-2">
-          <button
+          {hasFeature('data_export') && (<button
             onClick={handleExportFullHistoryPDF}
             className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-teal-300 border border-slate-700 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
           >
             <Download className="w-4 h-4" />
             Export History PDF
-          </button>
-          <button
+          </button>)}
+          {hasFeature('email') && (<button
             onClick={handleOpenBulkEmail}
             className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-teal-300 border border-slate-700 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
           >
             <Mail className="w-4 h-4 text-teal-400" />
             Email Ledger
-          </button>
+          </button>)}
         </div>
       </div>
 
@@ -337,7 +342,7 @@ export const SalesHistoryPlatform: React.FC = () => {
                     </td>
 
                     <td className="py-2.5 px-3 text-slate-400 whitespace-nowrap">
-                      {new Date(sale.timestamp).toLocaleDateString()} {new Date(sale.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      {regionalFormat.date(sale.timestamp)} {new Date(sale.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </td>
 
                     <td className="py-2.5 px-3 font-semibold text-slate-200">
@@ -353,17 +358,17 @@ export const SalesHistoryPlatform: React.FC = () => {
                     </td>
 
                     <td className="py-2.5 px-3 text-right font-bold text-slate-100">
-                      ${sale.netTotal.toFixed(2)}
+                      {currency} {sale.netTotal.toFixed(2)}
                     </td>
 
                     <td className="py-2.5 px-3 text-right text-emerald-400 font-semibold">
-                      ${sale.amountPaid.toFixed(2)}
+                      {currency} {sale.amountPaid.toFixed(2)}
                     </td>
 
                     <td className="py-2.5 px-3 text-right">
                       {sale.debtAmount > 0 ? (
                         <span className="text-rose-400 font-bold bg-rose-950/40 px-1.5 py-0.5 rounded border border-rose-900/40">
-                          ${sale.debtAmount.toFixed(2)}
+                          {currency} {sale.debtAmount.toFixed(2)}
                         </span>
                       ) : (
                         <span className="text-slate-500">$0.00</span>
@@ -393,7 +398,7 @@ export const SalesHistoryPlatform: React.FC = () => {
                     {/* Follow-up actions: Debt, Review, Appreciation Email */}
                     <td className="py-2.5 px-3 text-center">
                       <div className="flex items-center justify-center gap-1">
-                        {sale.debtAmount > 0 && (
+                        {hasFeature('debts') && sale.debtAmount > 0 && (
                           <button
                             onClick={() => setDebtModalSale(sale)}
                             title="Collect Debt Payment"
@@ -404,21 +409,21 @@ export const SalesHistoryPlatform: React.FC = () => {
                           </button>
                         )}
 
-                        <button
+                        {hasFeature('business_landing') && (<button
                           onClick={() => setReviewModalSale(sale)}
                           title="Capture Customer Review / Testimonial"
                           className="p-1 rounded-md bg-amber-500/20 hover:bg-amber-500/40 text-amber-300 border border-amber-500/30 cursor-pointer"
                         >
                           <Star className={`w-3.5 h-3.5 ${sale.hasReview ? 'fill-amber-400 text-amber-400' : ''}`} />
-                        </button>
+                        </button>)}
 
-                        <button
+                        {hasFeature('email') && (<button
                           onClick={() => setEmailModalSale(sale)}
                           title="Send Polite Appreciation & Review Request Email"
                           className="p-1 rounded-md bg-sky-500/20 hover:bg-sky-500/40 text-sky-300 border border-sky-500/30 cursor-pointer"
                         >
                           <Mail className="w-3.5 h-3.5" />
-                        </button>
+                        </button>)}
                       </div>
                     </td>
 
@@ -439,13 +444,13 @@ export const SalesHistoryPlatform: React.FC = () => {
                         >
                           <Download className="w-3.5 h-3.5" />
                         </button>
-                        <button
+                        {hasFeature('email') && (<button
                           onClick={() => handleOpenRowEmail(sale)}
                           title="Email sale transaction (.txt & .pdf) to customer/marketer/staff/transporter"
                           className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-teal-300 hover:text-teal-200 transition cursor-pointer"
                         >
                           <Mail className="w-3.5 h-3.5" />
-                        </button>
+                        </button>)}
                         <button
                           onClick={() => handleDeleteSale(sale)}
                           title="Delete Transaction"
@@ -490,7 +495,7 @@ export const SalesHistoryPlatform: React.FC = () => {
                       {item.discountValue > 0 && ` (Disc: -${item.discountValue}${item.discountType === 'percentage' ? '%' : '$'})`}
                     </div>
                   </div>
-                  <div className="font-bold text-emerald-400">${item.total.toFixed(2)}</div>
+                  <div className="font-bold text-emerald-400">{currency} {item.total.toFixed(2)}</div>
                 </div>
               ))}
             </div>
@@ -498,7 +503,7 @@ export const SalesHistoryPlatform: React.FC = () => {
             <div className="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-1 text-xs">
               <div className="flex justify-between text-slate-400">
                 <span>Subtotal:</span>
-                <span>${selectedSaleDetail.subtotal.toFixed(2)}</span>
+                <span>{currency} {selectedSaleDetail.subtotal.toFixed(2)}</span>
               </div>
               {selectedSaleDetail.overallDiscountValue > 0 && (
                 <div className="flex justify-between text-emerald-400">
@@ -517,7 +522,7 @@ export const SalesHistoryPlatform: React.FC = () => {
               ))}
               <div className="flex justify-between font-bold text-slate-100 border-t border-slate-800 pt-1">
                 <span>Net Total:</span>
-                <span className="text-emerald-400">${selectedSaleDetail.netTotal.toFixed(2)}</span>
+                <span className="text-emerald-400">{currency} {selectedSaleDetail.netTotal.toFixed(2)}</span>
               </div>
             </div>
 
@@ -581,7 +586,7 @@ export const SalesHistoryPlatform: React.FC = () => {
             ? {
                 receiptNo: selectedSaleForUniversalEmail.receiptNo,
                 saleCategory: selectedSaleForUniversalEmail.saleType === 'sales_invoice' ? 'Sales Invoice' : 'Normal Sale',
-                date: new Date(selectedSaleForUniversalEmail.timestamp).toLocaleString(),
+                date: regionalFormat.dateTime(selectedSaleForUniversalEmail.timestamp),
                 customer: selectedSaleForUniversalEmail.customerName,
                 cashier: selectedSaleForUniversalEmail.cashierName,
                 netTotal: `$${selectedSaleForUniversalEmail.netTotal.toFixed(2)}`,
@@ -592,7 +597,7 @@ export const SalesHistoryPlatform: React.FC = () => {
             : filteredSales.map((s) => ({
                 receiptNo: s.receiptNo,
                 saleCategory: s.saleType === 'sales_invoice' ? 'Sales Invoice' : 'Normal Sale',
-                date: new Date(s.timestamp).toLocaleDateString(),
+                date: regionalFormat.date(s.timestamp),
                 customer: s.customerName,
                 cashier: s.cashierName,
                 netTotal: s.netTotal.toFixed(2),

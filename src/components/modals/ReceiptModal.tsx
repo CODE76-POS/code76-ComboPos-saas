@@ -1,10 +1,13 @@
+import { useRegionalFormat } from '../../hooks/useRegionalFormat.ts';
 import { serviceUnitLabel } from '../../utils/serviceUnits.ts';
 import React from 'react';
 import { usePOS } from '../../context/POSContext.tsx';
 import { Printer, Download, X, CheckCircle, Receipt } from 'lucide-react';
 
 export const ReceiptModal: React.FC = () => {
+  const regionalFormat = useRegionalFormat();
   const { receiptModalSale, setReceiptModalSale, company, settings } = usePOS();
+  const currency = company.currency || 'USD';
 
   if (!receiptModalSale) return null;
 
@@ -48,7 +51,7 @@ export const ReceiptModal: React.FC = () => {
             </div>
             <div className="flex justify-between">
               <span className="text-slate-600">DATE:</span>
-              <span>{new Date(receiptModalSale.timestamp).toLocaleString()}</span>
+              <span>{regionalFormat.dateTime(receiptModalSale.timestamp)}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-slate-600">CASHIER:</span>
@@ -90,8 +93,8 @@ export const ReceiptModal: React.FC = () => {
                       )}
                     </td>
                     <td className="py-1.5 text-center">{item.quantity}</td>
-                    <td className="py-1.5 text-right">${item.unitPrice.toFixed(2)}</td>
-                    <td className="py-1.5 text-right font-bold">${item.total.toFixed(2)}</td>
+                    <td className="py-1.5 text-right">{currency} {item.unitPrice.toFixed(2)}</td>
+                    <td className="py-1.5 text-right font-bold">{currency} {item.total.toFixed(2)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -102,7 +105,7 @@ export const ReceiptModal: React.FC = () => {
           <div className="py-2.5 border-b border-dashed border-slate-400 space-y-1 text-[11px]">
             <div className="flex justify-between">
               <span className="text-slate-600">SUBTOTAL:</span>
-              <span>${receiptModalSale.subtotal.toFixed(2)}</span>
+              <span>{currency} {receiptModalSale.subtotal.toFixed(2)}</span>
             </div>
 
             {receiptModalSale.overallDiscountValue > 0 && (
@@ -125,7 +128,7 @@ export const ReceiptModal: React.FC = () => {
 
             <div className="flex justify-between text-base font-extrabold pt-1.5 border-t border-slate-300 text-slate-900">
               <span>TOTAL DUE:</span>
-              <span>${receiptModalSale.netTotal.toFixed(2)}</span>
+              <span>{currency} {receiptModalSale.netTotal.toFixed(2)}</span>
             </div>
           </div>
 
@@ -137,19 +140,19 @@ export const ReceiptModal: React.FC = () => {
                 <span>
                   {p.method} {p.referenceNo ? `(${p.referenceNo})` : ''}:
                 </span>
-                <span className="font-semibold">${p.amount.toFixed(2)}</span>
+                <span className="font-semibold">{currency} {p.amount.toFixed(2)}</span>
               </div>
             ))}
 
             <div className="flex justify-between pt-1">
               <span className="text-slate-600">AMOUNT PAID:</span>
-              <span className="font-bold text-emerald-700">${receiptModalSale.amountPaid.toFixed(2)}</span>
+              <span className="font-bold text-emerald-700">{currency} {receiptModalSale.amountPaid.toFixed(2)}</span>
             </div>
 
             {receiptModalSale.debtAmount > 0 && (
               <div className="flex justify-between text-rose-700 font-bold bg-rose-50 px-1 py-0.5 rounded">
                 <span>REMAINING BALANCE (DEBT):</span>
-                <span>${receiptModalSale.debtAmount.toFixed(2)}</span>
+                <span>{currency} {receiptModalSale.debtAmount.toFixed(2)}</span>
               </div>
             )}
           </div>

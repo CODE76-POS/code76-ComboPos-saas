@@ -1,5 +1,7 @@
 # CODE76 POS — interactive workspace preview
 
+> **Latest feature guide:** [Companies, schedules, payroll, camera and demo tiers](COMPANIES-PLANS-GUIDE.md). New workspaces start Free; use Current demo plan → Pro/Lifetime (admin) to test the advanced forms. No billing is connected.
+
 Open **CODE76 POS — Workspace Preview** in Arena's **Live Preview** panel, port **5173**. This is the actual interactive application, not a screenshot or a file preview. A fresh preview instance was opened and checked on this port; the old port-3000 instance was stopped to retain only one app server. Use the managed preview panel; the bare sandbox host may require a hosting traffic/access token.
 
 The restart commands below use the application's default port 3000 as an example. Set `PORT=5173` instead to match the current workspace preview.
@@ -24,7 +26,7 @@ Use only TEST data: auth/roles are still a client-side prototype, and payment me
 ```sh
 npm ci
 npm run lint
-node --import tsx --test src/utils/calculations.test.ts qa/onboarding/feature.test.ts qa/routing/routing-seo.test.ts qa/usability/usability.test.ts
+node --import tsx --test src/utils/calculations.test.ts qa/onboarding/feature.test.ts qa/routing/routing-seo.test.ts qa/usability/usability.test.ts qa/companies-plans/companies-plans.test.ts
 NODE_OPTIONS=--max-old-space-size=768 npm run build
 NODE_ENV=production DISABLE_HMR=true PORT=3000 NODE_OPTIONS=--max-old-space-size=384 npm start
 ```

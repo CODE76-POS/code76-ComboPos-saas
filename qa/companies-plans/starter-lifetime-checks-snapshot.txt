@@ -1,0 +1,286 @@
+### Page
+- Page URL: http://127.0.0.1:5173/#/pos/settings
+- Page Title: CODE76 POS — Private Workspace
+### Snapshot
+```yaml
+- generic [ref=f1e4]:
+  - banner [ref=f1e681]:
+    - generic [ref=f1e682]:
+      - button "76 CODE76 POS Enterprise Product & Service SaaS ERP System" [ref=f1e684] [cursor=pointer]:
+        - generic [ref=f1e685]: "76"
+        - generic [ref=f1e686]:
+          - generic [ref=f1e687]:
+            - generic [ref=f1e688]: CODE76 POS
+            - generic [ref=f1e689]: Enterprise
+          - paragraph [ref=f1e690]: Product & Service SaaS ERP System
+      - generic [ref=f1e691]:
+        - generic [ref=f1e692]:
+          - button "Desktop View (Full Width)" [ref=f1e693] [cursor=pointer]
+          - button "Laptop View (1024px)" [ref=f1e696] [cursor=pointer]
+          - button "Tablet View (768px)" [ref=f1e699] [cursor=pointer]
+          - button "Phone Mobile View (390px)" [ref=f1e702] [cursor=pointer]
+        - generic [ref=f1e705]:
+          - button "Demo Data" [ref=f1e706] [cursor=pointer]
+          - button "Business Page" [ref=f1e2016] [cursor=pointer]
+          - button "Click to view help guide and settings for this platform" [ref=f1e718] [cursor=pointer]
+          - button "Active user session and access controls" [ref=f1e723] [cursor=pointer]:
+            - generic [ref=f1e724]: DR
+            - generic [ref=f1e725]:
+              - generic [ref=f1e726]: Dr. David Kimani
+              - generic [ref=f1e727]: "Role: CEO"
+    - generic [ref=f1e728]:
+      - generic [ref=f1e729]:
+        - generic [ref=f1e733]: App link
+        - generic [ref=f1e734]:
+          - generic [ref=f1e735]:
+            - generic [ref=f1e736]: App link
+            - textbox "App link" [ref=f1e737]: http://127.0.0.1:5173/
+            - button "Copy app link" [ref=f1e738] [cursor=pointer]:
+              - generic [ref=f1e742]: Copy link
+            - link "Open app link in a new tab" [ref=f1e743] [cursor=pointer]:
+              - /url: http://127.0.0.1:5173/
+          - status [ref=f1e748]
+        - button "Current demo plan" [ref=f1e749]: Lifetime · demo
+      - paragraph [ref=f1e750]: Open this root link to reach CODE76 sign-in/register. Browser-local records and sessions do not sync between browsers.
+    - generic [ref=f1e752]:
+      - button "Sales POS" [ref=f1e753] [cursor=pointer]
+      - button "Sales History" [ref=f1e757] [cursor=pointer]
+      - button "Inventory" [ref=f1e762] [cursor=pointer]
+      - button "Expenses" [ref=f1e767] [cursor=pointer]
+      - button "Invoices" [ref=f1e771] [cursor=pointer]
+      - button "Analytics & P&L" [ref=f1e775] [cursor=pointer]
+      - button "Customers" [ref=f1e778] [cursor=pointer]
+      - button "Vendors" [ref=f1e784] [cursor=pointer]
+      - button "Transporters" [ref=f1e789] [cursor=pointer]
+      - button "Marketing Team" [ref=f1e795] [cursor=pointer]
+      - button "Company Members" [ref=f1e799] [cursor=pointer]
+      - button "My Company" [ref=f1e805] [cursor=pointer]
+      - button "Messaging" [ref=f1e2021] [cursor=pointer]
+      - button "Business Landing Page" [ref=f1e2024] [cursor=pointer]
+      - button "Settings" [ref=f1e817] [cursor=pointer]
+      - button "Audit & Access Logs" [ref=f1e821] [cursor=pointer]
+      - button "About & Manual" [ref=f1e825] [cursor=pointer]
+  - main [ref=f1e5]:
+    - generic [ref=f1e1740]:
+      - generic [ref=f1e1742]:
+        - generic [ref=f1e1743]:
+          - heading "System Settings Platform" [level=1] [ref=f1e1744]
+          - button "Click for platform guidance & settings" [ref=f1e1745] [cursor=pointer]
+        - paragraph [ref=f1e1749]: Configure payment methods, responsive text sizing, landing page rules, receipts, appearance, font families, backups, privileges, and PDF/Excel import pipeline.
+      - generic [ref=f1e1750]:
+        - generic [ref=f1e1751]:
+          - button "Demo Plan Settings" [ref=f1e1752] [cursor=pointer]
+          - button "Payment Settings" [ref=f1e1756] [cursor=pointer]
+          - button "Currency, Date & Time" [ref=f1e1760] [cursor=pointer]
+          - button "Delete All Business Data" [ref=f1e1765] [cursor=pointer]
+          - button "Text Sizing Settings" [ref=f1e1770] [cursor=pointer]
+          - button "Business Landing Page Settings" [ref=f1e2029] [cursor=pointer]
+          - button "Receipts Settings" [ref=f1e1774] [cursor=pointer]
+          - button "App Appearance Settings" [ref=f1e1779] [cursor=pointer]
+          - button "Font Text Settings" [ref=f1e1787] [cursor=pointer]
+          - button "Data Backup Settings" [ref=f1e1792] [cursor=pointer]
+          - button "App User Privilege Settings" [ref=f1e1796] [cursor=pointer]
+          - button "PDF & Excel Settings (CSV Import)" [ref=f1e1800] [cursor=pointer]
+          - button "Email Marketing Templates" [ref=f1e2034] [cursor=pointer]
+          - button "Audit Logs & Login History" [ref=f1e1805] [cursor=pointer]
+        - generic [ref=f1e1810]:
+          - generic [ref=f1e1811]:
+            - generic [ref=f1e1812]:
+              - heading "App plans — demo entitlements" [level=2] [ref=f1e1813]
+              - paragraph [ref=f1e1814]: No money is charged. There is no connected subscription provider, renewal or verified paid licence. Selecting a plan previews its enforced app restrictions; real billing needs server-side subscriptions.
+            - generic [ref=f1e1815]:
+              - generic [ref=f1e1816]:
+                - heading "Free" [level=3] [ref=f1e1817]
+                - paragraph [ref=f1e1818]: Basic operations
+                - paragraph [ref=f1e1819]: Selling, receipts, read-only debt balances in history, inventory without marketing/exports, limited settings and guides.
+                - button "Select Free demo plan" [ref=f1e1820]: Preview Free
+              - generic [ref=f1e1821]:
+                - heading "Starter" [level=3] [ref=f1e1822]
+                - paragraph [ref=f1e1823]: Demo paid tier
+                - paragraph [ref=f1e1824]: Pro operations except inventory marketing, Business Landing Page, chatbot, messaging and email.
+                - button "Select Starter demo plan" [ref=f1e1825]: Preview Starter
+              - generic [ref=f1e1826]:
+                - heading "Pro" [level=3] [ref=f1e1827]
+                - paragraph [ref=f1e1828]: Monthly subscription model
+                - paragraph [ref=f1e1829]: All current workspace features, still subject to role privileges.
+                - button "Select Pro demo plan" [ref=f1e1830]: Preview Pro
+              - generic [ref=f1e1831]:
+                - heading "Lifetime" [level=3] [ref=f1e1832]
+                - paragraph [ref=f1e1833]: One-time access model
+                - paragraph [ref=f1e1834]: All current features and future feature releases/updates, still subject to role privileges.
+                - button "Select Lifetime demo plan" [disabled] [ref=f1e1835]: Current plan
+            - status [ref=f1e2039]: Lifetime demo plan applied. No charge; existing data retained.
+            - table [ref=f1e1837]:
+              - rowgroup [ref=f1e1838]:
+                - row [ref=f1e1839]:
+                  - columnheader "Workspace feature" [ref=f1e1840]
+                  - columnheader "Free" [ref=f1e1841]
+                  - columnheader "Starter" [ref=f1e1842]
+                  - columnheader "Pro" [ref=f1e1843]
+                  - columnheader "Lifetime" [ref=f1e1844]
+              - rowgroup [ref=f1e1845]:
+                - row [ref=f1e1846]:
+                  - cell "selling" [ref=f1e1847]
+                  - cell "Included" [ref=f1e1848]
+                  - cell "Included" [ref=f1e1849]
+                  - cell "Included" [ref=f1e1850]
+                  - cell "Included" [ref=f1e1851]
+                - row [ref=f1e1852]:
+                  - cell "receipts" [ref=f1e1853]
+                  - cell "Included" [ref=f1e1854]
+                  - cell "Included" [ref=f1e1855]
+                  - cell "Included" [ref=f1e1856]
+                  - cell "Included" [ref=f1e1857]
+                - row [ref=f1e1858]:
+                  - cell "sales history" [ref=f1e1859]
+                  - cell "Included" [ref=f1e1860]
+                  - cell "Included" [ref=f1e1861]
+                  - cell "Included" [ref=f1e1862]
+                  - cell "Included" [ref=f1e1863]
+                - row [ref=f1e1864]:
+                  - cell "inventory" [ref=f1e1865]
+                  - cell "Included" [ref=f1e1866]
+                  - cell "Included" [ref=f1e1867]
+                  - cell "Included" [ref=f1e1868]
+                  - cell "Included" [ref=f1e1869]
+                - row [ref=f1e1870]:
+                  - cell "appearance" [ref=f1e1871]
+                  - cell "Included" [ref=f1e1872]
+                  - cell "Included" [ref=f1e1873]
+                  - cell "Included" [ref=f1e1874]
+                  - cell "Included" [ref=f1e1875]
+                - row [ref=f1e1876]:
+                  - cell "payments" [ref=f1e1877]
+                  - cell "Included" [ref=f1e1878]
+                  - cell "Included" [ref=f1e1879]
+                  - cell "Included" [ref=f1e1880]
+                  - cell "Included" [ref=f1e1881]
+                - row [ref=f1e1882]:
+                  - cell "regional" [ref=f1e1883]
+                  - cell "Included" [ref=f1e1884]
+                  - cell "Included" [ref=f1e1885]
+                  - cell "Included" [ref=f1e1886]
+                  - cell "Included" [ref=f1e1887]
+                - row [ref=f1e1888]:
+                  - cell "delete data" [ref=f1e1889]
+                  - cell "Included" [ref=f1e1890]
+                  - cell "Included" [ref=f1e1891]
+                  - cell "Included" [ref=f1e1892]
+                  - cell "Included" [ref=f1e1893]
+                - row [ref=f1e1894]:
+                  - cell "about" [ref=f1e1895]
+                  - cell "Included" [ref=f1e1896]
+                  - cell "Included" [ref=f1e1897]
+                  - cell "Included" [ref=f1e1898]
+                  - cell "Included" [ref=f1e1899]
+                - row [ref=f1e1900]:
+                  - cell "debts" [ref=f1e1901]
+                  - cell "Not included" [ref=f1e1902]
+                  - cell "Included" [ref=f1e1903]
+                  - cell "Included" [ref=f1e1904]
+                  - cell "Included" [ref=f1e1905]
+                - row [ref=f1e1906]:
+                  - cell "expenses" [ref=f1e1907]
+                  - cell "Not included" [ref=f1e1908]
+                  - cell "Included" [ref=f1e1909]
+                  - cell "Included" [ref=f1e1910]
+                  - cell "Included" [ref=f1e1911]
+                - row [ref=f1e1912]:
+                  - cell "invoices" [ref=f1e1913]
+                  - cell "Not included" [ref=f1e1914]
+                  - cell "Included" [ref=f1e1915]
+                  - cell "Included" [ref=f1e1916]
+                  - cell "Included" [ref=f1e1917]
+                - row [ref=f1e1918]:
+                  - cell "analytics" [ref=f1e1919]
+                  - cell "Not included" [ref=f1e1920]
+                  - cell "Included" [ref=f1e1921]
+                  - cell "Included" [ref=f1e1922]
+                  - cell "Included" [ref=f1e1923]
+                - row [ref=f1e1924]:
+                  - cell "directory" [ref=f1e1925]
+                  - cell "Not included" [ref=f1e1926]
+                  - cell "Included" [ref=f1e1927]
+                  - cell "Included" [ref=f1e1928]
+                  - cell "Included" [ref=f1e1929]
+                - row [ref=f1e1930]:
+                  - cell "company profile" [ref=f1e1931]
+                  - cell "Not included" [ref=f1e1932]
+                  - cell "Included" [ref=f1e1933]
+                  - cell "Included" [ref=f1e1934]
+                  - cell "Included" [ref=f1e1935]
+                - row [ref=f1e1936]:
+                  - cell "payroll" [ref=f1e1937]
+                  - cell "Not included" [ref=f1e1938]
+                  - cell "Included" [ref=f1e1939]
+                  - cell "Included" [ref=f1e1940]
+                  - cell "Included" [ref=f1e1941]
+                - row [ref=f1e1942]:
+                  - cell "audit" [ref=f1e1943]
+                  - cell "Not included" [ref=f1e1944]
+                  - cell "Included" [ref=f1e1945]
+                  - cell "Included" [ref=f1e1946]
+                  - cell "Included" [ref=f1e1947]
+                - row [ref=f1e1948]:
+                  - cell "data export" [ref=f1e1949]
+                  - cell "Not included" [ref=f1e1950]
+                  - cell "Included" [ref=f1e1951]
+                  - cell "Included" [ref=f1e1952]
+                  - cell "Included" [ref=f1e1953]
+                - row [ref=f1e1954]:
+                  - cell "inventory export" [ref=f1e1955]
+                  - cell "Not included" [ref=f1e1956]
+                  - cell "Included" [ref=f1e1957]
+                  - cell "Included" [ref=f1e1958]
+                  - cell "Included" [ref=f1e1959]
+                - row [ref=f1e1960]:
+                  - cell "backup" [ref=f1e1961]
+                  - cell "Not included" [ref=f1e1962]
+                  - cell "Included" [ref=f1e1963]
+                  - cell "Included" [ref=f1e1964]
+                  - cell "Included" [ref=f1e1965]
+                - row [ref=f1e1966]:
+                  - cell "imports" [ref=f1e1967]
+                  - cell "Not included" [ref=f1e1968]
+                  - cell "Included" [ref=f1e1969]
+                  - cell "Included" [ref=f1e1970]
+                  - cell "Included" [ref=f1e1971]
+                - row [ref=f1e1972]:
+                  - cell "privileges" [ref=f1e1973]
+                  - cell "Not included" [ref=f1e1974]
+                  - cell "Included" [ref=f1e1975]
+                  - cell "Included" [ref=f1e1976]
+                  - cell "Included" [ref=f1e1977]
+                - row [ref=f1e1978]:
+                  - cell "inventory marketing" [ref=f1e1979]
+                  - cell "Not included" [ref=f1e1980]
+                  - cell "Not included" [ref=f1e1981]
+                  - cell "Included" [ref=f1e1982]
+                  - cell "Included" [ref=f1e1983]
+                - row [ref=f1e1984]:
+                  - cell "business landing" [ref=f1e1985]
+                  - cell "Not included" [ref=f1e1986]
+                  - cell "Not included" [ref=f1e1987]
+                  - cell "Included" [ref=f1e1988]
+                  - cell "Included" [ref=f1e1989]
+                - row [ref=f1e1990]:
+                  - cell "chatbot" [ref=f1e1991]
+                  - cell "Not included" [ref=f1e1992]
+                  - cell "Not included" [ref=f1e1993]
+                  - cell "Included" [ref=f1e1994]
+                  - cell "Included" [ref=f1e1995]
+                - row [ref=f1e1996]:
+                  - cell "messaging" [ref=f1e1997]
+                  - cell "Not included" [ref=f1e1998]
+                  - cell "Not included" [ref=f1e1999]
+                  - cell "Included" [ref=f1e2000]
+                  - cell "Included" [ref=f1e2001]
+                - row [ref=f1e2002]:
+                  - cell "email" [ref=f1e2003]
+                  - cell "Not included" [ref=f1e2004]
+                  - cell "Not included" [ref=f1e2005]
+                  - cell "Included" [ref=f1e2006]
+                  - cell "Included" [ref=f1e2007]
+            - paragraph [ref=f1e2008]: Lifetime includes future declared features and updates. Role privileges remain necessary. New workspaces start Free; older saved workspaces without a plan field keep Pro-equivalent access rather than losing existing workflows.
+          - button "Save All Settings Changes" [ref=f1e2010] [cursor=pointer]
+```

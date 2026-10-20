@@ -1,3 +1,5 @@
+import { canOpenPlatform } from './utils/plans.ts';
+import { PlanNotice } from './components/common/PlanNotice.tsx';
 import React, { useEffect } from 'react';
 import { resolveAppSurface } from './utils/appRouting.ts';
 import { applyDocumentSeo } from './utils/siteSeo.ts';
@@ -29,7 +31,7 @@ import { LoginModal } from './components/modals/LoginModal.tsx';
 import { CompanyQAOnboardingModal } from './components/modals/CompanyQAOnboardingModal.tsx';
 
 const POSContent: React.FC = () => {
-  const { activeView, activePlatform, viewportMode, setViewportMode, settings, theme, currentUser } = usePOS();
+  const { activeView, activePlatform, viewportMode, setViewportMode, settings, theme, currentUser, hasFeature, hasPrivilege } = usePOS();
   const isLight = theme === 'light';
   const authenticatedWorkspace = !!currentUser && activeView === 'pos';
   const surface = resolveAppSurface({ view: activeView, platform: activePlatform }, !!currentUser);
@@ -70,6 +72,10 @@ const POSContent: React.FC = () => {
   };
 
   const renderActivePlatform = () => {
+    if (!canOpenPlatform(settings, activePlatform)) return <PlanNotice feature={activePlatform.replace(/_/g, ' ')} />;
+    const platformPermissions: Partial<Record<typeof activePlatform, Parameters<typeof hasPrivilege>[0]>> = { selling:'canSell', sales_history:'canSell', inventory:'canViewInventory', expenses:'canViewExpenses', invoices:'canViewInvoices', analytics:'canViewAnalytics', company_members:'canManagePeople' };
+    const permission = platformPermissions[activePlatform];
+    if(permission && !hasPrivilege(permission)) return <div role="alert" className="m-8 rounded-xl border border-amber-800 p-6">Your current role does not have permission to open this platform. Ask your administrator.</div>;
     switch (activePlatform) {
       case 'selling':
         return <SalesPlatform />;
@@ -96,8 +102,8 @@ const POSContent: React.FC = () => {
         return (
           <DirectoryPlatform
             category="vendor"
-            title="Vendors & Hardware Suppliers"
-            subtitle="Hardware importers, thermal paper manufacturers, and wholesale distributor accounts."
+            title="Vendors & Suppliers"
+            subtitle="People, vendor companies and supplier branches, linked to your company directory."
             platformId="vendors"
           />
         );
@@ -106,7 +112,7 @@ const POSContent: React.FC = () => {
           <DirectoryPlatform
             category="transporter"
             title="Transporters & Freight Logistics"
-            subtitle="Delivery fleet and dispatch couriers handling on-site customer deliveries. (Auto-synced from Company Members)."
+            subtitle="External drivers, transport companies and staff with Transporter/Driver roles share linked identities."
             platformId="transporters"
           />
         );
@@ -115,7 +121,7 @@ const POSContent: React.FC = () => {
           <DirectoryPlatform
             category="marketer"
             title="Marketing & Growth Team"
-            subtitle="Sales agents, social media growth specialists, and brand ambassadors. (Auto-synced from Company Members)."
+            subtitle="Individual agents, marketing companies and staff with Marketor roles, without duplicate identities."
             platformId="marketing_team"
           />
         );
@@ -197,9 +203,9 @@ const POSContent: React.FC = () => {
       {authenticatedWorkspace && <>
         <DemoWarningModal />
         <HoverHelpModal />
-        <MarketingCampaignModal />
+        {hasFeature('inventory_marketing') && hasFeature('email') && <MarketingCampaignModal />}
         <ReceiptModal />
-        <ReviewCaptureModal />
+        {hasFeature('business_landing') && <ReviewCaptureModal />}
         <LoginModal />
         <CompanyQAOnboardingModal />
       </>}

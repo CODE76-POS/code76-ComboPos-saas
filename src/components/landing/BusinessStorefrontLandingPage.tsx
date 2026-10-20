@@ -1,3 +1,4 @@
+import { directoryPhoto } from '../../utils/directory.ts';
 import { applicationUrl } from '../../utils/clipboard.ts';
 import { LinkCopyField } from '../common/LinkCopyField.tsx';
 import { serviceUnitLabel } from '../../utils/serviceUnits.ts';
@@ -57,6 +58,7 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
     marketingTeam,
     sales,
     reviews,
+    hasFeature,
     customers,
     landingMetrics,
     settings,
@@ -742,7 +744,7 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
 
                 <div className="mt-5 pt-4 border-t border-slate-800/80 flex items-center gap-3">
                   <img
-                    src={getCustomerReviewAvatar(rev.customerName, rev.customerPhotoUrl)}
+                    src={rev.customerPhotoUrl || directoryPhoto({firstName:rev.customerName,secondName:'',photoUrl:'',avatarStyle:rev.avatarStyle})}
                     alt={rev.customerName}
                     className="w-10 h-10 rounded-full object-cover border border-slate-700"
                   />
@@ -1017,7 +1019,7 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
       )}
 
       {/* FLOATING AI CHATBOT CONCIERGE */}
-      {settings.landingPage.showChatbot && (
+      {hasFeature('chatbot') && settings.landingPage.showChatbot && (
         <AIChatbotWidget surface="business" inquiryLead={activeInquiryLead} />
       )}
     </div>

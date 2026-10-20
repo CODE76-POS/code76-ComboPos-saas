@@ -126,7 +126,7 @@ test('all three history entry points use the same guarded component', () => {
 test('non-admins cannot save a modified permission map or open role-grant controls', () => {
   const page = source('src/components/platforms/SettingsPlatform.tsx');
   assert.ok(page.includes("activeTab === 'privileges' && !currentUser?.isAdmin"));
-  assert.ok(page.includes('privileges: settings.privileges')); assert.ok(page.includes('Export Reports privilege'));
+  assert.match(page, /privileges:currentUser\?\.isAdmin \? permitted.privileges : settings.privileges/); assert.ok(page.includes('Export Reports privilege'));
 });
 test('full backup cannot bypass restricted history export', () => {
   const serialized = JSON.stringify({ company: { name: 'TEST merchant' }, products: [], auditLogs: logs });

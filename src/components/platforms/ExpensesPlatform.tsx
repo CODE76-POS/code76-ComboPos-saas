@@ -1,3 +1,7 @@
+import { useRegionalFormat } from '../../hooks/useRegionalFormat.ts';
+import { PartyPicker } from '../common/PartyPicker.tsx';
+import { uniqueParties, directoryName, partyDetails } from '../../utils/directory.ts';
+import { PAYMENT_METHODS } from '../../config/paymentMethods.ts';
 import React, { useState, useMemo } from 'react';
 import { usePOS } from '../../context/POSContext.tsx';
 import {
@@ -21,8 +25,12 @@ import { exportToCSV, printPDFReport } from '../../utils/exportUtils.ts';
 import { EmailExportModal } from '../modals/EmailExportModal.tsx';
 
 export const ExpensesPlatform: React.FC = () => {
-  const { expenses, addExpense, deleteExpense, company, setHoverHelpPlatform } = usePOS();
+  const regionalFormat = useRegionalFormat();
+  const { expenses, addExpense, deleteExpense, company, setHoverHelpPlatform, relatedCompanies, vendors, transporters, marketingTeam, companyMembers, hasFeature } = usePOS();
+  const currency = company.currency || 'USD';
 
+  const parties = uniqueParties([relatedCompanies,vendors,transporters,marketingTeam,companyMembers]);
+  const [formError,setFormError] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('All');
   const [modalOpen, setModalOpen] = useState(false);
@@ -35,19 +43,22 @@ export const ExpensesPlatform: React.FC = () => {
   const expenseExportColumns = [
     { header: 'Title', dataKey: 'title' },
     { header: 'Category', dataKey: 'category' },
-    { header: 'Amount ($)', dataKey: 'amount' },
+    { header: 'Amount', dataKey: 'amount' },
     { header: 'Date', dataKey: 'date' },
     { header: 'Vendor / Beneficiary', dataKey: 'vendorName' },
     { header: 'Payment Channel', dataKey: 'paymentMethod' },
     { header: 'Operational Description', dataKey: 'description' },
+    { header: 'Related company details', dataKey: 'relatedCompanyDetails' },
   ];
 
   const handleOpenBulkEmail = () => {
+    if (!hasFeature('email')) return;
     setSelectedExpenseForEmail(null);
     setEmailModalOpen(true);
   };
 
   const handleOpenRowEmail = (item: ExpenseItem) => {
+    if (!hasFeature('email')) return;
     setSelectedExpenseForEmail(item);
     setEmailModalOpen(true);
   };
@@ -56,7 +67,7 @@ export const ExpensesPlatform: React.FC = () => {
     title: '',
     category: 'Rent',
     amount: 0,
-    date: new Date().toISOString().split('T')[0],
+    date: regionalFormat.inputDate(new Date()),
     vendorName: '',
     paymentMethod: 'Bank Transfer',
     description: '',
@@ -101,8 +112,7 @@ export const ExpensesPlatform: React.FC = () => {
   const handleCreate = (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.title || formData.amount <= 0) return;
-    addExpense(formData);
-    setModalOpen(false);
+    try { addExpense(formData); setModalOpen(false); setFormError(''); } catch(error) { setFormError(error instanceof Error?error.message:'Unable to record expense.'); }
   };
 
   const handleDelete = (e: ExpenseItem) => {
@@ -121,6 +131,7 @@ export const ExpensesPlatform: React.FC = () => {
         VendorName: e.vendorName,
         PaymentMethod: e.paymentMethod,
         Description: e.description,
+        RelatedCompanyDetails: partyDetails(e.partySnapshot),
       })),
       'code76_pos_expenses'
     );
@@ -137,11 +148,12 @@ export const ExpensesPlatform: React.FC = () => {
       [
         { k: 'Expense Title', v: e.title },
         { k: 'Cost Category', v: e.category },
-        { k: 'Amount Disbursed', v: `$${e.amount.toFixed(2)}` },
-        { k: 'Disbursement Date', v: e.date },
+        { k: 'Amount Disbursed', v: `${company.currency} ${e.amount.toFixed(2)}` },
+        { k: 'Disbursement Date', v: regionalFormat.date(e.date) },
         { k: 'Vendor / Beneficiary', v: e.vendorName },
         { k: 'Payment Channel', v: e.paymentMethod },
         { k: 'Operational Notes', v: e.description },
+        ...(e.partySnapshot ? [{k:'Related company / branch details (saved at entry)',v:partyDetails(e.partySnapshot)}] : []),
       ]
     );
   };
@@ -155,14 +167,16 @@ export const ExpensesPlatform: React.FC = () => {
         { header: 'Title', dataKey: 'title' },
         { header: 'Category', dataKey: 'category' },
         { header: 'Vendor', dataKey: 'vendor' },
+        { header: 'Related company / branch details', dataKey: 'partyDetails' },
         { header: 'Channel', dataKey: 'method' },
-        { header: 'Amount ($)', dataKey: 'amount' },
+        { header: 'Amount', dataKey: 'amount' },
       ],
       filtered.map((e) => ({
         date: e.date,
         title: e.title,
         category: e.category,
         vendor: e.vendorName,
+        partyDetails: partyDetails(e.partySnapshot),
         method: e.paymentMethod,
         amount: e.amount.toFixed(2),
       }))
@@ -171,6 +185,7 @@ export const ExpensesPlatform: React.FC = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-6">
+      <p className="mb-2 text-[10px] text-slate-400">Operating currency: {currency}. Currency changes do not convert existing amounts.</p>
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
@@ -204,20 +219,20 @@ export const ExpensesPlatform: React.FC = () => {
             <Download className="w-3.5 h-3.5" />
             PDF Export
           </button>
-          <button
+          {hasFeature('email') && (<button
             onClick={handleOpenBulkEmail}
             className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-teal-300 border border-slate-700 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
           >
             <Mail className="w-3.5 h-3.5 text-teal-400" />
             Email Ledger
-          </button>
+          </button>)}
           <button
             onClick={() => {
               setFormData({
                 title: '',
                 category: 'Rent',
                 amount: 0,
-                date: new Date().toISOString().split('T')[0],
+                date: regionalFormat.inputDate(new Date()),
                 vendorName: '',
                 paymentMethod: 'Bank Transfer',
                 description: '',
@@ -237,7 +252,7 @@ export const ExpensesPlatform: React.FC = () => {
         <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4">
           <div className="text-slate-400 text-xs">Total Expenses</div>
           <div className="text-xl font-black text-rose-400 mt-1">
-            ${totalExpenseAmount.toLocaleString()}
+            {currency} {totalExpenseAmount.toLocaleString()}
           </div>
           <div className="text-[10px] text-slate-500 mt-0.5">{filtered.length} entries shown</div>
         </div>
@@ -245,7 +260,7 @@ export const ExpensesPlatform: React.FC = () => {
         <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4">
           <div className="text-slate-400 text-xs">Payroll & Salaries</div>
           <div className="text-xl font-bold text-slate-100 mt-1">
-            ${(categoryBreakdown['Salaries'] || 0).toLocaleString()}
+            {currency} {(categoryBreakdown['Salaries'] || 0).toLocaleString()}
           </div>
           <div className="text-[10px] text-slate-500 mt-0.5">Staff compensation</div>
         </div>
@@ -253,7 +268,7 @@ export const ExpensesPlatform: React.FC = () => {
         <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4">
           <div className="text-slate-400 text-xs">Rent & Facilities</div>
           <div className="text-xl font-bold text-slate-100 mt-1">
-            ${(categoryBreakdown['Rent'] || 0).toLocaleString()}
+            {currency} {(categoryBreakdown['Rent'] || 0).toLocaleString()}
           </div>
           <div className="text-[10px] text-slate-500 mt-0.5">Premises & utilities</div>
         </div>
@@ -261,7 +276,7 @@ export const ExpensesPlatform: React.FC = () => {
         <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4">
           <div className="text-slate-400 text-xs">Growth & Marketing</div>
           <div className="text-xl font-bold text-slate-100 mt-1">
-            ${(categoryBreakdown['Marketing'] || 0).toLocaleString()}
+            {currency} {(categoryBreakdown['Marketing'] || 0).toLocaleString()}
           </div>
           <div className="text-[10px] text-slate-500 mt-0.5">Ad campaigns & lead gen</div>
         </div>
@@ -312,7 +327,7 @@ export const ExpensesPlatform: React.FC = () => {
                 <th className="py-3 px-3">Vendor / Recipient</th>
                 <th className="py-3 px-3">Payment Channel</th>
                 <th className="py-3 px-3">Description</th>
-                <th className="py-3 px-3 text-right">Amount ($)</th>
+                <th className="py-3 px-3 text-right">Amount</th>
                 {/* END ACTION COLUMN */}
                 <th className="py-3 px-3 text-center w-28 text-teal-400">Actions (End)</th>
               </tr>
@@ -354,7 +369,7 @@ export const ExpensesPlatform: React.FC = () => {
                       </div>
                     </td>
 
-                    <td className="py-2.5 px-3 whitespace-nowrap text-slate-400">{e.date}</td>
+                    <td className="py-2.5 px-3 whitespace-nowrap text-slate-400">{regionalFormat.date(e.date)}</td>
 
                     <td className="py-2.5 px-3 font-bold text-slate-100">{e.title}</td>
 
@@ -371,7 +386,7 @@ export const ExpensesPlatform: React.FC = () => {
                     <td className="py-2.5 px-3 text-slate-400 truncate max-w-xs">{e.description}</td>
 
                     <td className="py-2.5 px-3 text-right font-black text-rose-400 text-sm">
-                      ${e.amount.toFixed(2)}
+                      {currency} {e.amount.toFixed(2)}
                     </td>
 
                     {/* END ACTION COLUMN: Delete, Update/Read, PDF Export */}
@@ -391,13 +406,13 @@ export const ExpensesPlatform: React.FC = () => {
                         >
                           <Download className="w-3.5 h-3.5" />
                         </button>
-                        <button
+                        {hasFeature('email') && (<button
                           onClick={() => handleOpenRowEmail(e)}
                           title="Email expense payment voucher (.txt & .pdf) to admin/staff/vendor"
                           className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-teal-300 hover:text-teal-200 transition cursor-pointer"
                         >
                           <Mail className="w-3.5 h-3.5" />
-                        </button>
+                        </button>)}
                         <button
                           onClick={() => handleDelete(e)}
                           title="Delete Expense"
@@ -418,7 +433,7 @@ export const ExpensesPlatform: React.FC = () => {
       {/* Record Expense Modal */}
       {modalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-xs p-4">
-          <div className="relative w-full max-w-lg rounded-2xl bg-slate-900 border border-slate-700 shadow-2xl p-6 text-white">
+          <div className="relative w-full max-w-lg rounded-2xl bg-slate-900 border border-slate-700 shadow-2xl p-6 text-white max-h-[92vh] overflow-y-auto">
             <button
               onClick={() => setModalOpen(false)}
               className="absolute top-4 right-4 text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800"
@@ -429,13 +444,14 @@ export const ExpensesPlatform: React.FC = () => {
             <h3 className="text-xl font-bold mb-4">Record Operational Expense</h3>
 
             <form onSubmit={handleCreate} className="space-y-4">
+              {formError && <p role="alert" className="text-sm text-amber-300">{formError}</p>}
               <div>
                 <label className="block text-xs font-semibold text-slate-400 mb-1">Expense Title *</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Broadband Internet Bill"
-                  value={formData.title}
+                  aria-label="Expense title" value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                   className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-teal-500"
                 />
@@ -445,7 +461,7 @@ export const ExpensesPlatform: React.FC = () => {
                 <div>
                   <label className="block text-xs font-semibold text-slate-400 mb-1">Category *</label>
                   <select
-                    value={formData.category}
+                    aria-label="Expense category" value={formData.category}
                     onChange={(e) => setFormData({ ...formData, category: e.target.value as any })}
                     className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-teal-500"
                   >
@@ -456,13 +472,13 @@ export const ExpensesPlatform: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-400 mb-1">Amount ($) *</label>
+                  <label className="block text-xs font-semibold text-slate-400 mb-1">Amount *</label>
                   <input
                     type="number"
                     step="0.01"
                     min="0.01"
                     required
-                    value={formData.amount || ''}
+                    aria-label="Expense amount" value={formData.amount || ''}
                     placeholder="0.00"
                     onChange={(e) => setFormData({ ...formData, amount: parseFloat(e.target.value) || 0 })}
                     className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-rose-400 font-bold focus:outline-none focus:border-rose-500"
@@ -471,13 +487,14 @@ export const ExpensesPlatform: React.FC = () => {
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
+                <PartyPicker value={formData.relatedCompanyId} parties={parties} onChange={party=>setFormData({...formData,relatedCompanyId:party?.id,vendorName:party?directoryName(party):''})}/>
+              <div>
                   <label className="block text-xs font-semibold text-slate-400 mb-1">Vendor / Beneficiary *</label>
                   <input
                     type="text"
                     required
                     placeholder="e.g. FiberISP Africa"
-                    value={formData.vendorName}
+                    aria-label="Expense payee name" readOnly={!!formData.relatedCompanyId} value={formData.vendorName}
                     onChange={(e) => setFormData({ ...formData, vendorName: e.target.value })}
                     className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-teal-500"
                   />
@@ -486,15 +503,10 @@ export const ExpensesPlatform: React.FC = () => {
                 <div>
                   <label className="block text-xs font-semibold text-slate-400 mb-1">Payment Channel</label>
                   <select
-                    value={formData.paymentMethod}
+                    aria-label="Expense payment channel" value={formData.paymentMethod}
                     onChange={(e) => setFormData({ ...formData, paymentMethod: e.target.value })}
                     className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-teal-500"
-                  >
-                    <option value="Bank Transfer">Bank Wire Transfer</option>
-                    <option value="Cash">Cash</option>
-                    <option value="M-Pesa">M-Pesa</option>
-                    <option value="Credit Card">Credit Card</option>
-                  </select>
+                  >{PAYMENT_METHODS.filter(method=>method!=='Card'&&method!=='Bank Wire'&&method!=='Credit / Debt').map(method=><option key={method}>{method}</option>)}</select>
                 </div>
               </div>
 
@@ -503,7 +515,7 @@ export const ExpensesPlatform: React.FC = () => {
                 <input
                   type="date"
                   required
-                  value={formData.date}
+                  aria-label="Expense date" value={formData.date}
                   onChange={(e) => setFormData({ ...formData, date: e.target.value })}
                   className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-teal-500"
                 />
@@ -542,7 +554,7 @@ export const ExpensesPlatform: React.FC = () => {
       {/* View Expense Detail Modal */}
       {viewExpense && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-xs p-4">
-          <div className="relative w-full max-w-md rounded-2xl bg-slate-900 border border-slate-700 shadow-2xl p-6 text-white">
+          <div className="relative w-full max-w-md rounded-2xl bg-slate-900 border border-slate-700 shadow-2xl p-6 text-white max-h-[92vh] overflow-y-auto">
             <button
               onClick={() => setViewExpense(null)}
               className="absolute top-4 right-4 text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800"
@@ -559,11 +571,11 @@ export const ExpensesPlatform: React.FC = () => {
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-400">Amount:</span>
-                <span className="font-black text-rose-400 text-sm">${viewExpense.amount.toFixed(2)}</span>
+                <span className="font-black text-rose-400 text-sm">{currency} {viewExpense.amount.toFixed(2)}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-400">Date:</span>
-                <span className="text-slate-200">{viewExpense.date}</span>
+                <span className="text-slate-200">{regionalFormat.date(viewExpense.date)}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-400">Vendor / Payee:</span>

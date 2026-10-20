@@ -1,3 +1,4 @@
+import { useRegionalFormat } from '../../hooks/useRegionalFormat.ts';
 import { copyTextToClipboard } from '../../utils/clipboard.ts';
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { usePOS } from '../../context/POSContext.tsx';
@@ -50,6 +51,7 @@ export const EmailExportModal: React.FC<EmailExportModalProps> = ({
   columns = [],
   metadata = [],
 }) => {
+  const regionalFormat = useRegionalFormat();
   const {
     company,
     companyMembers,
@@ -59,6 +61,7 @@ export const EmailExportModal: React.FC<EmailExportModalProps> = ({
     marketingTeam,
     currentUser,
     logAuditAction,
+    hasFeature,
   } = usePOS();
 
   // Selected recipient category & email
@@ -130,7 +133,7 @@ export const EmailExportModal: React.FC<EmailExportModalProps> = ({
   const generatedTextDocument = useMemo(() => {
     const divider = '='.repeat(64);
     const subDivider = '-'.repeat(64);
-    const dateStr = new Date().toLocaleString();
+    const dateStr = regionalFormat.dateTime(new Date());
 
     let text = `${divider}\n`;
     text += `${company.name.toUpperCase()} - OFFICIAL SYSTEM REPORT\n`;
@@ -202,14 +205,14 @@ export const EmailExportModal: React.FC<EmailExportModalProps> = ({
           isSingleRow ? 'document' : 'full ledger export'
         } from ${company.name} generated via CODE76 POS.\n\nSummary:\n• Module: ${moduleName}\n• Records: ${
           isSingleRow ? 'Single Document' : `${Array.isArray(data) ? data.length : 1} Table Records`
-        }\n• Dispatched by: ${currentUser?.name || 'Authorized Admin'}\n• Timestamp: ${new Date().toLocaleString()}\n\nPlease review the attached files. Contact us if you have any questions.\n\nBest regards,\n${currentUser?.name || 'CODE76 Admin Team'}\n${company.name}`
+        }\n• Dispatched by: ${currentUser?.name || 'Authorized Admin'}\n• Timestamp: ${regionalFormat.dateTime(new Date())}\n\nPlease review the attached files. Contact us if you have any questions.\n\nBest regards,\n${currentUser?.name || 'CODE76 Admin Team'}\n${company.name}`
       );
       setSendSuccess(false);
       setIsSending(false);
     }
   }, [isOpen, title, entityName, moduleName, isSingleRow, data, effectiveName, currentUser, company]);
 
-  if (!isOpen) return null;
+  if (!isOpen || !hasFeature('email')) return null;
 
   // Handlers for direct downloads
   const handleDownloadTxt = () => {
@@ -288,6 +291,7 @@ export const EmailExportModal: React.FC<EmailExportModalProps> = ({
 
   const handleSendEmail = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!hasFeature('email')) return;
     if (!effectiveEmail) {
       alert('Please select or specify a valid recipient email address.');
       return;

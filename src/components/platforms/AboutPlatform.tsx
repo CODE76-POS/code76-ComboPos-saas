@@ -22,6 +22,24 @@ import {
 
 const USER_MANUAL_SECTIONS = [
   {
+    id: 'plans-companies-payroll',
+    title: 'Plans, related companies, pictures, staff schedules & salary payments',
+    content: `• DEMO PLANS: Settings → Demo Plan Settings. Only an administrator can select Free, Starter, Pro or Lifetime. No charge, renewal or paid licence is created. Existing saved workspaces keep Pro-equivalent access; new workspaces start Free.
+• FREE: selling, receipts, history with debt balances read-only, inventory without marketing/export, basic appearance/receipts, currency/payments/date/time settings, business-data deletion and help. New debt creation/repayments are not included.
+• STARTER: Pro operations except inventory marketing, Business Landing Page, merchant chatbot, messaging and email. PRO: all current features under a monthly-subscription model. LIFETIME: all current and future declared features/updates. Real billing is not connected. Role privileges still apply on every tier.
+• PICTURES: choose optional Neutral, Masculine or Feminine fallback avatar style for a person. It controls an illustration, not sex/gender/orientation. Supplied photos override it. Companies and branches use their logo or a building placeholder, not a person's portrait.
+• COMPANIES: My Company → Other Companies & Branches. Add a utility such as an Electricity company, a supplier, marketing company, transporting company or branch. Choose the parent of a branch. Contacts/legal identifiers are optional; no real company details are guessed.
+• LINKED DIRECTORIES: select vendor, transporter and/or marketing functions. The same stable ID appears in each chosen directory. Edits and removals synchronize; invoices, expenses and salary history keep their original snapshots. Companies are not employees. External people become company members only when explicitly marked as staff.
+• EXPENSES / STOCK INVOICES: select the involved company, branch or contact rather than retyping its name. Enter actual invoice item descriptions, physical quantities and unit costs; totals are calculated from those lines and tax. Stock invoices do not restock services. At save, its name/type/parent/contact/address/tax details are copied into a transaction snapshot and exported PDF details. Later company edits do not change old documents. Manual names remain supported for legacy records.
+• SHIFTS: full day, morning-to-noon half day, noon-to-evening half day, overnight, weekends-only, holidays-only or every day. Select off days explicitly. Working and off days do not overlap. Times use the company timezone; holiday-only uses the explicit dates in Currency, Date & Time—not a guessed country calendar.
+• PAY: use the Wallet / Salary payments action beside a company member to record an actual payment and view history. Save an agreed amount and basis (month/week/day/hour/completed task/delivery/session/project). A rate is not a payment. Salary payments are separate dated bookkeeping records with actual amount, period, channel and reference. No funds are transferred.
+• SALARY EXPENSES: tick Also record this exact payment once in Salaries expenses only when needed. Unticked creates no expense. Manage People permission is required; expense posting also needs Edit Expenses. Repeated submission of the same record does not post another expense.
+• CAMERA: Camera tab requests video only after the preview exists. Allow browser camera permission and wait for a live frame. Capture is disabled before readiness. Retry/flip/stop are supported; leaving the tab or form stops tracks. HTTPS/localhost and embedding-host permission are required. A host policy cannot be overridden by the app—use the device-camera/file option if necessary. Captures/uploads are resized locally and are not uploaded by this control.
+• DATE / TIME / CURRENCY: Settings → Currency, Date & Time. Choose an IANA timezone, date order and 12/24-hour time; configure holiday dates. UTC event timestamps do not change. Date-only business documents retain their calendar date. Currency changes do not convert historical amounts.
+• PAYMENTS: enable Cash, M-Pesa, Airtel Money, T-Kash, credit/debit card, bank transfer, cheque, PayPal, gift card, voucher, crypto or Other. These are recorded channels, not configured live processors. Credit/debt is unavailable in Free.
+• DATA / SECURITY: demo plans and roles are client-side prototype controls, not server-verified subscriptions or tenant security. Do not enter real passwords/customer/payroll information into this test workspace. Browser-local records do not sync to another browser.`,
+  },
+  {
     id: 'setup',
     title: 'Getting started: guided setup & the two landing pages',
     content: `• Open My Company → Open guided setup to resume the assistant.
@@ -41,18 +59,18 @@ const USER_MANUAL_SECTIONS = [
     id: 's1',
     title: 'Section 1: Point of Sale & Checkout Operations',
     content: `• Autocomplete Search: Start typing SKU, name, or scan barcode. The autocomplete dropdown displays the product photo, live price, available stock count, and an instant "+ Add 1" button.
-• One payment: Fills one Cash payment with the full total. Add extra payment methods to split the amount; use the trash icon to delete an added payment row.
+• One payment: Fills one accepted payment with the full total (Cash when enabled). Add extra payment methods to split the amount; use the trash icon to delete an added payment row.
 • Multi-Payment Split: Click "+ Add Method" in the cart to split customer bill across Cash, M-Pesa, Card, Bank Wire, and Credit/Debt simultaneously.
 • Extra Charges: Select charge reason (Tax, Transportation, Packaging, Delivery, Service Fee) and enter custom amount. It itemizes automatically.
 • Discounts: Apply percentage or dollar discounts per line item, or apply a cart-wide promotional discount to the entire subtotal.
 • Referral Tagging: Use the "Referred By" combo-box to credit customers, marketers, or staff (e.g. "Peter Nick (Customer)").
-• Testimonial Prompt: Completing a checkout immediately opens the Customer Testimonial prompt for landing page social proof.`,
+• Testimonial Prompt: Available with the Business Landing Page entitlement (Pro/Lifetime); approved feedback appears only on the private merchant preview.`,
   },
   {
     id: 's2',
     title: 'Section 2: Sales History & Debt Reconciliation',
     content: `• Drilldown: Click the eye icon on any transaction row to inspect all products and services sold in that sale.
-• Debt Operations: If a customer owes a balance, click "Pay Debt" to accept partial or complete settlement and record the payment channel.
+• Debt Operations: With a paid plan and appropriate privileges, if a customer owes a balance, click "Pay Debt" to accept partial or complete settlement and record the payment channel.
 • Appreciation & Review Email: Click the email icon to send a polite follow-up appreciation email. You can preview and edit the template before dispatch.
 • Action Columns: Action icons appear at BOTH the beginning and the end of every table for ergonomic access.
 • PDF Voucher: Click the download icon to generate a formatted printable sales voucher.`,
@@ -63,19 +81,20 @@ const USER_MANUAL_SECTIONS = [
     content: `• Product vs Service: Physical goods track stock and minimum stock alert thresholds; commercial services provide infinite fulfillment.
 • Direct Marketing Widget: Click the purple Megaphone icon on any inventory row to open the direct sales marketing widget. Select a target customer and marketer, choose a template (Discount, New Product, Low Stock Urgency), preview the message, and send!
 • Gemini Copy Polish: Click "AI Polish with Gemini" in the marketing widget to automatically generate high-converting promotional email copy.
-• PDF Audit & CSV Export: Instantly export inventory valuation reports.`,
+• Inventory export: paid plans and export privilege are required; inventory marketing requires Pro/Lifetime. Free inventory remains usable without marketing/export.`,
   },
   {
     id: 's4',
     title: 'Section 4: Operational Expense Auditing',
     content: `• Category Tagging: Group expenditures into Rent, Utilities, Salaries, Logistics, Marketing, Supplies, and Maintenance.
 • Financial P&L Impact: Every expense automatically reconciles against gross sales and COGS to compute true Net Profit or Loss.
-• Voucher Export: Print single payment vouchers or full monthly expense audit reports.`,
+• Related company: select a saved utility/supplier/branch. Its details are frozen on the expense and included in its PDF voucher.
+• Voucher Export: Print single payment vouchers or full expense reports with saved company details.`,
   },
   {
     id: 's5',
     title: 'Section 5: Invoicing & Accounts Receivable',
-    content: `• Dual Billing: Supports customer Sales Invoices and vendor Stock Purchase Invoices.
+    content: `• Dual Billing: Supports customer Sales Invoices and vendor Stock Purchase Invoices on paid plans. Select the company/branch from the saved list; its details become a historical snapshot.
 • Status Tracking: Monitor Paid, Pending, and Overdue balances.
 • Printable Letterhead: Generate formal PDF invoices with tax PIN and bank wire instructions.`,
   },
@@ -89,10 +108,11 @@ const USER_MANUAL_SECTIONS = [
   },
   {
     id: 's7',
-    title: 'Section 7: Directory Management & Mandatory Fields',
-    content: `• 5 Groups: Customers, Vendors, Transporters, Marketing Team, and Company Members.
-• Mandatory Fields: First Name, Second Name, Tel 1, Tel 2, WhatsApp No, Email 1, Email 2, Address, Location, Country, and Photo.
-• Photo Consent: Toggle whether person has consented to showcase their photo and review on the public landing page.`,
+    title: 'Section 7: People, Companies & Optional Pictures',
+    content: `• Directories include Customers, Vendors, Transporters, Marketing Team, Company Members and Other Companies & Branches.
+• Choose Person, Company or Branch where applicable. A person's first name or an organisation's name is required. Branches require a valid parent; contact details/photos are optional rather than fabricated.
+• Fallback avatar style is optional and does not record sex or orientation. Missing company pictures use a building placeholder.
+• Photo consent relates to the private merchant page only; it never edits CODE76 product-site content.`,
   },
   {
     id: 's8',

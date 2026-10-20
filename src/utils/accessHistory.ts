@@ -1,10 +1,12 @@
+import { hasPlanFeature, planTier } from './plans.ts';
 import type { AppSettings, AuditLog, AuthUser } from '../types/index.ts';
 
 /** Match the app's existing union-of-active-roles policy. A UI unlock toggle,
  * a master PIN, or membership of a named role alone cannot grant access.
  */
 export function accessHistoryPermissions(user: AuthUser | null, settings: AppSettings) {
-  const granted = (key: 'canViewAuditLogs' | 'canExportPdf') => !!user && (user.isAdmin === true || user.roles.some(role => settings.privileges[role]?.[key] === true));
+  const paidAccess = hasPlanFeature(planTier(settings),'audit');
+  const granted = (key: 'canViewAuditLogs' | 'canExportPdf') => paidAccess && !!user && (user.isAdmin === true || user.roles.some(role => settings.privileges[role]?.[key] === true));
   const canView = granted('canViewAuditLogs');
   return { canView, canExport: canView && granted('canExportPdf') };
 }
@@ -42,5 +44,9 @@ export function permittedBackup(serialized: string, user: AuthUser | null, setti
   const state = JSON.parse(serialized);
   if (!state || typeof state !== 'object' || Array.isArray(state)) throw new Error('The saved backup is not a valid POS object.');
   if (!accessHistoryPermissions(user, settings).canExport) delete state.auditLogs;
+  const canManage = user && (user.isAdmin || user.roles.some(role=>settings.privileges[role]?.canManagePeople));
+  if (!canManage) { delete state.salaryPayments; for (const key of ['customers','vendors','transporters','marketingTeam','companyMembers','relatedCompanies']) if(Array.isArray(state[key])) state[key]=state[key].map(({salaryRate,salaryBasis,...record}:Record<string,unknown>)=>record); }
+  const canViewExpenses = user && (user.isAdmin || user.roles.some(role=>settings.privileges[role]?.canViewExpenses));
+  if(!canManage && !canViewExpenses && Array.isArray(state.expenses)) state.expenses=state.expenses.filter((expense:{category?:string;salaryPaymentId?:string})=>expense.category!=='Salaries'&&!expense.salaryPaymentId);
   return JSON.stringify(state, null, 2);
 }

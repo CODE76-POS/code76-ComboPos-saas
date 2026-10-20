@@ -1,4 +1,7 @@
+import { dateTime } from './regional.ts';
 import { PersonRecord, ProductItem, SaleTransaction, ExpenseItem, InvoiceItem, AuditLog, CompanyData } from '../types/index.ts';
+
+export const escapeReportText = (value: unknown): string => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]!));
 
 /**
  * Escapes and serializes an array of objects to CSV.
@@ -103,14 +106,14 @@ export function printPDFReport(
 
   const metaHtml = metadata
     ? `<div style="display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 20px; padding: 12px; background: #f8fafc; border-radius: 6px;">
-        ${metadata.map((m) => `<div><span style="font-size: 11px; color: #64748b; text-transform: uppercase;">${m.label}:</span> <strong style="font-size: 13px; color: #0f172a;">${m.value}</strong></div>`).join('')}
+        ${metadata.map((m) => `<div><span style="font-size: 11px; color: #64748b; text-transform: uppercase;">${escapeReportText(m.label)}:</span> <strong style="font-size: 13px; color: #0f172a;">${escapeReportText(m.value)}</strong></div>`).join('')}
        </div>`
     : '';
 
   const tableHeaderHtml = columns
     .map(
       (col) =>
-        `<th style="border-bottom: 2px solid #cbd5e1; padding: 10px 12px; text-align: left; font-size: 12px; font-weight: 600; color: #334155; text-transform: uppercase;">${col.header}</th>`
+        `<th style="border-bottom: 2px solid #cbd5e1; padding: 10px 12px; text-align: left; font-size: 12px; font-weight: 600; color: #334155; text-transform: uppercase;">${escapeReportText(col.header)}</th>`
     )
     .join('');
 
@@ -124,7 +127,7 @@ export function printPDFReport(
               if (val === null || val === undefined) val = '-';
               if (typeof val === 'boolean') val = val ? 'Yes' : 'No';
               if (Array.isArray(val)) val = val.join(', ');
-              return `<td style="border-bottom: 1px solid #e2e8f0; padding: 10px 12px; font-size: 12px; color: #1e293b;">${val}</td>`;
+              return `<td style="border-bottom: 1px solid #e2e8f0; padding: 10px 12px; font-size: 12px; color: #1e293b;">${escapeReportText(val)}</td>`;
             })
             .join('')}
         </tr>`
@@ -135,7 +138,7 @@ export function printPDFReport(
     <!DOCTYPE html>
     <html>
       <head>
-        <title>${title} - ${company.name}</title>
+        <title>${escapeReportText(title)} - ${escapeReportText(company.name)}</title>
         <style>
           @page { size: A4; margin: 15mm; }
           body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: #0f172a; margin: 0; padding: 20px; }
@@ -163,15 +166,15 @@ export function printPDFReport(
         </div>
         <div class="header">
           <div class="company-info">
-            <h1>${company.name}</h1>
-            <p>${company.slogan || 'Business Solutions & Point of Sale'}</p>
-            <p>${company.address}, ${company.location}, ${company.country}</p>
-            <p>Tel: ${company.tel1} | Email: ${company.email}</p>
-            ${company.taxPin ? `<p>Tax/VAT PIN: <strong>${company.taxPin}</strong></p>` : ''}
+            <h1>${escapeReportText(company.name)}</h1>
+            <p>${escapeReportText(company.slogan || 'Business Solutions & Point of Sale')}</p>
+            <p>${escapeReportText(company.address)}, ${escapeReportText(company.location)}, ${escapeReportText(company.country)}</p>
+            <p>Tel: ${escapeReportText(company.tel1)} | Email: ${escapeReportText(company.email)}</p>
+            ${company.taxPin ? `<p>Tax/VAT PIN: <strong>${escapeReportText(company.taxPin)}</strong></p>` : ''}
           </div>
           <div class="report-meta">
-            <h2>${title}</h2>
-            <p>Generated: ${new Date().toLocaleString()}</p>
+            <h2>${escapeReportText(title)}</h2>
+            <p>Generated: ${escapeReportText(dateTime(new Date()))}</p>
             <p>System: CODE76 POS Enterprise</p>
             <p>Total Records: ${data.length}</p>
           </div>

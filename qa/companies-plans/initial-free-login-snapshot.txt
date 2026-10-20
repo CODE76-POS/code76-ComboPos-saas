@@ -1,0 +1,195 @@
+### Page
+- Page URL: http://127.0.0.1:5173/#/pos
+- Page Title: CODE76 POS — Private Workspace
+### Snapshot
+```yaml
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - banner [ref=e679]:
+      - generic [ref=e680]:
+        - button "76 CODE76 POS Enterprise Product & Service SaaS ERP System" [ref=e682] [cursor=pointer]:
+          - generic [ref=e683]: "76"
+          - generic [ref=e684]:
+            - generic [ref=e685]:
+              - generic [ref=e686]: CODE76 POS
+              - generic [ref=e687]: Enterprise
+            - paragraph [ref=e688]: Product & Service SaaS ERP System
+        - generic [ref=e689]:
+          - generic [ref=e690]:
+            - button "Desktop View (Full Width)" [ref=e691] [cursor=pointer]
+            - button "Laptop View (1024px)" [ref=e694] [cursor=pointer]
+            - button "Tablet View (768px)" [ref=e697] [cursor=pointer]
+            - button "Phone Mobile View (390px)" [ref=e700] [cursor=pointer]
+          - generic [ref=e703]:
+            - button "Demo Data" [ref=e704] [cursor=pointer]
+            - button "Click to view help guide and settings for this platform" [ref=e710] [cursor=pointer]
+            - button "Active user session and access controls" [ref=e715] [cursor=pointer]:
+              - generic [ref=e716]: DR
+              - generic [ref=e717]:
+                - generic [ref=e718]: Dr. David Kimani
+                - generic [ref=e719]: "Role: CEO"
+      - generic [ref=e720]:
+        - generic [ref=e721]:
+          - generic [ref=e725]: App link
+          - generic [ref=e726]:
+            - generic [ref=e727]:
+              - generic [ref=e728]: App link
+              - textbox "App link" [ref=e729]: http://127.0.0.1:5173/
+              - button "Copy app link" [ref=e730] [cursor=pointer]:
+                - generic [ref=e734]: Copy link
+              - link "Open app link in a new tab" [ref=e735] [cursor=pointer]:
+                - /url: http://127.0.0.1:5173/
+            - status [ref=e740]
+          - button "Current demo plan" [ref=e741]: Free · demo
+        - paragraph [ref=e742]: Open this root link to reach CODE76 sign-in/register. Browser-local records and sessions do not sync between browsers.
+      - generic [ref=e744]:
+        - button "Sales POS" [ref=e745] [cursor=pointer]
+        - button "Sales History" [ref=e749] [cursor=pointer]
+        - button "Inventory" [ref=e754] [cursor=pointer]
+        - button "Settings" [ref=e759] [cursor=pointer]
+        - button "About & Manual" [ref=e763] [cursor=pointer]
+    - main [ref=e5]:
+      - generic [ref=e766]:
+        - generic [ref=e767]:
+          - generic [ref=e768]:
+            - generic [ref=e769]:
+              - heading "Sales POS Terminal" [level=1] [ref=e770]
+              - button "Click for platform guidance & settings" [ref=e771] [cursor=pointer]
+            - paragraph [ref=e775]: Multi-payment splits, live autocomplete, line & cart discounts, extra charges, and social referral tagging.
+          - generic [ref=e776]:
+            - combobox [ref=e782] [cursor=pointer]:
+              - option "Walk-in Customer" [selected]
+            - combobox [ref=e787] [cursor=pointer]:
+              - 'option "Referred By: None" [selected]'
+        - generic [ref=e788]:
+          - generic [ref=e789]:
+            - textbox "Type product name, SKU, or scan barcode to search & add..." [ref=e795]
+            - button "All" [ref=e797] [cursor=pointer]
+            - generic [ref=e799]:
+              - generic [ref=e800]: Product Showcase Catalog (0)
+              - generic [ref=e801]: (Toggle grid in Settings > Color & Appearance)
+          - generic [ref=e803]:
+            - heading "Active Cart (0 items)" [level=3] [ref=e809]
+            - generic [ref=e810]:
+              - paragraph [ref=e814]: Cart is currently empty
+              - paragraph [ref=e815]: Search products or click catalog items above to add.
+            - generic [ref=e816]:
+              - generic [ref=e817]:
+                - generic [ref=e818]: "Cart-wide Discount:"
+                - generic [ref=e819]:
+                  - spinbutton "0" [ref=e820]
+                  - button "%" [ref=e821] [cursor=pointer]
+              - generic [ref=e822]:
+                - generic [ref=e823]: "Add Extra Charge:"
+                - generic [ref=e825]:
+                  - combobox [ref=e826]:
+                    - option "Transportation" [selected]
+                    - option "Tax"
+                    - option "Packaging"
+                    - option "Delivery"
+                    - option "Service Fee"
+                    - option "Installation"
+                    - option "Custom"
+                  - generic [ref=e827]:
+                    - spinbutton "Amount $" [ref=e828]
+                    - generic [ref=e829]: $
+                  - button "+ Add" [ref=e830] [cursor=pointer]
+            - generic [ref=e831]:
+              - generic [ref=e832]:
+                - generic [ref=e833]: "Subtotal:"
+                - generic [ref=e834]: USD 0.00
+              - generic [ref=e835]:
+                - generic [ref=e836]: "Net Total:"
+                - generic [ref=e837]: USD 0.00
+            - generic [ref=e838]:
+              - generic [ref=e839]:
+                - generic [ref=e840]: Split Payment Breakdown
+                - generic [ref=e843]:
+                  - button "One payment" [ref=e844] [cursor=pointer]
+                  - button "+ Add Payment Option" [ref=e845] [cursor=pointer]
+              - generic [ref=e848]:
+                - combobox "Payment 1 method" [ref=e849]:
+                  - option "Cash" [selected]
+                  - option "M-Pesa"
+                  - option "Airtel Money"
+                  - option "T-Kash"
+                  - option "Credit Card"
+                  - option "Bank Transfer"
+                  - option "Debit Card"
+                  - option "Cheque"
+                  - option "Other"
+                - generic [ref=e850]:
+                  - spinbutton "Payment 1 amount" [ref=e851]
+                  - generic [ref=e852]: $
+              - generic [ref=e853]:
+                - generic [ref=e854]: "Total Tendered:"
+                - generic [ref=e855]: USD 0.00
+            - button "Complete Sale & Print Receipt (USD 0.00)" [disabled] [ref=e857] [cursor=pointer]
+  - dialog [ref=e862]:
+    - banner [ref=e863]:
+      - generic [ref=e864]: "76"
+      - generic [ref=e866]:
+        - text: A good start, your way
+        - paragraph [ref=e867]: CODE76 workspace setup
+      - button "Save progress and close setup" [ref=e868] [cursor=pointer]
+    - list "Setup progress" [ref=e872]:
+      - listitem [ref=e873]:
+        - generic [ref=e874]: "1"
+        - generic [ref=e875]: Your workspace
+      - listitem [ref=e876]:
+        - generic [ref=e877]: "2"
+        - generic [ref=e878]: My Company
+      - listitem [ref=e879]:
+        - generic [ref=e880]: "3"
+        - generic [ref=e881]: First inventory
+      - listitem [ref=e882]:
+        - generic [ref=e883]: "4"
+        - generic [ref=e884]: Find your way
+    - generic [ref=e885]:
+      - generic [ref=e886]:
+        - generic [ref=e887]: Step 1 of 4 · Your workspace
+        - heading "Make yourself comfortable." [active] [level=2] [ref=e888]
+        - paragraph [ref=e889]: Choose a look and text size that feel right. These preferences apply to your POS workspace—not the CODE76 website or your Business Landing Page.
+      - group "Pick your theme" [ref=e890]:
+        - generic [ref=e898]:
+          - button "Light Bright surfaces, clear contrast" [ref=e899] [cursor=pointer]:
+            - generic [ref=e910]:
+              - generic [ref=e911]: Sales overview
+              - strong [ref=e912]: 12,450.00
+            - generic [ref=e930]:
+              - strong [ref=e931]: Light
+              - generic [ref=e932]: Bright surfaces, clear contrast
+          - button "Dark Softer on the eyes after hours" [pressed] [ref=e934] [cursor=pointer]:
+            - generic [ref=e945]:
+              - generic [ref=e946]: Sales overview
+              - strong [ref=e947]: 12,450.00
+            - generic [ref=e961]:
+              - strong [ref=e962]: Dark
+              - generic [ref=e963]: Softer on the eyes after hours
+      - group "Choose a text size" [ref=e967]:
+        - generic [ref=e971]:
+          - button "Aa Compact More on your screen" [ref=e972] [cursor=pointer]:
+            - generic [ref=e973]: Aa
+            - strong [ref=e974]: Compact
+            - generic [ref=e975]: More on your screen
+          - button "Aa Normal A balanced everyday view" [pressed] [ref=e976] [cursor=pointer]:
+            - generic [ref=e977]: Aa
+            - strong [ref=e978]: Normal
+            - generic [ref=e979]: A balanced everyday view
+          - button "Aa Large Comfortably readable" [ref=e980] [cursor=pointer]:
+            - generic [ref=e981]: Aa
+            - strong [ref=e982]: Large
+            - generic [ref=e983]: Comfortably readable
+          - button "Aa Extra large More room for every word" [ref=e984] [cursor=pointer]:
+            - generic [ref=e985]: Aa
+            - strong [ref=e986]: Extra large
+            - generic [ref=e987]: More room for every word
+        - generic [ref=e993]:
+          - strong [ref=e994]: Every detail, easy to read.
+          - text: Your products, sales and totals will use this text size.
+    - contentinfo [ref=e995]:
+      - generic [ref=e996]:
+        - button "Skip setup for now" [ref=e997] [cursor=pointer]
+        - button "Continue to My Company" [ref=e998] [cursor=pointer]
+      - paragraph [ref=e1001]: Change this any time in Settings → App Appearance Settings or Text Sizing.
+```

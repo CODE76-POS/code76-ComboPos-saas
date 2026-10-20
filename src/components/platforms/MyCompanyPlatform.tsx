@@ -1,3 +1,4 @@
+import { DirectoryPlatform } from './DirectoryPlatform.tsx';
 import React, { useState } from 'react';
 import { usePOS } from '../../context/POSContext.tsx';
 import {
@@ -21,6 +22,7 @@ export const MyCompanyPlatform: React.FC = () => {
   const { company, setCompany, setHoverHelpPlatform, logAuditAction, products, setCompanyQAModalOpen, settings } = usePOS();
 
   const [formData, setFormData] = useState<CompanyData>(() => isCompanyConfigured(company) ? company : blankMerchantCompany(settings.payments.defaultCurrency));
+  const [companyTab,setCompanyTab] = useState<'profile'|'related'>('profile');
   const [savedSuccess, setSavedSuccess] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -68,6 +70,9 @@ export const MyCompanyPlatform: React.FC = () => {
         )}
       </div>
 
+      <div className="flex gap-2 mb-5"><button type="button" className="rounded-xl border border-teal-700 px-4 py-2 text-sm" onClick={()=>setCompanyTab('profile')}>My company profile</button><button type="button" className="rounded-xl border border-teal-700 px-4 py-2 text-sm" onClick={()=>setCompanyTab('related')}>Other Companies & Branches</button></div>
+      {companyTab === 'related' && <DirectoryPlatform category="related_company" title="Other Companies & Branches" subtitle="Utilities, suppliers, transport companies, marketing companies and business branches." platformId="my_company" />}
+      {companyTab === 'profile' && (
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Form */}
         <div className="lg:col-span-8 bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl">
@@ -296,6 +301,7 @@ export const MyCompanyPlatform: React.FC = () => {
           </div>
         </div>
       </div>
+      )}
     </div>
   );
 };

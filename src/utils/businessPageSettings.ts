@@ -1,3 +1,5 @@
+import { PLAN_TIERS } from './plans.ts';
+import { regional } from './regional.ts';
 import type { AppSettings } from '../types/index.ts';
 import { BUSINESS_PAGE_DEFAULTS, LEGACY_CODE76_PAGE_DEFAULTS } from '../config/businessPage.ts';
 
@@ -16,6 +18,8 @@ export function migrateBusinessPageSettings(saved?: Partial<AppSettings['landing
 export function mergeAppSettings(defaults: AppSettings, saved?: Partial<AppSettings>): AppSettings {
   return {
     ...defaults, ...saved,
+    planTier: PLAN_TIERS.includes(saved?.planTier as any) ? saved!.planTier : saved ? 'pro' : 'free',
+    regional: regional(saved),
     payments: { ...defaults.payments, ...saved?.payments },
     appearance: { ...defaults.appearance, ...saved?.appearance },
     font: { ...defaults.font, ...saved?.font },

@@ -1,3 +1,4 @@
+import { useRegionalFormat } from '../../hooks/useRegionalFormat.ts';
 import { accessHistoryPermissions, assertAccessHistoryExport, accessHistoryCsv, accessHistoryText, downloadReport } from '../../utils/accessHistory.ts';
 import { accessHistoryPdf } from '../../utils/accessHistoryPdf.ts';
 import React, { useState, useMemo, useEffect, useRef } from 'react';
@@ -30,7 +31,8 @@ import { AuditLog } from '../../types/index.ts';
 import { EmailExportModal } from '../modals/EmailExportModal.tsx';
 
 export const AuditLogPlatform: React.FC = () => {
-  const { auditLogs, currentUser, setHoverHelpPlatform, logAuditAction, company, settings } = usePOS();
+  const regionalFormat = useRegionalFormat();
+  const { auditLogs, currentUser, setHoverHelpPlatform, logAuditAction, company, settings, hasFeature } = usePOS();
 
   const permissions = accessHistoryPermissions(currentUser, settings);
   const live = useRef({ user: currentUser, settings });
@@ -111,7 +113,7 @@ export const AuditLogPlatform: React.FC = () => {
   const formattedAuditData = useMemo(() => {
     return filteredLogs.map((log) => ({
       ...log,
-      formattedDate: new Date(log.timestamp).toLocaleString(),
+      formattedDate: regionalFormat.dateTime(log.timestamp),
     }));
   }, [filteredLogs]);
 
@@ -249,14 +251,14 @@ export const AuditLogPlatform: React.FC = () => {
                 <span className="sm:hidden">CSV</span>
               </button>
               <button onClick={handleExportTXT} aria-label="Download access history TXT" className="px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 text-xs font-semibold flex items-center gap-1.5"><FileText className="w-4 h-4 text-teal-400" /> TXT</button>
-              <button
+              {hasFeature('email') && (<button
                 onClick={handleOpenBulkEmail}
                 className="px-3.5 py-2 rounded-xl bg-teal-600/20 hover:bg-teal-600/30 border border-teal-500/40 text-teal-300 text-xs font-bold flex items-center gap-1.5 shadow-xs transition cursor-pointer"
                 title="Email PDF and CSV export audit trail to any company member or admin"
               >
                 <Mail className="w-4 h-4 text-teal-300" />
                 <span>Email Audit Trail (PDF / CSV)</span>
-              </button>
+              </button>)}
             </>
           )}
         </div>
@@ -374,16 +376,8 @@ export const AuditLogPlatform: React.FC = () => {
                   ) : (
                     filteredLogs.map((log) => {
                       const dateObj = new Date(log.timestamp);
-                      const formattedDate = dateObj.toLocaleDateString(undefined, {
-                        month: 'short',
-                        day: 'numeric',
-                        year: 'numeric',
-                      });
-                      const formattedTime = dateObj.toLocaleTimeString(undefined, {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        second: '2-digit',
-                      });
+                      const formattedDate = regionalFormat.date(log.timestamp);
+                      const formattedTime = regionalFormat.time(log.timestamp);
 
                       return (
                         <tr key={log.id} className="hover:bg-slate-800/40 transition">
@@ -424,14 +418,14 @@ export const AuditLogPlatform: React.FC = () => {
                             </div>
                           </td>
                           <td className="py-3 px-4 whitespace-nowrap text-center">
-                            <button
+                            {hasFeature('email') && (<button
                               onClick={() => handleOpenRowEmail(log)} disabled={!permissions.canExport}
                               title="Email this specific audit record to company member or admin"
                               className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-teal-300 hover:text-teal-200 border border-slate-700 transition cursor-pointer inline-flex items-center gap-1 text-[10px]"
                             >
                               <Mail className="w-3 h-3 text-teal-400" />
                               <span>Email</span>
-                            </button>
+                            </button>)}
                           </td>
                         </tr>
                       );
@@ -480,7 +474,7 @@ export const AuditLogPlatform: React.FC = () => {
               label: 'Event Count',
               value: selectedLogForEmail ? '1 Event' : `${filteredLogs.length} Events`,
             },
-            { label: 'Generated At', value: new Date().toLocaleString() },
+            { label: 'Generated At', value: regionalFormat.dateTime(new Date()) },
           ]}
         />
       )}

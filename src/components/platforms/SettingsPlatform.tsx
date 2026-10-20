@@ -1,3 +1,9 @@
+import { canOpenSettings, planTier } from '../../utils/plans.ts';
+import { regional, validTimeZone } from '../../utils/regional.ts';
+import { PAYMENT_METHODS } from '../../config/paymentMethods.ts';
+import { RegionalSettingsForm } from '../common/RegionalSettingsForm.tsx';
+import { DemoPlanSettings } from '../common/DemoPlanSettings.tsx';
+import { PlanNotice } from '../common/PlanNotice.tsx';
 import { accessHistoryPermissions, permittedBackup } from '../../utils/accessHistory.ts';
 import { DEFAULT_SERVICE_UNIT, parseServiceUnit } from '../../utils/serviceUnits.ts';
 import React, { useState, useEffect } from 'react';
@@ -40,6 +46,7 @@ import { AuditLogPlatform } from './AuditLogPlatform.tsx';
 export const SettingsPlatform: React.FC = () => {
   const {
     settings,
+    setCompany,
     setSettings,
     settingsSection: activeTab,
     setSettingsSection: setActiveTab,
@@ -86,14 +93,20 @@ export const SettingsPlatform: React.FC = () => {
 
   // Backup restore file input
   const [restoreJson, setRestoreJson] = useState<string>('');
+  const [deleteConfirmation,setDeleteConfirmation] = useState('');
 
   const handleSave = () => {
+    if (!canOpenSettings(settings,activeTab)) { setSaveAlert('This settings section is not included in your demo plan.'); return; }
+    if (!validTimeZone(regional(formSettings).timeZone) || !/^[A-Z]{3}$/.test(formSettings.payments.defaultCurrency)) { setSaveAlert('Choose a valid time zone and a three-letter currency code.'); return; }
+    if (!formSettings.payments.acceptedMethods.some(method=>method!=='Credit / Debt')) { setSaveAlert('Enable at least one non-debt payment channel.'); return; }
     if (activeTab === 'privileges' && !currentUser?.isAdmin) {
       setSaveAlert('Only an administrator can change role privileges.');
       return;
     }
     // Non-admin appearance/preferences saves must not modify the permission map.
-    setSettings(currentUser?.isAdmin ? formSettings : { ...formSettings, privileges: settings.privileges });
+    const permitted = planTier(settings)==='free' ? { ...settings, payments:formSettings.payments, appearance:formSettings.appearance, font:formSettings.font, textSizing:formSettings.textSizing, receipts:formSettings.receipts, regional:formSettings.regional } : formSettings;
+    setSettings({ ...permitted, planTier:settings.planTier, privileges:currentUser?.isAdmin ? permitted.privileges : settings.privileges });
+    setCompany(previous=>({...previous,currency:formSettings.payments.defaultCurrency}));
     logAuditAction('Updated System Settings', `Saved configuration changes in ${activeTab}`);
     setSaveAlert('Settings saved successfully!');
     setTimeout(() => setSaveAlert(''), 2500);
@@ -325,7 +338,10 @@ export const SettingsPlatform: React.FC = () => {
         {/* Navigation Sidebar */}
         <div className="lg:col-span-3 space-y-1">
           {[
+            { id: 'plans', label: 'Demo Plan Settings', icon: Shield },
             { id: 'payments', label: 'Payment Settings', icon: CreditCard },
+            { id: 'regional', label: 'Currency, Date & Time', icon: Globe },
+            { id: 'dataEraser', label: 'Delete All Business Data', icon: Trash2 },
             { id: 'textSizing', label: 'Text Sizing Settings', icon: Type },
             { id: 'landingPage', label: 'Business Landing Page Settings', icon: Globe },
             { id: 'receipts', label: 'Receipts Settings', icon: Receipt },
@@ -336,7 +352,7 @@ export const SettingsPlatform: React.FC = () => {
             { id: 'pdfExcel', label: 'PDF & Excel Settings (CSV Import)', icon: FileSpreadsheet },
             { id: 'emailTemplates', label: 'Email Marketing Templates', icon: Mail },
             { id: 'auditLogs', label: 'Audit Logs & Login History', icon: ShieldCheck },
-          ].map((tab) => {
+          ].filter(tab=>canOpenSettings(settings,tab.id as any)).map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
             return (
@@ -358,6 +374,7 @@ export const SettingsPlatform: React.FC = () => {
 
         {/* Tab Panel */}
         <div className="lg:col-span-9 bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl">
+          {canOpenSettings(settings,activeTab) ? <>
           {/* TAB 1: PAYMENTS */}
           {activeTab === 'payments' && (
             <div className="space-y-5">
@@ -371,7 +388,7 @@ export const SettingsPlatform: React.FC = () => {
                   Accepted Payment Methods
                 </label>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs">
-                  {['Cash', 'M-Pesa', 'Credit Card', 'Bank Transfer', 'Debit Card', 'Credit / Debt', 'Crypto'].map(
+                  {PAYMENT_METHODS.filter(method=>method!=='Card'&&method!=='Bank Wire').map(
                     (m) => (
                       <label
                         key={m}
@@ -435,7 +452,7 @@ export const SettingsPlatform: React.FC = () => {
                 <input
                   id="debtSalesAllow"
                   type="checkbox"
-                  checked={formSettings.payments.allowDebtSales}
+                  disabled={planTier(settings)==='free'} checked={formSettings.payments.allowDebtSales}
                   onChange={(e) =>
                     setFormSettings({
                       ...formSettings,
@@ -1327,6 +1344,9 @@ export const SettingsPlatform: React.FC = () => {
             </div>
           )}
 
+          {activeTab === 'plans' && <DemoPlanSettings />}
+          {activeTab === 'regional' && <RegionalSettingsForm settings={formSettings} onChange={setFormSettings} />}
+          {activeTab === 'dataEraser' && <section className="space-y-4"><h2 className="font-bold text-xl text-rose-400">Delete all business data</h2><p className="text-sm text-slate-400">Deletes inventory, sales, expenses, invoices, contacts/companies, reviews and recorded salary payments. Your account, demo plan, preferences and audit history are retained. Export any permitted backups first. This cannot be undone.</p>{currentUser?.isAdmin ? <><label className="block text-sm">Type DELETE to confirm<input aria-label="Delete all confirmation" className="mt-2 w-full rounded-xl border border-rose-900 bg-slate-800 px-3 py-2" value={deleteConfirmation} onChange={event=>setDeleteConfirmation(event.target.value)}/></label><button type="button" disabled={deleteConfirmation!=='DELETE'} className="rounded-xl bg-rose-700 px-4 py-2 font-bold text-white disabled:opacity-40" onClick={()=>{if(deleteConfirmation==='DELETE' && confirm('Permanently delete all business records, including payroll and related-company directories?')) {wipeDataToCleanState();setDeleteConfirmation('');setSaveAlert('Business records deleted. Plan/preferences and audit history retained.');}}}>Permanently delete business records</button></> : <p className="text-sm text-amber-300">Only an administrator can delete all business records.</p>}</section>}
           {/* Global Save Button at bottom of each tab */}
           <div className="mt-6 pt-4 border-t border-slate-800 flex justify-end">
             <button
@@ -1337,6 +1357,7 @@ export const SettingsPlatform: React.FC = () => {
               Save All Settings Changes
             </button>
           </div>
+          </> : <PlanNotice feature="This settings section" />}
         </div>
       </div>
     </div>

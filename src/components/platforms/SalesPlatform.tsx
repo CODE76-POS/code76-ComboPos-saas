@@ -1,3 +1,4 @@
+import { acceptedPaymentMethods } from '../../config/paymentMethods.ts';
 import { serviceUnitLabel } from '../../utils/serviceUnits.ts';
 import React, { useState, useMemo } from 'react';
 import { usePOS } from '../../context/POSContext.tsx';
@@ -38,8 +39,14 @@ export const SalesPlatform: React.FC = () => {
     setReviewModalSale,
     setHoverHelpPlatform,
     settings,
+    company,
+    hasFeature,
+    currentUser,
   } = usePOS();
+  const currency = company.currency || 'USD';
 
+  const availableMethods = acceptedPaymentMethods(settings.payments.acceptedMethods, hasFeature('debts') && settings.payments.allowDebtSales);
+  const [checkoutError,setCheckoutError] = useState('');
   // Cart state
   const [cart, setCart] = useState<CartItem[]>([]);
   const [selectedCustomerId, setSelectedCustomerId] = useState<string>('');
@@ -240,7 +247,7 @@ export const SalesPlatform: React.FC = () => {
   const addPaymentMethod = () => {
     const currentPaid = payments.reduce((acc, p) => acc + p.amount, 0);
     const remainder = Math.max(0, totals.netTotal - currentPaid);
-    setPayments((prev) => [...prev, { method: 'M-Pesa', amount: remainder }]);
+    setPayments((prev) => [...prev, { method: availableMethods.find(m=>m!=='Cash') || availableMethods[0] || 'Cash', amount: remainder }]);
   };
 
   const updatePaymentRow = (index: number, field: keyof PaymentSplit, val: any) => {
@@ -254,13 +261,15 @@ export const SalesPlatform: React.FC = () => {
   };
 
   const autoFillFullPayment = () => {
-    setPayments([{ method: 'Cash', amount: totals.netTotal }]);
+    setPayments([{ method: availableMethods.includes('Cash')?'Cash':availableMethods[0] || 'Cash', amount: totals.netTotal }]);
   };
 
   // Complete Checkout
   const handleCompleteSale = () => {
     if (cart.length === 0) return;
+    if (!hasFeature('debts') && paymentAnalysis.remainingDebt > 0) { setCheckoutError('The Free plan requires full payment. Debt creation and handling need a paid demo plan.'); return; }
 
+    setCheckoutError('');
     const currentCustomer = customers.find((c) => c.id === selectedCustomerId);
     const customerName = currentCustomer
       ? `${currentCustomer.firstName} ${currentCustomer.secondName}`
@@ -270,8 +279,8 @@ export const SalesPlatform: React.FC = () => {
       customerId: selectedCustomerId || 'walk-in',
       customerName,
       customerContact: currentCustomer?.tel1 || '',
-      cashierId: 'cashier-01',
-      cashierName: 'Peter Nick (Cashier)',
+      cashierId: currentUser?.id || 'cashier',
+      cashierName: currentUser?.name || 'Cashier',
       items: cart,
       subtotal: totals.subtotal,
       overallDiscountType,
@@ -291,9 +300,7 @@ export const SalesPlatform: React.FC = () => {
     setReceiptModalSale(completed);
 
     // Prompt for review capture if customer exists
-    setTimeout(() => {
-      setReviewModalSale(completed);
-    }, 1200);
+    if (hasFeature('business_landing')) setTimeout(() => { setReviewModalSale(completed); }, 1200);
 
     // Reset cart
     clearCart();
@@ -303,6 +310,7 @@ export const SalesPlatform: React.FC = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-6">
+      {checkoutError && <p role="alert" className="mb-4 rounded-xl border border-amber-700 p-3 text-sm text-amber-300">{checkoutError}</p>}
       {/* Platform Header with Help Trigger */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
@@ -443,15 +451,15 @@ export const SalesPlatform: React.FC = () => {
                             {p.isOnPromo ? (
                               <div>
                                 <span className="line-through text-slate-500 text-[10px] block">
-                                  ${p.sellingPrice.toFixed(2)}
+                                  {currency} {p.sellingPrice.toFixed(2)}
                                 </span>
                                 <span className="text-xs font-black text-amber-400 font-mono">
-                                  ${(p.promoDiscountPrice || p.sellingPrice).toFixed(2)}
+                                  {currency} {(p.promoDiscountPrice || p.sellingPrice).toFixed(2)}
                                 </span>
                               </div>
                             ) : (
                               <div className="text-xs font-extrabold text-emerald-400">
-                                ${p.sellingPrice.toFixed(2)}
+                                {currency} {p.sellingPrice.toFixed(2)}
                               </div>
                             )}
                             <div className="text-[10px] text-slate-400">
@@ -538,15 +546,15 @@ export const SalesPlatform: React.FC = () => {
                         {p.isOnPromo ? (
                           <div>
                             <span className="line-through text-slate-500 text-[10px] block">
-                              ${p.sellingPrice.toFixed(2)}
+                              {currency} {p.sellingPrice.toFixed(2)}
                             </span>
                             <span className="text-sm font-black text-amber-400 font-mono">
-                              ${(p.promoDiscountPrice || p.sellingPrice).toFixed(2)}
+                              {currency} {(p.promoDiscountPrice || p.sellingPrice).toFixed(2)}
                             </span>
                           </div>
                         ) : (
                           <span className="text-sm font-black text-emerald-400 font-mono">
-                            ${p.sellingPrice.toFixed(2)}
+                            {currency} {p.sellingPrice.toFixed(2)}
                           </span>
                         )}
                       </div>
@@ -604,12 +612,12 @@ export const SalesPlatform: React.FC = () => {
                       <div>
                         <div className="text-xs font-bold text-slate-100">{item.product.name}</div>
                         <div className="text-[10px] text-slate-400">
-                          ${item.unitPrice.toFixed(2)} each
+                          {currency} {item.unitPrice.toFixed(2)} each
                         </div>
                       </div>
                       <div className="text-right">
                         <div className="text-xs font-bold text-emerald-400">
-                          ${item.total.toFixed(2)}
+                          {currency} {item.total.toFixed(2)}
                         </div>
                         <button
                           onClick={() => removeFromCart(item.product.id)}
@@ -781,7 +789,7 @@ export const SalesPlatform: React.FC = () => {
             <div className="border-t border-slate-800 pt-3 my-2 space-y-1.5 text-xs">
               <div className="flex justify-between text-slate-400">
                 <span>Subtotal:</span>
-                <span>${totals.subtotal.toFixed(2)}</span>
+                <span>{currency} {totals.subtotal.toFixed(2)}</span>
               </div>
               {totals.totalDiscount > 0 && (
                 <div className="flex justify-between text-emerald-400">
@@ -803,7 +811,7 @@ export const SalesPlatform: React.FC = () => {
               )}
               <div className="flex justify-between text-base font-black text-slate-100 border-t border-slate-800 pt-2">
                 <span>Net Total:</span>
-                <span className="text-emerald-400">${totals.netTotal.toFixed(2)}</span>
+                <span className="text-emerald-400">{currency} {totals.netTotal.toFixed(2)}</span>
               </div>
             </div>
 
@@ -841,12 +849,7 @@ export const SalesPlatform: React.FC = () => {
                     onChange={(e) => updatePaymentRow(idx, 'method', e.target.value)}
                     className="w-28 bg-slate-950 border border-slate-800 rounded-lg px-2 py-1 text-slate-200"
                   >
-                    <option value="Cash">Cash</option>
-                    <option value="M-Pesa">M-Pesa</option>
-                    <option value="Credit Card">Card</option>
-                    <option value="Bank Transfer">Bank Wire</option>
-                    <option value="Debit Card">Debit Card</option>
-                    <option value="Credit / Debt">Credit / Debt</option>
+                    {availableMethods.map(method=><option key={method}>{method}</option>)}
                   </select>
 
                   <div className="relative flex-1">
@@ -882,21 +885,21 @@ export const SalesPlatform: React.FC = () => {
               <div className="flex justify-between items-center text-xs pt-1">
                 <span className="text-slate-400">Total Tendered:</span>
                 <span className="font-bold text-slate-200">
-                  ${paymentAnalysis.totalPaid.toFixed(2)}
+                  {currency} {paymentAnalysis.totalPaid.toFixed(2)}
                 </span>
               </div>
 
               {paymentAnalysis.remainingDebt > 0 && (
                 <div className="flex justify-between items-center text-xs text-rose-400 font-bold bg-rose-950/40 p-1.5 rounded border border-rose-900/40">
                   <span>Pending Debt (Customer Balance):</span>
-                  <span>${paymentAnalysis.remainingDebt.toFixed(2)}</span>
+                  <span>{currency} {paymentAnalysis.remainingDebt.toFixed(2)}</span>
                 </div>
               )}
 
               {paymentAnalysis.changeDue > 0 && (
                 <div className="flex justify-between items-center text-xs text-sky-400 font-bold bg-sky-950/40 p-1.5 rounded border border-sky-900/40">
                   <span>Change Due to Customer:</span>
-                  <span>${paymentAnalysis.changeDue.toFixed(2)}</span>
+                  <span>{currency} {paymentAnalysis.changeDue.toFixed(2)}</span>
                 </div>
               )}
             </div>
@@ -913,10 +916,10 @@ export const SalesPlatform: React.FC = () => {
                 }`}
               >
                 <CheckCircle className="w-4 h-4" />
-                Complete Sale & Print Receipt (${totals.netTotal.toFixed(2)})
+                Complete Sale & Print Receipt ({currency} {totals.netTotal.toFixed(2)})
               </button>
 
-              <button
+              {hasFeature('invoices') && (<button
                 onClick={() => setInvoiceModalOpen(true)}
                 disabled={cart.length === 0}
                 className={`w-full py-2.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition cursor-pointer border ${
@@ -928,7 +931,7 @@ export const SalesPlatform: React.FC = () => {
               >
                 <FileText className="w-4 h-4 text-indigo-400" />
                 <span>Convert to Sales Invoice (B2B Quick Invoice)</span>
-              </button>
+              </button>)}
             </div>
           </div>
         </div>
@@ -1006,7 +1009,7 @@ export const SalesPlatform: React.FC = () => {
                   <div>
                     <span className="text-slate-400 block text-[11px]">Invoice Total Net</span>
                     <span className="text-lg font-black text-indigo-300 font-mono">
-                      ${totals.netTotal.toFixed(2)}
+                      {currency} {totals.netTotal.toFixed(2)}
                     </span>
                   </div>
                   <div className="text-right">

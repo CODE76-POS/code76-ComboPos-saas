@@ -1,3 +1,4 @@
+import { PLAN_INFO, planTier } from '../../utils/plans.ts';
 import { accessHistoryPermissions } from '../../utils/accessHistory.ts';
 import React, { useEffect, useRef, useState } from 'react';
 import { usePOS } from '../../context/POSContext.tsx';
@@ -5,7 +6,7 @@ import { Lock, Mail, KeyRound, Shield, X, UserPlus, LogIn, CheckCircle2, AlertCi
 import { ALL_ROLES, UserRole } from '../../types/index.ts';
 
 export const LoginModal: React.FC = () => {
-  const { loginModalOpen, setLoginModalOpen, currentUser, loginUser, logoutUser, registerUser, settings, setActivePlatform } = usePOS();
+  const { loginModalOpen, setLoginModalOpen, currentUser, loginUser, logoutUser, registerUser, settings, setActivePlatform, hasFeature } = usePOS();
 
   const [mode, setMode] = useState<'login' | 'register'>('login');
   const [email, setEmail] = useState<string>('');
@@ -122,9 +123,10 @@ export const LoginModal: React.FC = () => {
               </div>
             </div>
 
+            <p className="text-xs text-teal-400">Current plan: {PLAN_INFO[planTier(settings)].name} · demo entitlements only, no billing</p>
             <div className="rounded-xl border border-teal-800 bg-teal-950/40 p-3 text-xs text-slate-300">
               <p className="flex items-center gap-2 font-bold text-teal-300"><Info size={15} /> Access-history tip</p>
-              {historyAccess.canView ? <>
+              {!hasFeature('audit') ? <p className="mt-2">Access history requires Starter, Pro or Lifetime, plus the necessary role privileges. Your Free records are preserved; an administrator can change the demo plan in Settings.</p> : historyAccess.canView ? <>
                 <p className="mt-2">Find app user access history in <strong>Audit & Access Logs</strong>, or <strong>Settings → Audit Logs & Login History</strong>.</p>
                 <p className="mt-2">{historyAccess.canExport ? 'You can download the filtered results as PDF, TXT or CSV files.' : 'Your role can view history. Downloads also require the Export Reports privilege; ask an administrator.'}</p>
                 <button type="button" onClick={() => { if (!accessHistoryPermissions(currentUser, settings).canView) return; setLoginModalOpen(false); setActivePlatform('audit_logs'); }} className="mt-3 inline-flex items-center gap-2 rounded-lg bg-teal-700 px-3 py-2 font-semibold text-white"><History size={14} /> Open access history</button>

@@ -898,8 +898,9 @@ export const INITIAL_LANDING_METRICS: LandingMetrics = [
 ][0];
 
 export const INITIAL_SETTINGS: AppSettings = {
+  planTier: 'pro',
   payments: {
-    acceptedMethods: ['Cash', 'M-Pesa', 'Credit Card', 'Bank Transfer', 'Debit Card', 'Credit / Debt'],
+    acceptedMethods: ['Cash', 'M-Pesa', 'Airtel Money', 'T-Kash', 'Credit Card', 'Bank Transfer', 'Debit Card', 'Cheque', 'Other', 'Credit / Debt'],
     defaultCurrency: 'USD',
     taxRatePercentage: 0,
     allowDebtSales: true,

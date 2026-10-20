@@ -1,5 +1,7 @@
 # CODE76 workspace update
 
+> **Next completed update:** [Companies, payroll, camera and demo tiers](COMPANIES-PLANS-GUIDE.md), with [current evidence](qa/companies-plans/README.md). The older counts below retain their historical scope.
+
 ## Implemented
 
 - Kept public CODE76 root/SEO and authenticated-only `landing_page_builder` boundaries intact; public and merchant content/settings remain independent.

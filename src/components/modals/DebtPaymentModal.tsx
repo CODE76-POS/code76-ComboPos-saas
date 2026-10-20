@@ -1,3 +1,4 @@
+import { acceptedPaymentMethods } from '../../config/paymentMethods.ts';
 import React, { useState } from 'react';
 import { usePOS } from '../../context/POSContext.tsx';
 import { CreditCard, CheckCircle2, X, DollarSign, Wallet } from 'lucide-react';
@@ -9,13 +10,13 @@ interface DebtPaymentModalProps {
 }
 
 export const DebtPaymentModal: React.FC<DebtPaymentModalProps> = ({ sale, onClose }) => {
-  const { settleDebt } = usePOS();
+  const { settleDebt, hasFeature, settings } = usePOS();
 
   const [paymentAmount, setPaymentAmount] = useState<number>(sale ? sale.debtAmount : 0);
   const [paymentMethod, setPaymentMethod] = useState<string>('Cash');
   const [success, setSuccess] = useState<boolean>(false);
 
-  if (!sale) return null;
+  if (!sale || !hasFeature('debts')) return null;
 
   const handlePay = (e: React.FormEvent) => {
     e.preventDefault();
@@ -117,12 +118,8 @@ export const DebtPaymentModal: React.FC<DebtPaymentModalProps> = ({ sale, onClos
                 onChange={(e) => setPaymentMethod(e.target.value)}
                 className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-emerald-500"
               >
-                <option value="Cash">Cash</option>
-                <option value="M-Pesa">M-Pesa Mobile Money</option>
-                <option value="Credit Card">Credit Card</option>
-                <option value="Debit Card">Debit Card</option>
-                <option value="Bank Transfer">Bank Wire Transfer</option>
-              </select>
+                {acceptedPaymentMethods(settings.payments.acceptedMethods,false).map(method=><option key={method}>{method}</option>)}
+</select>
             </div>
 
             <div className="flex justify-end gap-3 pt-2">

@@ -1,7 +1,14 @@
+import { invoiceDraftTotals } from '../utils/invoiceDraft.ts';
+import { hasPlanFeature, planTier, requirePlanFeature, PLAN_TIERS, type Feature } from '../utils/plans.ts';
+import { canonicalDirectoryId, directoryName, snapshotParty, uniqueParties, upsertDirectory, removeDirectory, validateDirectory, type DirectoryCollections } from '../utils/directory.ts';
+import { prepareSalaryPayment } from '../utils/staffing.ts';
 import { serviceUnitLabel } from '../utils/serviceUnits.ts';
 import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import {
   AppSettings,
+  PlanTier,
+  SalaryPayment,
+  SalaryPaymentDraft,
   AuditLog,
   AuthUser,
   CompanyData,
@@ -60,6 +67,11 @@ interface POSContextType {
   setMarketingTeam: React.Dispatch<React.SetStateAction<PersonRecord[]>>;
   companyMembers: PersonRecord[];
   setCompanyMembers: React.Dispatch<React.SetStateAction<PersonRecord[]>>;
+  relatedCompanies: PersonRecord[];
+  salaryPayments: SalaryPayment[];
+  recordSalaryPayment: (draft: SalaryPaymentDraft) => SalaryPayment;
+  setDemoPlan: (tier: PlanTier) => void;
+  hasFeature: (feature: Feature) => boolean;
   reviews: CustomerReview[];
   setReviews: React.Dispatch<React.SetStateAction<CustomerReview[]>>;
   auditLogs: AuditLog[];
@@ -168,10 +180,22 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [transporters, setTransporters] = useState<PersonRecord[]>(initial?.transporters || []);
   const [marketingTeam, setMarketingTeam] = useState<PersonRecord[]>(initial?.marketingTeam || []);
   const [companyMembers, setCompanyMembers] = useState<PersonRecord[]>(initial?.companyMembers || []);
+  const [relatedCompanies, setRelatedCompanies] = useState<PersonRecord[]>(initial?.relatedCompanies || []);
+  const [salaryPayments, setSalaryPayments] = useState<SalaryPayment[]>(initial?.salaryPayments || []);
   const [reviews, setReviews] = useState<CustomerReview[]>(initial?.reviews || []);
   const [auditLogs, setAuditLogs] = useState<AuditLog[]>(initial?.auditLogs || []);
   const [landingMetrics, setLandingMetrics] = useState<LandingMetrics>(initial?.landingMetrics || EMPTY_BUSINESS_METRICS);
   const [settings, setSettings] = useState<AppSettings>(() => mergeAppSettings(INITIAL_SETTINGS, initial?.settings));
+  const directoriesRef = useRef<DirectoryCollections>({ customers, vendors, transporters, marketingTeam, companyMembers, relatedCompanies });
+  directoriesRef.current = { customers, vendors, transporters, marketingTeam, companyMembers, relatedCompanies };
+  const salaryRef = useRef(salaryPayments); salaryRef.current = salaryPayments;
+  const hasFeature = (feature: Feature) => hasPlanFeature(planTier(settings), feature);
+  const applyDirectories = (next: DirectoryCollections) => {
+    directoriesRef.current = next;
+    setCustomers(next.customers); setVendors(next.vendors); setTransporters(next.transporters);
+    setMarketingTeam(next.marketingTeam); setCompanyMembers(next.companyMembers); setRelatedCompanies(next.relatedCompanies);
+  };
+
 
   // One persisted source of truth for both Settings and the setup assistant.
   const theme = settings.appearance.theme;
@@ -259,6 +283,8 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         transporters,
         marketingTeam,
         companyMembers,
+        relatedCompanies,
+        salaryPayments,
         reviews,
         auditLogs,
         landingMetrics,
@@ -279,6 +305,8 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     transporters,
     marketingTeam,
     companyMembers,
+    relatedCompanies,
+    salaryPayments,
     reviews,
     auditLogs,
     landingMetrics,
@@ -303,6 +331,8 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // Check RBAC privileges
   const hasPrivilege = (permission: keyof AppSettings['privileges'][UserRole]): boolean => {
     if (!currentUser) return false;
+    const feature: Partial<Record<keyof AppSettings['privileges'][UserRole], Feature>> = { canSell:'selling',canViewInventory:'inventory',canEditInventory:'inventory',canAdjustStock:'inventory',canViewExpenses:'expenses',canEditExpenses:'expenses',canViewInvoices:'invoices',canViewAnalytics:'analytics',canManagePeople:'directory',canExportPdf:'data_export',canImportCsv:'imports',canViewAuditLogs:'audit',canModifySettings:'appearance' };
+    if (feature[permission] && !hasFeature(feature[permission]!)) return false;
     if (currentUser.isAdmin) return true;
     const role1 = currentUser.roles[0];
     const role2 = currentUser.roles[1];
@@ -334,7 +364,7 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setReviews(INITIAL_REVIEWS);
     setAuditLogs(INITIAL_AUDIT_LOGS);
     setLandingMetrics(INITIAL_LANDING_METRICS);
-    setSettings(INITIAL_SETTINGS);
+    setSettings(previous => ({ ...INITIAL_SETTINGS, planTier: previous.planTier, regional: previous.regional }));
 
     if (!currentUser) {
       setCurrentUser({
@@ -353,6 +383,9 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // Clear to blank
   const wipeDataToCleanState = () => {
+    if (!currentUser?.isAdmin) throw new Error('Only an administrator can delete all business records.');
+    setRelatedCompanies([]); setSalaryPayments([]); salaryRef.current = [];
+    directoriesRef.current = { customers: [], vendors: [], transporters: [], marketingTeam: [], companyMembers: [], relatedCompanies: [] };
     setProducts([]);
     setSales([]);
     setExpenses([]);
@@ -419,7 +452,7 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       wipedNames.push('Audit Logs');
     }
     if (selectedKeys.includes('settings')) {
-      setSettings(INITIAL_SETTINGS);
+      setSettings(previous => ({ ...INITIAL_SETTINGS, planTier: previous.planTier, regional: previous.regional }));
       wipedNames.push('System Settings');
     }
     logAuditAction(
@@ -431,6 +464,8 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // Add Sale
   const addSale = (saleData: Omit<SaleTransaction, 'id' | 'receiptNo' | 'timestamp'>): SaleTransaction => {
+    requirePlanFeature(settings, 'selling');
+    if (!hasFeature('debts') && (saleData.debtAmount > 0 || saleData.amountPaid + 0.001 < saleData.netTotal || saleData.payments.some(p => p.method === 'Credit / Debt'))) throw new Error('The Free plan requires full payment and cannot create debt.');
     const seq = sales.length + 7601;
     const receiptNo = `REC-${seq}`;
     const newSale: SaleTransaction = {
@@ -496,6 +531,7 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // Settle Debt
   const settleDebt = (saleId: string, amount: number, method: string) => {
+    requirePlanFeature(settings, 'debts');
     setSales((prev) =>
       prev.map((sale) => {
         if (sale.id !== saleId) return sale;
@@ -515,113 +551,47 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     logAuditAction('Debt Settled', `Received debt payment of $${amount} for Sale ID: ${saleId} via ${method}`);
   };
 
-  // Add Person with Auto-Sync for Transporter & Marketer
-  const addPerson = (
-    category: PersonRecord['category'],
-    personData: Omit<PersonRecord, 'id' | 'createdAt'>
-  ): PersonRecord => {
-    const id = `${category.slice(0, 4)}-${Date.now()}`;
-    const newPerson: PersonRecord = {
-      ...personData,
-      id,
-      category,
-      createdAt: new Date().toISOString(),
-      referralCount: personData.referralCount || 0,
-      totalReferralVolume: personData.totalReferralVolume || 0,
-    };
-
-    switch (category) {
-      case 'customer':
-        setCustomers((prev) => [newPerson, ...prev]);
-        break;
-      case 'vendor':
-        setVendors((prev) => [newPerson, ...prev]);
-        break;
-      case 'transporter':
-        setTransporters((prev) => [newPerson, ...prev]);
-        break;
-      case 'marketer':
-        setMarketingTeam((prev) => [newPerson, ...prev]);
-        break;
-      case 'company_member': {
-        setCompanyMembers((prev) => [newPerson, ...prev]);
-
-        // AUTO-SYNC REQUIREMENTS:
-        // "if the user has one of their role Transporter/Driver then as their info is added to company member database
-        // let it be added to the transporter database, do the same for marketor."
-        const roles = newPerson.roles || ['Other', 'Other'];
-        const isTransporter = roles.includes('Transporter/Driver');
-        const isMarketer = roles.includes('Marketor');
-
-        if (isTransporter) {
-          const syncedTransporter: PersonRecord = {
-            ...newPerson,
-            id: `trans-sync-${id}`,
-            category: 'transporter',
-            notes: `Auto-synced from Company Member: ${newPerson.firstName} ${newPerson.secondName}`,
-          };
-          setTransporters((prev) => [syncedTransporter, ...prev]);
-        }
-
-        if (isMarketer) {
-          const syncedMarketer: PersonRecord = {
-            ...newPerson,
-            id: `mkt-sync-${id}`,
-            category: 'marketer',
-            notes: `Auto-synced from Company Member: ${newPerson.firstName} ${newPerson.secondName}`,
-          };
-          setMarketingTeam((prev) => [syncedMarketer, ...prev]);
-        }
-        break;
-      }
-    }
-
-    logAuditAction('Added Person', `Added ${category}: ${newPerson.firstName} ${newPerson.secondName}`);
-    return newPerson;
+  // Stable identities project into selected directories; historical snapshots remain immutable.
+  const addPerson = (category: PersonRecord['category'], personData: Omit<PersonRecord, 'id' | 'createdAt'>): PersonRecord => {
+    requirePlanFeature(settings, 'directory');
+    if (!hasPrivilege('canManagePeople')) throw new Error('Directory changes require Manage People permission.');
+    const person: PersonRecord = { ...personData, id: `party-${crypto.randomUUID()}`, category, sourceCategory: category, createdAt: new Date().toISOString() };
+    validateDirectory(person, directoriesRef.current.relatedCompanies);
+    applyDirectories(upsertDirectory(directoriesRef.current, person));
+    logAuditAction('Added Person', `Added ${category}: ${directoryName(person)}`);
+    return person;
   };
-
   const updatePerson = (category: PersonRecord['category'], person: PersonRecord) => {
-    const updater = (list: PersonRecord[]) => list.map((p) => (p.id === person.id ? person : p));
-    switch (category) {
-      case 'customer':
-        setCustomers(updater);
-        break;
-      case 'vendor':
-        setVendors(updater);
-        break;
-      case 'transporter':
-        setTransporters(updater);
-        break;
-      case 'marketer':
-        setMarketingTeam(updater);
-        break;
-      case 'company_member':
-        setCompanyMembers(updater);
-        break;
-    }
-    logAuditAction('Updated Person', `Updated ${category}: ${person.firstName} ${person.secondName}`);
+    requirePlanFeature(settings, 'directory');
+    if (!hasPrivilege('canManagePeople')) throw new Error('Directory changes require Manage People permission.');
+    validateDirectory(person, directoriesRef.current.relatedCompanies);
+    applyDirectories(upsertDirectory(directoriesRef.current, person));
+    logAuditAction('Updated Person', `Updated linked identity ${canonicalDirectoryId(person.id)}: ${directoryName(person)}`);
   };
-
-  const deletePerson = (category: PersonRecord['category'], id: string) => {
-    const filterer = (list: PersonRecord[]) => list.filter((p) => p.id !== id);
-    switch (category) {
-      case 'customer':
-        setCustomers(filterer);
-        break;
-      case 'vendor':
-        setVendors(filterer);
-        break;
-      case 'transporter':
-        setTransporters(filterer);
-        break;
-      case 'marketer':
-        setMarketingTeam(filterer);
-        break;
-      case 'company_member':
-        setCompanyMembers(filterer);
-        break;
-    }
-    logAuditAction('Deleted Person', `Deleted record ID ${id} from ${category}`);
+  const deletePerson = (_category: PersonRecord['category'], id: string) => {
+    requirePlanFeature(settings, 'directory');
+    if (!hasPrivilege('canManagePeople')) throw new Error('Directory deletion requires Manage People permission.');
+    applyDirectories(removeDirectory(directoriesRef.current, id));
+    logAuditAction('Deleted Person', `Removed linked identity ${canonicalDirectoryId(id)} from directories; historical transactions/payments retained`);
+  };
+  const recordSalaryPayment = (draft: SalaryPaymentDraft): SalaryPayment => {
+    requirePlanFeature(settings, 'payroll');
+    if (!hasPrivilege('canManagePeople')) throw new Error('Salary recording requires Manage People permission.');
+    const previous = salaryRef.current.find(p => p.id === draft.id); if (previous) return previous;
+    const member = directoriesRef.current.companyMembers.find(p => canonicalDirectoryId(p.id) === canonicalDirectoryId(draft.memberId));
+    if (!member) throw new Error('Select an existing individual company member.');
+    if (draft.recordExpense && !hasPrivilege('canEditExpenses')) throw new Error('Posting an expense also requires Edit Expenses permission.');
+    const result = prepareSalaryPayment(draft, member, company.currency || settings.payments.defaultCurrency, currentUser?.name || 'User');
+    salaryRef.current = [result.payment, ...salaryRef.current]; setSalaryPayments(salaryRef.current);
+    if (result.expense) setExpenses(previous => previous.some(e => e.id === result.expense!.id) ? previous : [result.expense!, ...previous]);
+    logAuditAction('Recorded Salary Payment', `Recorded ${result.payment.amount} ${result.payment.currency} for ${result.payment.memberName}${result.expense ? ' with one linked salary expense' : ' without posting an expense'}`);
+    return result.payment;
+  };
+  const setDemoPlan = (tier: PlanTier) => {
+    if (!currentUser?.isAdmin || !PLAN_TIERS.includes(tier)) throw new Error('Only an administrator can select a valid demo plan.');
+    setSettings(previous => ({ ...previous, planTier: tier }));
+    setMarketingModalItem(null); setReviewModalSale(null);
+    logAuditAction('Changed Demo Plan', `Selected ${tier}; no charge or real subscription created; existing data retained`);
   };
 
   // Products
@@ -648,15 +618,23 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // Expenses
   const addExpense = (expense: Omit<ExpenseItem, 'id'>) => {
+    requirePlanFeature(settings, 'expenses');
+    if (!hasPrivilege('canEditExpenses')) throw new Error('Expense changes require Edit Expenses permission.');
+    const party = expense.relatedCompanyId ? uniqueParties(Object.values(directoriesRef.current)).find(p => canonicalDirectoryId(p.id) === canonicalDirectoryId(expense.relatedCompanyId!)) : undefined;
+    if (expense.relatedCompanyId && !party) throw new Error('The selected company/contact no longer exists. Select it again.');
+    const partySnapshot = party ? snapshotParty(party, directoriesRef.current.relatedCompanies) : undefined;
     const newExp: ExpenseItem = {
       ...expense,
-      id: `exp-${Date.now()}`,
+      partySnapshot, vendorName: partySnapshot?.name || expense.vendorName,
+      id: `exp-${crypto.randomUUID()}`,
     };
     setExpenses((prev) => [newExp, ...prev]);
     logAuditAction('Added Expense', `Logged expense: ${expense.title} - $${expense.amount}`);
   };
 
   const deleteExpense = (id: string) => {
+    requirePlanFeature(settings, 'expenses');
+    if (!hasPrivilege('canEditExpenses')) throw new Error('Expense changes require Edit Expenses permission.');
     const item = expenses.find((e) => e.id === id);
     setExpenses((prev) => prev.filter((e) => e.id !== id));
     logAuditAction('Deleted Expense', `Removed expense: ${item?.title || id}`);
@@ -701,6 +679,7 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     dueDate: string,
     notes?: string
   ): InvoiceItem => {
+    requirePlanFeature(settings, 'invoices');
     const invoiceNo = `INV-${Date.now().toString().slice(-6)}`;
     const newInvId = `inv-${Date.now()}`;
     const invoice: InvoiceItem = {
@@ -783,6 +762,13 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // Invoices (with automatic stock invoice & sales invoice synchronization)
   const addInvoice = (invoice: Omit<InvoiceItem, 'id'>) => {
+    requirePlanFeature(settings, 'invoices');
+    invoice={...invoice,...invoiceDraftTotals(invoice.items,invoice.tax,invoice.amountPaid)};
+    if(invoices.some(existing=>existing.type===invoice.type && existing.invoiceNo===invoice.invoiceNo && existing.partyName===invoice.partyName)) throw new Error('This invoice number is already recorded for this party.');
+    if(invoice.type==='stock_purchase' && invoice.items.some(item=>!Number.isSafeInteger(item.quantity) || products.some(product=>product.type==='service' && product.name.toLowerCase().trim()===item.description.toLowerCase().trim()))) throw new Error('Stock purchase invoices require whole physical-product quantities; record service purchases as expenses.');
+    const party = invoice.relatedCompanyId ? uniqueParties(Object.values(directoriesRef.current)).find(p => canonicalDirectoryId(p.id) === canonicalDirectoryId(invoice.relatedCompanyId!)) : undefined;
+    if (invoice.relatedCompanyId && !party) throw new Error('The selected company/contact no longer exists. Select it again.');
+    invoice = { ...invoice, partySnapshot: party ? snapshotParty(party, directoriesRef.current.relatedCompanies) : undefined, partyName: party ? directoryName(party) : invoice.partyName };
     const newInvId = `inv-${Date.now()}`;
     const newInv: InvoiceItem = {
       ...invoice,
@@ -813,7 +799,7 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
               category: 'Hardware',
               type: 'product',
               costPrice: item.unitPrice,
-              sellingPrice: item.unitPrice > 0 ? Number((item.unitPrice * 1.35).toFixed(2)) : 50,
+              sellingPrice: item.unitPrice > 0 ? Number((item.unitPrice * 1.35).toFixed(2)) : 0,
               stock: item.quantity,
               minStockAlert: 5,
               description: `Restocked via purchase invoice ${invoice.invoiceNo} from ${invoice.partyName}`,
@@ -921,11 +907,13 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const updateInvoice = (invoice: InvoiceItem) => {
+    requirePlanFeature(settings, 'invoices');
     setInvoices((prev) => prev.map((i) => (i.id === invoice.id ? invoice : i)));
     logAuditAction('Updated Invoice', `Updated invoice ${invoice.invoiceNo}`);
   };
 
   const deleteInvoice = (id: string) => {
+    requirePlanFeature(settings, 'invoices');
     setInvoices((prev) => prev.filter((i) => i.id !== id));
     logAuditAction('Deleted Invoice', `Removed invoice record ID: ${id}`);
   };
@@ -1099,6 +1087,11 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setMarketingTeam,
         companyMembers,
         setCompanyMembers,
+        relatedCompanies,
+        salaryPayments,
+        recordSalaryPayment,
+        setDemoPlan,
+        hasFeature,
         reviews,
         setReviews,
         auditLogs,

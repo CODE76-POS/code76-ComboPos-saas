@@ -9,7 +9,7 @@ interface SendEmailReminderModalProps {
 }
 
 export const SendEmailReminderModal: React.FC<SendEmailReminderModalProps> = ({ sale, onClose }) => {
-  const { company, settings, logAuditAction } = usePOS();
+  const { company, settings, logAuditAction, hasFeature } = usePOS();
 
   const [subject, setSubject] = useState('');
   const [body, setBody] = useState('');
@@ -42,7 +42,7 @@ export const SendEmailReminderModal: React.FC<SendEmailReminderModalProps> = ({ 
     setSentSuccess(false);
   }, [sale, company, settings]);
 
-  if (!sale) return null;
+  if (!sale || !hasFeature('email')) return null;
 
   const handleSend = () => {
     logAuditAction(

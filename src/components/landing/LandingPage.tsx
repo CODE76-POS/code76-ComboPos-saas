@@ -1,3 +1,4 @@
+import { PlanOverview } from './PlanOverview.tsx';
 import { CODE76_PLATFORMS } from '../../config/code76Platforms.ts';
 import { LinkCopyField } from '../common/LinkCopyField.tsx';
 import React, { useState, useEffect } from 'react';
@@ -424,6 +425,7 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
         <div className="hidden lg:flex items-center gap-6 text-xs text-slate-300 font-medium">
           <a href="#about" className="hover:text-teal-400 transition">About CODE76</a>
           <a href="#features" className="hover:text-teal-400 transition">Platforms & Features</a>
+          <a href="#plans" className="hover:text-teal-400 transition">App Plans</a>
           <a href="#companies" className="hover:text-teal-400 transition">Companies Using CODE76</a>
           <a href="#reviews" className="hover:text-teal-400 transition">Customer Proof</a>
           <a href="#referrals" className="hover:text-teal-400 transition">Referral Rewards</a>
@@ -832,6 +834,8 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
             </div>
             <div className="mt-7 text-center"><a href="#portal-access" className="inline-flex rounded-xl bg-teal-700 px-5 py-3 text-sm font-bold text-white hover:bg-teal-600">Sign in or register to explore</a></div>
           </section>
+
+          <PlanOverview />
 
           {/* 4. COMPANIES & BRANDS USING CODE76 POS */}
           <section id="companies" className="max-w-7xl mx-auto px-4 py-12 scroll-mt-20">

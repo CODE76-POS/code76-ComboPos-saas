@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { directoryPhoto } from '../../utils/directory.ts';
+import React, { useState, useEffect } from 'react';
 import { usePOS } from '../../context/POSContext.tsx';
 import { Star, MessageSquare, X, CheckCircle2, ShieldCheck } from 'lucide-react';
 import { UniversalPhotoInput } from '../common/UniversalPhotoInput.tsx';
@@ -12,10 +13,10 @@ export const ReviewCaptureModal: React.FC = () => {
   const [submitted, setSubmitted] = useState<boolean>(false);
   const associatedCustomer = customers.find((c) => c.id === reviewModalSale?.customerId);
   const [customPhotoUrl, setCustomPhotoUrl] = useState<string>(
-    associatedCustomer?.photoUrl ||
-      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80'
+    associatedCustomer?.photoUrl || ''
   );
 
+  useEffect(()=>{if(reviewModalSale){setCustomPhotoUrl(associatedCustomer?.photoUrl || '');setComment('');setRating(5);setIsApprovedForLanding(true);}},[reviewModalSale?.id]);
   if (!reviewModalSale) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -25,6 +26,7 @@ export const ReviewCaptureModal: React.FC = () => {
     addReview({
       customerName: reviewModalSale.customerName || 'Valued Customer',
       customerPhotoUrl: customPhotoUrl || associatedCustomer?.photoUrl,
+      avatarStyle: associatedCustomer?.avatarStyle || 'neutral',
       customerLocation: associatedCustomer?.location || 'Verified Buyer',
       rating,
       comment: comment.trim(),
