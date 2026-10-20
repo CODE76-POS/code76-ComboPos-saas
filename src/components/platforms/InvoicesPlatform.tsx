@@ -1,0 +1,708 @@
+import React, { useState } from 'react';
+import { usePOS } from '../../context/POSContext.tsx';
+import {
+  FileText,
+  Plus,
+  Search,
+  Trash2,
+  Edit,
+  Eye,
+  Download,
+  Printer,
+  HelpCircle,
+  FileSpreadsheet,
+  CheckCircle2,
+  Clock,
+  AlertCircle,
+  X,
+  Mail,
+} from 'lucide-react';
+import { InvoiceItem } from '../../types/index.ts';
+import { exportToCSV, printPDFReport } from '../../utils/exportUtils.ts';
+import { EmailExportModal } from '../modals/EmailExportModal.tsx';
+
+export const InvoicesPlatform: React.FC = () => {
+  const { invoices, addInvoice, updateInvoice, deleteInvoice, company, setHoverHelpPlatform } = usePOS();
+
+  const [typeFilter, setTypeFilter] = useState<'all' | 'sales' | 'stock_purchase'>('all');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [modalOpen, setModalOpen] = useState(false);
+  const [viewInvoice, setViewInvoice] = useState<InvoiceItem | null>(null);
+
+  // Email to Party Modal State (.txt and .pdf formats)
+  const [emailModalOpen, setEmailModalOpen] = useState(false);
+  const [selectedInvoiceForEmail, setSelectedInvoiceForEmail] = useState<InvoiceItem | null>(null);
+
+  const invoiceExportColumns = [
+    { header: 'Invoice #', dataKey: 'invoiceNo' },
+    { header: 'Type', dataKey: 'type' },
+    { header: 'Party Name', dataKey: 'partyName' },
+    { header: 'Party Type', dataKey: 'partyType' },
+    { header: 'Date', dataKey: 'date' },
+    { header: 'Due Date', dataKey: 'dueDate' },
+    { header: 'Subtotal ($)', dataKey: 'subtotal' },
+    { header: 'Total ($)', dataKey: 'total' },
+    { header: 'Amount Paid ($)', dataKey: 'amountPaid' },
+    { header: 'Status', dataKey: 'status' },
+  ];
+
+  const handleOpenBulkEmail = () => {
+    setSelectedInvoiceForEmail(null);
+    setEmailModalOpen(true);
+  };
+
+  const handleOpenRowEmail = (inv: InvoiceItem) => {
+    setSelectedInvoiceForEmail(inv);
+    setEmailModalOpen(true);
+  };
+
+  const [formData, setFormData] = useState<Omit<InvoiceItem, 'id'>>({
+    invoiceNo: `INV-${Date.now().toString().slice(-6)}`,
+    type: 'sales',
+    partyName: '',
+    partyType: 'Customer',
+    date: new Date().toISOString().split('T')[0],
+    dueDate: new Date(Date.now() + 14 * 86400000).toISOString().split('T')[0],
+    items: [{ description: 'Commercial Terminal Equipment', quantity: 1, unitPrice: 599, total: 599 }],
+    subtotal: 599,
+    tax: 0,
+    total: 599,
+    amountPaid: 599,
+    status: 'paid',
+    notes: 'Payment net 14 days.',
+  });
+
+  const filtered = invoices.filter((inv) => {
+    const matchType = typeFilter === 'all' || inv.type === typeFilter;
+    const q = searchQuery.toLowerCase().trim();
+    const matchQ =
+      !q ||
+      inv.invoiceNo.toLowerCase().includes(q) ||
+      inv.partyName.toLowerCase().includes(q) ||
+      inv.notes?.toLowerCase().includes(q);
+    return matchType && matchQ;
+  });
+
+  const handleCreate = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.partyName) return;
+    addInvoice(formData);
+    setModalOpen(false);
+  };
+
+  const handleDelete = (inv: InvoiceItem) => {
+    if (confirm(`Delete invoice ${inv.invoiceNo}?`)) {
+      deleteInvoice(inv.id);
+    }
+  };
+
+  const handleExportCSV = () => {
+    exportToCSV(
+      invoices.map((inv) => ({
+        InvoiceNo: inv.invoiceNo,
+        Type: inv.type,
+        Party: inv.partyName,
+        PartyType: inv.partyType,
+        Date: inv.date,
+        DueDate: inv.dueDate,
+        Subtotal: inv.subtotal,
+        Tax: inv.tax,
+        Total: inv.total,
+        AmountPaid: inv.amountPaid,
+        Status: inv.status,
+      })),
+      'code76_pos_invoices'
+    );
+  };
+
+  const handleExportSinglePDF = (inv: InvoiceItem) => {
+    printPDFReport(
+      `Official Commercial Invoice - ${inv.invoiceNo}`,
+      company,
+      [
+        { header: 'Item Description', dataKey: 'desc' },
+        { header: 'Qty', dataKey: 'qty' },
+        { header: 'Unit Price ($)', dataKey: 'unit' },
+        { header: 'Line Total ($)', dataKey: 'lineTot' },
+      ],
+      inv.items.map((i) => ({
+        desc: i.description,
+        qty: i.quantity,
+        unit: i.unitPrice.toFixed(2),
+        lineTot: i.total.toFixed(2),
+      })),
+      [
+        { label: 'Invoice No', value: inv.invoiceNo },
+        { label: 'Type', value: inv.type === 'sales' ? 'Customer Sales Receivable' : 'Stock Purchase Payable' },
+        { label: 'Billed To / From', value: `${inv.partyName} (${inv.partyType})` },
+        { label: 'Issue Date', value: inv.date },
+        { label: 'Due Date', value: inv.dueDate },
+        { label: 'Total Due', value: `$${inv.total.toFixed(2)}` },
+        { label: 'Paid', value: `$${inv.amountPaid.toFixed(2)}` },
+        { label: 'Status', value: inv.status.toUpperCase() },
+      ]
+    );
+  };
+
+  const handleExportFullLedgerPDF = () => {
+    printPDFReport(
+      'Full Invoices & Accounts Billing Ledger',
+      company,
+      [
+        { header: 'Invoice #', dataKey: 'no' },
+        { header: 'Type', dataKey: 'type' },
+        { header: 'Party Name', dataKey: 'party' },
+        { header: 'Date', dataKey: 'date' },
+        { header: 'Due Date', dataKey: 'due' },
+        { header: 'Total ($)', dataKey: 'total' },
+        { header: 'Paid ($)', dataKey: 'paid' },
+        { header: 'Status', dataKey: 'status' },
+      ],
+      filtered.map((inv) => ({
+        no: inv.invoiceNo,
+        type: inv.type === 'sales' ? 'Sales' : 'Stock Purchase',
+        party: inv.partyName,
+        date: inv.date,
+        due: inv.dueDate,
+        total: inv.total.toFixed(2),
+        paid: inv.amountPaid.toFixed(2),
+        status: inv.status,
+      }))
+    );
+  };
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 py-6">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <div className="flex items-center gap-2">
+            <h1 className="text-2xl font-black text-slate-100 tracking-tight">Invoices Platform</h1>
+            <button
+              onClick={() => setHoverHelpPlatform('invoices')}
+              title="Click for platform guidance & settings"
+              className="p-1 rounded-lg text-teal-400 hover:text-teal-300 hover:bg-slate-800 transition cursor-pointer"
+            >
+              <HelpCircle className="w-5 h-5" />
+            </button>
+          </div>
+          <p className="text-xs text-slate-400">
+            Billing management for both customer Sales Invoices and vendor Stock Purchase Invoices.
+          </p>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            onClick={handleExportCSV}
+            className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
+          >
+            <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-400" />
+            CSV Export
+          </button>
+          <button
+            onClick={handleExportFullLedgerPDF}
+            className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-teal-300 border border-slate-700 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
+          >
+            <Download className="w-3.5 h-3.5" />
+            PDF Ledger
+          </button>
+          <button
+            onClick={handleOpenBulkEmail}
+            className="px-3 py-2 rounded-xl bg-teal-600/20 hover:bg-teal-600/30 text-teal-300 border border-teal-500/40 text-xs font-bold flex items-center gap-1.5 transition cursor-pointer shadow-xs"
+            title="Email all invoice records in .txt and .pdf format to customer, vendor, marketer, or company member"
+          >
+            <Mail className="w-3.5 h-3.5 text-teal-300" />
+            <span>Email Invoices (.txt & .pdf)</span>
+          </button>
+          <button
+            onClick={() => {
+              setFormData({
+                invoiceNo: `INV-${Date.now().toString().slice(-6)}`,
+                type: 'sales',
+                partyName: '',
+                partyType: 'Customer',
+                date: new Date().toISOString().split('T')[0],
+                dueDate: new Date(Date.now() + 14 * 86400000).toISOString().split('T')[0],
+                items: [{ description: 'Commercial Terminal Equipment', quantity: 1, unitPrice: 599, total: 599 }],
+                subtotal: 599,
+                tax: 0,
+                total: 599,
+                amountPaid: 599,
+                status: 'paid',
+                notes: 'Payment net 14 days.',
+              });
+              setModalOpen(true);
+            }}
+            className="px-4 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-semibold flex items-center gap-1.5 shadow-md shadow-teal-600/30 transition cursor-pointer"
+          >
+            <Plus className="w-4 h-4" />
+            Create Invoice
+          </button>
+        </div>
+      </div>
+
+      {/* Filter and Search Bar */}
+      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 mb-6 flex flex-col sm:flex-row gap-3 justify-between items-center">
+        <div className="relative w-full sm:w-80">
+          <Search className="w-4 h-4 absolute left-3 top-3 text-slate-500" />
+          <input
+            type="text"
+            placeholder="Search invoice #, customer, or vendor..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-4 py-2 text-xs text-slate-200 focus:outline-none focus:border-teal-500"
+          />
+        </div>
+
+        <div className="flex items-center gap-2 self-start sm:self-auto">
+          <button
+            onClick={() => setTypeFilter('all')}
+            className={`px-3 py-1.5 rounded-xl text-xs font-medium transition cursor-pointer ${
+              typeFilter === 'all'
+                ? 'bg-teal-600 text-white font-semibold shadow-xs'
+                : 'bg-slate-950 hover:bg-slate-800 text-slate-400 border border-slate-800'
+            }`}
+          >
+            All Invoices
+          </button>
+          <button
+            onClick={() => setTypeFilter('sales')}
+            className={`px-3 py-1.5 rounded-xl text-xs font-medium transition cursor-pointer ${
+              typeFilter === 'sales'
+                ? 'bg-teal-600 text-white font-semibold shadow-xs'
+                : 'bg-slate-950 hover:bg-slate-800 text-slate-400 border border-slate-800'
+            }`}
+          >
+            Sales Invoices (Customers)
+          </button>
+          <button
+            onClick={() => setTypeFilter('stock_purchase')}
+            className={`px-3 py-1.5 rounded-xl text-xs font-medium transition cursor-pointer ${
+              typeFilter === 'stock_purchase'
+                ? 'bg-teal-600 text-white font-semibold shadow-xs'
+                : 'bg-slate-950 hover:bg-slate-800 text-slate-400 border border-slate-800'
+            }`}
+          >
+            Stock Purchases (Vendors)
+          </button>
+        </div>
+      </div>
+
+      {/* Invoices Table */}
+      {/* Notice: ACTION COLUMN ON BOTH START AND END OF TABLE as explicitly required! */}
+      <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-xs min-w-[950px]">
+            <thead className="bg-slate-950/80 border-b border-slate-800 text-[11px] uppercase font-bold text-slate-400">
+              <tr>
+                {/* START ACTION COLUMN */}
+                <th className="py-3 px-3 text-center w-28 text-teal-400">Actions (Start)</th>
+                <th className="py-3 px-3">Invoice #</th>
+                <th className="py-3 px-3">Classification</th>
+                <th className="py-3 px-3">Billed Party</th>
+                <th className="py-3 px-3">Issue Date</th>
+                <th className="py-3 px-3">Due Date</th>
+                <th className="py-3 px-3 text-right">Subtotal</th>
+                <th className="py-3 px-3 text-right">Total ($)</th>
+                <th className="py-3 px-3 text-right">Amount Paid</th>
+                <th className="py-3 px-3 text-center">Status</th>
+                {/* END ACTION COLUMN */}
+                <th className="py-3 px-3 text-center w-28 text-teal-400">Actions (End)</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-800 text-slate-200">
+              {filtered.length === 0 ? (
+                <tr>
+                  <td colSpan={11} className="py-8 text-center text-slate-500">
+                    No invoice records found.
+                  </td>
+                </tr>
+              ) : (
+                filtered.map((inv) => (
+                  <tr key={inv.id} className="hover:bg-slate-800/40 transition">
+                    {/* START ACTION COLUMN: Delete, Update/Read, PDF Export */}
+                    <td className="py-2.5 px-3">
+                      <div className="flex items-center justify-center gap-1.5">
+                        <button
+                          onClick={() => setViewInvoice(inv)}
+                          title="View Invoice Details"
+                          className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-sky-400 hover:text-sky-300 transition cursor-pointer"
+                        >
+                          <Eye className="w-3.5 h-3.5" />
+                        </button>
+                        <button
+                          onClick={() => handleExportSinglePDF(inv)}
+                          title="Print / Export Invoice PDF"
+                          className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-teal-400 hover:text-teal-300 transition cursor-pointer"
+                        >
+                          <Download className="w-3.5 h-3.5" />
+                        </button>
+                        <button
+                          onClick={() => handleOpenRowEmail(inv)}
+                          title="Email invoice (.txt & .pdf) to client, vendor, or staff"
+                          className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-teal-300 hover:text-teal-200 transition cursor-pointer"
+                        >
+                          <Mail className="w-3.5 h-3.5" />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(inv)}
+                          title="Delete Invoice"
+                          className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-rose-400 hover:text-rose-300 transition cursor-pointer"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </td>
+
+                    <td className="py-2.5 px-3 font-mono font-bold text-slate-100">{inv.invoiceNo}</td>
+
+                    <td className="py-2.5 px-3">
+                      <span
+                        className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${
+                          inv.type === 'sales'
+                            ? 'bg-blue-500/20 text-blue-300 border border-blue-500/30'
+                            : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
+                        }`}
+                      >
+                        {inv.type === 'sales' ? 'Sales Receivable' : 'Stock Purchase'}
+                      </span>
+                    </td>
+
+                    <td className="py-2.5 px-3 font-semibold text-slate-200">
+                      {inv.partyName}
+                      <span className="text-[10px] text-slate-400 ml-1">({inv.partyType})</span>
+                    </td>
+
+                    <td className="py-2.5 px-3 text-slate-400 whitespace-nowrap">{inv.date}</td>
+
+                    <td className="py-2.5 px-3 text-slate-400 whitespace-nowrap">{inv.dueDate}</td>
+
+                    <td className="py-2.5 px-3 text-right text-slate-400">${inv.subtotal.toFixed(2)}</td>
+
+                    <td className="py-2.5 px-3 text-right font-black text-slate-100 text-sm">
+                      ${inv.total.toFixed(2)}
+                    </td>
+
+                    <td className="py-2.5 px-3 text-right text-emerald-400 font-semibold">
+                      ${inv.amountPaid.toFixed(2)}
+                    </td>
+
+                    <td className="py-2.5 px-3 text-center">
+                      <span
+                        className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${
+                          inv.status === 'paid'
+                            ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                            : inv.status === 'pending'
+                            ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
+                            : 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
+                        }`}
+                      >
+                        {inv.status}
+                      </span>
+                    </td>
+
+                    {/* END ACTION COLUMN: Delete, Update/Read, PDF Export */}
+                    <td className="py-2.5 px-3">
+                      <div className="flex items-center justify-center gap-1.5">
+                        <button
+                          onClick={() => setViewInvoice(inv)}
+                          title="View Invoice Details"
+                          className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-sky-400 hover:text-sky-300 transition cursor-pointer"
+                        >
+                          <Eye className="w-3.5 h-3.5" />
+                        </button>
+                        <button
+                          onClick={() => handleExportSinglePDF(inv)}
+                          title="Print / Export Invoice PDF"
+                          className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-teal-400 hover:text-teal-300 transition cursor-pointer"
+                        >
+                          <Download className="w-3.5 h-3.5" />
+                        </button>
+                        <button
+                          onClick={() => handleOpenRowEmail(inv)}
+                          title="Email invoice (.txt & .pdf) to client, vendor, or staff"
+                          className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-teal-300 hover:text-teal-200 transition cursor-pointer"
+                        >
+                          <Mail className="w-3.5 h-3.5" />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(inv)}
+                          title="Delete Invoice"
+                          className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-rose-400 hover:text-rose-300 transition cursor-pointer"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Create Invoice Modal */}
+      {modalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-xs p-4">
+          <div className="relative w-full max-w-lg rounded-2xl bg-slate-900 border border-slate-700 shadow-2xl p-6 text-white max-h-[90vh] overflow-y-auto">
+            <button
+              onClick={() => setModalOpen(false)}
+              className="absolute top-4 right-4 text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <h3 className="text-xl font-bold mb-4">Generate Commercial Invoice</h3>
+
+            <form onSubmit={handleCreate} className="space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-semibold text-slate-400 mb-1">Invoice Number</label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.invoiceNo}
+                    onChange={(e) => setFormData({ ...formData, invoiceNo: e.target.value })}
+                    className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100 font-mono"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-400 mb-1">Invoice Type</label>
+                  <select
+                    value={formData.type}
+                    onChange={(e) => {
+                      const t = e.target.value as any;
+                      setFormData({
+                        ...formData,
+                        type: t,
+                        partyType: t === 'sales' ? 'Customer' : 'Vendor',
+                      });
+                    }}
+                    className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100"
+                  >
+                    <option value="sales">Sales Invoice (Customer)</option>
+                    <option value="stock_purchase">Stock Purchase (Vendor PO)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-400 mb-1">
+                  Billed Party ({formData.partyType}) *
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. Apex Supermarket Group"
+                  value={formData.partyName}
+                  onChange={(e) => setFormData({ ...formData, partyName: e.target.value })}
+                  className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-teal-500"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-semibold text-slate-400 mb-1">Issue Date</label>
+                  <input
+                    type="date"
+                    required
+                    value={formData.date}
+                    onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                    className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-400 mb-1">Due Date</label>
+                  <input
+                    type="date"
+                    required
+                    value={formData.dueDate}
+                    onChange={(e) => setFormData({ ...formData, dueDate: e.target.value })}
+                    className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-semibold text-slate-400 mb-1">Total Bill Amount ($)</label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    min="1"
+                    required
+                    value={formData.total}
+                    onChange={(e) => {
+                      const val = parseFloat(e.target.value) || 0;
+                      setFormData({ ...formData, total: val, subtotal: val });
+                    }}
+                    className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-emerald-400 font-bold"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-400 mb-1">Initial Amount Paid ($)</label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    value={formData.amountPaid}
+                    onChange={(e) => {
+                      const paid = parseFloat(e.target.value) || 0;
+                      setFormData({
+                        ...formData,
+                        amountPaid: paid,
+                        status: paid >= formData.total ? 'paid' : 'pending',
+                      });
+                    }}
+                    className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-400 mb-1">Payment Terms & Notes</label>
+                <textarea
+                  rows={2}
+                  value={formData.notes}
+                  onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                  className="w-full bg-slate-800 border border-slate-700 rounded-xl p-2.5 text-xs text-slate-100"
+                />
+              </div>
+
+              <div className="flex justify-end gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setModalOpen(false)}
+                  className="px-4 py-2 rounded-xl border border-slate-700 text-slate-300 hover:bg-slate-800 text-sm font-medium"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-sm font-semibold shadow-md"
+                >
+                  Issue Invoice
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* View Invoice Detail Modal */}
+      {viewInvoice && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-xs p-4">
+          <div className="relative w-full max-w-lg rounded-2xl bg-slate-900 border border-slate-700 shadow-2xl p-6 text-white">
+            <button
+              onClick={() => setViewInvoice(null)}
+              className="absolute top-4 right-4 text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="flex justify-between items-start mb-4">
+              <div>
+                <span className="text-xs uppercase font-bold text-teal-400">Invoice Details</span>
+                <h3 className="text-xl font-bold">{viewInvoice.invoiceNo}</h3>
+              </div>
+              <span
+                className={`px-2.5 py-1 rounded-full text-xs font-bold uppercase ${
+                  viewInvoice.status === 'paid'
+                    ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                    : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
+                }`}
+              >
+                {viewInvoice.status}
+              </span>
+            </div>
+
+            <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2 text-xs">
+              <div className="flex justify-between">
+                <span className="text-slate-400">Classification:</span>
+                <span className="font-semibold text-slate-200">
+                  {viewInvoice.type === 'sales' ? 'Sales Receivable (Customer)' : 'Stock Purchase (Vendor PO)'}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-400">Party:</span>
+                <span className="font-semibold text-slate-200">{viewInvoice.partyName}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-400">Issue Date:</span>
+                <span className="text-slate-200">{viewInvoice.date}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-400">Due Date:</span>
+                <span className="text-slate-200">{viewInvoice.dueDate}</span>
+              </div>
+              <div className="flex justify-between border-t border-slate-800 pt-2 font-bold text-sm">
+                <span className="text-slate-200">Total Billed:</span>
+                <span className="text-emerald-400">${viewInvoice.total.toFixed(2)}</span>
+              </div>
+              <div className="flex justify-between text-xs">
+                <span className="text-slate-400">Amount Paid:</span>
+                <span className="text-emerald-400 font-semibold">${viewInvoice.amountPaid.toFixed(2)}</span>
+              </div>
+              {viewInvoice.total > viewInvoice.amountPaid && (
+                <div className="flex justify-between text-xs text-rose-400 font-bold">
+                  <span>Balance Outstanding:</span>
+                  <span>${(viewInvoice.total - viewInvoice.amountPaid).toFixed(2)}</span>
+                </div>
+              )}
+            </div>
+
+            <div className="flex justify-end gap-2 mt-4">
+              <button
+                onClick={() => handleExportSinglePDF(viewInvoice)}
+                className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold flex items-center gap-1.5"
+              >
+                <Download className="w-3.5 h-3.5" />
+                Print / PDF
+              </button>
+              <button
+                onClick={() => setViewInvoice(null)}
+                className="px-4 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-xs font-semibold"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Email Export Modal for Invoices (.txt and .pdf formats) */}
+      {emailModalOpen && (
+        <EmailExportModal
+          isOpen={emailModalOpen}
+          onClose={() => setEmailModalOpen(false)}
+          title={
+            selectedInvoiceForEmail
+              ? `Invoice Document: #${selectedInvoiceForEmail.invoiceNo}`
+              : 'Complete Commercial Invoices Ledger'
+          }
+          moduleName="Invoices"
+          isSingleRow={Boolean(selectedInvoiceForEmail)}
+          entityName={
+            selectedInvoiceForEmail
+              ? `#${selectedInvoiceForEmail.invoiceNo} (${selectedInvoiceForEmail.partyName})`
+              : undefined
+          }
+          availableFormats={['txt', 'pdf']}
+          data={selectedInvoiceForEmail || filtered}
+          columns={invoiceExportColumns}
+          metadata={[
+            { label: 'Invoice Type Filter', value: typeFilter },
+            {
+              label: 'Total Invoices',
+              value: selectedInvoiceForEmail ? '1 Document' : `${filtered.length} Invoices`,
+            },
+          ]}
+        />
+      )}
+    </div>
+  );
+};
