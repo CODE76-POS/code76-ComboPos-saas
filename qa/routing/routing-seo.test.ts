@@ -55,11 +55,12 @@ test('merchant component checks auth again and cannot count anonymous visits', (
   assert.match(page, /viewUrl\('pos', applicationUrl\(window.location.href/);
   assert.ok(page.includes("'landing_page_builder')"));
 });
-test('all eight merchant section links scroll without overwriting the private hash route', () => {
-  const page = source('src/components/landing/BusinessStorefrontLandingPage.tsx');
-  const links = page.match(/href="#[^"]+"/g) || [];
-  assert.equal(links.length, 8);
-  assert.equal((page.match(/href="#[^"]+" onClick=\{scrollToSection\}/g) || []).length, links.length);
+test('merchant navigation and hero links scroll without overwriting the private hash route', () => {
+  const page=readFileSync('src/components/landing/BusinessStorefrontLandingPage.tsx','utf8');
+  const nav=readFileSync('src/components/landing/LandingSectionNav.tsx','utf8');
+  assert.match(page,/onClick=\{scrollToSection\}/);
+  assert.ok(page.includes('label="Business page sections" preserveHash'));
+  assert.ok(nav.includes('event.preventDefault()'));
 });
 test('public page has metadata and no guest merchant launch controls', () => {
   const page = source('src/components/landing/LandingPage.tsx');

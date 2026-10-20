@@ -1,5 +1,7 @@
 # CODE76 workspace update
 
+> **Latest pricing/Max update:** [Max, current prices, Starter changes and coordinated landing navigation](MAX-PRICING-AND-LANDING.md). Max and Lifetime include scoped team-service access. Current evidence: [qa/max-marketing](qa/max-marketing/README.md).
+
 > **Next completed update:** [Companies, payroll, camera and demo tiers](COMPANIES-PLANS-GUIDE.md), with [current evidence](qa/companies-plans/README.md). The older counts below retain their historical scope.
 
 ## Implemented

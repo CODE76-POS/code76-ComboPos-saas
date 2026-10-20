@@ -68,7 +68,13 @@ export type AvatarStyle = 'neutral' | 'masculine' | 'feminine';
 export type DirectoryCategory = 'customer' | 'vendor' | 'transporter' | 'marketer' | 'company_member' | 'related_company';
 export type CompanyFunction = 'vendor' | 'transporter' | 'marketer';
 export type PayBasis = 'month' | 'week' | 'day' | 'hour' | 'task' | 'delivery' | 'session' | 'project';
-export type PlanTier = 'free' | 'starter' | 'pro' | 'lifetime';
+export type PlanTier = 'free' | 'starter' | 'pro' | 'max' | 'lifetime';
+export interface TeamServiceBrief {
+  id:string; serviceId:string; businessName:string; website:string; goal:string;
+  scope:string; contact:string; authorized:boolean; createdAt:string;
+  createdBy:string; status:'local_draft';
+}
+export type TeamServiceBriefDraft=Omit<TeamServiceBrief,'id'|'createdAt'|'createdBy'|'status'>;
 export interface RegionalSettings {
   timeZone: string;
   dateFormat: 'DD/MM/YYYY' | 'MM/DD/YYYY' | 'YYYY-MM-DD';
@@ -342,7 +348,7 @@ export interface EmailTemplate {
   body: string;
 }
 
-export type SettingsSection = 'payments' | 'textSizing' | 'landingPage' | 'receipts' | 'appearance' | 'font' | 'backup' | 'privileges' | 'pdfExcel' | 'emailTemplates' | 'auditLogs' | 'dataEraser' | 'regional' | 'plans';
+export type SettingsSection = 'payments' | 'textSizing' | 'landingPage' | 'receipts' | 'appearance' | 'font' | 'backup' | 'privileges' | 'pdfExcel' | 'emailTemplates' | 'auditLogs' | 'dataEraser' | 'regional' | 'plans' | 'teamServices';
 
 export interface AppSettings {
   /** Demo entitlements only, not a verified paid subscription. */

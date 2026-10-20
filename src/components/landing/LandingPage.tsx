@@ -1,7 +1,11 @@
+import { LandingSectionNav } from './LandingSectionNav.tsx';
+import { MaxServicesSection } from './MaxServicesSection.tsx';
+import { GrowthPlanner } from './GrowthPlanner.tsx';
+import { useMeasuredHeader } from '../../hooks/useMeasuredHeader.ts';
 import { PlanOverview } from './PlanOverview.tsx';
 import { CODE76_PLATFORMS } from '../../config/code76Platforms.ts';
 import { LinkCopyField } from '../common/LinkCopyField.tsx';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { usePOS } from '../../context/POSContext.tsx';
 import { useCode76Site } from '../../context/Code76SiteContext.tsx';
 import { CODE76_SITE } from '../../config/code76Site.ts';
@@ -71,76 +75,11 @@ import {
 
 
 // Commercial Companies and Brands Running Daily on CODE76 POS
-export const COMPANIES_USING_CODE76 = [
-  {
-    name: 'Apex Supermarket & Hyperstore',
-    sector: 'Supermarket & FMCG',
-    locations: '8 Locations • 45,000 SKUs',
-    stat: '65% Faster Checkout',
-    logoText: 'APEX',
-    color: 'from-emerald-600 to-teal-500',
-    quote: 'CODE76 transformed our peak weekend rushes. Real-time barcode scanning and instant M-Pesa & Card reconciliation cut checkout queues in half.',
-    manager: 'Samuel M. • Operations Director',
-    icon: Store,
-  },
-  {
-    name: 'Java Peak Roastery & Cafés',
-    sector: 'Restaurant & Hospitality',
-    locations: '4 Branches • 60 Tables',
-    stat: 'Zero Lost Orders',
-    logoText: 'JAVA',
-    color: 'from-amber-600 to-orange-500',
-    quote: 'Orders taken on mobile tablets hit kitchen displays in real time. Table bill splitting is effortless, and daily cash-up takes under 3 minutes.',
-    manager: 'Beatrice W. • General Manager',
-    icon: Utensils,
-  },
-  {
-    name: 'MediCare Regional Pharmacy',
-    sector: 'Healthcare & Pharma',
-    locations: '12 Branches • 18,000 Items',
-    stat: '100% Expiry & Batch Tracked',
-    logoText: 'MEDI',
-    color: 'from-sky-600 to-cyan-500',
-    quote: 'Automated batch number tracking, expiry warnings, and strict pharmacist PIN authorizations keep our multi-branch inventory fully compliant.',
-    manager: 'Dr. Kevin O. • Lead Pharmacist',
-    icon: Pill,
-  },
-  {
-    name: 'Skyline Logistics & Wholesale Depot',
-    sector: 'Wholesale & Warehousing',
-    locations: '3 Central Depots • 500+ Daily Pallets',
-    stat: '$140k+ Monthly Tracked Credit',
-    logoText: 'SKY',
-    color: 'from-indigo-600 to-blue-500',
-    quote: 'Our B2B customers demand automated commercial invoices and net-30 debt statements. CODE76 handles bulk tier pricing with automated PDF delivery.',
-    manager: 'Hassan A. • Distribution Head',
-    icon: Truck,
-  },
-  {
-    name: 'NexGen Smart Electronics',
-    sector: 'Hardware & Tech Boutiques',
-    locations: '5 Stores • Serialized IMEI',
-    stat: 'Zero Duplicate Reconciliation',
-    logoText: 'NEXT',
-    color: 'from-purple-600 to-violet-500',
-    quote: 'When an iPhone or laptop sells, stock is deducted instantly across all branches. The automated trigger ensures our online store never oversells.',
-    manager: 'Daniel K. • Store Operations Lead',
-    icon: Cpu,
-  },
-  {
-    name: 'Prime Auto Spares & Garage Services',
-    sector: 'Automotive & Technical Repairs',
-    locations: '2 Workshop Hubs • 14 Mechanics',
-    stat: '28% Profit Margin Increase',
-    logoText: 'PRIME',
-    color: 'from-rose-600 to-pink-500',
-    quote: 'We combine physical spare parts sales with mechanic labor in one bill. Converting job cards to official tax invoices takes one click.',
-    manager: 'Patrick N. • Workshop Manager',
-    icon: Wrench,
-  },
-];
+
 
 export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSignIn = false }) => {
+  const siteHeader=useRef<HTMLElement>(null);
+  useMeasuredHeader(siteHeader,'--public-site-header-height');
   // Only authentication and navigation are shared with the POS. No merchant data or settings here.
   const { setActiveView, setActivePlatform, currentUser, loginUser, logoutUser, registerUser } = usePOS();
   const { metrics: landingMetrics, setMetrics: setLandingMetrics, addSiteLead, logSiteEvent } = useCode76Site();
@@ -161,7 +100,6 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
   const [activeInquiryLead, setActiveInquiryLead] = useState<InquiryLeadData | null>(null);
 
   // Slideshow state for remaining items (after the first 6)
-  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
 
   // Referral generator state
   const [referralName, setReferralName] = useState('');
@@ -187,14 +125,7 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
   const [authError, setAuthError] = useState('');
   const [authSuccess, setAuthSuccess] = useState('');
 
-  // Slideshow auto-advance
-  useEffect(() => {
-    if (slideshowItems.length <= 1) return;
-    const interval = setInterval(() => {
-      setCurrentSlideIndex((prev) => (prev + 1) % slideshowItems.length);
-    }, settings.landingPage.slideshowSpeedMs || 4000);
-    return () => clearInterval(interval);
-  }, [slideshowItems, settings.landingPage.slideshowSpeedMs]);
+
 
   // Track page visit once on mount
   useEffect(() => {
@@ -226,15 +157,8 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
   const [contactSubmitting, setContactSubmitting] = useState(false);
 
   // Active Company Slide in Companies Carousel
-  const [activeCompanyIdx, setActiveCompanyIdx] = useState(0);
 
-  // Auto-advance companies carousel
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setActiveCompanyIdx((prev) => (prev + 1) % COMPANIES_USING_CODE76.length);
-    }, 5000);
-    return () => clearInterval(timer);
-  }, []);
+
 
   const handleContactSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -270,7 +194,7 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
     const mailtoUrl = `mailto:code76pos@gmail.com?subject=${encodeURIComponent(
       `[CODE76 POS Official Inquiry] ${contactSubject || 'Business Consultation Request'} - ${contactName}`
     )}&body=${encodeURIComponent(
-      `Name: ${contactName}\nEmail: ${contactEmail}\nPhone / WhatsApp: ${contactPhone}\nCompany / Business: ${contactCompany}\nSubject: ${contactSubject}\n\nMessage Details:\n${contactMessage}\n\n---\nDispatched from CODE76 Point of Sale & ERP Commercial Portal`
+      `Name: ${contactName}\nEmail: ${contactEmail}\nPhone / WhatsApp: ${contactPhone}\nCompany / Business: ${contactCompany}\nSubject: ${contactSubject}\n\nMessage Details:\n${contactMessage}\n\n---\nPrepared in the CODE76 product-site demo; confirm all details directly`
     )}`;
 
     try {
@@ -386,23 +310,24 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
   const approvedReviews = displayReviews.filter((r) => r.isApprovedForLanding);
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-teal-500 selection:text-white pb-24">
+    <div className="public-landing-page min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-teal-500 selection:text-white pb-24">
       <PublicLandingMetadata protectedEntry={requiresSignIn} />
       {requiresSignIn && <div role="status" className="border-b border-teal-800 bg-teal-950 px-4 py-3 text-center text-sm text-teal-100">
-        This is a private POS workspace. <a href="#portal-access" className="font-bold underline">Sign in or register</a> to continue. Business Landing Pages are available only inside the authenticated POS.
+        This is a private POS workspace. <a href="#portal-access" onClick={event=>{event.preventDefault();document.getElementById('portal-access')?.scrollIntoView({block:'start'});}} className="font-bold underline">Sign in or register</a> to continue. Business Landing Pages are available only inside the authenticated POS.
       </div>}
       {/* Top Announcement Bar */}
       <div className="bg-gradient-to-r from-teal-900 via-slate-900 to-emerald-950 border-b border-teal-800/40 text-center py-2 px-4 text-xs font-medium text-teal-200">
         <span className="inline-flex items-center gap-2">
           <Sparkles className="w-3.5 h-3.5 text-teal-400" />
           <span>
-            <strong>Official CODE76 POS Release:</strong> Enterprise Retail, Supermarket & Restaurant Point of Sale Suite. Refer a fellow business owner and earn $50 instant cash reward!
+            <strong>CODE76 POS:</strong> Clear operations, transparent plans and team-assisted growth. Explore the workspace at your own pace.
           </span>
         </span>
       </div>
 
       {/* Public Landing Navbar - CODE76 POS Official */}
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between border-b border-slate-800/80 sticky top-0 bg-slate-950/90 backdrop-blur-md z-40">
+      <header ref={siteHeader} data-public-site-header="true" className="sticky top-0 z-40 border-b border-slate-800 bg-slate-950/95 backdrop-blur-md">
+      <nav aria-label="CODE76 product navigation" className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-3">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-teal-600 to-emerald-400 text-white font-black text-lg flex items-center justify-center shadow-lg shadow-teal-500/25">
             76
@@ -422,15 +347,7 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
           </div>
         </div>
 
-        <div className="hidden lg:flex items-center gap-6 text-xs text-slate-300 font-medium">
-          <a href="#about" className="hover:text-teal-400 transition">About CODE76</a>
-          <a href="#features" className="hover:text-teal-400 transition">Platforms & Features</a>
-          <a href="#plans" className="hover:text-teal-400 transition">App Plans</a>
-          <a href="#companies" className="hover:text-teal-400 transition">Companies Using CODE76</a>
-          <a href="#reviews" className="hover:text-teal-400 transition">Customer Proof</a>
-          <a href="#referrals" className="hover:text-teal-400 transition">Referral Rewards</a>
-          <a href="#contact" className="hover:text-teal-400 transition">Contact Sales</a>
-        </div>
+
 
         <div className="flex items-center gap-2">
           {currentUser ? (
@@ -463,6 +380,7 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
           ) : (
             <a
               href="#portal-access"
+              onClick={event=>{if(requiresSignIn){event.preventDefault();document.getElementById('portal-access')?.scrollIntoView({block:'start'});}}}
               className="px-4 py-2 rounded-xl bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-md shadow-teal-600/30 cursor-pointer"
             >
               <LogIn className="w-3.5 h-3.5" />
@@ -471,23 +389,25 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
           )}
         </div>
       </nav>
+      <LandingSectionNav label="CODE76 page sections" preserveHash={requiresSignIn} sections={[{id:'start',label:'Overview'},{id:'features',label:'Platforms'},{id:'plans',label:'Plans & prices'},{id:'product-help',label:'Questions'},{id:'max-services',label:'Max services'},{id:'growth-planner',label:'Growth planner'},{id:'companies',label:'How it works'},{id:'reviews',label:'Before you choose'},{id:'contact',label:'Contact'}]}/>
+      </header>
 
       {/* HERO SECTION WITH PORTAL LOGIN & REGISTRATION INTEGRATION */}
-      <section className="relative overflow-hidden pt-10 pb-16 px-4 max-w-7xl mx-auto">
+      <section id="start" className="relative overflow-hidden pt-10 pb-16 px-4 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           {/* Left Column: Brand, Value Proposition & Key Capabilities */}
           <div className="lg:col-span-7 space-y-6 text-left">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/30 text-teal-300 text-xs font-semibold">
               <ShieldCheck className="w-4 h-4 text-teal-400" />
-              <span>Enterprise Point of Sale & Commercial ERP Platform</span>
+              <span>Your next operational step, made clearer</span>
             </div>
 
             <h1 className="text-3xl sm:text-5xl font-black text-slate-100 tracking-tight leading-tight">
-              Next-Generation Point of Sale & Retail Management Suite
+              Sell with clarity. Run the rest with confidence.
             </h1>
 
             <p className="text-sm sm:text-base text-slate-400 leading-relaxed max-w-2xl">
-              Engineered for high-velocity supermarkets, busy restaurants, pharmacies, wholesale distributors, and retail boutiques. Experience lightning-fast barcode checkout, dual-role staff permissions, automated stock deduplication, and multi-split payments.
+              Bring products, services, checkout and business records into one workspace. Start with Free, grow into Pro, or add CODE76 team assistance with Max. See what fits before making a commitment.
             </p>
 
             {/* Key SaaS ERP Highlights */}
@@ -498,11 +418,11 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
               </div>
               <div className="flex items-center gap-2 bg-slate-900/80 p-2.5 rounded-xl border border-slate-800">
                 <CheckCircle2 className="w-4 h-4 text-teal-400 shrink-0" />
-                <span>Real-Time Stock Adjustment & Protected PIN Authorization</span>
+                <span>Product stock and clear service billing units</span>
               </div>
               <div className="flex items-center gap-2 bg-slate-900/80 p-2.5 rounded-xl border border-slate-800">
                 <CheckCircle2 className="w-4 h-4 text-indigo-400 shrink-0" />
-                <span>B2B Sales Invoices & Purchase Stock Auto-Sync</span>
+                <span>Company-linked invoices, expenses and staff records</span>
               </div>
               <div className="flex items-center gap-2 bg-slate-900/80 p-2.5 rounded-xl border border-slate-800">
                 <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0" />
@@ -510,29 +430,12 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
               </div>
             </div>
 
-                {/* Live Real-Time Sales Metrics to Incite Social Proof */}
-                <div className="pt-2 flex flex-wrap items-center gap-3 sm:gap-4 text-xs text-slate-300">
-                  <div className="flex items-center gap-2 bg-slate-900/90 px-3.5 py-2 rounded-2xl border border-slate-800 shadow-md">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                    <span>
-                      <strong className="text-slate-100 font-extrabold">{CODE76_SITE.exampleSalesCount + 7600}+</strong> Sales Logged
-                    </span>
-                  </div>
-
-                  <div className="flex items-center gap-2 bg-slate-900/90 px-3.5 py-2 rounded-2xl border border-slate-800 shadow-md">
-                    <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
-                    <span>
-                      <strong className="text-slate-100 font-extrabold">4.9 / 5.0</strong> Client Satisfaction
-                    </span>
-                  </div>
-
-                  <div className="flex items-center gap-2 bg-slate-900/90 px-3.5 py-2 rounded-2xl border border-slate-800 shadow-md">
-                    <Sparkles className="w-4 h-4 text-teal-400" />
-                    <span>
-                      <strong className="text-slate-100 font-extrabold">24/7</strong> AI Sales Concierge
-                    </span>
-                  </div>
-                </div>
+            <div className="flex flex-wrap gap-3 pt-2">
+              <a href="#portal-access" onClick={event=>{if(requiresSignIn){event.preventDefault();document.getElementById('portal-access')?.scrollIntoView({block:'start'});}}} className="inline-flex rounded-xl bg-teal-700 px-5 py-3 text-sm font-bold text-white hover:bg-teal-600">Start with Free</a>
+              <a href="#plans" className="inline-flex rounded-xl border border-slate-700 px-5 py-3 text-sm font-bold text-slate-200 hover:bg-slate-900">Find your plan</a>
+              <a href="#max-services" className="inline-flex rounded-xl border border-teal-900 px-5 py-3 text-sm font-bold text-teal-300 hover:bg-teal-950">Explore Max support</a>
+            </div>
+            <div className="flex flex-wrap gap-3 text-[11px] text-slate-400"><span>No card needed for the demo</span><span>·</span><span>5 clearly compared plans</span><span>·</span><span>You choose the pace</span></div>
               </div>
 
               {/* Right Column: Interactive Portal Access (Sign In / Register) */}
@@ -545,12 +448,12 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
                       </div>
                       <div>
                         <h3 className="text-base font-black text-slate-100">CODE76 POS Portal Access</h3>
-                        <p className="text-[10px] text-teal-400 font-medium">Enterprise Authentication Gate</p>
+                        <p className="text-[10px] text-teal-400 font-medium">Workspace account portal</p>
                       </div>
                     </div>
 
                     <span className="px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider bg-teal-500/10 text-teal-300 border border-teal-500/30">
-                      Encrypted
+                      Demo access
                     </span>
                   </div>
 
@@ -783,9 +686,9 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
                     <div className="w-8 h-8 rounded-xl bg-teal-500/20 text-teal-400 flex items-center justify-center mb-2 font-bold">
                       <Zap className="w-4 h-4" />
                     </div>
-                    <h3 className="font-bold text-slate-100 text-xs mb-1">Zero Downtime Checkout</h3>
+                    <h3 className="font-bold text-slate-100 text-xs mb-1">A clearer checkout workflow</h3>
                     <p className="text-[11px] text-slate-400 leading-normal">
-                      Multi-split payments (Cash, M-Pesa, Card, Wire) process in under 3 seconds per customer lane.
+                      Build a cart, record one or split payments and inspect the resulting receipt with test data.
                     </p>
                   </div>
 
@@ -793,9 +696,9 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
                     <div className="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center mb-2 font-bold">
                       <Database className="w-4 h-4" />
                     </div>
-                    <h3 className="font-bold text-slate-100 text-xs mb-1">Automated Stock Sync</h3>
+                    <h3 className="font-bold text-slate-100 text-xs mb-1">Connected product records</h3>
                     <p className="text-[11px] text-slate-400 leading-normal">
-                      Every sale cross-references inventory in real-time, preventing duplicate reconciliation and stockouts.
+                      Review product stock, service billing units and records together. Check inventory before committing to fulfilment.
                     </p>
                   </div>
 
@@ -803,9 +706,9 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
                     <div className="w-8 h-8 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center mb-2 font-bold">
                       <ShieldCheck className="w-4 h-4" />
                     </div>
-                    <h3 className="font-bold text-slate-100 text-xs mb-1">Audit-Grade Security</h3>
+                    <h3 className="font-bold text-slate-100 text-xs mb-1">Visible workspace controls</h3>
                     <p className="text-[11px] text-slate-400 leading-normal">
-                      Role-based privilege enforcement, manager PIN verification, and one-click PDF/CSV audit trail export.
+                      Explore role privileges and permitted exports. Production authentication, billing and tenant security still need a backend.
                     </p>
                   </div>
                 </div>
@@ -836,244 +739,16 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
           </section>
 
           <PlanOverview />
+          <section id="product-help" className="max-w-7xl mx-auto px-4 py-7"><div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-slate-800 bg-slate-900 p-5"><div className="max-w-2xl"><h2 className="text-xl font-bold">Not sure which plan fits?</h2><p className="mt-2 text-sm text-slate-400">Ask about the software, current published prices or the team-service package. No purchase, service booking or reward is created by the conversation.</p></div><AIChatbotWidget surface="code76" inquiryLead={activeInquiryLead} inlineLauncher /></div></section>
 
-          {/* 4. COMPANIES & BRANDS USING CODE76 POS */}
-          <section id="companies" className="max-w-7xl mx-auto px-4 py-12 scroll-mt-20">
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
-              <div>
-                <span className="text-xs uppercase font-extrabold tracking-widest text-teal-400 flex items-center gap-1.5 mb-1">
-                  <Building2 className="w-4 h-4" />
-                  Enterprise Adoption
-                </span>
-                <h2 className="text-2xl sm:text-3xl font-black text-slate-100">
-                  Companies Using CODE76 POS
-                </h2>
-              </div>
-              <p className="text-xs text-slate-400 max-w-md">
-                Over 850+ stores, supermarkets, pharmacies, cafes, and logistics hubs run their daily checkout on CODE76.
-              </p>
-            </div>
 
-            {/* Featured Active Company Card Showcase */}
-            {(() => {
-              const comp = COMPANIES_USING_CODE76[activeCompanyIdx] || COMPANIES_USING_CODE76[0];
-              const CompIcon = comp.icon;
-              return (
-                <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden mb-8">
-                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-                    <div className="lg:col-span-4 flex flex-col items-start gap-4">
-                      <div className={`w-16 h-16 rounded-2xl bg-gradient-to-tr ${comp.color} flex items-center justify-center font-black text-white text-xl shadow-lg border border-white/20`}>
-                        {comp.logoText}
-                      </div>
+          <MaxServicesSection />
+          <GrowthPlanner />
+          <section id="companies" className="max-w-7xl mx-auto px-4 py-12"><div className="max-w-3xl mb-7"><span className="text-xs uppercase tracking-widest font-bold text-teal-400">A practical first success</span><h2 className="mt-2 text-3xl font-black">See the workflow, not just a feature list</h2><p className="mt-3 text-sm text-slate-400">Use your own test entries. No claimed client results or invented customer testimonials are needed to see whether the workflow suits you.</p></div><div className="grid md:grid-cols-3 gap-4">{[{title:'1. Make it yours',copy:'Choose readable text and a theme, enter your company details, then add a real test product or service.'},{title:'2. Try the daily job',copy:'Build a cart, record a payment and inspect a receipt. Move through the actual forms rather than a staged sales claim.'},{title:'3. Review the fit',copy:'Explore the records, compare the plan limits and decide whether software alone or team assistance is your next step.'}].map(step=><article key={step.title} className="rounded-2xl border border-slate-800 bg-slate-900 p-5"><h3 className="font-bold">{step.title}</h3><p className="mt-3 text-sm leading-relaxed text-slate-400">{step.copy}</p></article>)}</div><a href="#portal-access" className="mt-5 inline-flex font-bold text-sm text-teal-300 underline">Try the guided workspace</a></section>
+          <section id="reviews" className="max-w-7xl mx-auto px-4 py-12"><h2 className="text-3xl font-black">Choose with clear expectations</h2><div className="mt-6 grid sm:grid-cols-2 gap-4">{[{title:'See prices before choosing',copy:'List and promotional prices are shown in USD with monthly versus one-time terms. The demo has no connected payment gateway.'},{title:'Keep control of the decision',copy:'No fabricated countdown, sales volume or client-rating claim is used here. Try Free and compare the actual entitlements.'},{title:'Know the current data boundary',copy:'This is a browser-local prototype, not production tenant security or cloud synchronization. Use test records, not real passwords, payroll or customer data.'},{title:'Know what is—and is not—published',copy:'The CODE76 site is public product information. Your merchant Business Landing Page remains an authenticated internal preview, not a public storefront.'}].map(item=><article key={item.title} className="rounded-2xl border border-slate-800 bg-slate-900 p-5"><h3 className="font-bold text-teal-300">{item.title}</h3><p className="mt-3 text-sm leading-relaxed text-slate-400">{item.copy}</p></article>)}</div></section>
 
-                      <div>
-                        <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-teal-400 bg-slate-950 px-2.5 py-0.5 rounded border border-slate-800">
-                          {comp.sector}
-                        </span>
-                        <h3 className="text-xl sm:text-2xl font-black text-slate-100 mt-1">
-                          {comp.name}
-                        </h3>
-                        <p className="text-xs text-slate-400 mt-0.5">
-                          {comp.locations}
-                        </p>
-                      </div>
+          <section id="referrals" className="max-w-7xl mx-auto px-4 py-12"><div className="rounded-3xl border border-slate-800 bg-slate-900 p-5 sm:p-8"><h2 className="text-2xl font-black">Referrals work better with clear terms</h2><p className="mt-3 text-sm text-slate-400">Max and Lifetime include team assistance to plan a referral program. Agree eligibility, attribution, consent and any reward before sharing. This demo does not promise cash, reserve rewards or track a real referral payout.</p><form onSubmit={handleGenerateReferral} className="mt-5 flex flex-wrap gap-2"><label className="min-w-0 flex-1 text-xs text-slate-400">Demo referral name<input aria-label="Demo referral name" className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm" value={referralName} onChange={event=>setReferralName(event.target.value)} required/></label><button type="submit" className="self-end rounded-lg bg-teal-700 px-4 py-2 text-sm font-bold text-white">Create demo share link</button></form>{generatedReferralLink&&<div className="mt-4"><LinkCopyField value={generatedReferralLink} label="CODE76 referral link"/><p className="mt-2 text-[10px] text-slate-500">An illustrative ref query only; no backend attribution or reward is created. Share only with people who welcome the recommendation.</p></div>}</div></section>
 
-                      <div className="px-3.5 py-1.5 rounded-xl bg-emerald-950/70 border border-emerald-700/60 text-emerald-300 font-bold text-xs flex items-center gap-1.5">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                        <span>{comp.stat}</span>
-                      </div>
-                    </div>
-
-                    <div className="lg:col-span-8 bg-slate-950 p-6 rounded-2xl border border-slate-800/80 space-y-4">
-                      <div className="flex items-center gap-1 text-amber-400">
-                        {[...Array(5)].map((_, i) => (
-                          <Star key={i} className="w-4 h-4 fill-amber-400" />
-                        ))}
-                      </div>
-
-                      <blockquote className="text-sm sm:text-base text-slate-200 italic leading-relaxed">
-                        &quot;{comp.quote}&quot;
-                      </blockquote>
-
-                      <div className="pt-3 border-t border-slate-800 flex items-center justify-between">
-                        <div className="text-xs text-slate-300 font-bold">
-                          {comp.manager}
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <button
-                            onClick={() =>
-                              setActiveCompanyIdx(
-                                (activeCompanyIdx - 1 + COMPANIES_USING_CODE76.length) %
-                                  COMPANIES_USING_CODE76.length
-                              )
-                            }
-                            className="p-2 rounded-xl bg-slate-900 border border-slate-700 hover:bg-slate-800 text-slate-300 hover:text-white transition cursor-pointer"
-                            title="Previous Company"
-                          >
-                            <ChevronLeft className="w-4 h-4" />
-                          </button>
-                          <button
-                            onClick={() =>
-                              setActiveCompanyIdx((activeCompanyIdx + 1) % COMPANIES_USING_CODE76.length)
-                            }
-                            className="p-2 rounded-xl bg-slate-900 border border-slate-700 hover:bg-slate-800 text-slate-300 hover:text-white transition cursor-pointer"
-                            title="Next Company"
-                          >
-                            <ChevronRight className="w-4 h-4" />
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Indicator Dots */}
-                  <div className="flex justify-center gap-2 mt-6">
-                    {COMPANIES_USING_CODE76.map((_, idx) => (
-                      <button
-                        key={idx}
-                        onClick={() => setActiveCompanyIdx(idx)}
-                        className={`h-2 rounded-full transition-all cursor-pointer ${
-                          activeCompanyIdx === idx ? 'w-8 bg-teal-400' : 'w-2 bg-slate-800'
-                        }`}
-                        title={`Slide ${idx + 1}`}
-                      />
-                    ))}
-                  </div>
-                </div>
-              );
-            })()}
-
-            {/* Quick Grid of all 6 companies */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-              {COMPANIES_USING_CODE76.map((c, i) => (
-                <button
-                  key={i}
-                  onClick={() => setActiveCompanyIdx(i)}
-                  className={`p-3 rounded-2xl border text-center transition cursor-pointer ${
-                    activeCompanyIdx === i
-                      ? 'bg-teal-950/60 border-teal-500 shadow-md text-white'
-                      : 'bg-slate-900/90 border-slate-800 hover:border-slate-700 text-slate-400 hover:text-slate-200'
-                  }`}
-                >
-                  <div className={`w-10 h-10 rounded-xl bg-gradient-to-tr ${c.color} text-white font-black text-xs flex items-center justify-center mx-auto mb-2`}>
-                    {c.logoText}
-                  </div>
-                  <div className="font-bold text-xs truncate text-slate-100">{c.name.split(' ')[0]}</div>
-                  <div className="text-[10px] text-teal-400 truncate">{c.sector.split(' ')[0]}</div>
-                </button>
-              ))}
-            </div>
-          </section>
-
-          {/* 5. VERIFIED SOCIAL PROOF & TESTIMONIALS */}
-          <section id="reviews" className="max-w-7xl mx-auto px-4 py-12">
-            <div className="text-center max-w-2xl mx-auto mb-10">
-              <span className="text-xs font-bold uppercase tracking-wider text-amber-400 block mb-1">
-                Verified Social Proof
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-black text-slate-100">
-                Trusted by Retailers & Modern Businesses
-              </h2>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {approvedReviews.map((rev) => (
-                <div
-                  key={rev.id}
-                  className="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl flex flex-col justify-between"
-                >
-                  <div>
-                    <div className="flex items-center gap-1 text-amber-400 mb-3">
-                      {[...Array(rev.rating)].map((_, i) => (
-                        <Star key={i} className="w-4 h-4 fill-amber-400" />
-                      ))}
-                    </div>
-                    <p className="text-xs text-slate-300 italic leading-relaxed">
-                      "{rev.comment}"
-                    </p>
-                  </div>
-
-                  <div className="mt-5 pt-4 border-t border-slate-800/80 flex items-center gap-3">
-                    <img
-                      src={getCustomerReviewAvatar(rev.customerName, rev.customerPhotoUrl)}
-                      alt={rev.customerName}
-                      className="w-10 h-10 rounded-full object-cover border border-slate-700 shadow-md"
-                    />
-                    <div>
-                      <div className="font-bold text-xs text-slate-100 flex items-center gap-1">
-                        {rev.customerName}
-                        <ShieldCheck className="w-3.5 h-3.5 text-teal-400" />
-                      </div>
-                      <div className="text-[10px] text-slate-400">
-                        {rev.customerLocation || 'Verified Retailer'}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          {/* 6. VIRAL FRIEND REFERRAL PROGRAM (HOW TO ENSURE EVEN NON-BUYERS REFER SOMEONE) */}
-          <section id="referrals" className="max-w-7xl mx-auto px-4 py-12">
-            <div className="bg-gradient-to-r from-amber-950/40 via-slate-900 to-purple-950/40 border border-amber-800/40 rounded-3xl p-6 sm:p-10 shadow-2xl">
-              <div className="max-w-3xl mx-auto text-center space-y-4">
-                <div className="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center mx-auto border border-amber-500/30">
-                  <Gift className="w-6 h-6" />
-                </div>
-                <h2 className="text-2xl sm:text-3xl font-black text-slate-100">
-                  Earn $50 Every Time You Refer a Friend or Relative
-                </h2>
-                <p className="text-xs sm:text-sm text-slate-300 max-w-xl mx-auto leading-relaxed">
-                  Even if you are not purchasing equipment today, you probably know a fellow retailer, friend, or relative who needs a reliable POS terminal. Generate your referral link below!
-                </p>
-
-                <form onSubmit={handleGenerateReferral} className="flex flex-col sm:flex-row gap-2 max-w-md mx-auto pt-2">
-                  <input
-                    type="text"
-                    required
-                    placeholder="Enter your name or business..."
-                    value={referralName}
-                    onChange={(e) => setReferralName(e.target.value)}
-                    className="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-amber-500"
-                  />
-                  <button
-                    type="submit"
-                    className="px-5 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs shadow-md transition cursor-pointer"
-                  >
-                    Generate Link
-                  </button>
-                </form>
-
-                {generatedReferralLink && (
-                  <div className="mt-4"><LinkCopyField value={generatedReferralLink} label="CODE76 referral link" /></div>
-                )}
-
-                {/* Top Referrers on Landing Page */}
-                {topReferrers.length > 0 && (
-                  <div className="pt-6 border-t border-slate-800/80">
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-amber-400 block mb-3">
-                      Our Top Community Referrers
-                    </span>
-                    <div className="flex flex-wrap justify-center gap-4">
-                      {topReferrers.map((ref, idx) => (
-                        <div
-                          key={idx}
-                          className="bg-slate-900/90 px-3.5 py-1.5 rounded-full border border-slate-800 flex items-center gap-2 text-xs"
-                        >
-                          <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                          <span className="font-bold text-slate-200">{ref.firstName} {ref.secondName}</span>
-                          <span className="text-[10px] text-amber-300">({ref.referralCount} refs)</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          </section>
-
-          {/* 7. DEDICATED CONTACT FORM (EMAILS DIRECTLY TO code76pos@gmail.com) */}
           <section id="contact" className="max-w-7xl mx-auto px-4 py-12 scroll-mt-20">
             <div className="bg-gradient-to-r from-slate-900 via-teal-950/30 to-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-10 shadow-2xl">
               <div className="max-w-4xl mx-auto">
@@ -1100,10 +775,10 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
                   <div className="bg-emerald-950/70 border border-emerald-600 rounded-2xl p-8 text-center my-4 animate-in zoom-in-95 max-w-xl mx-auto">
                     <CheckCircle2 className="w-12 h-12 text-emerald-400 mx-auto mb-3 animate-bounce" />
                     <h3 className="text-lg font-black text-emerald-200">
-                      Message Dispatched to code76pos@gmail.com!
+                      Email draft prepared—not delivered by this app
                     </h3>
                     <p className="text-xs text-emerald-300 mt-2 leading-relaxed">
-                      Thank you, <strong>{contactName}</strong>! Your inquiry was recorded into our enterprise CRM directory and dispatched to <strong>code76pos@gmail.com</strong>. Our senior technical consultant will reply within 15 minutes.
+                      Thank you, <strong>{contactName}</strong>! Your inquiry was saved locally and an email draft was prepared for <strong>code76pos@gmail.com</strong>. Complete sending in your email app; this demo cannot confirm delivery or a response time.
                     </p>
                     <button
                       onClick={() => {
@@ -1317,7 +992,7 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
                   </li>
                   <li className="flex items-center gap-1.5">
                     <Clock className="w-3.5 h-3.5 text-amber-400" />
-                    <span>24/7 Global Operations & Technical Desk</span>
+                    <span>CODE76 product and service inquiries</span>
                   </li>
                 </ul>
               </div>
@@ -1363,7 +1038,7 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
           </footer>
 
           {/* 8. EMBEDDED LIVE AI SALES CHATBOT WITH PSYCHOLOGICAL PERSUASION */}
-          <AIChatbotWidget surface="code76" inquiryLead={activeInquiryLead} />
+
     </div>
   );
 };

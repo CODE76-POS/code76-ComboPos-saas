@@ -166,7 +166,7 @@ test('appearance settings own light/dark controls and preserve saved preference 
 test('empty merchant reviews have no placeholder badge or navigation; approved reviews remain reactive', () => {
   const page = source('src/components/landing/BusinessStorefrontLandingPage.tsx');
   assert.ok(!page.includes('No reviews yet')); assert.ok(page.includes('const showReviews = settings.landingPage.showSocialProof && approvedReviews.length > 0'));
-  assert.ok(page.includes('{showReviews && <a href="#reviews"')); assert.ok(page.includes('{showReviews && ('));
+  assert.ok(page.includes("...(showReviews?[{id:'reviews'")); assert.ok(page.includes('{showReviews && ('));
 });
 test('public replacement contains exactly 18 unique real modules and useful benefit descriptions', () => {
   assert.equal(CODE76_PLATFORMS.length, 18); assert.equal(new Set(CODE76_PLATFORMS.map(p => p.id)).size, 18);

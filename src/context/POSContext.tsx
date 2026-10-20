@@ -1,3 +1,4 @@
+import { TEAM_SERVICES } from '../config/teamServices.ts';
 import { invoiceDraftTotals } from '../utils/invoiceDraft.ts';
 import { hasPlanFeature, planTier, requirePlanFeature, PLAN_TIERS, type Feature } from '../utils/plans.ts';
 import { canonicalDirectoryId, directoryName, snapshotParty, uniqueParties, upsertDirectory, removeDirectory, validateDirectory, type DirectoryCollections } from '../utils/directory.ts';
@@ -6,6 +7,8 @@ import { serviceUnitLabel } from '../utils/serviceUnits.ts';
 import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import {
   AppSettings,
+  TeamServiceBrief,
+  TeamServiceBriefDraft,
   PlanTier,
   SalaryPayment,
   SalaryPaymentDraft,
@@ -67,6 +70,8 @@ interface POSContextType {
   setMarketingTeam: React.Dispatch<React.SetStateAction<PersonRecord[]>>;
   companyMembers: PersonRecord[];
   setCompanyMembers: React.Dispatch<React.SetStateAction<PersonRecord[]>>;
+  teamServiceBriefs: TeamServiceBrief[];
+  saveTeamServiceBrief: (draft:TeamServiceBriefDraft)=>TeamServiceBrief;
   relatedCompanies: PersonRecord[];
   salaryPayments: SalaryPayment[];
   recordSalaryPayment: (draft: SalaryPaymentDraft) => SalaryPayment;
@@ -180,6 +185,7 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [transporters, setTransporters] = useState<PersonRecord[]>(initial?.transporters || []);
   const [marketingTeam, setMarketingTeam] = useState<PersonRecord[]>(initial?.marketingTeam || []);
   const [companyMembers, setCompanyMembers] = useState<PersonRecord[]>(initial?.companyMembers || []);
+  const [teamServiceBriefs,setTeamServiceBriefs]=useState<TeamServiceBrief[]>(initial?.teamServiceBriefs || []);
   const [relatedCompanies, setRelatedCompanies] = useState<PersonRecord[]>(initial?.relatedCompanies || []);
   const [salaryPayments, setSalaryPayments] = useState<SalaryPayment[]>(initial?.salaryPayments || []);
   const [reviews, setReviews] = useState<CustomerReview[]>(initial?.reviews || []);
@@ -285,6 +291,7 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         companyMembers,
         relatedCompanies,
         salaryPayments,
+        teamServiceBriefs,
         reviews,
         auditLogs,
         landingMetrics,
@@ -307,6 +314,7 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     companyMembers,
     relatedCompanies,
     salaryPayments,
+    teamServiceBriefs,
     reviews,
     auditLogs,
     landingMetrics,
@@ -384,6 +392,7 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // Clear to blank
   const wipeDataToCleanState = () => {
     if (!currentUser?.isAdmin) throw new Error('Only an administrator can delete all business records.');
+    setTeamServiceBriefs([]);
     setRelatedCompanies([]); setSalaryPayments([]); salaryRef.current = [];
     directoriesRef.current = { customers: [], vendors: [], transporters: [], marketingTeam: [], companyMembers: [], relatedCompanies: [] };
     setProducts([]);
@@ -465,6 +474,7 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // Add Sale
   const addSale = (saleData: Omit<SaleTransaction, 'id' | 'receiptNo' | 'timestamp'>): SaleTransaction => {
     requirePlanFeature(settings, 'selling');
+    if(saleData.referredBy&&!hasFeature('referrals'))throw new Error('Referral attribution is not included in this plan.');
     if (!hasFeature('debts') && (saleData.debtAmount > 0 || saleData.amountPaid + 0.001 < saleData.netTotal || saleData.payments.some(p => p.method === 'Credit / Debt'))) throw new Error('The Free plan requires full payment and cannot create debt.');
     const seq = sales.length + 7601;
     const receiptNo = `REC-${seq}`;
@@ -586,6 +596,17 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     if (result.expense) setExpenses(previous => previous.some(e => e.id === result.expense!.id) ? previous : [result.expense!, ...previous]);
     logAuditAction('Recorded Salary Payment', `Recorded ${result.payment.amount} ${result.payment.currency} for ${result.payment.memberName}${result.expense ? ' with one linked salary expense' : ' without posting an expense'}`);
     return result.payment;
+  };
+  const saveTeamServiceBrief=(draft:TeamServiceBriefDraft):TeamServiceBrief=>{
+    requirePlanFeature(settings,'team_services');
+    if(!currentUser?.isAdmin&&!hasPrivilege('canModifySettings'))throw new Error('Preparing team briefs requires workspace-administration permission.');
+    if(!TEAM_SERVICES.some(service=>service.id===draft.serviceId)||!draft.businessName.trim()||!draft.goal.trim()||!draft.authorized)throw new Error('Select a service, enter a business/goal and confirm authorization.');
+    if(draft.website){const website=new URL(draft.website);if(!['http:','https:'].includes(website.protocol)||website.username||website.password)throw new Error('Use a normal HTTP(S) business URL without credentials.');}
+    if(draft.businessName.length>160||draft.goal.length>2000||draft.scope.length>2500||draft.contact.length>300)throw new Error('Keep the brief within the displayed field limits.');
+    const brief:TeamServiceBrief={...draft,id:`service-${crypto.randomUUID()}`,createdAt:new Date().toISOString(),createdBy:currentUser?.name||'User',status:'local_draft'};
+    setTeamServiceBriefs(previous=>[brief,...previous]);
+    logAuditAction('Saved Local Team-Service Brief',`Saved ${draft.serviceId} draft only; no team delivery, ads, lead contacts or security testing initiated`);
+    return brief;
   };
   const setDemoPlan = (tier: PlanTier) => {
     if (!currentUser?.isAdmin || !PLAN_TIERS.includes(tier)) throw new Error('Only an administrator can select a valid demo plan.');
@@ -1089,6 +1110,8 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setCompanyMembers,
         relatedCompanies,
         salaryPayments,
+        teamServiceBriefs,
+        saveTeamServiceBrief,
         recordSalaryPayment,
         setDemoPlan,
         hasFeature,

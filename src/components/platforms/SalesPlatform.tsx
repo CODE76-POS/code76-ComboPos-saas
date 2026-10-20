@@ -348,6 +348,7 @@ export const SalesPlatform: React.FC = () => {
             </select>
           </div>
 
+          {hasFeature('referrals') && (<>
           {/* Sales Referred By combo-box */}
           <div className="flex items-center gap-1.5 bg-slate-900 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-slate-200">
             <Sparkles className="w-3.5 h-3.5 text-amber-400" />
@@ -366,7 +367,8 @@ export const SalesPlatform: React.FC = () => {
                 </option>
               ))}
             </select>
-          </div>
+          </div>          </>)}
+
         </div>
       </div>
 

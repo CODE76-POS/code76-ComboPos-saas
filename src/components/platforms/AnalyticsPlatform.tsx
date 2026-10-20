@@ -98,6 +98,7 @@ export const AnalyticsPlatform: React.FC = () => {
     setHoverHelpPlatform,
     viewportMode,
     currentUser,
+    hasFeature,
   } = usePOS();
 
   const isPhone = viewportMode === 'phone';
@@ -748,8 +749,8 @@ export const AnalyticsPlatform: React.FC = () => {
                 <option value="q_landing_traffic">3. How are landing page visitors behaving (traffic, duration, chatbot)?</option>
                 <option value="q_lead_conversion">4. How can I turn landing page leads into paying customers (Funnel)?</option>
                 <option value="q_inventory_vs_sales">5. How do sales compare to inventory costs across categories?</option>
-                <option value="q_top_referrers">6. Who are our top referrers and how much revenue are they driving?</option>
-                <option value="q_viral_referrals">7. How to ensure non-buyers refer friends and relatives (Referral ROI)?</option>
+                {hasFeature('referrals') && (<option value="q_top_referrers">6. Who are our top referrers and how much revenue are they driving?</option>)}
+                {hasFeature('referrals') && (<option value="q_viral_referrals">7. How to ensure non-buyers refer friends and relatives (Referral ROI)?</option>)}
                 <option value="q_debt_receivables">8. What is our customer debt and accounts receivable status?</option>
                 <option value="q_product_margins">9. Which products & services yield highest gross margins vs sales volume?</option>
                 <option value="q_traffic_sources">10. Where is our landing page traffic coming from (Traffic Channels)?</option>
@@ -1133,7 +1134,7 @@ export const AnalyticsPlatform: React.FC = () => {
           )}
 
           {/* QUESTION 6: TOP REFERRERS */}
-          {selectedQuestion === 'q_top_referrers' && (
+          {hasFeature('referrals') && selectedQuestion === 'q_top_referrers' && (
             <div className="space-y-6 animate-in fade-in duration-200">
               <div className="bg-slate-950/70 p-4 rounded-2xl border border-slate-800">
                 <h3 className="text-base font-bold text-slate-100 flex items-center gap-2">
@@ -1173,7 +1174,7 @@ export const AnalyticsPlatform: React.FC = () => {
           )}
 
           {/* QUESTION 7: VIRAL REFERRAL PERFORMANCE */}
-          {selectedQuestion === 'q_viral_referrals' && (
+          {hasFeature('referrals') && selectedQuestion === 'q_viral_referrals' && (
             <div className="space-y-6 animate-in fade-in duration-200">
               <div className="bg-slate-950/70 p-4 rounded-2xl border border-slate-800">
                 <h3 className="text-base font-bold text-slate-100 flex items-center gap-2">

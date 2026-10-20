@@ -44,6 +44,8 @@ export function permittedBackup(serialized: string, user: AuthUser | null, setti
   const state = JSON.parse(serialized);
   if (!state || typeof state !== 'object' || Array.isArray(state)) throw new Error('The saved backup is not a valid POS object.');
   if (!accessHistoryPermissions(user, settings).canExport) delete state.auditLogs;
+  const canAdminister = user && (user.isAdmin || user.roles.some(role=>settings.privileges[role]?.canModifySettings));
+  if(!canAdminister)delete state.teamServiceBriefs;
   const canManage = user && (user.isAdmin || user.roles.some(role=>settings.privileges[role]?.canManagePeople));
   if (!canManage) { delete state.salaryPayments; for (const key of ['customers','vendors','transporters','marketingTeam','companyMembers','relatedCompanies']) if(Array.isArray(state[key])) state[key]=state[key].map(({salaryRate,salaryBasis,...record}:Record<string,unknown>)=>record); }
   const canViewExpenses = user && (user.isAdmin || user.roles.some(role=>settings.privileges[role]?.canViewExpenses));

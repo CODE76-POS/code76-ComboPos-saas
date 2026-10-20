@@ -1,5 +1,7 @@
 # Companies, people, schedules, pay and demo plans
 
+> **Latest pricing/Max update:** [Max, current prices, Starter changes and coordinated landing navigation](MAX-PRICING-AND-LANDING.md). Max and Lifetime include scoped team-service access. Current evidence: [qa/max-marketing](qa/max-marketing/README.md).
+
 ## Live app
 
 Open **CODE76 POS — Workspace Preview**, **port 5173**, in Arena's Live Preview panel. The app URL remains available in the POS top navbar. A new workspace starts Free; select **CEO / Admin → skip/complete setup → Current demo plan → Pro or Lifetime** to test company, payroll and other paid features. Existing saved workspaces without a tier retain Pro-equivalent access. No billing or subscription provider is connected.

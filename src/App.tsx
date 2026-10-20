@@ -45,11 +45,11 @@ const POSContent: React.FC = () => {
     const borderClass = isLight ? 'border-slate-300' : 'border-slate-800';
     switch (viewportMode) {
       case 'phone':
-        return `max-w-[390px] mx-auto min-h-screen border-x ${borderClass} shadow-2xl overflow-x-hidden transition-all duration-300 ${bgClass}`;
+        return `max-w-[390px] mx-auto min-h-screen border-x ${borderClass} shadow-2xl overflow-x-clip transition-all duration-300 ${bgClass}`;
       case 'tablet':
-        return `max-w-[768px] mx-auto min-h-screen border-x ${borderClass} shadow-2xl overflow-x-hidden transition-all duration-300 ${bgClass}`;
+        return `max-w-[768px] mx-auto min-h-screen border-x ${borderClass} shadow-2xl overflow-x-clip transition-all duration-300 ${bgClass}`;
       case 'laptop':
-        return `max-w-[1024px] mx-auto min-h-screen border-x ${borderClass} shadow-2xl overflow-x-hidden transition-all duration-300 ${bgClass}`;
+        return `max-w-[1024px] mx-auto min-h-screen border-x ${borderClass} shadow-2xl overflow-x-clip transition-all duration-300 ${bgClass}`;
       default:
         return `w-full min-h-screen transition-all duration-300 ${bgClass}`;
     }

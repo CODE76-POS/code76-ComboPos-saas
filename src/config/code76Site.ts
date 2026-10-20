@@ -8,11 +8,11 @@ import { CODE76_MARKETING_CONTENT } from '../data/code76SiteContent.ts';
  */
 // Current CODE76 website copy. This is not a merchant preference or migration default.
 const CODE76_WEBSITE_SETTINGS = {
-  heroTitle: 'Transform Every Retail & Service Transaction into Predictable Profit',
-  heroSubtitle: 'Complete POS hardware, real-time inventory synchronization, automated debt tracking, and AI sales conversion for ambitious businesses.',
+  heroTitle: 'Sell clearly. Keep business records connected.',
+  heroSubtitle: 'Explore sales, service inventory, business records and clearly scoped team assistance. Choose the tools and plan that fit your next step.',
   featuredCount: 6, slideshowSpeedMs: 4000, showSocialProof: true, showChatbot: true,
-  referralBonusText: 'Refer a fellow business owner or friend! When they purchase a terminal, both of you get $50 credit or 10% discount on next restock.',
-  topReferrersLimit: 5, showPromoCountdown: true, customInstagram: '@code76_pos', customTwitter: '@code76pos',
+  referralBonusText: 'Referral assistance and any rewards are agreed with the CODE76 team; no cash or credit is issued automatically.',
+  topReferrersLimit: 5, showPromoCountdown: false, customInstagram: '@code76_pos', customTwitter: '@code76pos',
   customWhatsappDirect: '+18007607676', shareableLinkSlogan: 'Exclusive Enterprise Commercial POS & ERP Hardware Special',
 };
 

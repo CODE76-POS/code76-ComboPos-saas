@@ -1,0 +1,255 @@
+### Page
+- Page URL: http://127.0.0.1:5173/#/pos/analytics
+- Page Title: CODE76 POS — Private Workspace
+### Snapshot
+```yaml
+- generic [ref=e1]:
+  - generic [ref=e4]:
+    - banner [ref=e3001]:
+      - generic [ref=e3002]:
+        - button "76 CODE76 POS Enterprise Product & Service SaaS ERP System" [ref=e3004] [cursor=pointer]:
+          - generic [ref=e3005]: "76"
+          - generic [ref=e3006]:
+            - generic [ref=e3007]:
+              - generic [ref=e3008]: CODE76 POS
+              - generic [ref=e3009]: Enterprise
+            - paragraph [ref=e3010]: Product & Service SaaS ERP System
+        - generic [ref=e3011]:
+          - generic [ref=e3012]:
+            - button "Desktop View (Full Width)" [ref=e3013] [cursor=pointer]
+            - button "Laptop View (1024px)" [ref=e3016] [cursor=pointer]
+            - button "Tablet View (768px)" [ref=e3019] [cursor=pointer]
+            - button "Phone Mobile View (390px)" [ref=e3022] [cursor=pointer]
+          - generic [ref=e3025]:
+            - button "Demo Data" [ref=e3026] [cursor=pointer]
+            - button "Click to view help guide and settings for this platform" [ref=e3038] [cursor=pointer]
+            - button "Active user session and access controls" [ref=e3043] [cursor=pointer]:
+              - generic [ref=e3044]: DR
+              - generic [ref=e3045]:
+                - generic [ref=e3046]: Dr. David Kimani
+                - generic [ref=e3047]: "Role: CEO"
+      - generic [ref=e3048]:
+        - generic [ref=e3049]:
+          - generic [ref=e3053]: App link
+          - generic [ref=e3054]:
+            - generic [ref=e3055]:
+              - generic [ref=e3056]: App link
+              - textbox "App link" [ref=e3057]: http://127.0.0.1:5173/
+              - button "Copy app link" [ref=e3058] [cursor=pointer]:
+                - generic [ref=e3062]: Copy link
+              - link "Open app link in a new tab" [ref=e3063] [cursor=pointer]:
+                - /url: http://127.0.0.1:5173/
+            - status [ref=e3068]
+          - button "Current demo plan" [ref=e3069]: Starter · demo
+        - paragraph [ref=e3070]: Open this root link to reach CODE76 sign-in/register. Browser-local records and sessions do not sync between browsers.
+      - generic [ref=e3072]:
+        - button "Sales POS" [ref=e3073] [cursor=pointer]
+        - button "Sales History" [ref=e3077] [cursor=pointer]
+        - button "Inventory" [ref=e3082] [cursor=pointer]
+        - button "Expenses" [ref=e3087] [cursor=pointer]
+        - button "Invoices" [ref=e3091] [cursor=pointer]
+        - button "Analytics & P&L" [active] [ref=e3095] [cursor=pointer]
+        - button "Customers" [ref=e3098] [cursor=pointer]
+        - button "Vendors" [ref=e3104] [cursor=pointer]
+        - button "Transporters" [ref=e3109] [cursor=pointer]
+        - button "Marketing Team" [ref=e3115] [cursor=pointer]
+        - button "Company Members" [ref=e3119] [cursor=pointer]
+        - button "My Company" [ref=e3125] [cursor=pointer]
+        - button "Messaging" [ref=e3129] [cursor=pointer]
+        - button "Settings" [ref=e3137] [cursor=pointer]
+        - button "Audit & Access Logs" [ref=e3141] [cursor=pointer]
+        - button "About & Manual" [ref=e3145] [cursor=pointer]
+    - main [ref=e5]:
+      - generic [ref=e4786]:
+        - generic [ref=e4787]:
+          - generic [ref=e4788]:
+            - generic [ref=e4789]:
+              - heading "Executive Analytics & Interactive Infographics" [level=1] [ref=e4790]
+              - button "Click for platform guidance & settings" [ref=e4791] [cursor=pointer]
+            - paragraph [ref=e4795]: "Interactive D3.js & Recharts infographics answering core business questions: expenses vs profits, landing traffic metrics, and viral referral ROI."
+          - generic [ref=e4796]:
+            - button "PDF Report" [ref=e4797] [cursor=pointer]
+            - button "Export CSV" [ref=e4802] [cursor=pointer]
+            - button "Email Analytics (.txt & .pdf)" [ref=e4807] [cursor=pointer]
+            - button "Run Gemini AI CFO Analysis" [ref=e4812] [cursor=pointer]
+        - generic [ref=e4816]:
+          - generic [ref=e4817]:
+            - generic [ref=e4818]: Gross Revenue
+            - generic [ref=e4822]: $100
+            - generic [ref=e4823]: 1 transactions completed
+          - generic [ref=e4824]:
+            - generic [ref=e4825]: Operating Expenses
+            - generic [ref=e4830]: $0
+            - generic [ref=e4831]: 0 overhead expenses
+          - generic [ref=e4832]:
+            - generic [ref=e4833]: Inventory Valuation
+            - generic [ref=e4839]: $180
+            - generic [ref=e4840]: Asset value across 1 catalog items
+          - generic [ref=e4841]:
+            - generic [ref=e4842]: Net Profit / Margin
+            - generic [ref=e4847]: $55
+            - generic [ref=e4848]: 55% Net Margin
+        - generic [ref=e4849]:
+          - generic [ref=e4850]:
+            - generic [ref=e4851]:
+              - generic [ref=e4852]: Executive Business Intelligence & Diagnostic Center
+              - heading "Interactive Answers to Your Core Business & Landing Questions" [level=2] [ref=e4856]
+            - generic [ref=e4857]:
+              - generic [ref=e4858]: "Select Business Question:"
+              - combobox [ref=e4860] [cursor=pointer]:
+                - option "1. Is the business making profits or losses, and what is our net margin?" [selected]
+                - option "2. What expenses are costing the business the most?"
+                - option "3. How are landing page visitors behaving (traffic, duration, chatbot)?"
+                - option "4. How can I turn landing page leads into paying customers (Funnel)?"
+                - option "5. How do sales compare to inventory costs across categories?"
+                - option "8. What is our customer debt and accounts receivable status?"
+                - option "9. Which products & services yield highest gross margins vs sales volume?"
+                - option "10. Where is our landing page traffic coming from (Traffic Channels)?"
+                - option "11. What payment methods are customers using (Cash, M-Pesa, Card, Bank)?"
+                - option "12. What are landing page visitors asking the AI Chatbot the most?"
+                - option "13. Customer Satisfaction & Testimonial Ratings Distribution?"
+                - option "14. Inventory Stock Health & Depletion Reorder Warnings?"
+                - 'option "15. Predictive Trends: Next Month''s Sales Revenue AI Forecast"'
+                - 'option "16. Future Predictions: Multi-Scenario Revenue Forecast, Cash Runway & CapEx"'
+                - 'option "17. Current Affairs & Market Dynamics: Inflation, Supply Volatility & Pricing Elasticity"'
+                - 'option "18. Historical Data Deep Dive: Peak Checkout Hours, Day-of-Week Trends & Seasonal Cycles"'
+          - generic [ref=e4861]:
+            - generic [ref=e4862]:
+              - generic [ref=e4863]: "Chart Type Representation:"
+              - generic [ref=e4866]: (Choose how to view the answer data)
+            - generic [ref=e4867]:
+              - button "✨ All Views" [ref=e4868] [cursor=pointer]
+              - button "📊 Bar Graph" [ref=e4870] [cursor=pointer]
+              - button "📈 Line Graph" [ref=e4872] [cursor=pointer]
+              - button "🥧 Pie Chart" [ref=e4874] [cursor=pointer]
+              - button "📉 Histogram" [ref=e4876] [cursor=pointer]
+          - generic [ref=e4879]:
+            - generic [ref=e4880]:
+              - generic [ref=e4881]:
+                - 'heading "Profit & Loss Verdict: Operating at a Profit" [level=3] [ref=e4882]'
+                - paragraph [ref=e4886]:
+                  - text: Total sales revenue is
+                  - strong [ref=e4887]: $100
+                  - text: . Direct cost of goods sold (COGS) is
+                  - strong [ref=e4888]: $45
+                  - text: ", leaving a Gross Profit of"
+                  - strong [ref=e4889]: $55
+                  - text: . After operational overhead expenses (
+                  - strong [ref=e4890]: $0
+                  - text: ), the net bottom line is
+                  - strong [ref=e4891]: $55 (55% net margin)
+                  - text: .
+              - generic [ref=e4892]:
+                - generic [ref=e4893]: Net Profit Margin
+                - generic [ref=e4894]: 55%
+            - generic [ref=e4895]:
+              - generic [ref=e4896]:
+                - generic [ref=e4897]:
+                  - 'heading "D3.js Interactive Infographic: Expenses vs Profits Flow" [level=4] [ref=e4900]'
+                  - paragraph [ref=e4903]: Real-time vector D3 visualization depicting revenue conversion, cost deduction, and net margin.
+                - generic [ref=e4904]:
+                  - button "P&L Waterfall" [ref=e4905] [cursor=pointer]
+                  - button "Overhead Hierarchy" [ref=e4906] [cursor=pointer]
+              - img [ref=e4908]:
+                - generic [ref=e4909]:
+                  - generic [ref=e4912]:
+                    - generic [ref=e4914]: $0k
+                    - generic [ref=e4916]: $0.02k
+                    - generic [ref=e4918]: $0.04k
+                    - generic [ref=e4920]: $0.06k
+                    - generic [ref=e4922]: $0.08k
+                    - generic [ref=e4924]: $0.1k
+                  - generic [ref=e4926]:
+                    - generic [ref=e4928]: Revenue
+                    - generic [ref=e4930]: COGS
+                    - generic [ref=e4932]: Gross Profit
+                    - generic [ref=e4934]: Expenses
+                    - generic [ref=e4936]: Net Profit
+                  - generic [ref=e4938] [cursor=pointer]
+                  - generic [ref=e4939] [cursor=pointer]
+                  - generic [ref=e4940] [cursor=pointer]
+                  - generic [ref=e4941] [cursor=pointer]
+                  - generic [ref=e4942]: $0k
+                  - generic [ref=e4943]: $0k
+                  - generic [ref=e4944]: $0k
+                  - generic [ref=e4945]: $0k
+                  - generic [ref=e4946]: $0k
+            - generic [ref=e4947]:
+              - generic [ref=e4948]:
+                - 'heading "Recharts Comparative Bar Graph: Revenue vs COGS vs Expenses vs Net Profit" [level=4] [ref=e4949]'
+                - generic [ref=e4952]: Live Interactive Recharts
+              - application [ref=e4956]:
+                - generic [ref=e4984]:
+                  - generic [ref=e4985]:
+                    - generic [ref=e4986]: Gross Revenue
+                    - generic [ref=e4988]: Inventory Cost (COGS)
+                    - generic [ref=e4990]: Gross Profit
+                    - generic [ref=e4992]: Operating Expenses
+                    - generic [ref=e4994]: Net Profit / Loss
+                  - generic [ref=e4996]:
+                    - generic [ref=e4997]: $0
+                    - generic [ref=e4999]: $25
+                    - generic [ref=e5001]: $50
+                    - generic [ref=e5003]: $75
+                    - generic [ref=e5005]: $100
+        - region "Historical live and future scenario analytics" [ref=e5007]:
+          - generic [ref=e5008]:
+            - generic [ref=e5009]:
+              - text: Historical · live workspace · future scenarios
+              - heading "Read the past. Model the next step." [level=2] [ref=e5010]
+              - paragraph [ref=e5011]: Historical points sum your stored net sales by the selected business timezone. Live means this view updates when workspace entries change—not a connected external market feed. Net sales can include credit sales; they are not cash collected.
+            - button "Export scenario CSV" [ref=e5012]
+          - generic [ref=e5013]:
+            - generic [ref=e5014]:
+              - paragraph [ref=e5015]: Recorded net sales · last 14 days
+              - strong [ref=e5016]: USD 100
+            - generic [ref=e5017]:
+              - paragraph [ref=e5018]: Days with recorded transactions
+              - strong [ref=e5019]: "1"
+            - generic [ref=e5020]:
+              - paragraph [ref=e5021]: Next 7 days · scenario estimate
+              - strong [ref=e5022]: Not enough history
+          - generic [ref=e5023]:
+            - generic [ref=e5024]:
+              - text: Scenario method
+              - combobox "Sales scenario method" [ref=e5025]:
+                - option "Trailing 7-day average" [selected]
+                - option "Simple 14-day linear trend"
+            - generic [ref=e5026]:
+              - text: Your scenario adjustment (%)
+              - spinbutton "Sales scenario adjustment" [ref=e5027]: "0"
+          - status [ref=e5028]: Record transactions on at least 3 separate business dates within the last 14 days to enable a future scenario. No revenue, history or forecast is invented for an empty workspace.
+          - img "Recorded daily net sales and clearly separated future scenario line" [ref=e5029]:
+            - generic [ref=e5031]:
+              - list [ref=e5033]:
+                - listitem [ref=e5034]:
+                  - img "Future scenario (estimate) legend icon" [ref=e5035]
+                  - text: Future scenario (estimate)
+                - listitem [ref=e5037]:
+                  - img "Recorded net sales legend icon" [ref=e5038]
+                  - text: Recorded net sales
+              - application [ref=e5040]:
+                - generic [ref=e5056]:
+                  - generic [ref=e5057]:
+                    - generic [ref=e5058]: 2026-10-07
+                    - generic [ref=e5060]: 2026-10-08
+                    - generic [ref=e5062]: 2026-10-09
+                    - generic [ref=e5064]: 2026-10-10
+                    - generic [ref=e5066]: 2026-10-11
+                    - generic [ref=e5068]: 2026-10-12
+                    - generic [ref=e5070]: 2026-10-13
+                    - generic [ref=e5072]: 2026-10-14
+                    - generic [ref=e5074]: 2026-10-15
+                    - generic [ref=e5076]: 2026-10-16
+                    - generic [ref=e5078]: 2026-10-17
+                    - generic [ref=e5080]: 2026-10-18
+                    - generic [ref=e5082]: 2026-10-20
+                  - generic [ref=e5084]:
+                    - generic [ref=e5085]: "0"
+                    - generic [ref=e5087]: "25"
+                    - generic [ref=e5089]: "50"
+                    - generic [ref=e5091]: "75"
+                    - generic [ref=e5093]: "100"
+          - paragraph [ref=e5095]: Methods are simple arithmetic scenarios, not Gemini/ARIMA/Prophet inference or statistically validated confidence intervals. Zero means no sales are recorded for that day; missing/offline records may make the data incomplete. Seasonality, marketing effects and profit are not predicted. Your adjustment is a chosen assumption, not a measured effect. Outcomes can differ substantially; no sales/profit guarantee is made.
+  - generic [aria-hidden] [ref=e4555]: "25"
+```

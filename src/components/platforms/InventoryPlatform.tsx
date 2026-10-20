@@ -614,7 +614,7 @@ export const InventoryPlatform: React.FC = () => {
 
                       {/* MARKETING PROMOTION */}
                       <td className="py-2.5 px-3 text-center">
-                        {canMarket && (<button
+                        {canMarket && hasFeature('email') && (<button
                           onClick={() => { if(canMarket) setMarketingModalItem(item); }}
                           title="Open Marketing Widget: Dispatch email campaign for this product/discount"
                           className="px-2.5 py-1 rounded-lg bg-violet-600/30 hover:bg-violet-600/50 text-violet-300 border border-violet-500/40 text-[11px] font-bold flex items-center gap-1 mx-auto transition cursor-pointer shadow-xs"

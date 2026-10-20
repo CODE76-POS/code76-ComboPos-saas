@@ -1,8 +1,9 @@
+import { useMeasuredHeader } from '../../hooks/useMeasuredHeader.ts';
 import { canOpenPlatform, PLAN_INFO, planTier } from '../../utils/plans.ts';
 import { LinkCopyField } from '../common/LinkCopyField.tsx';
 import { applicationUrl, isWorkspacePreview } from '../../utils/clipboard.ts';
 import { accessHistoryPermissions } from '../../utils/accessHistory.ts';
-import React from 'react';
+import React, { useRef } from 'react';
 import { usePOS } from '../../context/POSContext.tsx';
 import {
   Monitor,
@@ -71,12 +72,14 @@ export const TopNavBar: React.FC = () => {
     setSettingsSection,
   } = usePOS();
 
+  const headerRef=useRef<HTMLElement>(null);
+  useMeasuredHeader(headerRef,'--pos-header-height');
   const isLight = theme === 'light';
   const appUrl = applicationUrl(window.location.href, import.meta.env.BASE_URL);
   const historyAccess = accessHistoryPermissions(currentUser, settings);
 
   return (
-    <header
+    <header ref={headerRef} data-pos-header="true"
       className={`sticky top-0 z-40 transition-colors duration-200 ${
         isLight
           ? 'bg-white border-b border-slate-200 text-slate-800 shadow-sm'

@@ -196,3 +196,8 @@
 /* Samples keep their own colors even while the POS uses the opposite theme. */
 .pos-workspace .appearance-theme-sample[data-preview-theme="light"] { background: #fff; color: #0f172a; border-color: #cbd5e1; }
 .pos-workspace .appearance-theme-sample[data-preview-theme="dark"] { background: #020617; color: #f1f5f9; border-color: #334155; }
+
+/* Landing navigation is coordinated with measured, responsive header heights. */
+.public-landing-page section[id], .public-landing-page #portal-access { scroll-margin-top: calc(var(--public-site-header-height, 0px) + 18px); }
+.business-landing-page section[id], .business-landing-page #contact { scroll-margin-top: calc(var(--pos-header-height, 0px) + var(--business-site-header-height, 0px) + 18px); }
+@media (prefers-reduced-motion: reduce) { .public-landing-page *, .business-landing-page * { scroll-behavior: auto !important; transition-duration: 0s; } }

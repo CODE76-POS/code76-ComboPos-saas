@@ -18,9 +18,9 @@ const person = (patch: Partial<PersonRecord>={}): PersonRecord => ({id:'TEST-mem
 const empty = (): DirectoryCollections => ({customers:[],vendors:[],transporters:[],marketingTeam:[],companyMembers:[],relatedCompanies:[]});
 const source = (path:string) => readFileSync(new URL(`../../${path}`,import.meta.url),'utf8');
 const free = new Set(['selling','receipts','sales_history','inventory','appearance','payments','regional','delete_data','about']);
-const starterOff = new Set(['inventory_marketing','business_landing','chatbot','messaging','email']);
+const starterOff = new Set(['business_landing','chatbot','email','referrals']);
 for (const tier of PLAN_TIERS) for (const feature of FEATURES) test(`${tier} entitlement: ${feature}`,()=>{
-  assert.equal(hasPlanFeature(tier,feature),tier==='free'?free.has(feature):tier==='starter'?!starterOff.has(feature):true);
+  assert.equal(hasPlanFeature(tier,feature),feature==='team_services'?(tier==='max'||tier==='lifetime'):tier==='free'?free.has(feature):tier==='starter'?!starterOff.has(feature):true);
 });
 test('unknown feature strings fail closed even on Lifetime',()=>assert.equal(hasPlanFeature('lifetime','misspelled_feature' as any),false));
 test('new workspaces default to Free while older saved settings retain Pro access',()=>{
@@ -37,8 +37,8 @@ test('Free has currency/date/appearance/payment/delete settings but no imports, 
   for(const section of ['regional','appearance','payments','dataEraser','plans'] as const)assert.equal(canOpenSettings(prefs('free'),section),true);
   for(const section of ['backup','privileges','emailTemplates','pdfExcel','landingPage','auditLogs'] as const)assert.equal(canOpenSettings(prefs('free'),section),false);
 });
-test('Starter retains companies, payroll and invoices but not merchant marketing/comms',()=>{
-  for(const feature of ['directory','company_profile','payroll','invoices','expenses','audit'] as const)assert.equal(hasPlanFeature('starter',feature),true);
+test('Starter retains companies, payroll, messaging and promotions with four explicit exclusions',()=>{
+  for(const feature of ['directory','company_profile','payroll','invoices','expenses','audit','messaging','inventory_marketing'] as const)assert.equal(hasPlanFeature('starter',feature),true);
   for(const feature of starterOff)assert.equal(hasPlanFeature('starter',feature as any),false);
 });
 test('context-level paid actions reject Free as well as hiding its menu',()=>{

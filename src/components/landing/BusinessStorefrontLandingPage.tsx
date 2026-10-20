@@ -1,8 +1,10 @@
+import { LandingSectionNav } from './LandingSectionNav.tsx';
+import { useMeasuredHeader } from '../../hooks/useMeasuredHeader.ts';
 import { directoryPhoto } from '../../utils/directory.ts';
 import { applicationUrl } from '../../utils/clipboard.ts';
 import { LinkCopyField } from '../common/LinkCopyField.tsx';
 import { serviceUnitLabel } from '../../utils/serviceUnits.ts';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { usePOS } from '../../context/POSContext.tsx';
 import {
   ShoppingBag,
@@ -208,6 +210,9 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
     }, 1400);
   };
 
+  const merchantHeader=useRef<HTMLElement>(null);
+  useMeasuredHeader(merchantHeader,'--business-site-header-height');
+
   // This link remains inside the authenticated POS. It is NOT a public storefront.
   const getInternalPreviewUrl = () => typeof window === 'undefined' ? '' : viewUrl('pos', applicationUrl(window.location.href, import.meta.env.BASE_URL), 'landing_page_builder');
 
@@ -245,9 +250,9 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
   if (!currentUser) return null;
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-teal-500 selection:text-white pb-24">
+    <div className="business-landing-page min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-teal-500 selection:text-white pb-24">
       {/* Top Announcement Bar */}
-      {settings.landingPage.referralBonusText.trim() && <div className="bg-gradient-to-r from-teal-900 via-slate-900 to-emerald-950 border-b border-teal-800/40 text-center py-2 px-4 text-xs font-medium text-teal-200">
+      {hasFeature('referrals') && settings.landingPage.referralBonusText.trim() && <div className="bg-gradient-to-r from-teal-900 via-slate-900 to-emerald-950 border-b border-teal-800/40 text-center py-2 px-4 text-xs font-medium text-teal-200">
         <span className="inline-flex items-center gap-2">
           <Sparkles className="w-3.5 h-3.5 text-teal-400" />
           <span>
@@ -257,7 +262,8 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
       </div>}
 
       {/* Authenticated Business Landing Page preview navigation */}
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-wrap gap-3 items-center justify-between border-b border-slate-800/80 sticky top-0 bg-slate-950/90 backdrop-blur-md z-40">
+      <header ref={merchantHeader} data-business-site-header="true" className="sticky z-30 border-b border-slate-800 bg-slate-950/95 backdrop-blur-md" style={{top:'var(--pos-header-height, 0px)'}}>
+      <nav aria-label="Business identity and private actions" className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap gap-3 items-center justify-between">
         <div className="flex items-center gap-3">
           {displayCompany.logoUrl ? (
             <img
@@ -278,16 +284,6 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
               {displayCompany.slogan || 'Products & services from our business'}
             </span>
           </div>
-        </div>
-
-        {/* Top Storefront Menu */}
-        <div className="hidden lg:flex items-center gap-6 text-xs text-slate-300 font-medium">
-          <a href="#featured" onClick={scrollToSection} className="hover:text-teal-400 transition">Featured Items</a>
-          <a href="#matcher" onClick={scrollToSection} className="hover:text-teal-400 transition">Browse Catalog</a>
-          <a href="#matcher" onClick={scrollToSection} className="hover:text-teal-400 transition">Product Catalog</a>
-          {showReviews && <a href="#reviews" onClick={scrollToSection} className="hover:text-teal-400 transition">Customer Reviews</a>}
-          {settings.landingPage.referralBonusText.trim() && <a href="#referrals" onClick={scrollToSection} className="hover:text-teal-400 transition">Referral Rewards</a>}
-          <a href="#contact" onClick={scrollToSection} className="hover:text-teal-400 transition">Contact Store</a>
         </div>
 
         {/* Quick Actions */}
@@ -333,9 +329,11 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
           )}
         </div>
       </nav>
+      <LandingSectionNav label="Business page sections" preserveHash sections={[{id:'business-start',label:'Overview'},{id:'featured',label:'Featured'},{id:'matcher',label:'Catalog'},{id:'buying-guide',label:'How to choose'},...(showReviews?[{id:'reviews',label:'Reviews'}]:[]),...(hasFeature('referrals')&&settings.landingPage.referralBonusText.trim()?[{id:'referrals',label:'Referrals'}]:[]),...(hasFeature('chatbot')&&settings.landingPage.showChatbot?[{id:'assistant',label:'Ask the business'}]:[]),{id:'contact',label:'Contact'}]}/>
+      </header>
 
       <div className="border-b border-teal-800/60 bg-teal-950/70 px-4 py-3 text-center text-xs text-teal-100" role="note">
-        <strong>Private Business Landing Page preview.</strong> Only signed-in POS users can access this screen. This page is not published to the public website.
+        <strong>Private Business Landing Page preview.</strong> Only signed-in POS users can access this screen. This page is not published to the public website. Its content is managed separately from CODE76 product marketing.
       </div>
 
       {/* Clean State Info Banner */}
@@ -349,7 +347,7 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
       )}
 
       {/* STOREFRONT HERO SECTION */}
-      <section className="relative overflow-hidden pt-12 pb-16 px-4 max-w-7xl mx-auto">
+      <section id="business-start" className="relative overflow-hidden pt-12 pb-16 px-4 max-w-7xl mx-auto">
         <div className="max-w-4xl mx-auto text-center space-y-5">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-teal-500/10 border border-teal-500/30 text-teal-300 text-xs font-semibold">
             <ShieldCheck className="w-4 h-4 text-teal-400" />
@@ -368,7 +366,7 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
             <div className="flex items-center gap-2 bg-slate-900/90 px-3.5 py-2 rounded-2xl border border-slate-800 shadow-md">
               <Package className="w-4 h-4 text-teal-400" />
               <span>
-                <strong className="text-slate-100 font-extrabold">{displayProducts.length}</strong> Live SKUs Synchronized
+                <strong className="text-slate-100 font-extrabold">{displayProducts.length}</strong> catalog entries from Inventory
               </span>
             </div>
 
@@ -393,18 +391,20 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
               className="px-6 py-3 rounded-2xl bg-teal-600 hover:bg-teal-500 text-white font-extrabold text-xs shadow-lg shadow-teal-600/30 transition flex items-center gap-2 cursor-pointer"
             >
               <ShoppingBag className="w-4 h-4" />
-              <span>Browse Featured Items</span>
+              <span>Explore featured items</span>
             </a>
             <a
               href="#matcher" onClick={scrollToSection}
               className="px-6 py-3 rounded-2xl bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700 font-bold text-xs transition flex items-center gap-2 cursor-pointer"
             >
               <Sparkles className="w-4 h-4 text-teal-400" />
-              <span>Browse the Catalog</span>
+              <span>Find the right product or service</span>
             </a>
           </div>
         </div>
       </section>
+
+      <section id="buying-guide" className="max-w-7xl mx-auto px-4 py-8"><div className="grid md:grid-cols-3 gap-3">{[{title:'1. Find a good fit',copy:'Browse the actual catalog, compare descriptions and check the displayed price or service billing unit.'},{title:'2. Confirm the details',copy:'Ask about current availability, service scope, timing and any applicable terms before making a decision.'},{title:'3. Choose your next step',copy:'Use the business contact details to arrange an order or service. This preview does not take payment, reserve stock or confirm appointments.'}].map(step=><article key={step.title} className="rounded-2xl border border-slate-800 bg-slate-900 p-4"><h2 className="font-bold text-sm text-teal-300">{step.title}</h2><p className="mt-2 text-xs leading-relaxed text-slate-400">{step.copy}</p></article>)}</div></section>
 
       {/* 1. PRIMARY LIVE CATALOG (ITEMS 1 TO 6) */}
       <section id="featured" className="max-w-7xl mx-auto px-4 py-12 scroll-mt-20">
@@ -763,7 +763,7 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
       )}
 
       {/* 5. STORE REFERRAL REWARDS */}
-      {settings.landingPage.referralBonusText.trim() && <section id="referrals" className="max-w-7xl mx-auto px-4 py-12">
+      {hasFeature('referrals') && settings.landingPage.referralBonusText.trim() && <section id="referrals" className="max-w-7xl mx-auto px-4 py-12">
         <div className="bg-gradient-to-r from-amber-950/40 via-slate-900 to-purple-950/40 border border-amber-800/40 rounded-3xl p-6 sm:p-10 shadow-2xl">
           <div className="max-w-3xl mx-auto text-center space-y-4">
             <div className="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center mx-auto border border-amber-500/30">
@@ -802,6 +802,8 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
       </section>}
 
       {/* 6. STORE OFFICIAL CONTACT & LOCATION DETAILS */}
+      {hasFeature('chatbot') && settings.landingPage.showChatbot && <section id="assistant" className="max-w-7xl mx-auto px-4 py-8"><div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-slate-800 bg-slate-900 p-5"><div className="max-w-2xl"><h2 className="text-xl font-bold">A question before you decide?</h2><p className="mt-2 text-sm text-slate-400">Ask about this business's actual catalog and contacts. Confirm availability and terms directly; the assistant does not take payment, reserve stock or confirm appointments.</p></div><AIChatbotWidget surface="business" inquiryLead={activeInquiryLead} inlineLauncher /></div></section>}
+
       <section id="contact" className="max-w-7xl mx-auto px-4 py-12 scroll-mt-20">
         <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-10 shadow-xl">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs">
@@ -1019,9 +1021,7 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
       )}
 
       {/* FLOATING AI CHATBOT CONCIERGE */}
-      {hasFeature('chatbot') && settings.landingPage.showChatbot && (
-        <AIChatbotWidget surface="business" inquiryLead={activeInquiryLead} />
-      )}
+
     </div>
   );
 };

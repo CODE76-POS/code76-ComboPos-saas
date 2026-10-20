@@ -24,9 +24,14 @@ const USER_MANUAL_SECTIONS = [
   {
     id: 'plans-companies-payroll',
     title: 'Plans, related companies, pictures, staff schedules & salary payments',
-    content: `• DEMO PLANS: Settings → Demo Plan Settings. Only an administrator can select Free, Starter, Pro or Lifetime. No charge, renewal or paid licence is created. Existing saved workspaces keep Pro-equivalent access; new workspaces start Free.
+    content: `• DEMO PLANS: Settings → Demo Plan Settings. Only an administrator can select Free, Starter, Pro, Max or Lifetime. No charge, renewal or paid licence is created. Existing saved workspaces keep Pro-equivalent access; new workspaces start Free.
 • FREE: selling, receipts, history with debt balances read-only, inventory without marketing/export, basic appearance/receipts, currency/payments/date/time settings, business-data deletion and help. New debt creation/repayments are not included.
-• STARTER: Pro operations except inventory marketing, Business Landing Page, merchant chatbot, messaging and email. PRO: all current features under a monthly-subscription model. LIFETIME: all current and future declared features/updates. Real billing is not connected. Role privileges still apply on every tier.
+• STARTER: Access everything Pro Tier has except email, referral operations, Business Landing Page creation and chatbot intelligence. Messaging and inventory promotion editing are available; email-campaign actions remain excluded. PRO: all software including historical/live records, future scenario visual analytics, the Business Landing Page/chatbot and debt handling. MAX: everything Pro plus CODE76 team services. LIFETIME: current/future software and Max service access. Role privileges still apply.
+• PRICES (USD): Free standard $20 → $0/month (100% off); Starter $26 → $13/month; Pro $50 → $25/month; Max $110 → $55/month; Lifetime $500 → $250 one-time. All paid offers are 50% off. No price deadline or actual charge/renewal is created by choosing a demo plan. Plan-comparison months multiply monthly tiers, not Lifetime.
+• MAX / LIFETIME SERVICES: advertising/market planning, lawful business-matched lead research, referral program assistance, SEO review, defensive business cybersecurity and scoped growth/staff support. Agree deliverables, schedule and any third-party/ad spend before work. Access is not unlimited work or a result guarantee.
+• SERVICE BRIEFS: Settings → CODE76 Team Services (Max/Lifetime, administrator/Modify Settings role). Save and copy a local brief. It is not sent, assigned, notified, scanned, queued or fulfilled by this demo. Do not paste credentials or private customer lists; security work needs explicit authorization.
+• NAVIGATION: section menus stay with the measured CODE76/POS headers on desktop and mobile. Private business links scroll without replacing #/pos/landing_page_builder. The product site and business-page content stay independent.
+• PLANNING: the public site has six transparent assumption calculators (referral K, payback, LTV:CAC with retention months, optional order value, NRR and weighted engagement). They are not guarantees or hidden tracking. Analytics future scenarios use stored sales plus a disclosed average/linear method; no fake $18,500 baseline, AI model execution or confidence interval is claimed.
 • PICTURES: choose optional Neutral, Masculine or Feminine fallback avatar style for a person. It controls an illustration, not sex/gender/orientation. Supplied photos override it. Companies and branches use their logo or a building placeholder, not a person's portrait.
 • COMPANIES: My Company → Other Companies & Branches. Add a utility such as an Electricity company, a supplier, marketing company, transporting company or branch. Choose the parent of a branch. Contacts/legal identifiers are optional; no real company details are guessed.
 • LINKED DIRECTORIES: select vendor, transporter and/or marketing functions. The same stable ID appears in each chosen directory. Edits and removals synchronize; invoices, expenses and salary history keep their original snapshots. Companies are not employees. External people become company members only when explicitly marked as staff.
@@ -64,7 +69,7 @@ const USER_MANUAL_SECTIONS = [
 • Extra Charges: Select charge reason (Tax, Transportation, Packaging, Delivery, Service Fee) and enter custom amount. It itemizes automatically.
 • Discounts: Apply percentage or dollar discounts per line item, or apply a cart-wide promotional discount to the entire subtotal.
 • Referral Tagging: Use the "Referred By" combo-box to credit customers, marketers, or staff (e.g. "Peter Nick (Customer)").
-• Testimonial Prompt: Available with the Business Landing Page entitlement (Pro/Lifetime); approved feedback appears only on the private merchant preview.`,
+• Testimonial Prompt: Available with the Business Landing Page entitlement (Pro/Max/Lifetime); approved feedback appears only on the private merchant preview.`,
   },
   {
     id: 's2',
@@ -81,7 +86,7 @@ const USER_MANUAL_SECTIONS = [
     content: `• Product vs Service: Physical goods track stock and minimum stock alert thresholds; commercial services provide infinite fulfillment.
 • Direct Marketing Widget: Click the purple Megaphone icon on any inventory row to open the direct sales marketing widget. Select a target customer and marketer, choose a template (Discount, New Product, Low Stock Urgency), preview the message, and send!
 • Gemini Copy Polish: Click "AI Polish with Gemini" in the marketing widget to automatically generate high-converting promotional email copy.
-• Inventory export: paid plans and export privilege are required; inventory marketing requires Pro/Lifetime. Free inventory remains usable without marketing/export.`,
+• Inventory export: paid plans and export privilege are required; inventory promotion editing is available in Starter; emailing/referrals are excluded there. Free inventory remains usable without marketing/export.`,
   },
   {
     id: 's4',

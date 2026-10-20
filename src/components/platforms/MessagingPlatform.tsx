@@ -15,7 +15,7 @@ import {
 import { PersonRecord } from '../../types/index.ts';
 
 export const MessagingPlatform: React.FC = () => {
-  const { customers, vendors, transporters, marketingTeam, companyMembers, company, logAuditAction, setHoverHelpPlatform } =
+  const { customers, vendors, transporters, marketingTeam, companyMembers, company, logAuditAction, setHoverHelpPlatform, hasFeature } =
     usePOS();
 
   const [targetCategory, setTargetCategory] = useState<'customer' | 'vendor' | 'transporter' | 'marketer' | 'company_member'>('customer');
@@ -27,22 +27,7 @@ export const MessagingPlatform: React.FC = () => {
   // Message activity history log
   const [sentLogs, setSentLogs] = useState<
     { id: string; timestamp: string; recipient: string; channel: string; preview: string }[]
-  >([
-    {
-      id: 'msg-1',
-      timestamp: '2026-10-15 14:20',
-      recipient: 'Michael Ouma (Customer)',
-      channel: 'WhatsApp',
-      preview: 'Hello Michael, your Touch POS terminal dispatch #76001 is on transit.',
-    },
-    {
-      id: 'msg-2',
-      timestamp: '2026-10-15 10:45',
-      recipient: 'David Kamau (Transporter)',
-      channel: 'SMS',
-      preview: 'Hardware pickup scheduled at Silicon Towers Bay 4 at 11:30 AM.',
-    },
-  ]);
+  >([]);
 
   const getRecipientList = (): PersonRecord[] => {
     switch (targetCategory) {
@@ -69,7 +54,7 @@ export const MessagingPlatform: React.FC = () => {
     switch (tpl) {
       case 'discount':
         setMessageText(
-          `Hello ${name}, ${company.name} is pleased to share our newest 10% commercial discount on all POS scanners and paper rolls. Let us know if you need to restock!`
+          `Hello ${name}, ${company.name} is pleased to share our product and service information. Please ask us about current prices and any offers before ordering!`
         );
         break;
       case 'order_ready':
@@ -92,7 +77,7 @@ export const MessagingPlatform: React.FC = () => {
 
   const handleSend = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!messageText.trim()) return;
+    if (!messageText.trim() || !hasFeature('messaging') || (channel==='email'&&!hasFeature('email'))) return;
 
     const recipientLabel = currentRecipient
       ? `${currentRecipient.firstName} ${currentRecipient.secondName} (${targetCategory})`
@@ -107,7 +92,7 @@ export const MessagingPlatform: React.FC = () => {
     };
 
     setSentLogs((prev) => [newLog, ...prev]);
-    logAuditAction('Sent Direct Message', `Dispatched ${channel.toUpperCase()} message to ${recipientLabel}`);
+    logAuditAction('Saved Message Draft', `Prepared ${channel.toUpperCase()} draft for ${recipientLabel}; no delivery provider connected`);
 
     setDispatchedSuccess(true);
     setMessageText('');
@@ -130,14 +115,14 @@ export const MessagingPlatform: React.FC = () => {
             </button>
           </div>
           <p className="text-xs text-slate-400">
-            Multi-channel outreach to Customers, Vendors, Transporters, Marketing Team, and Company Members via WhatsApp, SMS, and Email.
+            Prepare messaging drafts for your contacts. This demo saves drafts only; no external delivery provider is connected. Email drafting requires an eligible plan.
           </p>
         </div>
 
         {dispatchedSuccess && (
           <div className="bg-emerald-950/60 border border-emerald-800/60 rounded-xl px-3.5 py-1.5 text-xs text-emerald-300 flex items-center gap-1.5">
             <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-            Message sent & logged!
+            Message draft saved locally. Nothing has been sent.
           </div>
         )}
       </div>
@@ -225,7 +210,7 @@ export const MessagingPlatform: React.FC = () => {
                 >
                   SMS Mobile ({currentRecipient?.tel1 || 'N/A'})
                 </button>
-                <button
+                {hasFeature('email') && (<button
                   type="button"
                   onClick={() => setChannel('email')}
                   className={`flex-1 py-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer ${
@@ -235,7 +220,7 @@ export const MessagingPlatform: React.FC = () => {
                   }`}
                 >
                   Email ({currentRecipient?.email1 || 'N/A'})
-                </button>
+                </button>)}
               </div>
             </div>
 
@@ -293,7 +278,7 @@ export const MessagingPlatform: React.FC = () => {
                 className="px-6 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-sm font-semibold shadow-lg shadow-teal-600/30 transition flex items-center gap-2 cursor-pointer"
               >
                 <Send className="w-4 h-4" />
-                Dispatch {channel.toUpperCase()} Message
+                Save {channel.toUpperCase()} draft
               </button>
             </div>
           </form>
@@ -304,7 +289,7 @@ export const MessagingPlatform: React.FC = () => {
           <div className="flex items-center justify-between mb-4 pb-2 border-b border-slate-800">
             <h3 className="font-bold text-slate-100 text-sm flex items-center gap-2">
               <Clock className="w-4 h-4 text-teal-400" />
-              Recent Dispatch Log
+              Local draft history
             </h3>
             <span className="text-xs text-slate-400">{sentLogs.length} logged</span>
           </div>

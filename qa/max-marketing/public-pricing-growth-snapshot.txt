@@ -1,0 +1,536 @@
+### Page
+- Page URL: http://127.0.0.1:5173/#growth-planner
+- Page Title: CODE76 POS — Point of Sale, Inventory & Business Management
+### Snapshot
+```yaml
+- main [ref=e5]:
+  - generic [ref=e6]:
+    - generic [ref=e12]:
+      - strong [ref=e13]: "CODE76 POS:"
+      - text: Clear operations, transparent plans and team-assisted growth. Explore the workspace at your own pace.
+    - generic [ref=e14]:
+      - navigation "CODE76 product navigation" [ref=e15]:
+        - generic [ref=e16]:
+          - generic [ref=e17]: "76"
+          - generic [ref=e18]:
+            - generic [ref=e19]:
+              - generic [ref=e20]: CODE76 POS
+              - generic [ref=e21]: Official
+            - generic [ref=e22]: Enterprise Point of Sale & ERP SaaS Software
+        - link "Sign In / Register" [ref=e24] [cursor=pointer]:
+          - /url: "#portal-access"
+      - navigation "CODE76 page sections" [ref=e29]:
+        - generic [ref=e30]:
+          - link "Overview" [ref=e31] [cursor=pointer]:
+            - /url: "#start"
+          - link "Platforms" [ref=e32] [cursor=pointer]:
+            - /url: "#features"
+          - link "Plans & prices" [ref=e33] [cursor=pointer]:
+            - /url: "#plans"
+          - link "Max services" [ref=e34] [cursor=pointer]:
+            - /url: "#max-services"
+          - link "Growth planner" [ref=e35] [cursor=pointer]:
+            - /url: "#growth-planner"
+          - link "How it works" [ref=e36] [cursor=pointer]:
+            - /url: "#companies"
+          - link "Before you choose" [ref=e37] [cursor=pointer]:
+            - /url: "#reviews"
+          - link "Contact" [ref=e38] [cursor=pointer]:
+            - /url: "#contact"
+    - generic [ref=e40]:
+      - generic [ref=e41]:
+        - generic [ref=e42]: Your next operational step, made clearer
+        - heading "Sell with clarity. Run the rest with confidence." [level=1] [ref=e47]
+        - paragraph [ref=e48]: Bring products, services, checkout and business records into one workspace. Start with Free, grow into Pro, or add CODE76 team assistance with Max. See what fits before making a commitment.
+        - generic [ref=e49]:
+          - generic [ref=e50]: "Multi-Split Payment: Cash, M-Pesa, Card & Wire"
+          - generic [ref=e55]: Product stock and clear service billing units
+          - generic [ref=e60]: Company-linked invoices, expenses and staff records
+          - generic [ref=e65]: High-Contrast Light/Dark Themes & Multi-Device Views
+        - generic [ref=e70]:
+          - link "Start with Free" [ref=e71] [cursor=pointer]:
+            - /url: "#portal-access"
+          - link "Find your plan" [ref=e72] [cursor=pointer]:
+            - /url: "#plans"
+          - link "Explore Max support" [ref=e73] [cursor=pointer]:
+            - /url: "#max-services"
+        - generic [ref=e74]:
+          - generic [ref=e75]: No card needed for the demo
+          - generic [ref=e76]: ·
+          - generic [ref=e77]: 5 clearly compared plans
+          - generic [ref=e78]: ·
+          - generic [ref=e79]: You choose the pace
+      - generic [ref=e81]:
+        - generic [ref=e82]:
+          - generic [ref=e88]:
+            - heading "CODE76 POS Portal Access" [level=3] [ref=e89]
+            - paragraph [ref=e90]: Workspace account portal
+          - generic [ref=e91]: Demo access
+        - generic [ref=e92]:
+          - generic [ref=e93]:
+            - button "Sign In" [ref=e94] [cursor=pointer]
+            - button "Create Account" [ref=e99] [cursor=pointer]
+          - generic [ref=e104]:
+            - generic [ref=e105]:
+              - generic [ref=e106]: Email Address
+              - textbox "user@business.com" [ref=e110]
+            - generic [ref=e111]:
+              - generic [ref=e112]: Password
+              - textbox "••••••••" [ref=e116]
+            - generic [ref=e117]:
+              - generic [ref=e118]: Role / Permission Level
+              - combobox [ref=e121]:
+                - option "CEO"
+                - option "Manager"
+                - option "Ass-Manager"
+                - option "Supervisor"
+                - option "Marketor"
+                - option "Associate"
+                - option "Ass-Supervisor"
+                - option "Director"
+                - option "Company HR"
+                - option "Company HR 2"
+                - option "Ass-Cashier"
+                - option "Cashier" [selected]
+                - option "Accountant"
+                - option "Basor"
+                - option "Technician"
+                - option "Maintainance"
+                - option "Cleaner"
+                - option "Erands-Person"
+                - option "Developer"
+                - option "Transporter/Driver"
+                - option "Other"
+            - button "Sign In & Enter POS" [ref=e122] [cursor=pointer]
+            - generic [ref=e127]:
+              - generic [ref=e128]: "Quick 1-Click Demo Profiles:"
+              - generic [ref=e129]:
+                - button "⚡ Cashier" [ref=e130] [cursor=pointer]
+                - button "⚡ Manager" [ref=e131] [cursor=pointer]
+                - button "⚡ CEO / Admin" [ref=e132] [cursor=pointer]
+            - generic [ref=e133]: 🔒 Secure confidential authentication with role-based privilege enforcement.
+    - generic [ref=e136]:
+      - generic [ref=e137]: About CODE76 POS System
+      - heading "Engineered for High-Velocity Modern Commerce" [level=2] [ref=e141]
+      - paragraph [ref=e142]: CODE76 POS is an enterprise-grade Point of Sale and ERP management suite crafted specifically for supermarkets, pharmacies, restaurants, wholesale distributors, and retail businesses. From multi-split checkouts to automated stock deduction and compliance audit trails, we empower businesses with uncompromised speed and transparency.
+      - generic [ref=e143]:
+        - generic [ref=e144]:
+          - heading "A clearer checkout workflow" [level=3] [ref=e148]
+          - paragraph [ref=e149]: Build a cart, record one or split payments and inspect the resulting receipt with test data.
+        - generic [ref=e150]:
+          - heading "Connected product records" [level=3] [ref=e156]
+          - paragraph [ref=e157]: Review product stock, service billing units and records together. Check inventory before committing to fulfilment.
+        - generic [ref=e158]:
+          - heading "Visible workspace controls" [level=3] [ref=e163]
+          - paragraph [ref=e164]: Explore role privileges and permitted exports. Production authentication, billing and tenant security still need a backend.
+    - region "CODE76 platforms and features" [ref=e165]:
+      - generic [ref=e166]:
+        - text: One workspace, practical tools
+        - heading "CODE76 Platforms & Features for Your Business" [level=2] [ref=e167]
+        - paragraph [ref=e168]: Explore 18 tools and the everyday business jobs they help you handle. Sign in to explore the POS workspace; merchant business pages remain private.
+      - generic [ref=e169]:
+        - article [ref=e170]:
+          - generic [ref=e171]: "01"
+          - heading "Guided workspace setup" [level=3] [ref=e177]
+          - paragraph [ref=e178]: Choose readable text and a theme, enter your company details, and add your first real products or services at your own pace.
+        - article [ref=e179]:
+          - generic [ref=e180]: "02"
+          - heading "Sales POS & checkout" [level=3] [ref=e186]
+          - paragraph [ref=e187]: Build a cart, apply discounts and record one payment or split payment methods in a single checkout workflow.
+        - article [ref=e188]:
+          - generic [ref=e189]: "03"
+          - heading "Products & service inventory" [level=3] [ref=e196]
+          - paragraph [ref=e197]: Organize SKUs and prices, track product stock, and set service billing units such as per task, per hour or per day.
+        - article [ref=e198]:
+          - generic [ref=e199]: "04"
+          - heading "Sales history & receipts" [level=3] [ref=e206]
+          - paragraph [ref=e207]: Find recorded transactions, review receipts and track outstanding balances without searching through paper notes.
+        - article [ref=e208]:
+          - generic [ref=e209]: "05"
+          - heading "Expense tracking" [level=3] [ref=e215]
+          - paragraph [ref=e216]: Keep operating costs and payment details together so you can review where business money is going.
+        - article [ref=e217]:
+          - generic [ref=e218]: "06"
+          - heading "Sales & purchase invoices" [level=3] [ref=e224]
+          - paragraph [ref=e225]: Prepare invoices, review payment status and keep customer and supplier documents organized.
+        - article [ref=e226]:
+          - generic [ref=e227]: "07"
+          - heading "Business analytics & reporting" [level=3] [ref=e232]
+          - paragraph [ref=e233]: Review recorded sales, expenses and inventory dashboards to support day-to-day business decisions.
+        - article [ref=e234]:
+          - generic [ref=e235]: "08"
+          - heading "Customer directory" [level=3] [ref=e243]
+          - paragraph [ref=e244]: Keep customer contact records and inquiries together for easier follow-up and relationship management.
+        - article [ref=e245]:
+          - generic [ref=e246]: "09"
+          - heading "Vendor directory" [level=3] [ref=e253]
+          - paragraph [ref=e254]: Organize supplier contacts and reference information for purchasing and restocking conversations.
+        - article [ref=e255]:
+          - generic [ref=e256]: "10"
+          - heading "Transport & delivery contacts" [level=3] [ref=e264]
+          - paragraph [ref=e265]: Keep transporters and driver contact details accessible when coordinating business deliveries.
+        - article [ref=e266]:
+          - generic [ref=e267]: "11"
+          - heading "Marketing team directory" [level=3] [ref=e273]
+          - paragraph [ref=e274]: Maintain your marketing contacts and referral information in one place instead of scattered lists.
+        - article [ref=e275]:
+          - generic [ref=e276]: "12"
+          - heading "Company members & roles" [level=3] [ref=e284]
+          - paragraph [ref=e285]: Organize staff records and active roles so responsibilities are clearer across your workspace.
+        - article [ref=e286]:
+          - generic [ref=e287]: "13"
+          - heading "My Company profile" [level=3] [ref=e293]
+          - paragraph [ref=e294]: Manage the merchant identity and contact details used by business documents and your private business-page preview.
+        - article [ref=e295]:
+          - generic [ref=e296]: "14"
+          - heading "Messaging & communication drafts" [level=3] [ref=e301]
+          - paragraph [ref=e302]: Prepare customer communications and reusable message content. Delivery still depends on the configured communication service.
+        - article [ref=e303]:
+          - generic [ref=e304]: "15"
+          - heading "Private Business Landing Page" [level=3] [ref=e311]
+          - paragraph [ref=e312]: Preview your business identity, live inventory and approved reviews inside the authenticated POS—not as a publicly published storefront.
+        - article [ref=e313]:
+          - generic [ref=e314]: "16"
+          - heading "Appearance & workspace settings" [level=3] [ref=e320]
+          - paragraph [ref=e321]: Adjust light/dark appearance, text sizing, receipt preferences and role privileges without changing the public CODE76 website.
+        - article [ref=e322]:
+          - generic [ref=e323]: "17"
+          - heading "User access history & exports" [level=3] [ref=e329]
+          - paragraph [ref=e330]: Authorized users can review activity and session records and download filtered PDF, TXT or CSV reports.
+        - article [ref=e331]:
+          - generic [ref=e332]: "18"
+          - heading "Platform help & user manual" [level=3] [ref=e337]
+          - paragraph [ref=e338]: Find workflow guidance and explanations of the actual navigation icons whenever you need a refresher.
+      - link "Sign in or register to explore" [ref=e340] [cursor=pointer]:
+        - /url: "#portal-access"
+    - generic [ref=e341]:
+      - generic [ref=e342]:
+        - text: A clear next step at every stage
+        - heading "Free, Starter, Pro, Max & Lifetime" [level=2] [ref=e343]
+        - paragraph [ref=e344]: Start with your daily operations. Choose more software capability, or add the CODE76 team with Max. All paid tiers are currently 50% off their listed standard price; Free is $0 instead of $20.
+      - generic [ref=e345]:
+        - article [ref=e346]:
+          - heading "Free" [level=3] [ref=e348]
+          - generic [ref=e349]:
+            - generic [ref=e350]:
+              - deletion [ref=e351]: $20.00
+              - generic [ref=e352]: 100% off
+            - generic [ref=e353]:
+              - strong [ref=e354]: $0.00
+              - generic [ref=e355]: / month
+            - paragraph [ref=e356]: USD · Monthly price, not an annual charge.
+          - paragraph [ref=e357]: Selling, receipts, history with read-only debt balances, inventory without marketing/exports, basic settings and guides.
+          - list [ref=e358]:
+            - listitem [ref=e359]:
+              - generic [aria-hidden] [ref=e360]: ✓
+              - generic [ref=e361]: Core sales and receipt operations
+            - listitem [ref=e362]:
+              - generic [aria-hidden] [ref=e363]: ✓
+              - generic [ref=e364]: Inventory without marketing or data exports
+            - listitem [ref=e365]:
+              - generic [aria-hidden] [ref=e366]: ✓
+              - generic [ref=e367]: Appearance, currency, payments, date/time and guides
+          - link "Start with Free" [ref=e368] [cursor=pointer]:
+            - /url: "#portal-access"
+        - article [ref=e369]:
+          - heading "Starter" [level=3] [ref=e371]
+          - generic [ref=e372]:
+            - generic [ref=e373]:
+              - deletion [ref=e374]: $26.00
+              - generic [ref=e375]: 50% off
+            - generic [ref=e376]:
+              - strong [ref=e377]: $13.00
+              - generic [ref=e378]: / month
+            - paragraph [ref=e379]: USD · Monthly price, not an annual charge.
+          - paragraph [ref=e380]: "Access everything Pro Tier has except: emailing, referral, business landing page creation and chatbot intelligence features."
+          - list [ref=e381]:
+            - listitem [ref=e382]:
+              - generic [aria-hidden] [ref=e383]: ✓
+              - generic [ref=e384]: Business operations, visual analytics and payroll
+            - listitem [ref=e385]:
+              - generic [aria-hidden] [ref=e386]: ✓
+              - generic [ref=e387]: Messaging and inventory promotion tools
+            - listitem [ref=e388]:
+              - generic [aria-hidden] [ref=e389]: ✓
+              - generic [ref=e390]: No email, referral, business-page creation or chatbot intelligence
+          - link "Explore Starter" [ref=e391] [cursor=pointer]:
+            - /url: "#portal-access"
+        - article [ref=e392]:
+          - heading "Pro" [level=3] [ref=e394]
+          - generic [ref=e395]:
+            - generic [ref=e396]:
+              - deletion [ref=e397]: $50.00
+              - generic [ref=e398]: 50% off
+            - generic [ref=e399]:
+              - strong [ref=e400]: $25.00
+              - generic [ref=e401]: / month
+            - paragraph [ref=e402]: USD · Monthly price, not an annual charge.
+          - paragraph [ref=e403]: "With Pro Tier you access everything for your business, including:"
+          - list [ref=e404]:
+            - listitem [ref=e405]:
+              - generic [aria-hidden] [ref=e406]: ✓
+              - generic [ref=e407]: Historical, live and future-prediction visual data analytics
+            - listitem [ref=e408]:
+              - generic [aria-hidden] [ref=e409]: ✓
+              - generic [ref=e410]: Business Landing Page and intelligent chatbot
+            - listitem [ref=e411]:
+              - generic [aria-hidden] [ref=e412]: ✓
+              - generic [ref=e413]: All sales operations, including debt handling
+            - listitem [ref=e414]:
+              - generic [aria-hidden] [ref=e415]: ✓
+              - generic [ref=e416]: And many other workspace features
+          - link "Explore Pro" [ref=e417] [cursor=pointer]:
+            - /url: "#portal-access"
+        - article [ref=e418]:
+          - generic [ref=e419]:
+            - heading "Max" [level=3] [ref=e420]
+            - generic [ref=e421]: Software + team
+          - generic [ref=e422]:
+            - generic [ref=e423]:
+              - deletion [ref=e424]: $110.00
+              - generic [ref=e425]: 50% off
+            - generic [ref=e426]:
+              - strong [ref=e427]: $55.00
+              - generic [ref=e428]: / month
+            - paragraph [ref=e429]: USD · Monthly price, not an annual charge.
+          - paragraph [ref=e430]: Everything in Pro, plus CODE76 team-assisted services to support your business growth.
+          - list [ref=e431]:
+            - listitem [ref=e432]:
+              - generic [aria-hidden] [ref=e433]: ✓
+              - generic [ref=e434]: Advertising and market-positioning assistance
+            - listitem [ref=e435]:
+              - generic [aria-hidden] [ref=e436]: ✓
+              - generic [ref=e437]: Business-matched lead research and referral program help
+            - listitem [ref=e438]:
+              - generic [aria-hidden] [ref=e439]: ✓
+              - generic [ref=e440]: SEO optimization and business cybersecurity services
+            - listitem [ref=e441]:
+              - generic [aria-hidden] [ref=e442]: ✓
+              - generic [ref=e443]: Growth reviews and additional support by agreed scope
+          - link "Explore Max" [ref=e444] [cursor=pointer]:
+            - /url: "#portal-access"
+        - article [ref=e445]:
+          - heading "Lifetime" [level=3] [ref=e447]
+          - generic [ref=e448]:
+            - generic [ref=e449]:
+              - deletion [ref=e450]: $500.00
+              - generic [ref=e451]: 50% off
+            - generic [ref=e452]:
+              - strong [ref=e453]: $250.00
+              - generic [ref=e454]: one-time
+            - paragraph [ref=e455]: USD · No monthly software charge.
+          - paragraph [ref=e456]: All current software features, future declared features and updates, plus access to the Max team-service package.
+          - list [ref=e457]:
+            - listitem [ref=e458]:
+              - generic [aria-hidden] [ref=e459]: ✓
+              - generic [ref=e460]: All current and future software features/updates
+            - listitem [ref=e461]:
+              - generic [aria-hidden] [ref=e462]: ✓
+              - generic [ref=e463]: Max team-service access included
+            - listitem [ref=e464]:
+              - generic [aria-hidden] [ref=e465]: ✓
+              - generic [ref=e466]: No monthly software charge; role privileges still apply
+          - link "Explore Lifetime" [ref=e467] [cursor=pointer]:
+            - /url: "#portal-access"
+      - generic [ref=e468]:
+        - paragraph [ref=e469]: "Transparent billing: USD/month for Free, Starter, Pro and Max; Lifetime is one-time. These are displayed catalog/promotional prices. Billing remains disconnected—choosing a demo tier does not charge you, create a subscription or verify payment. No artificial deadline/countdown is used."
+        - paragraph [ref=e470]: Max and Lifetime include access to CODE76 team-assisted services. Agree scope, delivery schedule and any third-party/ad spend first; access is not unlimited work or a guaranteed outcome. Lifetime includes the same service access. Forecasts are planning estimates, not guaranteed sales, profit or rankings.
+    - generic [ref=e472]:
+      - generic [ref=e473]:
+        - text: Max and Lifetime · software + people
+        - heading "A business toolkit. A team to help you use it." [level=2] [ref=e474]
+        - paragraph [ref=e475]: Run your operations in Pro, then work with the CODE76 POS team on the next growth bottleneck. Agree on the problem, the work and how progress will be measured before any engagement starts.
+      - generic [ref=e476]:
+        - article [ref=e477]:
+          - heading "Advertising & market positioning" [level=3] [ref=e481]
+          - paragraph [ref=e482]: Work with the CODE76 team on audience, offer, channel and campaign planning.
+          - paragraph [ref=e483]: An agreed campaign brief and measurement plan. Ad spend/platform fees require separate approval.
+        - article [ref=e484]:
+          - heading "Business-matched customer lead research" [level=3] [ref=e490]
+          - paragraph [ref=e491]: Define your ideal business customer and research relevant, lawful contact opportunities.
+          - paragraph [ref=e492]: A scoped lead-research brief; use permitted public business information or consent-based contacts, not private/sensitive dossiers.
+        - article [ref=e493]:
+          - heading "Referral program assistance" [level=3] [ref=e498]
+          - paragraph [ref=e499]: Plan clear referral terms, consent-based sharing and attribution for your business.
+          - paragraph [ref=e500]: A referral workflow and terms checklist. No reward is promised or issued automatically.
+        - article [ref=e501]:
+          - heading "SEO & website conversion review" [level=3] [ref=e505]
+          - paragraph [ref=e506]: Review discoverability, page structure, metadata and the path from interest to inquiry.
+          - paragraph [ref=e507]: Prioritized SEO and page-improvement recommendations. Search rankings and sales are not guaranteed.
+        - article [ref=e508]:
+          - heading "Business cybersecurity services" [level=3] [ref=e512]
+          - paragraph [ref=e513]: Scope a defensive review of account access, MFA, backups, recovery and staff awareness.
+          - paragraph [ref=e514]: An authorized security-readiness checklist and agreed actions; no testing outside an approved scope, certification or breach guarantee.
+        - article [ref=e515]:
+          - heading "Growth reviews & staff enablement" [level=3] [ref=e519]
+          - paragraph [ref=e520]: Discuss your business goals, review useful metrics and identify training/onboarding priorities.
+          - paragraph [ref=e521]: A practical next-step plan; additional work is defined and agreed during onboarding.
+      - generic [ref=e522]:
+        - paragraph [ref=e523]: Max and Lifetime include access to CODE76 team-assisted services. Agree scope, delivery schedule and any third-party/ad spend first; access is not unlimited work or a guaranteed outcome. No ads, lead delivery, referral payouts, security testing or notifications happen automatically in this demo. A saved brief is a local draft until you contact the team.
+        - link "Compare Max and Lifetime" [ref=e524] [cursor=pointer]:
+          - /url: "#plans"
+    - generic [ref=e529]:
+      - generic [ref=e530]:
+        - text: Make the next decision clearer
+        - heading "Test the numbers before you commit" [level=2] [ref=e531]
+        - paragraph [ref=e532]: Explore acquisition, retention, order value and referral assumptions with simple, visible arithmetic. Adjust the example inputs to your business—nothing here predicts or guarantees your results.
+        - paragraph [ref=e533]: Inspired by the supplied economic equations. LTV includes an explicit retention horizon; a monthly profit figure alone is not lifetime value. Example inputs are hypothetical, not CODE76 customer performance.
+        - link "Compare plans with the same clarity" [ref=e534] [cursor=pointer]:
+          - /url: "#plans"
+      - generic [ref=e535]:
+        - generic [ref=e536]:
+          - text: Planning tool
+          - combobox "Growth planning tool" [ref=e537]:
+            - option "Referral loop"
+            - option "Acquisition payback" [selected]
+            - 'option "LTV : CAC"'
+            - option "Order-value comparison"
+            - option "Net revenue retention"
+            - option "Weighted engagement"
+        - generic [ref=e538]:
+          - generic [ref=e539]:
+            - text: Acquisition cost per customer
+            - spinbutton "Acquisition cost per customer" [ref=e540]: "100"
+          - generic [ref=e541]:
+            - text: Monthly gross profit per customer
+            - spinbutton "Monthly gross profit per customer" [ref=e542]: "25"
+        - paragraph [ref=e543]: Payback = acquisition cost ÷ monthly gross profit
+        - status [ref=e544]:
+          - strong [ref=e545]: "4"
+          - paragraph [ref=e546]: months to recoup acquisition cost
+        - paragraph [ref=e547]: Local calculator only. No input is sent or saved, and no ROI, ranking or sales guarantee is made.
+    - generic [ref=e548]:
+      - generic [ref=e549]:
+        - text: A practical first success
+        - heading "See the workflow, not just a feature list" [level=2] [ref=e550]
+        - paragraph [ref=e551]: Use your own test entries. No claimed client results or invented customer testimonials are needed to see whether the workflow suits you.
+      - generic [ref=e552]:
+        - article [ref=e553]:
+          - heading "1. Make it yours" [level=3] [ref=e554]
+          - paragraph [ref=e555]: Choose readable text and a theme, enter your company details, then add a real test product or service.
+        - article [ref=e556]:
+          - heading "2. Try the daily job" [level=3] [ref=e557]
+          - paragraph [ref=e558]: Build a cart, record a payment and inspect a receipt. Move through the actual forms rather than a staged sales claim.
+        - article [ref=e559]:
+          - heading "3. Review the fit" [level=3] [ref=e560]
+          - paragraph [ref=e561]: Explore the records, compare the plan limits and decide whether software alone or team assistance is your next step.
+      - link "Try the guided workspace" [ref=e562] [cursor=pointer]:
+        - /url: "#portal-access"
+    - generic [ref=e563]:
+      - heading "Choose with clear expectations" [level=2] [ref=e564]
+      - generic [ref=e565]:
+        - article [ref=e566]:
+          - heading "See prices before choosing" [level=3] [ref=e567]
+          - paragraph [ref=e568]: List and promotional prices are shown in USD with monthly versus one-time terms. The demo has no connected payment gateway.
+        - article [ref=e569]:
+          - heading "Keep control of the decision" [level=3] [ref=e570]
+          - paragraph [ref=e571]: No fabricated countdown, sales volume or client-rating claim is used here. Try Free and compare the actual entitlements.
+        - article [ref=e572]:
+          - heading "Know the current data boundary" [level=3] [ref=e573]
+          - paragraph [ref=e574]: This is a browser-local prototype, not production tenant security or cloud synchronization. Use test records, not real passwords, payroll or customer data.
+        - article [ref=e575]:
+          - heading "Know what is—and is not—published" [level=3] [ref=e576]
+          - paragraph [ref=e577]: The CODE76 site is public product information. Your merchant Business Landing Page remains an authenticated internal preview, not a public storefront.
+    - generic [ref=e579]:
+      - heading "Referrals work better with clear terms" [level=2] [ref=e580]
+      - paragraph [ref=e581]: Max and Lifetime include team assistance to plan a referral program. Agree eligibility, attribution, consent and any reward before sharing. This demo does not promise cash, reserve rewards or track a real referral payout.
+      - generic [ref=e582]:
+        - generic [ref=e583]:
+          - text: Demo referral name
+          - textbox "Demo referral name" [ref=e584]
+        - button "Create demo share link" [ref=e585]
+    - generic [ref=e588]:
+      - generic [ref=e589]:
+        - generic [ref=e590]: Direct Official Inquiries
+        - heading "Contact CODE76 POS Official Support & Sales" [level=2] [ref=e594]
+        - paragraph [ref=e595]:
+          - text: Have questions about hardware compatibility, barcode scanners, multi-branch licensing, or bespoke deployments? Fill out the form below or write directly to
+          - link "code76pos@gmail.com" [ref=e596] [cursor=pointer]:
+            - /url: mailto:code76pos@gmail.com
+          - text: .
+      - generic [ref=e597]:
+        - generic [ref=e598]:
+          - generic [ref=e599]:
+            - generic [ref=e600]: Your Full Name *
+            - textbox "e.g. Samuel Kiprono" [ref=e601]
+          - generic [ref=e602]:
+            - generic [ref=e603]: Email Address *
+            - textbox "e.g. samuel@business.com" [ref=e604]
+        - generic [ref=e605]:
+          - generic [ref=e606]:
+            - generic [ref=e607]: Phone / WhatsApp Number
+            - textbox "e.g. +254 700 000 000" [ref=e608]
+          - generic [ref=e609]:
+            - generic [ref=e610]: Company / Business Name
+            - textbox "e.g. Apex Hypermarket Ltd" [ref=e611]
+        - generic [ref=e612]:
+          - generic [ref=e613]: Inquiry Subject / Topic
+          - textbox "e.g. POS Hardware Pricing & Multi-Cashier Setup Consultation" [ref=e614]
+        - generic [ref=e615]:
+          - generic [ref=e616]: Message Details *
+          - textbox "Describe your current store setup, number of tills, expected daily sales volume, or questions..." [ref=e617]
+        - button "Send Message to code76pos@gmail.com" [ref=e619] [cursor=pointer]
+        - generic [ref=e624]:
+          - generic [ref=e625]: 🔒 Direct delivery to code76pos@gmail.com
+          - link "code76pos@gmail.com" [ref=e626] [cursor=pointer]:
+            - /url: mailto:code76pos@gmail.com
+    - generic [ref=e632]:
+      - generic [ref=e633]:
+        - generic [ref=e634]: Connect & Follow CODE76 POS
+        - heading "Stay Updated Across Our Social Channels" [level=3] [ref=e635]
+        - paragraph [ref=e636]: Join our retailer community, watch video walkthroughs, or chat live on WhatsApp.
+      - generic [ref=e637]:
+        - link "💬 WhatsApp" [ref=e638] [cursor=pointer]:
+          - /url: https://wa.me/?text=Hello%20CODE76%20POS%20Team%2C%20I%20would%20like%20to%20inquire%20about%20point%20of%20sale%20setup%20for%20my%20shop.
+        - link "🐦 Twitter / X" [ref=e640] [cursor=pointer]:
+          - /url: https://twitter.com
+        - link "💼 LinkedIn" [ref=e642] [cursor=pointer]:
+          - /url: https://linkedin.com
+        - 'link "✉️ Email: code76pos@gmail.com" [ref=e644] [cursor=pointer]':
+          - /url: mailto:code76pos@gmail.com
+    - generic [ref=e646]:
+      - generic [ref=e647]:
+        - generic [ref=e648]:
+          - generic [ref=e649]:
+            - generic [ref=e650]: "76"
+            - generic [ref=e651]: CODE76 POS Systems Inc.
+          - paragraph [ref=e652]: Empowering supermarkets, restaurants, pharmacies, wholesale depots, and retail enterprises worldwide with lightning-fast checkout and audit-grade commercial ERP architecture.
+          - generic [ref=e653]: "TAX PIN: C76-ENTERPRISE-REG-84729"
+        - generic [ref=e654]:
+          - generic [ref=e655]: Direct Technical Contacts
+          - list [ref=e656]:
+            - listitem [ref=e657]:
+              - generic [ref=e660]: +1 (800) 76-CODE76
+            - listitem [ref=e661]:
+              - link "code76pos@gmail.com" [ref=e665] [cursor=pointer]:
+                - /url: mailto:code76pos@gmail.com
+            - listitem [ref=e666]:
+              - generic [ref=e670]: CODE76 product and service inquiries
+        - generic [ref=e671]:
+          - generic [ref=e672]: Global Headquarters & Showroom
+          - paragraph [ref=e673]:
+            - generic [ref=e677]: CODE76 Technology Towers, 76 Silicon Avenue, Enterprise District, Global Hub
+        - generic [ref=e678]:
+          - generic [ref=e679]: Enterprise License Tier
+          - paragraph [ref=e680]:
+            - text: "Authorized installation key:"
+            - strong [ref=e681]: C76-PRO-9842
+          - button "Open POS Terminal" [ref=e683] [cursor=pointer]
+      - generic [ref=e684]:
+        - generic [ref=e685]: © 2026 CODE76 POS Systems Inc. All Rights Reserved. Enterprise Edition.
+        - generic [ref=e686]:
+          - link "About" [ref=e687] [cursor=pointer]:
+            - /url: "#about"
+          - link "Platforms & Features" [ref=e688] [cursor=pointer]:
+            - /url: "#features"
+          - link "Companies" [ref=e689] [cursor=pointer]:
+            - /url: "#companies"
+          - link "Contact Sales" [ref=e690] [cursor=pointer]:
+            - /url: "#contact"
+          - link "code76pos@gmail.com" [ref=e691] [cursor=pointer]:
+            - /url: mailto:code76pos@gmail.com
+    - button "Open CODE76 assistant" [ref=e692] [cursor=pointer]:
+      - generic [ref=e698]:
+        - generic [ref=e699]: AI Sales Concierge
+        - generic [ref=e704]: CODE76 products & pricing
+```

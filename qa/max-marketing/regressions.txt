@@ -1,0 +1,1955 @@
+TAP version 13
+# Subtest: free entitlement: selling
+ok 1 - free entitlement: selling
+  ---
+  duration_ms: 0.766352
+  ...
+# Subtest: free entitlement: receipts
+ok 2 - free entitlement: receipts
+  ---
+  duration_ms: 0.155755
+  ...
+# Subtest: free entitlement: sales_history
+ok 3 - free entitlement: sales_history
+  ---
+  duration_ms: 0.088999
+  ...
+# Subtest: free entitlement: inventory
+ok 4 - free entitlement: inventory
+  ---
+  duration_ms: 0.070372
+  ...
+# Subtest: free entitlement: appearance
+ok 5 - free entitlement: appearance
+  ---
+  duration_ms: 0.126158
+  ...
+# Subtest: free entitlement: payments
+ok 6 - free entitlement: payments
+  ---
+  duration_ms: 0.102278
+  ...
+# Subtest: free entitlement: regional
+ok 7 - free entitlement: regional
+  ---
+  duration_ms: 0.067736
+  ...
+# Subtest: free entitlement: delete_data
+ok 8 - free entitlement: delete_data
+  ---
+  duration_ms: 0.100207
+  ...
+# Subtest: free entitlement: about
+ok 9 - free entitlement: about
+  ---
+  duration_ms: 0.074844
+  ...
+# Subtest: free entitlement: debts
+ok 10 - free entitlement: debts
+  ---
+  duration_ms: 0.158624
+  ...
+# Subtest: free entitlement: expenses
+ok 11 - free entitlement: expenses
+  ---
+  duration_ms: 0.075563
+  ...
+# Subtest: free entitlement: invoices
+ok 12 - free entitlement: invoices
+  ---
+  duration_ms: 0.066506
+  ...
+# Subtest: free entitlement: analytics
+ok 13 - free entitlement: analytics
+  ---
+  duration_ms: 0.146465
+  ...
+# Subtest: free entitlement: directory
+ok 14 - free entitlement: directory
+  ---
+  duration_ms: 0.127536
+  ...
+# Subtest: free entitlement: company_profile
+ok 15 - free entitlement: company_profile
+  ---
+  duration_ms: 0.082693
+  ...
+# Subtest: free entitlement: payroll
+ok 16 - free entitlement: payroll
+  ---
+  duration_ms: 0.070369
+  ...
+# Subtest: free entitlement: audit
+ok 17 - free entitlement: audit
+  ---
+  duration_ms: 0.063563
+  ...
+# Subtest: free entitlement: data_export
+ok 18 - free entitlement: data_export
+  ---
+  duration_ms: 0.194742
+  ...
+# Subtest: free entitlement: inventory_export
+ok 19 - free entitlement: inventory_export
+  ---
+  duration_ms: 0.094758
+  ...
+# Subtest: free entitlement: backup
+ok 20 - free entitlement: backup
+  ---
+  duration_ms: 0.066876
+  ...
+# Subtest: free entitlement: imports
+ok 21 - free entitlement: imports
+  ---
+  duration_ms: 0.113589
+  ...
+# Subtest: free entitlement: privileges
+ok 22 - free entitlement: privileges
+  ---
+  duration_ms: 0.070273
+  ...
+# Subtest: free entitlement: inventory_marketing
+ok 23 - free entitlement: inventory_marketing
+  ---
+  duration_ms: 1.011629
+  ...
+# Subtest: free entitlement: business_landing
+ok 24 - free entitlement: business_landing
+  ---
+  duration_ms: 0.121117
+  ...
+# Subtest: free entitlement: chatbot
+ok 25 - free entitlement: chatbot
+  ---
+  duration_ms: 0.059381
+  ...
+# Subtest: free entitlement: messaging
+ok 26 - free entitlement: messaging
+  ---
+  duration_ms: 0.133694
+  ...
+# Subtest: free entitlement: email
+ok 27 - free entitlement: email
+  ---
+  duration_ms: 0.055302
+  ...
+# Subtest: free entitlement: referrals
+ok 28 - free entitlement: referrals
+  ---
+  duration_ms: 0.048846
+  ...
+# Subtest: free entitlement: team_services
+ok 29 - free entitlement: team_services
+  ---
+  duration_ms: 0.051493
+  ...
+# Subtest: starter entitlement: selling
+ok 30 - starter entitlement: selling
+  ---
+  duration_ms: 0.048955
+  ...
+# Subtest: starter entitlement: receipts
+ok 31 - starter entitlement: receipts
+  ---
+  duration_ms: 0.081342
+  ...
+# Subtest: starter entitlement: sales_history
+ok 32 - starter entitlement: sales_history
+  ---
+  duration_ms: 0.061015
+  ...
+# Subtest: starter entitlement: inventory
+ok 33 - starter entitlement: inventory
+  ---
+  duration_ms: 0.117645
+  ...
+# Subtest: starter entitlement: appearance
+ok 34 - starter entitlement: appearance
+  ---
+  duration_ms: 0.839022
+  ...
+# Subtest: starter entitlement: payments
+ok 35 - starter entitlement: payments
+  ---
+  duration_ms: 0.273485
+  ...
+# Subtest: starter entitlement: regional
+ok 36 - starter entitlement: regional
+  ---
+  duration_ms: 0.064331
+  ...
+# Subtest: starter entitlement: delete_data
+ok 37 - starter entitlement: delete_data
+  ---
+  duration_ms: 0.050714
+  ...
+# Subtest: starter entitlement: about
+ok 38 - starter entitlement: about
+  ---
+  duration_ms: 0.044568
+  ...
+# Subtest: starter entitlement: debts
+ok 39 - starter entitlement: debts
+  ---
+  duration_ms: 0.053337
+  ...
+# Subtest: starter entitlement: expenses
+ok 40 - starter entitlement: expenses
+  ---
+  duration_ms: 0.045555
+  ...
+# Subtest: starter entitlement: invoices
+ok 41 - starter entitlement: invoices
+  ---
+  duration_ms: 1.644685
+  ...
+# Subtest: starter entitlement: analytics
+ok 42 - starter entitlement: analytics
+  ---
+  duration_ms: 0.091264
+  ...
+# Subtest: starter entitlement: directory
+ok 43 - starter entitlement: directory
+  ---
+  duration_ms: 0.092685
+  ...
+# Subtest: starter entitlement: company_profile
+ok 44 - starter entitlement: company_profile
+  ---
+  duration_ms: 0.7641
+  ...
+# Subtest: starter entitlement: payroll
+ok 45 - starter entitlement: payroll
+  ---
+  duration_ms: 0.086984
+  ...
+# Subtest: starter entitlement: audit
+ok 46 - starter entitlement: audit
+  ---
+  duration_ms: 0.105167
+  ...
+# Subtest: starter entitlement: data_export
+ok 47 - starter entitlement: data_export
+  ---
+  duration_ms: 0.067068
+  ...
+# Subtest: starter entitlement: inventory_export
+ok 48 - starter entitlement: inventory_export
+  ---
+  duration_ms: 0.049403
+  ...
+# Subtest: starter entitlement: backup
+ok 49 - starter entitlement: backup
+  ---
+  duration_ms: 0.043813
+  ...
+# Subtest: starter entitlement: imports
+ok 50 - starter entitlement: imports
+  ---
+  duration_ms: 0.048578
+  ...
+# Subtest: starter entitlement: privileges
+ok 51 - starter entitlement: privileges
+  ---
+  duration_ms: 0.04301
+  ...
+# Subtest: starter entitlement: inventory_marketing
+ok 52 - starter entitlement: inventory_marketing
+  ---
+  duration_ms: 0.041315
+  ...
+# Subtest: starter entitlement: business_landing
+ok 53 - starter entitlement: business_landing
+  ---
+  duration_ms: 0.089841
+  ...
+# Subtest: starter entitlement: chatbot
+ok 54 - starter entitlement: chatbot
+  ---
+  duration_ms: 0.05171
+  ...
+# Subtest: starter entitlement: messaging
+ok 55 - starter entitlement: messaging
+  ---
+  duration_ms: 0.052613
+  ...
+# Subtest: starter entitlement: email
+ok 56 - starter entitlement: email
+  ---
+  duration_ms: 0.042322
+  ...
+# Subtest: starter entitlement: referrals
+ok 57 - starter entitlement: referrals
+  ---
+  duration_ms: 0.039663
+  ...
+# Subtest: starter entitlement: team_services
+ok 58 - starter entitlement: team_services
+  ---
+  duration_ms: 0.039438
+  ...
+# Subtest: pro entitlement: selling
+ok 59 - pro entitlement: selling
+  ---
+  duration_ms: 0.045867
+  ...
+# Subtest: pro entitlement: receipts
+ok 60 - pro entitlement: receipts
+  ---
+  duration_ms: 0.040861
+  ...
+# Subtest: pro entitlement: sales_history
+ok 61 - pro entitlement: sales_history
+  ---
+  duration_ms: 0.073927
+  ...
+# Subtest: pro entitlement: inventory
+ok 62 - pro entitlement: inventory
+  ---
+  duration_ms: 0.04127
+  ...
+# Subtest: pro entitlement: appearance
+ok 63 - pro entitlement: appearance
+  ---
+  duration_ms: 0.039462
+  ...
+# Subtest: pro entitlement: payments
+ok 64 - pro entitlement: payments
+  ---
+  duration_ms: 0.065112
+  ...
+# Subtest: pro entitlement: regional
+ok 65 - pro entitlement: regional
+  ---
+  duration_ms: 0.038136
+  ...
+# Subtest: pro entitlement: delete_data
+ok 66 - pro entitlement: delete_data
+  ---
+  duration_ms: 0.039004
+  ...
+# Subtest: pro entitlement: about
+ok 67 - pro entitlement: about
+  ---
+  duration_ms: 0.043099
+  ...
+# Subtest: pro entitlement: debts
+ok 68 - pro entitlement: debts
+  ---
+  duration_ms: 0.037824
+  ...
+# Subtest: pro entitlement: expenses
+ok 69 - pro entitlement: expenses
+  ---
+  duration_ms: 0.035787
+  ...
+# Subtest: pro entitlement: invoices
+ok 70 - pro entitlement: invoices
+  ---
+  duration_ms: 0.036607
+  ...
+# Subtest: pro entitlement: analytics
+ok 71 - pro entitlement: analytics
+  ---
+  duration_ms: 0.036106
+  ...
+# Subtest: pro entitlement: directory
+ok 72 - pro entitlement: directory
+  ---
+  duration_ms: 0.043314
+  ...
+# Subtest: pro entitlement: company_profile
+ok 73 - pro entitlement: company_profile
+  ---
+  duration_ms: 0.041762
+  ...
+# Subtest: pro entitlement: payroll
+ok 74 - pro entitlement: payroll
+  ---
+  duration_ms: 0.039177
+  ...
+# Subtest: pro entitlement: audit
+ok 75 - pro entitlement: audit
+  ---
+  duration_ms: 0.050977
+  ...
+# Subtest: pro entitlement: data_export
+ok 76 - pro entitlement: data_export
+  ---
+  duration_ms: 0.051617
+  ...
+# Subtest: pro entitlement: inventory_export
+ok 77 - pro entitlement: inventory_export
+  ---
+  duration_ms: 0.038853
+  ...
+# Subtest: pro entitlement: backup
+ok 78 - pro entitlement: backup
+  ---
+  duration_ms: 0.071762
+  ...
+# Subtest: pro entitlement: imports
+ok 79 - pro entitlement: imports
+  ---
+  duration_ms: 0.040192
+  ...
+# Subtest: pro entitlement: privileges
+ok 80 - pro entitlement: privileges
+  ---
+  duration_ms: 0.039274
+  ...
+# Subtest: pro entitlement: inventory_marketing
+ok 81 - pro entitlement: inventory_marketing
+  ---
+  duration_ms: 0.037916
+  ...
+# Subtest: pro entitlement: business_landing
+ok 82 - pro entitlement: business_landing
+  ---
+  duration_ms: 0.039675
+  ...
+# Subtest: pro entitlement: chatbot
+ok 83 - pro entitlement: chatbot
+  ---
+  duration_ms: 0.037005
+  ...
+# Subtest: pro entitlement: messaging
+ok 84 - pro entitlement: messaging
+  ---
+  duration_ms: 0.089648
+  ...
+# Subtest: pro entitlement: email
+ok 85 - pro entitlement: email
+  ---
+  duration_ms: 0.045104
+  ...
+# Subtest: pro entitlement: referrals
+ok 86 - pro entitlement: referrals
+  ---
+  duration_ms: 0.043966
+  ...
+# Subtest: pro entitlement: team_services
+ok 87 - pro entitlement: team_services
+  ---
+  duration_ms: 0.041394
+  ...
+# Subtest: max entitlement: selling
+ok 88 - max entitlement: selling
+  ---
+  duration_ms: 0.041101
+  ...
+# Subtest: max entitlement: receipts
+ok 89 - max entitlement: receipts
+  ---
+  duration_ms: 0.047979
+  ...
+# Subtest: max entitlement: sales_history
+ok 90 - max entitlement: sales_history
+  ---
+  duration_ms: 0.039703
+  ...
+# Subtest: max entitlement: inventory
+ok 91 - max entitlement: inventory
+  ---
+  duration_ms: 0.040276
+  ...
+# Subtest: max entitlement: appearance
+ok 92 - max entitlement: appearance
+  ---
+  duration_ms: 0.03848
+  ...
+# Subtest: max entitlement: payments
+ok 93 - max entitlement: payments
+  ---
+  duration_ms: 0.037212
+  ...
+# Subtest: max entitlement: regional
+ok 94 - max entitlement: regional
+  ---
+  duration_ms: 0.037098
+  ...
+# Subtest: max entitlement: delete_data
+ok 95 - max entitlement: delete_data
+  ---
+  duration_ms: 0.048558
+  ...
+# Subtest: max entitlement: about
+ok 96 - max entitlement: about
+  ---
+  duration_ms: 0.038079
+  ...
+# Subtest: max entitlement: debts
+ok 97 - max entitlement: debts
+  ---
+  duration_ms: 0.039352
+  ...
+# Subtest: max entitlement: expenses
+ok 98 - max entitlement: expenses
+  ---
+  duration_ms: 0.035965
+  ...
+# Subtest: max entitlement: invoices
+ok 99 - max entitlement: invoices
+  ---
+  duration_ms: 0.03834
+  ...
+# Subtest: max entitlement: analytics
+ok 100 - max entitlement: analytics
+  ---
+  duration_ms: 0.037464
+  ...
+# Subtest: max entitlement: directory
+ok 101 - max entitlement: directory
+  ---
+  duration_ms: 0.036417
+  ...
+# Subtest: max entitlement: company_profile
+ok 102 - max entitlement: company_profile
+  ---
+  duration_ms: 0.036716
+  ...
+# Subtest: max entitlement: payroll
+ok 103 - max entitlement: payroll
+  ---
+  duration_ms: 0.036015
+  ...
+# Subtest: max entitlement: audit
+ok 104 - max entitlement: audit
+  ---
+  duration_ms: 0.03399
+  ...
+# Subtest: max entitlement: data_export
+ok 105 - max entitlement: data_export
+  ---
+  duration_ms: 0.033943
+  ...
+# Subtest: max entitlement: inventory_export
+ok 106 - max entitlement: inventory_export
+  ---
+  duration_ms: 0.033454
+  ...
+# Subtest: max entitlement: backup
+ok 107 - max entitlement: backup
+  ---
+  duration_ms: 0.033
+  ...
+# Subtest: max entitlement: imports
+ok 108 - max entitlement: imports
+  ---
+  duration_ms: 0.045506
+  ...
+# Subtest: max entitlement: privileges
+ok 109 - max entitlement: privileges
+  ---
+  duration_ms: 0.036939
+  ...
+# Subtest: max entitlement: inventory_marketing
+ok 110 - max entitlement: inventory_marketing
+  ---
+  duration_ms: 0.035112
+  ...
+# Subtest: max entitlement: business_landing
+ok 111 - max entitlement: business_landing
+  ---
+  duration_ms: 0.03502
+  ...
+# Subtest: max entitlement: chatbot
+ok 112 - max entitlement: chatbot
+  ---
+  duration_ms: 0.034926
+  ...
+# Subtest: max entitlement: messaging
+ok 113 - max entitlement: messaging
+  ---
+  duration_ms: 0.036248
+  ...
+# Subtest: max entitlement: email
+ok 114 - max entitlement: email
+  ---
+  duration_ms: 0.035874
+  ...
+# Subtest: max entitlement: referrals
+ok 115 - max entitlement: referrals
+  ---
+  duration_ms: 0.046171
+  ...
+# Subtest: max entitlement: team_services
+ok 116 - max entitlement: team_services
+  ---
+  duration_ms: 0.037687
+  ...
+# Subtest: lifetime entitlement: selling
+ok 117 - lifetime entitlement: selling
+  ---
+  duration_ms: 0.03712
+  ...
+# Subtest: lifetime entitlement: receipts
+ok 118 - lifetime entitlement: receipts
+  ---
+  duration_ms: 0.035112
+  ...
+# Subtest: lifetime entitlement: sales_history
+ok 119 - lifetime entitlement: sales_history
+  ---
+  duration_ms: 0.033975
+  ...
+# Subtest: lifetime entitlement: inventory
+ok 120 - lifetime entitlement: inventory
+  ---
+  duration_ms: 0.035104
+  ...
+# Subtest: lifetime entitlement: appearance
+ok 121 - lifetime entitlement: appearance
+  ---
+  duration_ms: 0.034288
+  ...
+# Subtest: lifetime entitlement: payments
+ok 122 - lifetime entitlement: payments
+  ---
+  duration_ms: 0.035869
+  ...
+# Subtest: lifetime entitlement: regional
+ok 123 - lifetime entitlement: regional
+  ---
+  duration_ms: 0.03652
+  ...
+# Subtest: lifetime entitlement: delete_data
+ok 124 - lifetime entitlement: delete_data
+  ---
+  duration_ms: 0.075603
+  ...
+# Subtest: lifetime entitlement: about
+ok 125 - lifetime entitlement: about
+  ---
+  duration_ms: 0.044901
+  ...
+# Subtest: lifetime entitlement: debts
+ok 126 - lifetime entitlement: debts
+  ---
+  duration_ms: 0.044011
+  ...
+# Subtest: lifetime entitlement: expenses
+ok 127 - lifetime entitlement: expenses
+  ---
+  duration_ms: 0.047255
+  ...
+# Subtest: lifetime entitlement: invoices
+ok 128 - lifetime entitlement: invoices
+  ---
+  duration_ms: 0.044382
+  ...
+# Subtest: lifetime entitlement: analytics
+ok 129 - lifetime entitlement: analytics
+  ---
+  duration_ms: 0.041772
+  ...
+# Subtest: lifetime entitlement: directory
+ok 130 - lifetime entitlement: directory
+  ---
+  duration_ms: 0.0422
+  ...
+# Subtest: lifetime entitlement: company_profile
+ok 131 - lifetime entitlement: company_profile
+  ---
+  duration_ms: 0.04024
+  ...
+# Subtest: lifetime entitlement: payroll
+ok 132 - lifetime entitlement: payroll
+  ---
+  duration_ms: 0.053287
+  ...
+# Subtest: lifetime entitlement: audit
+ok 133 - lifetime entitlement: audit
+  ---
+  duration_ms: 0.042084
+  ...
+# Subtest: lifetime entitlement: data_export
+ok 134 - lifetime entitlement: data_export
+  ---
+  duration_ms: 0.041878
+  ...
+# Subtest: lifetime entitlement: inventory_export
+ok 135 - lifetime entitlement: inventory_export
+  ---
+  duration_ms: 0.049617
+  ...
+# Subtest: lifetime entitlement: backup
+ok 136 - lifetime entitlement: backup
+  ---
+  duration_ms: 0.043239
+  ...
+# Subtest: lifetime entitlement: imports
+ok 137 - lifetime entitlement: imports
+  ---
+  duration_ms: 0.040737
+  ...
+# Subtest: lifetime entitlement: privileges
+ok 138 - lifetime entitlement: privileges
+  ---
+  duration_ms: 0.041842
+  ...
+# Subtest: lifetime entitlement: inventory_marketing
+ok 139 - lifetime entitlement: inventory_marketing
+  ---
+  duration_ms: 0.040475
+  ...
+# Subtest: lifetime entitlement: business_landing
+ok 140 - lifetime entitlement: business_landing
+  ---
+  duration_ms: 0.07143
+  ...
+# Subtest: lifetime entitlement: chatbot
+ok 141 - lifetime entitlement: chatbot
+  ---
+  duration_ms: 0.045697
+  ...
+# Subtest: lifetime entitlement: messaging
+ok 142 - lifetime entitlement: messaging
+  ---
+  duration_ms: 0.050153
+  ...
+# Subtest: lifetime entitlement: email
+ok 143 - lifetime entitlement: email
+  ---
+  duration_ms: 0.041348
+  ...
+# Subtest: lifetime entitlement: referrals
+ok 144 - lifetime entitlement: referrals
+  ---
+  duration_ms: 0.038888
+  ...
+# Subtest: lifetime entitlement: team_services
+ok 145 - lifetime entitlement: team_services
+  ---
+  duration_ms: 0.041109
+  ...
+# Subtest: unknown feature strings fail closed even on Lifetime
+ok 146 - unknown feature strings fail closed even on Lifetime
+  ---
+  duration_ms: 0.084813
+  ...
+# Subtest: new workspaces default to Free while older saved settings retain Pro access
+ok 147 - new workspaces default to Free while older saved settings retain Pro access
+  ---
+  duration_ms: 13.942516
+  ...
+# Subtest: downgrade does not delete or rewrite records
+ok 148 - downgrade does not delete or rewrite records
+  ---
+  duration_ms: 0.229632
+  ...
+# Subtest: Free platform navigation only exposes licensed basic modules
+ok 149 - Free platform navigation only exposes licensed basic modules
+  ---
+  duration_ms: 0.905285
+  ...
+# Subtest: Free has currency/date/appearance/payment/delete settings but no imports, backup or email
+ok 150 - Free has currency/date/appearance/payment/delete settings but no imports, backup or email
+  ---
+  duration_ms: 0.608703
+  ...
+# Subtest: Starter retains companies, payroll, messaging and promotions with four explicit exclusions
+ok 151 - Starter retains companies, payroll, messaging and promotions with four explicit exclusions
+  ---
+  duration_ms: 0.091213
+  ...
+# Subtest: context-level paid actions reject Free as well as hiding its menu
+ok 152 - context-level paid actions reject Free as well as hiding its menu
+  ---
+  duration_ms: 0.807805
+  ...
+# Subtest: only an admin can select a valid demo tier; save preferences cannot revert it
+ok 153 - only an admin can select a valid demo tier; save preferences cannot revert it
+  ---
+  duration_ms: 0.550154
+  ...
+# Subtest: Free admin does not bypass licensed audit access
+ok 154 - Free admin does not bypass licensed audit access
+  ---
+  duration_ms: 1.373866
+  ...
+# Subtest: optional neutral avatar is a local illustrated placeholder
+ok 155 - optional neutral avatar is a local illustrated placeholder
+  ---
+  duration_ms: 0.248919
+  ...
+# Subtest: optional masculine avatar is a local illustrated placeholder
+ok 156 - optional masculine avatar is a local illustrated placeholder
+  ---
+  duration_ms: 0.105805
+  ...
+# Subtest: optional feminine avatar is a local illustrated placeholder
+ok 157 - optional feminine avatar is a local illustrated placeholder
+  ---
+  duration_ms: 0.052573
+  ...
+# Subtest: unspecified avatar is neutral and never infers sex/orientation from names
+ok 158 - unspecified avatar is neutral and never infers sex/orientation from names
+  ---
+  duration_ms: 0.086483
+  ...
+# Subtest: supplied photos override placeholders and organisations get a company image
+ok 159 - supplied photos override placeholders and organisations get a company image
+  ---
+  duration_ms: 0.107295
+  ...
+# Subtest: company name is distinct from personal first/second names
+ok 160 - company name is distinct from personal first/second names
+  ---
+  duration_ms: 0.075028
+  ...
+# Subtest: one staff identity is visible in members, transporters and marketing without duplicate IDs
+ok 161 - one staff identity is visible in members, transporters and marketing without duplicate IDs
+  ---
+  duration_ms: 0.740137
+  ...
+# Subtest: editing any linked staff projection updates master and other views
+ok 162 - editing any linked staff projection updates master and other views
+  ---
+  duration_ms: 0.185256
+  ...
+# Subtest: removing a staff role removes its derived row, not the source member
+ok 163 - removing a staff role removes its derived row, not the source member
+  ---
+  duration_ms: 0.205457
+  ...
+# Subtest: legacy trans-sync/mkt-sync IDs reconcile to the original member on edit
+ok 164 - legacy trans-sync/mkt-sync IDs reconcile to the original member on edit
+  ---
+  duration_ms: 0.131232
+  ...
+# Subtest: company functions project the same organisation into all selected business directories
+ok 165 - company functions project the same organisation into all selected business directories
+  ---
+  duration_ms: 0.118202
+  ...
+# Subtest: removing a company function removes that derived directory membership
+ok 166 - removing a company function removes that derived directory membership
+  ---
+  duration_ms: 0.171415
+  ...
+# Subtest: utilities can exist only in related companies and still be a selectable payee
+ok 167 - utilities can exist only in related companies and still be a selectable payee
+  ---
+  duration_ms: 0.149995
+  ...
+# Subtest: company branches require an existing parent and reject ancestor cycles
+ok 168 - company branches require an existing parent and reject ancestor cycles
+  ---
+  duration_ms: 0.294915
+  ...
+# Subtest: company transaction snapshots keep original details after contact edits
+ok 169 - company transaction snapshots keep original details after contact edits
+  ---
+  duration_ms: 0.167799
+  ...
+# Subtest: branch snapshots include parent identity
+ok 170 - branch snapshots include parent identity
+  ---
+  duration_ms: 0.085441
+  ...
+# Subtest: deleting a linked directory identity does not mutate financial snapshots
+ok 171 - deleting a linked directory identity does not mutate financial snapshots
+  ---
+  duration_ms: 0.20262
+  ...
+# Subtest: external drivers are not automatically treated as employees without explicit selection
+ok 172 - external drivers are not automatically treated as employees without explicit selection
+  ---
+  duration_ms: 0.127572
+  ...
+# Subtest: shift preset Full day · weekdays keeps disjoint working/off days
+ok 173 - shift preset Full day · weekdays keeps disjoint working/off days
+  ---
+  duration_ms: 0.168819
+  ...
+# Subtest: shift preset Half day · morning to noon keeps disjoint working/off days
+ok 174 - shift preset Half day · morning to noon keeps disjoint working/off days
+  ---
+  duration_ms: 1.541433
+  ...
+# Subtest: shift preset Half day · noon to evening keeps disjoint working/off days
+ok 175 - shift preset Half day · noon to evening keeps disjoint working/off days
+  ---
+  duration_ms: 0.062231
+  ...
+# Subtest: shift preset Night shift · overnight keeps disjoint working/off days
+ok 176 - shift preset Night shift · overnight keeps disjoint working/off days
+  ---
+  duration_ms: 0.046853
+  ...
+# Subtest: shift preset Weekends only keeps disjoint working/off days
+ok 177 - shift preset Weekends only keeps disjoint working/off days
+  ---
+  duration_ms: 0.086758
+  ...
+# Subtest: shift preset Holidays only keeps disjoint working/off days
+ok 178 - shift preset Holidays only keeps disjoint working/off days
+  ---
+  duration_ms: 0.045725
+  ...
+# Subtest: shift preset Every day keeps disjoint working/off days
+ok 179 - shift preset Every day keeps disjoint working/off days
+  ---
+  duration_ms: 0.041486
+  ...
+# Subtest: half-day and overnight boundaries are explicit
+ok 180 - half-day and overnight boundaries are explicit
+  ---
+  duration_ms: 0.125257
+  ...
+# Subtest: holiday-only schedules do not fabricate holiday dates or salary payments
+ok 181 - holiday-only schedules do not fabricate holiday dates or salary payments
+  ---
+  duration_ms: 0.058166
+  ...
+# Subtest: off-day selection is complementary and duplicate-safe
+ok 182 - off-day selection is complementary and duplicate-safe
+  ---
+  duration_ms: 0.122788
+  ...
+# Subtest: recording salary without the expense checkbox creates no expense
+ok 183 - recording salary without the expense checkbox creates no expense
+  ---
+  duration_ms: 0.354947
+  ...
+# Subtest: explicit salary-expense choice creates one deterministically linked expense
+ok 184 - explicit salary-expense choice creates one deterministically linked expense
+  ---
+  duration_ms: 0.152388
+  ...
+# Subtest: agreed rate does not replace the actual paid amount
+ok 185 - agreed rate does not replace the actual paid amount
+  ---
+  duration_ms: 0.076616
+  ...
+# Subtest: invalid paid amount 0 is rejected before posting
+ok 186 - invalid paid amount 0 is rejected before posting
+  ---
+  duration_ms: 0.111978
+  ...
+# Subtest: invalid paid amount -1 is rejected before posting
+ok 187 - invalid paid amount -1 is rejected before posting
+  ---
+  duration_ms: 0.050568
+  ...
+# Subtest: invalid paid amount NaN is rejected before posting
+ok 188 - invalid paid amount NaN is rejected before posting
+  ---
+  duration_ms: 0.052904
+  ...
+# Subtest: invalid paid amount Infinity is rejected before posting
+ok 189 - invalid paid amount Infinity is rejected before posting
+  ---
+  duration_ms: 0.047199
+  ...
+# Subtest: invalid salary dates and companies are rejected
+ok 190 - invalid salary dates and companies are rejected
+  ---
+  duration_ms: 0.184285
+  ...
+# Subtest: context prevents double-click salary/expense duplication and checks expense privilege first
+ok 191 - context prevents double-click salary/expense duplication and checks expense privilege first
+  ---
+  duration_ms: 0.184201
+  ...
+# Subtest: non-HR backup does not expose salary payments or agreed rates
+ok 192 - non-HR backup does not expose salary payments or agreed rates
+  ---
+  duration_ms: 0.402919
+  ...
+# Subtest: selected time zone formats instants without changing the stored ISO value
+ok 193 - selected time zone formats instants without changing the stored ISO value
+  ---
+  duration_ms: 1.917536
+  ...
+# Subtest: date-only documents do not move to yesterday in another time zone
+ok 194 - date-only documents do not move to yesterday in another time zone
+  ---
+  duration_ms: 0.441199
+  ...
+# Subtest: all three date formats and 12-hour time are supported
+ok 195 - all three date formats and 12-hour time are supported
+  ---
+  duration_ms: 1.18852
+  ...
+# Subtest: business date inputs use the selected timezone rather than an unconditional UTC day
+ok 196 - business date inputs use the selected timezone rather than an unconditional UTC day
+  ---
+  duration_ms: 0.839177
+  ...
+# Subtest: bad zones fail validation and holiday lists are explicit/deduplicated
+ok 197 - bad zones fail validation and holiday lists are explicit/deduplicated
+  ---
+  duration_ms: 0.457553
+  ...
+# Subtest: more payment channels are available but bookkeeping is not live integration
+ok 198 - more payment channels are available but bookkeeping is not live integration
+  ---
+  duration_ms: 0.162851
+  ...
+# Subtest: camera refuses blank or unready video frames
+ok 199 - camera refuses blank or unready video frames
+  ---
+  duration_ms: 1.553015
+  ...
+# Subtest: camera capture scales large frames, keeps text orientation and emits actual JPEG
+ok 200 - camera capture scales large frames, keeps text orientation and emits actual JPEG
+  ---
+  duration_ms: 0.215818
+  ...
+# Subtest: camera failures explain permission/device/busy conditions and have a device-file fallback
+ok 201 - camera failures explain permission/device/busy conditions and have a device-file fallback
+  ---
+  duration_ms: 0.179469
+  ...
+# Subtest: camera stop releases every track
+ok 202 - camera stop releases every track
+  ---
+  duration_ms: 0.134275
+  ...
+# Subtest: shared camera starts after DOM commit and cancels late streams on retry/unmount
+ok 203 - shared camera starts after DOM commit and cancels late streams on retry/unmount
+  ---
+  duration_ms: 0.1083
+  ...
+# Subtest: every camera implementation routes through the one shared control
+ok 204 - every camera implementation routes through the one shared control
+  ---
+  duration_ms: 0.087817
+  ...
+# Subtest: new supplier/company fields cannot execute HTML in PDF print reports
+ok 205 - new supplier/company fields cannot execute HTML in PDF print reports
+  ---
+  duration_ms: 0.172291
+  ...
+# Subtest: expense and purchase invoice PDFs retain the selected company snapshot details
+ok 206 - expense and purchase invoice PDFs retain the selected company snapshot details
+  ---
+  duration_ms: 0.175258
+  ...
+# Subtest: invoice totals come from actual stock lines and paid status, not a hidden template
+ok 207 - invoice totals come from actual stock lines and paid status, not a hidden template
+  ---
+  duration_ms: 1.740979
+  ...
+# Subtest: non-HR/non-finance backups cannot reveal salary payments through linked expense rows
+ok 208 - non-HR/non-finance backups cannot reveal salary payments through linked expense rows
+  ---
+  duration_ms: 0.249459
+  ...
+# Subtest: empty onboarding profile contains no CODE76 identity, contacts or tax registration
+ok 209 - empty onboarding profile contains no CODE76 identity, contacts or tax registration
+  ---
+  duration_ms: 0.677339
+  ...
+# Subtest: untouched CODE76 demo profile is not an actual merchant profile
+ok 210 - untouched CODE76 demo profile is not an actual merchant profile
+  ---
+  duration_ms: 0.107426
+  ...
+# Subtest: merchant can deliberately configure a company with the CODE76 name
+ok 211 - merchant can deliberately configure a company with the CODE76 name
+  ---
+  duration_ms: 0.093207
+  ...
+# Subtest: nonempty custom profile remains compatible with existing saved merchants
+ok 212 - nonempty custom profile remains compatible with existing saved merchants
+  ---
+  duration_ms: 0.077978
+  ...
+# Subtest: configured flag cannot make a blank name valid
+ok 213 - configured flag cannot make a blank name valid
+  ---
+  duration_ms: 0.103896
+  ...
+# Subtest: all four real text sizing values have increasing, visible sample sizes
+ok 214 - all four real text sizing values have increasing, visible sample sizes
+  ---
+  duration_ms: 1.395378
+  ...
+# Subtest: starter item saves supplied stock and prices, trimmed name and category
+ok 215 - starter item saves supplied stock and prices, trimmed name and category
+  ---
+  duration_ms: 0.168879
+  ...
+# Subtest: blank optional cost/stock are zero, never invented sample stock or prices
+ok 216 - blank optional cost/stock are zero, never invented sample stock or prices
+  ---
+  duration_ms: 0.11733
+  ...
+# Subtest: starter service does not fabricate physical stock
+ok 217 - starter service does not fabricate physical stock
+  ---
+  duration_ms: 0.334149
+  ...
+# Subtest: starter items have unique inventory IDs
+ok 218 - starter items have unique inventory IDs
+  ---
+  duration_ms: 0.618035
+  ...
+# Subtest: starter validation rejects name="  "
+ok 219 - starter validation rejects name="  "
+  ---
+  duration_ms: 0.231363
+  ...
+# Subtest: starter validation rejects sellingPrice=""
+ok 220 - starter validation rejects sellingPrice=""
+  ---
+  duration_ms: 0.094385
+  ...
+# Subtest: starter validation rejects sellingPrice="-1"
+ok 221 - starter validation rejects sellingPrice="-1"
+  ---
+  duration_ms: 0.071056
+  ...
+# Subtest: starter validation rejects costPrice="-1"
+ok 222 - starter validation rejects costPrice="-1"
+  ---
+  duration_ms: 0.148161
+  ...
+# Subtest: starter validation rejects sellingPrice="Infinity"
+ok 223 - starter validation rejects sellingPrice="Infinity"
+  ---
+  duration_ms: 0.078411
+  ...
+# Subtest: starter validation rejects sellingPrice="NaN"
+ok 224 - starter validation rejects sellingPrice="NaN"
+  ---
+  duration_ms: 0.069728
+  ...
+# Subtest: starter validation rejects sellingPrice="1e308"
+ok 225 - starter validation rejects sellingPrice="1e308"
+  ---
+  duration_ms: 0.069889
+  ...
+# Subtest: starter validation rejects stock="-1"
+ok 226 - starter validation rejects stock="-1"
+  ---
+  duration_ms: 0.162046
+  ...
+# Subtest: starter validation rejects stock="1.5"
+ok 227 - starter validation rejects stock="1.5"
+  ---
+  duration_ms: 0.084348
+  ...
+# Subtest: starter validation rejects stock="9007199254740992"
+ok 228 - starter validation rejects stock="9007199254740992"
+  ---
+  duration_ms: 0.146688
+  ...
+# Subtest: setup progress restores stage, saved IDs and unsaved company draft
+ok 229 - setup progress restores stage, saved IDs and unsaved company draft
+  ---
+  duration_ms: 0.254363
+  ...
+# Subtest: corrupt or old setup progress fails safely
+ok 230 - corrupt or old setup progress fails safely
+  ---
+  duration_ms: 0.213228
+  ...
+# Subtest: storage quota failure is reported, not thrown
+ok 231 - storage quota failure is reported, not thrown
+  ---
+  duration_ms: 0.109535
+  ...
+# Subtest: business page uses merchant identity and the actual saved inventory array
+ok 232 - business page uses merchant identity and the actual saved inventory array
+  ---
+  duration_ms: 0.109495
+  ...
+# Subtest: empty business catalog and reviews stay empty
+ok 233 - empty business catalog and reviews stay empty
+  ---
+  duration_ms: 0.084574
+  ...
+# Subtest: public CODE76 site ignores merchant brand and inventory
+ok 234 - public CODE76 site ignores merchant brand and inventory
+  ---
+  duration_ms: 0.109129
+  ...
+# Subtest: public CODE76 content is frozen against accidental mutation
+ok 235 - public CODE76 content is frozen against accidental mutation
+  ---
+  duration_ms: 0.066403
+  ...
+# Subtest: new business page defaults contain no CODE76 offers or social handles
+ok 236 - new business page defaults contain no CODE76 offers or social handles
+  ---
+  duration_ms: 0.118202
+  ...
+# Subtest: one-time migration removes unchanged legacy CODE76 copy
+ok 237 - one-time migration removes unchanged legacy CODE76 copy
+  ---
+  duration_ms: 0.119972
+  ...
+# Subtest: migration preserves custom merchant text, controls and contacts
+ok 238 - migration preserves custom merchant text, controls and contacts
+  ---
+  duration_ms: 0.092737
+  ...
+# Subtest: versioned settings are not repeatedly cleaned if merchant intentionally uses a legacy phrase
+ok 239 - versioned settings are not repeatedly cleaned if merchant intentionally uses a legacy phrase
+  ---
+  duration_ms: 0.075434
+  ...
+# Subtest: old partial settings acquire missing defaults without losing selected theme
+ok 240 - old partial settings acquire missing defaults without losing selected theme
+  ---
+  duration_ms: 12.360297
+  ...
+# Subtest: public marketing configuration has no import dependency on merchant page defaults
+ok 241 - public marketing configuration has no import dependency on merchant page defaults
+  ---
+  duration_ms: 0.369277
+  ...
+# Subtest: legacy storefront query cannot select an anonymous business page
+ok 242 - legacy storefront query cannot select an anonymous business page
+  ---
+  duration_ms: 0.189332
+  ...
+# Subtest: base URL always selects the CODE76 product site, including for signed-in users
+ok 243 - base URL always selects the CODE76 product site, including for signed-in users
+  ---
+  duration_ms: 0.121108
+  ...
+# Subtest: invalid routes and unauthenticated POS requests safely show the public site
+ok 244 - invalid routes and unauthenticated POS requests safely show the public site
+  ---
+  duration_ms: 0.083088
+  ...
+# Subtest: private page links preserve deployment paths and unrelated parameters using hash routing
+ok 245 - private page links preserve deployment paths and unrelated parameters using hash routing
+  ---
+  duration_ms: 0.500564
+  ...
+# Subtest: business chat excludes cost prices, tax IDs and non-public reviews
+ok 246 - business chat excludes cost prices, tax IDs and non-public reviews
+  ---
+  duration_ms: 0.206787
+  ...
+# Subtest: CODE76 chat cannot consume merchant records
+ok 247 - CODE76 chat cannot consume merchant records
+  ---
+  duration_ms: 0.187608
+  ...
+# Subtest: business fallback quotes actual merchandise and merchant currency
+ok 248 - business fallback quotes actual merchandise and merchant currency
+  ---
+  duration_ms: 0.7159
+  ...
+# Subtest: empty business assistant invents no equipment
+ok 249 - empty business assistant invents no equipment
+  ---
+  duration_ms: 0.267059
+  ...
+# Subtest: business assistant never confirms a reservation or appointment
+ok 250 - business assistant never confirms a reservation or appointment
+  ---
+  duration_ms: 0.159937
+  ...
+# Subtest: out-of-stock business merchandise is honestly labelled
+ok 251 - out-of-stock business merchandise is honestly labelled
+  ---
+  duration_ms: 0.168719
+  ...
+# Subtest: public leads and metrics have their own storage key
+ok 252 - public leads and metrics have their own storage key
+  ---
+  duration_ms: 0.096358
+  ...
+# Subtest: public landing page reads only auth/navigation from POS context
+ok 253 - public landing page reads only auth/navigation from POS context
+  ---
+  duration_ms: 1.633882
+  ...
+# Subtest: business page has no implicit INITIAL_* demo fallback or fixed 4.9 rating
+ok 254 - business page has no implicit INITIAL_* demo fallback or fixed 4.9 rating
+  ---
+  duration_ms: 0.337968
+  ...
+# Subtest: both chatbot callers explicitly identify their page surface
+ok 255 - both chatbot callers explicitly identify their page surface
+  ---
+  duration_ms: 0.407674
+  ...
+# Subtest: payment action is One payment and split removal uses a labelled trash icon
+ok 256 - payment action is One payment and split removal uses a labelled trash icon
+  ---
+  duration_ms: 0.304434
+  ...
+# Subtest: wizard includes real settings/help/manual icons and enforces starter cap
+ok 257 - wizard includes real settings/help/manual icons and enforces starter cap
+  ---
+  duration_ms: 0.240769
+  ...
+# Subtest: theme state is derived from persisted Settings rather than divergent local state
+ok 258 - theme state is derived from persisted Settings rather than divergent local state
+  ---
+  duration_ms: 0.191289
+  ...
+# Subtest: POS font preferences are scoped away from both landing pages
+ok 259 - POS font preferences are scoped away from both landing pages
+  ---
+  duration_ms: 0.152476
+  ...
+# Subtest: base URL stays public with authenticated=false
+ok 260 - base URL stays public with authenticated=false
+  ---
+  duration_ms: 1.343587
+  ...
+# Subtest: base URL stays public with authenticated=true
+ok 261 - base URL stays public with authenticated=true
+  ---
+  duration_ms: 0.137933
+  ...
+# Subtest: public marketing anchor \#about never opens a merchant screen
+ok 262 - public marketing anchor \#about never opens a merchant screen
+  ---
+  duration_ms: 0.115043
+  ...
+# Subtest: public marketing anchor \#features never opens a merchant screen
+ok 263 - public marketing anchor \#features never opens a merchant screen
+  ---
+  duration_ms: 0.074536
+  ...
+# Subtest: public marketing anchor \#portal-access never opens a merchant screen
+ok 264 - public marketing anchor \#portal-access never opens a merchant screen
+  ---
+  duration_ms: 0.133547
+  ...
+# Subtest: public marketing anchor \#contact never opens a merchant screen
+ok 265 - public marketing anchor \#contact never opens a merchant screen
+  ---
+  duration_ms: 0.100901
+  ...
+# Subtest: public marketing anchor \#reviews never opens a merchant screen
+ok 266 - public marketing anchor \#reviews never opens a merchant screen
+  ---
+  duration_ms: 0.06407
+  ...
+# Subtest: public marketing anchor \#/ never opens a merchant screen
+ok 267 - public marketing anchor \#/ never opens a merchant screen
+  ---
+  duration_ms: 0.065211
+  ...
+# Subtest: /selling: explicit internal route, round trip and authentication guard
+ok 268 - /selling: explicit internal route, round trip and authentication guard
+  ---
+  duration_ms: 0.480355
+  ...
+# Subtest: /sales_history: explicit internal route, round trip and authentication guard
+ok 269 - /sales_history: explicit internal route, round trip and authentication guard
+  ---
+  duration_ms: 0.247431
+  ...
+# Subtest: /inventory: explicit internal route, round trip and authentication guard
+ok 270 - /inventory: explicit internal route, round trip and authentication guard
+  ---
+  duration_ms: 0.138859
+  ...
+# Subtest: /expenses: explicit internal route, round trip and authentication guard
+ok 271 - /expenses: explicit internal route, round trip and authentication guard
+  ---
+  duration_ms: 0.921086
+  ...
+# Subtest: /invoices: explicit internal route, round trip and authentication guard
+ok 272 - /invoices: explicit internal route, round trip and authentication guard
+  ---
+  duration_ms: 0.176869
+  ...
+# Subtest: /analytics: explicit internal route, round trip and authentication guard
+ok 273 - /analytics: explicit internal route, round trip and authentication guard
+  ---
+  duration_ms: 0.188678
+  ...
+# Subtest: /customers: explicit internal route, round trip and authentication guard
+ok 274 - /customers: explicit internal route, round trip and authentication guard
+  ---
+  duration_ms: 0.107059
+  ...
+# Subtest: /vendors: explicit internal route, round trip and authentication guard
+ok 275 - /vendors: explicit internal route, round trip and authentication guard
+  ---
+  duration_ms: 0.160776
+  ...
+# Subtest: /transporters: explicit internal route, round trip and authentication guard
+ok 276 - /transporters: explicit internal route, round trip and authentication guard
+  ---
+  duration_ms: 0.156893
+  ...
+# Subtest: /marketing_team: explicit internal route, round trip and authentication guard
+ok 277 - /marketing_team: explicit internal route, round trip and authentication guard
+  ---
+  duration_ms: 0.237131
+  ...
+# Subtest: /company_members: explicit internal route, round trip and authentication guard
+ok 278 - /company_members: explicit internal route, round trip and authentication guard
+  ---
+  duration_ms: 0.222639
+  ...
+# Subtest: /my_company: explicit internal route, round trip and authentication guard
+ok 279 - /my_company: explicit internal route, round trip and authentication guard
+  ---
+  duration_ms: 0.095941
+  ...
+# Subtest: /messaging: explicit internal route, round trip and authentication guard
+ok 280 - /messaging: explicit internal route, round trip and authentication guard
+  ---
+  duration_ms: 0.07685
+  ...
+# Subtest: /landing_page_builder: explicit internal route, round trip and authentication guard
+ok 281 - /landing_page_builder: explicit internal route, round trip and authentication guard
+  ---
+  duration_ms: 0.111258
+  ...
+# Subtest: /settings: explicit internal route, round trip and authentication guard
+ok 282 - /settings: explicit internal route, round trip and authentication guard
+  ---
+  duration_ms: 0.181241
+  ...
+# Subtest: /audit_logs: explicit internal route, round trip and authentication guard
+ok 283 - /audit_logs: explicit internal route, round trip and authentication guard
+  ---
+  duration_ms: 0.138126
+  ...
+# Subtest: /about: explicit internal route, round trip and authentication guard
+ok 284 - /about: explicit internal route, round trip and authentication guard
+  ---
+  duration_ms: 0.126726
+  ...
+# Subtest: invalid or obsolete route \#/storefront is public only
+ok 285 - invalid or obsolete route \#/storefront is public only
+  ---
+  duration_ms: 0.125279
+  ...
+# Subtest: invalid or obsolete route \#storefront is public only
+ok 286 - invalid or obsolete route \#storefront is public only
+  ---
+  duration_ms: 0.079114
+  ...
+# Subtest: invalid or obsolete route \#/landing_page_builder is public only
+ok 287 - invalid or obsolete route \#/landing_page_builder is public only
+  ---
+  duration_ms: 0.083772
+  ...
+# Subtest: invalid or obsolete route \#/pos/storefront is public only
+ok 288 - invalid or obsolete route \#/pos/storefront is public only
+  ---
+  duration_ms: 0.125374
+  ...
+# Subtest: invalid or obsolete route \#/pos/landing_page_builder/extra is public only
+ok 289 - invalid or obsolete route \#/pos/landing_page_builder/extra is public only
+  ---
+  duration_ms: 0.06346
+  ...
+# Subtest: invalid or obsolete route \#//pos/settings is public only
+ok 290 - invalid or obsolete route \#//pos/settings is public only
+  ---
+  duration_ms: 0.062403
+  ...
+# Subtest: invalid or obsolete route \#/POS/settings is public only
+ok 291 - invalid or obsolete route \#/POS/settings is public only
+  ---
+  duration_ms: 0.050415
+  ...
+# Subtest: invalid or obsolete route \#/pos/%6canding_page_builder is public only
+ok 292 - invalid or obsolete route \#/pos/%6canding_page_builder is public only
+  ---
+  duration_ms: 0.100758
+  ...
+# Subtest: legacy query links cannot open a standalone merchant page, even with an authenticated user
+ok 293 - legacy query links cannot open a standalone merchant page, even with an authenticated user
+  ---
+  duration_ms: 0.137499
+  ...
+# Subtest: return-to-site URL removes both the private hash and the obsolete view parameter
+ok 294 - return-to-site URL removes both the private hash and the obsolete view parameter
+  ---
+  duration_ms: 0.24099
+  ...
+# Subtest: internal builder is the only business-page JSX entry and has the shared workspace guard
+ok 295 - internal builder is the only business-page JSX entry and has the shared workspace guard
+  ---
+  duration_ms: 0.469932
+  ...
+# Subtest: merchant component checks auth again and cannot count anonymous visits
+ok 296 - merchant component checks auth again and cannot count anonymous visits
+  ---
+  duration_ms: 0.473254
+  ...
+# Subtest: merchant navigation and hero links scroll without overwriting the private hash route
+ok 297 - merchant navigation and hero links scroll without overwriting the private hash route
+  ---
+  duration_ms: 0.433486
+  ...
+# Subtest: public page has metadata and no guest merchant launch controls
+ok 298 - public page has metadata and no guest merchant launch controls
+  ---
+  duration_ms: 0.524997
+  ...
+# Subtest: router listens to hash and browser history; saved merchant records are not authentication
+ok 299 - router listens to hash and browser history; saved merchant records are not authentication
+  ---
+  duration_ms: 0.376024
+  ...
+# Subtest: canonical normalization: https://shop.example.com/?utm_source=test\#/pos/landing_page_builder
+ok 300 - canonical normalization: https://shop.example.com/?utm_source=test\#/pos/landing_page_builder
+  ---
+  duration_ms: 0.296056
+  ...
+# Subtest: canonical normalization: https://shop.example.com/index.html
+ok 301 - canonical normalization: https://shop.example.com/index.html
+  ---
+  duration_ms: 0.107128
+  ...
+# Subtest: canonical normalization: https://shop.example.com/private/page
+ok 302 - canonical normalization: https://shop.example.com/private/page
+  ---
+  duration_ms: 0.088805
+  ...
+# Subtest: invalid canonical rejected: undefined
+ok 303 - invalid canonical rejected: undefined
+  ---
+  duration_ms: 0.157625
+  ...
+# Subtest: invalid canonical rejected: MY_APP_URL
+ok 304 - invalid canonical rejected: MY_APP_URL
+  ---
+  duration_ms: 0.13442
+  ...
+# Subtest: invalid canonical rejected: /
+ok 305 - invalid canonical rejected: /
+  ---
+  duration_ms: 0.104625
+  ...
+# Subtest: invalid canonical rejected: javascript:alert(1)
+ok 306 - invalid canonical rejected: javascript:alert(1)
+  ---
+  duration_ms: 0.083638
+  ...
+# Subtest: invalid canonical rejected: file:///etc/passwd
+ok 307 - invalid canonical rejected: file:///etc/passwd
+  ---
+  duration_ms: 1.218386
+  ...
+# Subtest: invalid canonical rejected: https://user:secret@shop.example.com/
+ok 308 - invalid canonical rejected: https://user:secret@shop.example.com/
+  ---
+  duration_ms: 0.102932
+  ...
+# Subtest: local or workspace preview is noindex: http://localhost:3000/
+ok 309 - local or workspace preview is noindex: http://localhost:3000/
+  ---
+  duration_ms: 0.185678
+  ...
+# Subtest: local or workspace preview is noindex: http://127.0.0.1:3000/
+ok 310 - local or workspace preview is noindex: http://127.0.0.1:3000/
+  ---
+  duration_ms: 0.108611
+  ...
+# Subtest: local or workspace preview is noindex: http://[::1]:3000/
+ok 311 - local or workspace preview is noindex: http://[::1]:3000/
+  ---
+  duration_ms: 0.058586
+  ...
+# Subtest: local or workspace preview is noindex: https://3000-workspace.e2b.app/
+ok 312 - local or workspace preview is noindex: https://3000-workspace.e2b.app/
+  ---
+  duration_ms: 0.054923
+  ...
+# Subtest: production site may be indexed, but explicit staging opt-out wins
+ok 313 - production site may be indexed, but explicit staging opt-out wins
+  ---
+  duration_ms: 0.077633
+  ...
+# Subtest: proxy-aware fallback never guesses a production domain
+ok 314 - proxy-aware fallback never guesses a production domain
+  ---
+  duration_ms: 0.282686
+  ...
+# Subtest: invalid host headers cannot inject markup or credentials into SEO metadata
+ok 315 - invalid host headers cannot inject markup or credentials into SEO metadata
+  ---
+  duration_ms: 0.147439
+  ...
+# Subtest: public head has one canonical, aligned title/description/social tags and correct robots
+ok 316 - public head has one canonical, aligned title/description/social tags and correct robots
+  ---
+  duration_ms: 0.626934
+  ...
+# Subtest: workspace/staging metadata is noindex and never canonicalizes a private route
+ok 317 - workspace/staging metadata is noindex and never canonicalizes a private route
+  ---
+  duration_ms: 0.137385
+  ...
+# Subtest: structured data describes the actual web app without invented pricing or native-platform claims
+ok 318 - structured data describes the actual web app without invented pricing or native-platform claims
+  ---
+  duration_ms: 0.208839
+  ...
+# Subtest: sharing image is a real local 1200 by 630 PNG, not an external image dependency
+ok 319 - sharing image is a real local 1200 by 630 PNG, not an external image dependency
+  ---
+  duration_ms: 0.521307
+  ...
+# Subtest: SEO renderer escapes attributes and rejects an unmarked template
+ok 320 - SEO renderer escapes attributes and rejects an unmarked template
+  ---
+  duration_ms: 0.333298
+  ...
+# Subtest: root and index have explicit HTTP handlers, API misses are not swallowed, preview host is allowed
+ok 321 - root and index have explicit HTTP handlers, API misses are not swallowed, preview host is allowed
+  ---
+  duration_ms: 0.290264
+  ...
+# Subtest: clipboard success is awaited and fallback is not called
+ok 322 - clipboard success is awaited and fallback is not called
+  ---
+  duration_ms: 1.195578
+  ...
+# Subtest: blocked modern clipboard falls back to a real successful legacy copy
+ok 323 - blocked modern clipboard falls back to a real successful legacy copy
+  ---
+  duration_ms: 0.278937
+  ...
+# Subtest: missing modern clipboard can use the legacy copy path
+ok 324 - missing modern clipboard can use the legacy copy path
+  ---
+  duration_ms: 0.127359
+  ...
+# Subtest: no clipboard APIs never claims the link was copied
+ok 325 - no clipboard APIs never claims the link was copied
+  ---
+  duration_ms: 0.098383
+  ...
+# Subtest: rejected/false clipboard paths require manual selection rather than false success
+ok 326 - rejected/false clipboard paths require manual selection rather than false success
+  ---
+  duration_ms: 0.182212
+  ...
+# Subtest: exceptions from both clipboard mechanisms still produce a usable manual fallback
+ok 327 - exceptions from both clipboard mechanisms still produce a usable manual fallback
+  ---
+  duration_ms: 0.138311
+  ...
+# Subtest: empty text is not copied or reported successful
+ok 328 - empty text is not copied or reported successful
+  ---
+  duration_ms: 0.097851
+  ...
+# Subtest: copy field exposes read-only selectable text, status and keyboard-copy instructions
+ok 329 - copy field exposes read-only selectable text, status and keyboard-copy instructions
+  ---
+  duration_ms: 0.35665
+  ...
+# Subtest: app link strips authentication tokens, userinfo, query and private hashes
+ok 330 - app link strips authentication tokens, userinfo, query and private hashes
+  ---
+  duration_ms: 0.321763
+  ...
+# Subtest: app link supports a configured base path but never another origin
+ok 331 - app link supports a configured base path but never another origin
+  ---
+  duration_ms: 0.286606
+  ...
+# Subtest: workspace links are identified for an honest host-authorization warning
+ok 332 - workspace links are identified for an honest host-authorization warning
+  ---
+  duration_ms: 0.132887
+  ...
+# Subtest: navbar contains app link and session access, not the removed public-site/logout/theme actions
+ok 333 - navbar contains app link and session access, not the removed public-site/logout/theme actions
+  ---
+  duration_ms: 0.228802
+  ...
+# Subtest: service quantity basis Per task completion round-trips and formats correctly
+ok 334 - service quantity basis Per task completion round-trips and formats correctly
+  ---
+  duration_ms: 0.3149
+  ...
+# Subtest: service quantity basis Per minute round-trips and formats correctly
+ok 335 - service quantity basis Per minute round-trips and formats correctly
+  ---
+  duration_ms: 0.135491
+  ...
+# Subtest: service quantity basis Per hour round-trips and formats correctly
+ok 336 - service quantity basis Per hour round-trips and formats correctly
+  ---
+  duration_ms: 0.092507
+  ...
+# Subtest: service quantity basis Per day round-trips and formats correctly
+ok 337 - service quantity basis Per day round-trips and formats correctly
+  ---
+  duration_ms: 0.08215
+  ...
+# Subtest: service quantity basis Per week round-trips and formats correctly
+ok 338 - service quantity basis Per week round-trips and formats correctly
+  ---
+  duration_ms: 0.076829
+  ...
+# Subtest: service quantity basis Per month round-trips and formats correctly
+ok 339 - service quantity basis Per month round-trips and formats correctly
+  ---
+  duration_ms: 0.190388
+  ...
+# Subtest: service quantity basis Per year round-trips and formats correctly
+ok 340 - service quantity basis Per year round-trips and formats correctly
+  ---
+  duration_ms: 0.104653
+  ...
+# Subtest: service quantity basis Per session round-trips and formats correctly
+ok 341 - service quantity basis Per session round-trips and formats correctly
+  ---
+  duration_ms: 0.10331
+  ...
+# Subtest: service quantity basis Per visit round-trips and formats correctly
+ok 342 - service quantity basis Per visit round-trips and formats correctly
+  ---
+  duration_ms: 0.070819
+  ...
+# Subtest: service quantity basis Per project round-trips and formats correctly
+ok 343 - service quantity basis Per project round-trips and formats correctly
+  ---
+  duration_ms: 0.069802
+  ...
+# Subtest: new hourly starter service stores its billing unit without fictitious stock
+ok 344 - new hourly starter service stores its billing unit without fictitious stock
+  ---
+  duration_ms: 0.561121
+  ...
+# Subtest: product stock semantics are unchanged and no service unit is attached
+ok 345 - product stock semantics are unchanged and no service unit is attached
+  ---
+  duration_ms: 0.161822
+  ...
+# Subtest: legacy services have a safe editable task-completion display default
+ok 346 - legacy services have a safe editable task-completion display default
+  ---
+  duration_ms: 0.088542
+  ...
+# Subtest: invalid explicitly supplied service units are rejected rather than changing the rate basis
+ok 347 - invalid explicitly supplied service units are rejected rather than changing the rate basis
+  ---
+  duration_ms: 0.329366
+  ...
+# Subtest: both inventory entry paths expose service unit selection; new services are not 9999 stock
+ok 348 - both inventory entry paths expose service unit selection; new services are not 9999 stock
+  ---
+  duration_ms: 0.603605
+  ...
+# Subtest: unauthenticated users cannot view or export history
+ok 349 - unauthenticated users cannot view or export history
+  ---
+  duration_ms: 0.343457
+  ...
+# Subtest: no privilege means no view or export, regardless of a UI unlock
+ok 350 - no privilege means no view or export, regardless of a UI unlock
+  ---
+  duration_ms: 0.273676
+  ...
+# Subtest: admins may view and export even when role flags are false
+ok 351 - admins may view and export even when role flags are false
+  ---
+  duration_ms: 0.169352
+  ...
+# Subtest: view-only privilege does not grant file export
+ok 352 - view-only privilege does not grant file export
+  ---
+  duration_ms: 0.135814
+  ...
+# Subtest: export flag alone cannot expose access history
+ok 353 - export flag alone cannot expose access history
+  ---
+  duration_ms: 0.10962
+  ...
+# Subtest: both required privileges allow delegated non-admin history exports
+ok 354 - both required privileges allow delegated non-admin history exports
+  ---
+  duration_ms: 0.25244
+  ...
+# Subtest: secondary active roles can grant privileges consistently with POS context
+ok 355 - secondary active roles can grant privileges consistently with POS context
+  ---
+  duration_ms: 0.171683
+  ...
+# Subtest: a named CEO role without admin status or granted privileges does not bypass the policy
+ok 356 - a named CEO role without admin status or granted privileges does not bypass the policy
+  ---
+  duration_ms: 0.142569
+  ...
+# Subtest: export authorization fails closed when rights are revoked
+ok 357 - export authorization fails closed when rights are revoked
+  ---
+  duration_ms: 2.948991
+  ...
+# Subtest: audit no longer has a PIN or click-to-unlock backdoor and rechecks pending PDF downloads
+ok 358 - audit no longer has a PIN or click-to-unlock backdoor and rechecks pending PDF downloads
+  ---
+  duration_ms: 0.281967
+  ...
+# Subtest: session dialog locates history/downloads and handles sign-out inside the widget
+ok 359 - session dialog locates history/downloads and handles sign-out inside the widget
+  ---
+  duration_ms: 0.243198
+  ...
+# Subtest: all three history entry points use the same guarded component
+ok 360 - all three history entry points use the same guarded component
+  ---
+  duration_ms: 0.576009
+  ...
+# Subtest: non-admins cannot save a modified permission map or open role-grant controls
+ok 361 - non-admins cannot save a modified permission map or open role-grant controls
+  ---
+  duration_ms: 0.347389
+  ...
+# Subtest: full backup cannot bypass restricted history export
+ok 362 - full backup cannot bypass restricted history export
+  ---
+  duration_ms: 0.607869
+  ...
+# Subtest: history CSV neutralizes formula-like value "=HYPERLINK(\\"bad\\")"
+ok 363 - history CSV neutralizes formula-like value "=HYPERLINK(\\"bad\\")"
+  ---
+  duration_ms: 0.185139
+  ...
+# Subtest: history CSV neutralizes formula-like value "+cmd"
+ok 364 - history CSV neutralizes formula-like value "+cmd"
+  ---
+  duration_ms: 0.091963
+  ...
+# Subtest: history CSV neutralizes formula-like value "-10+cmd"
+ok 365 - history CSV neutralizes formula-like value "-10+cmd"
+  ---
+  duration_ms: 0.067055
+  ...
+# Subtest: history CSV neutralizes formula-like value "@SUM(A1)"
+ok 366 - history CSV neutralizes formula-like value "@SUM(A1)"
+  ---
+  duration_ms: 0.117023
+  ...
+# Subtest: history CSV neutralizes formula-like value "  =SUM(A1)"
+ok 367 - history CSV neutralizes formula-like value "  =SUM(A1)"
+  ---
+  duration_ms: 0.074461
+  ...
+# Subtest: history CSV neutralizes formula-like value "\\t=2+2"
+ok 368 - history CSV neutralizes formula-like value "\\t=2+2"
+  ---
+  duration_ms: 0.064697
+  ...
+# Subtest: CSV preserves Unicode and quotes newlines, commas and quotation marks
+ok 369 - CSV preserves Unicode and quotes newlines, commas and quotation marks
+  ---
+  duration_ms: 0.258353
+  ...
+# Subtest: empty CSV retains headers and TXT retains export metadata
+ok 370 - empty CSV retains headers and TXT retains export metadata
+  ---
+  duration_ms: 0.148727
+  ...
+# Subtest: TXT escapes embedded newlines in record values without dropping Unicode
+ok 371 - TXT escapes embedded newlines in record values without dropping Unicode
+  ---
+  duration_ms: 0.183758
+  ...
+# Subtest: PDF is a real downloadable, Unicode-font, paginated document rather than a print-window placeholder
+ok 372 - PDF is a real downloadable, Unicode-font, paginated document rather than a print-window placeholder
+  ---
+  duration_ms: 313.89153
+  ...
+# Subtest: appearance settings own light/dark controls and preserve saved preference state
+ok 373 - appearance settings own light/dark controls and preserve saved preference state
+  ---
+  duration_ms: 0.425788
+  ...
+# Subtest: empty merchant reviews have no placeholder badge or navigation; approved reviews remain reactive
+ok 374 - empty merchant reviews have no placeholder badge or navigation; approved reviews remain reactive
+  ---
+  duration_ms: 0.331454
+  ...
+# Subtest: public replacement contains exactly 18 unique real modules and useful benefit descriptions
+ok 375 - public replacement contains exactly 18 unique real modules and useful benefit descriptions
+  ---
+  duration_ms: 0.331641
+  ...
+# Subtest: public marketing copy does not promise public merchant publishing or unconfigured live messaging
+ok 376 - public marketing copy does not promise public merchant publishing or unconfigured live messaging
+  ---
+  duration_ms: 0.106507
+  ...
+# Subtest: database restore cannot replace role privileges for a non-admin
+ok 377 - database restore cannot replace role privileges for a non-admin
+  ---
+  duration_ms: 0.252692
+  ...
+# Subtest: theme examples retain their own colors instead of inheriting opposite-mode utility overrides
+ok 378 - theme examples retain their own colors instead of inheriting opposite-mode utility overrides
+  ---
+  duration_ms: 0.363333
+  ...
+# Subtest: review capture describes merchant feedback and private business-page approval, not CODE76 promotion
+ok 379 - review capture describes merchant feedback and private business-page approval, not CODE76 promotion
+  ---
+  duration_ms: 0.117568
+  ...
+# Subtest: document-preview copying also awaits the shared clipboard result before claiming success
+ok 380 - document-preview copying also awaits the shared clipboard result before claiming success
+  ---
+  duration_ms: 0.247858
+  ...
+# Subtest: private business links are created from a clean app root so query credentials cannot leak
+ok 381 - private business links are created from a clean app root so query credentials cannot leak
+  ---
+  duration_ms: 0.143969
+  ...
+# Subtest: zero-stock services keep their billing basis in the honest no-key catalog assistant
+ok 382 - zero-stock services keep their billing basis in the honest no-key catalog assistant
+  ---
+  duration_ms: 11.019703
+  ...
+# Subtest: calculateLineItemTotal applies percentage discount correctly
+ok 383 - calculateLineItemTotal applies percentage discount correctly
+  ---
+  duration_ms: 0.790735
+  ...
+# Subtest: calculateLineItemTotal applies fixed discount correctly
+ok 384 - calculateLineItemTotal applies fixed discount correctly
+  ---
+  duration_ms: 0.146832
+  ...
+# Subtest: calculateCartTotals computes subtotal, extra charges and taxes
+ok 385 - calculateCartTotals computes subtotal, extra charges and taxes
+  ---
+  duration_ms: 0.496292
+  ...
+# Subtest: calculatePaymentsAndDebt tracks remaining debt and change due
+ok 386 - calculatePaymentsAndDebt tracks remaining debt and change due
+  ---
+  duration_ms: 0.260081
+  ...
+# Subtest: calculateFinancialHealth evaluates P&L, COGS, and profit margin
+ok 387 - calculateFinancialHealth evaluates P&L, COGS, and profit margin
+  ---
+  duration_ms: 0.375869
+  ...
+# Subtest: calculateProductProfitMargin detects profit, break-even, and selling at a loss
+ok 388 - calculateProductProfitMargin detects profit, break-even, and selling at a loss
+  ---
+  duration_ms: 0.183359
+  ...
+# Subtest: generateUniqueInventoryId generates unique read-only IDs without colliding
+ok 389 - generateUniqueInventoryId generates unique read-only IDs without colliding
+  ---
+  duration_ms: 0.211614
+  ...
+1..389
+# tests 389
+# suites 0
+# pass 389
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1864.676974

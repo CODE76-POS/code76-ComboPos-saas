@@ -1,3 +1,4 @@
+import { code76SiteReply } from '../../utils/code76Offers.ts';
 import React, { useState, useRef, useEffect } from 'react';
 import { usePOS } from '../../context/POSContext.tsx';
 import { useCode76Site } from '../../context/Code76SiteContext.tsx';
@@ -43,6 +44,7 @@ export interface InquiryLeadData {
 
 interface AIChatbotWidgetProps {
   surface: LandingSurface;
+  inlineLauncher?: boolean;
   inquiryLead?: InquiryLeadData | null;
   isOpenControlled?: boolean;
   onCloseControlled?: () => void;
@@ -50,6 +52,7 @@ interface AIChatbotWidgetProps {
 
 export const AIChatbotWidget: React.FC<AIChatbotWidgetProps> = ({
   surface,
+  inlineLauncher = false,
   inquiryLead,
   isOpenControlled,
   onCloseControlled,
@@ -88,7 +91,7 @@ export const AIChatbotWidget: React.FC<AIChatbotWidgetProps> = ({
       role: 'model',
       text: isBusiness
         ? `Hello! Welcome to **${company.name}**. I can help you explore this business’s products and services, prices and contact details. What are you looking for?`
-        : `Hello! 👋 Welcome to **${company.name}**.\n\nI am your AI Concierge & Commercial Advisor. Tell me about your business (e.g. supermarket, restaurant, hardware store, service agency) or what POS terminals and printers you are looking for, and I will recommend the best equipment bundle with live pricing!`,
+        : code76SiteReply(''),
     },
   ]);
   const [inputText, setInputText] = useState('');
@@ -182,7 +185,7 @@ export const AIChatbotWidget: React.FC<AIChatbotWidgetProps> = ({
         ...prev,
         {
           role: 'model',
-          text: isBusiness ? businessCatalogReply(textToSend, safeContext) : `Thank you for your inquiry! Our flagship **CODE76 Touch Terminal** ($599) and **Thermal Receipt Printer** ($129) are ready for dispatch with full 2-year warranty. Would you like our sales team to contact you with a formal quote or schedule an on-site visit?`,
+          text: isBusiness ? businessCatalogReply(textToSend, safeContext) : code76SiteReply(textToSend),
         },
       ]);
     } finally {
@@ -235,7 +238,7 @@ export const AIChatbotWidget: React.FC<AIChatbotWidgetProps> = ({
       {!isOpen && (
         <button
           onClick={handleOpen}
-          className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 p-3.5 sm:p-4 rounded-full bg-gradient-to-r from-teal-600 via-emerald-600 to-teal-500 hover:from-teal-500 hover:to-emerald-400 text-white shadow-[0_0_25px_rgba(20,184,166,0.5)] hover:shadow-[0_0_35px_rgba(20,184,166,0.7)] border-2 border-teal-300/40 flex items-center gap-3 transition-all hover:scale-105 cursor-pointer group active:scale-95"
+          className={`${inlineLauncher?'relative inline-flex rounded-xl':'fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 rounded-full'} p-3.5 sm:p-4 bg-teal-700 hover:bg-teal-600 text-white border border-teal-500/40 flex items-center gap-3 transition-colors cursor-pointer group`}
           aria-label={`Open ${isBusiness ? company.name : 'CODE76'} assistant`}
           title={isBusiness ? `Ask ${company.name} about its catalog` : 'Open CODE76 product advisor'}
         >
@@ -243,9 +246,9 @@ export const AIChatbotWidget: React.FC<AIChatbotWidgetProps> = ({
             <Bot className="w-5 h-5 sm:w-6 sm:h-6" />
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-300 absolute -top-1 -right-1 ring-2 ring-emerald-600 animate-ping" />
           </div>
-          <div className="text-left hidden sm:block pr-1">
+          <div className={inlineLauncher?"text-left pr-1":"text-left hidden sm:block pr-1"}>
             <div className="text-xs font-black leading-tight flex items-center gap-1">
-              <span>AI Sales Concierge</span>
+              <span>{isBusiness?'Ask about this business':'Ask CODE76'}</span>
               <Sparkles className="w-3.5 h-3.5 text-emerald-200" />
             </div>
             <div className="text-[10px] text-emerald-100 opacity-95 leading-tight">
@@ -269,7 +272,7 @@ export const AIChatbotWidget: React.FC<AIChatbotWidgetProps> = ({
                   <span>{isBusiness ? `${company.name} assistant` : 'CODE76 Sales Concierge'}</span>
                   <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block animate-ping" />
                 </div>
-                <div className="text-[10px] text-teal-300 font-medium">Psychological Sales Intelligence</div>
+                <div className="text-[10px] text-teal-300 font-medium">{isBusiness?'Catalog questions & contacts':'Product, plans & service information'}</div>
               </div>
             </div>
 

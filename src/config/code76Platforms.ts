@@ -8,7 +8,7 @@ export const CODE76_PLATFORMS = [
   { id: 'sales_history', name: 'Sales history & receipts', icon: History, benefit: 'Find recorded transactions, review receipts and track outstanding balances without searching through paper notes.' },
   { id: 'expenses', name: 'Expense tracking', icon: Receipt, benefit: 'Keep operating costs and payment details together so you can review where business money is going.' },
   { id: 'invoices', name: 'Sales & purchase invoices', icon: FileText, benefit: 'Prepare invoices, review payment status and keep customer and supplier documents organized.' },
-  { id: 'analytics', name: 'Business analytics & reporting', icon: BarChart3, benefit: 'Review recorded sales, expenses and inventory dashboards to support day-to-day business decisions.' },
+  { id: 'analytics', name: 'Business analytics & reporting', icon: BarChart3, benefit: 'Review recorded history and live workspace totals, then explore clearly labelled average/linear future scenarios—not guaranteed outcomes.' },
   { id: 'customers', name: 'Customer directory', icon: Users, benefit: 'Keep customer contact records and inquiries together for easier follow-up and relationship management.' },
   { id: 'vendors', name: 'Vendor directory', icon: Building2, benefit: 'Organize supplier contacts and reference information for purchasing and restocking conversations.' },
   { id: 'transporters', name: 'Transport & delivery contacts', icon: Truck, benefit: 'Keep transporters and driver contact details accessible when coordinating business deliveries.' },
