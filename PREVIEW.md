@@ -4,24 +4,27 @@ Open **CODE76 POS — Workspace Preview** in Arena's **Live Preview** panel, por
 
 The restart commands below use the application's default port 3000 as an example. Set `PORT=5173` instead to match the current workspace preview.
 
-## Test the requested routes
+## Test the updated app
 
-1. Open the base URL `/`: it always shows public CODE76 marketing with **Sign In / Register**, even if already signed in. `/index.html` also works.
-2. Use **⚡ CEO / Admin** for the seeded, local-only demo login, or try the sign-in/register form with test-only details.
-3. Complete or skip the guided setup. Its theme/text/company/0–3 real item workflow is retained.
-4. Inside POS, select **Business Landing Page** (or the **Business Page** shortcut). The URL becomes `/#/pos/landing_page_builder`.
-5. Open the business-page gear to edit **Settings → Business Landing Page Settings**. These settings do not alter the CODE76 website. My Company and Inventory control merchant content.
-6. Choose **CODE76 Site**: the base URL returns to public marketing while you remain signed in. **Enter POS App** explicitly opens the workspace again.
-7. Sign out, then use Back or request the internal builder URL: the public sign-in page appears, not merchant content. `?view=storefront` no longer opens a public storefront.
+1. The base URL `/` always shows CODE76 marketing and the account portal. The old sector section is replaced by 18 practical platforms/features.
+2. Use **⚡ CEO / Admin** for the local demo session, then complete or skip setup.
+3. The POS top navbar contains **App link**, a read-only URL, **Copy link**, and an open-in-new-tab control. It copies the clean current root, not a merchant hash or credential query.
+4. For services, choose **Service quantity / billing unit** in Inventory or guided first-inventory setup: task completion, minute, hour, day, week, month, year, session, visit or project. Product stock remains numeric; services do not carry stock.
+5. **Business Landing Page** opens only at `/#/pos/landing_page_builder` after sign-in. It uses merchant data, automatically reflects inventory and approved reviews, and shows no empty-review placeholder. Its private link also uses the reliable copy control.
+6. Open your **active user/session avatar** for access-history guidance or **Sign Out**. Sign-out returns to CODE76 sign-in/register. The redundant CODE76 Site and far-right logout buttons are removed.
+7. Light/dark controls are under **Settings → App Appearance Settings**. Choose a mode and save; the old navbar theme switches are removed.
+8. **Audit & Access Logs** provides real filtered PDF/TXT/CSV downloads. Admins or granted Audit Logs roles may view; file/email export additionally requires Export Reports. Role grants and full snapshot restore are admin-only. Read-only backups omit access history.
 
-Optional sample data is under **Demo Data**. Use only test records. **One payment** replaces the old Exact Pay label. Checkout payment methods are bookkeeping fields, not a live processor. Nothing from the tool's isolated test browser populates your own preview browser.
+**Another browser:** this workspace host requires an Arena/E2B traffic token before requests reach the app. A copied raw URL may therefore show 403. Open the conversation's authorized Live Preview in that browser, or deploy the app to an authorized public host. Client routing cannot remove hosting authentication. Sessions and merchant data are browser-local, not automatically shared.
+
+Use only TEST data: auth/roles are still a client-side prototype, and payment methods are bookkeeping fields rather than a live payment processor. No supplied Gemini key was used or saved.
 
 ## Low-resource start / restart
 
 ```sh
 npm ci
 npm run lint
-node --import tsx --test src/utils/calculations.test.ts qa/onboarding/feature.test.ts qa/routing/routing-seo.test.ts
+node --import tsx --test src/utils/calculations.test.ts qa/onboarding/feature.test.ts qa/routing/routing-seo.test.ts qa/usability/usability.test.ts
 NODE_OPTIONS=--max-old-space-size=768 npm run build
 NODE_ENV=production DISABLE_HMR=true PORT=3000 NODE_OPTIONS=--max-old-space-size=384 npm start
 ```
@@ -32,7 +35,7 @@ One production server is retained, without development watchers. No supplied Gem
 
 Set `PUBLIC_SITE_URL` to the verified public production origin before deploying/building; the Node server otherwise uses the validated current request origin. Local and `*.e2b.app` previews are intentionally noindex. Use `PUBLIC_SITE_INDEXING=false` for other staging environments. Public canonical/social/schema metadata, robots and sitemap must never point to a merchant hash route.
 
-See [routing/SEO changes](ROUTING-SEO-UPDATE.md), [page ownership and access boundaries](docs/LANDING-PAGES.md), and [current evidence](qa/routing/README.md).
+See [routing/SEO changes](ROUTING-SEO-UPDATE.md), [page ownership and access boundaries](docs/LANDING-PAGES.md), and [latest usability evidence](qa/usability/README.md).
 
 ## Scope and limits
 

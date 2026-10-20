@@ -1,3 +1,5 @@
+import { accessHistoryPermissions, permittedBackup } from '../../utils/accessHistory.ts';
+import { DEFAULT_SERVICE_UNIT, parseServiceUnit } from '../../utils/serviceUnits.ts';
 import React, { useState, useEffect } from 'react';
 import { usePOS } from '../../context/POSContext.tsx';
 import {
@@ -28,6 +30,8 @@ import {
   Building,
   Truck,
   RotateCcw,
+  Sun,
+  Moon,
 } from 'lucide-react';
 import { ALL_ROLES, AppSettings, UserRole } from '../../types/index.ts';
 import { parseCSV } from '../../utils/exportUtils.ts';
@@ -84,7 +88,12 @@ export const SettingsPlatform: React.FC = () => {
   const [restoreJson, setRestoreJson] = useState<string>('');
 
   const handleSave = () => {
-    setSettings(formSettings);
+    if (activeTab === 'privileges' && !currentUser?.isAdmin) {
+      setSaveAlert('Only an administrator can change role privileges.');
+      return;
+    }
+    // Non-admin appearance/preferences saves must not modify the permission map.
+    setSettings(currentUser?.isAdmin ? formSettings : { ...formSettings, privileges: settings.privileges });
     logAuditAction('Updated System Settings', `Saved configuration changes in ${activeTab}`);
     setSaveAlert('Settings saved successfully!');
     setTimeout(() => setSaveAlert(''), 2500);
@@ -176,6 +185,10 @@ export const SettingsPlatform: React.FC = () => {
         return;
       }
 
+      if (targetImportPlatform === 'inventory') {
+        const invalid = records.find(row => row.type?.toLowerCase() === 'service' && (row.serviceUnit || row.serviceunit)?.trim() && !parseServiceUnit(row.serviceUnit || row.serviceunit));
+        if (invalid) throw new Error('Unsupported serviceUnit. Use task, minute, hour, day, week, month, year, session, visit or project.');
+      }
       // Add to database
       let count = 0;
       records.forEach((row) => {
@@ -187,9 +200,10 @@ export const SettingsPlatform: React.FC = () => {
             barcode: row.barcode || `7600${Math.floor(100000 + Math.random() * 900000)}`,
             costPrice: parseFloat(row.costprice) || 0,
             sellingPrice: parseFloat(row.sellingprice) || 0,
-            stock: parseInt(row.stock) || 10,
-            minStockAlert: parseInt(row.minstockalert) || 2,
+            stock: row.type?.toLowerCase() === 'service' ? 0 : parseInt(row.stock) || 10,
+            minStockAlert: row.type?.toLowerCase() === 'service' ? 0 : parseInt(row.minstockalert) || 2,
             type: (row.type?.toLowerCase() === 'service' ? 'service' : 'product') as any,
+            serviceUnit: row.type?.toLowerCase() === 'service' ? parseServiceUnit(row.serviceUnit || row.serviceunit) || DEFAULT_SERVICE_UNIT : undefined,
             description: row.description || '',
             imageUrl: 'https://images.unsplash.com/photo-1556740758-90de374c12ad?w=600&auto=format&fit=crop&q=80',
           });
@@ -251,17 +265,22 @@ export const SettingsPlatform: React.FC = () => {
   const handleDownloadFullBackup = () => {
     const stateStr = localStorage.getItem('code76_pos_state_v1');
     if (!stateStr) return;
-    const blob = new Blob([stateStr], { type: 'application/json' });
+    let allowedState: string;
+    try { allowedState = permittedBackup(stateStr, currentUser, settings); }
+    catch { setSaveAlert('The saved backup could not be read. No file was downloaded.'); return; }
+    const blob = new Blob([allowedState], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
     a.download = `CODE76_POS_BACKUP_${new Date().toISOString().slice(0, 10)}.json`;
     a.click();
-    logAuditAction('Exported Database Backup', 'Created complete JSON state backup');
+    logAuditAction('Exported Database Backup', accessHistoryPermissions(currentUser, settings).canExport ? 'Created JSON backup including authorized access history' : 'Created JSON backup with access history excluded by permissions');
+    setSaveAlert(accessHistoryPermissions(currentUser, settings).canExport ? 'Backup download requested.' : 'Backup download requested. Access history was omitted because export permission is not granted.');
   };
 
   // Backup Restore
   const handleRestoreBackup = () => {
+    if (!currentUser?.isAdmin) { setSaveAlert('Only an administrator can restore a full database snapshot.'); return; }
     try {
       if (!restoreJson.trim()) return;
       JSON.parse(restoreJson);
@@ -310,7 +329,7 @@ export const SettingsPlatform: React.FC = () => {
             { id: 'textSizing', label: 'Text Sizing Settings', icon: Type },
             { id: 'landingPage', label: 'Business Landing Page Settings', icon: Globe },
             { id: 'receipts', label: 'Receipts Settings', icon: Receipt },
-            { id: 'appearance', label: 'Color / Appearance Settings', icon: Palette },
+            { id: 'appearance', label: 'App Appearance Settings', icon: Palette },
             { id: 'font', label: 'Font Text Settings', icon: FileText },
             { id: 'backup', label: 'Data Backup Settings', icon: HardDrive },
             { id: 'privileges', label: 'App User Privilege Settings', icon: Shield },
@@ -704,11 +723,24 @@ export const SettingsPlatform: React.FC = () => {
           {activeTab === 'appearance' && (
             <div className="space-y-5">
               <div>
-                <h3 className="text-base font-bold text-slate-100">Color, Theme & Layout Appearance</h3>
+                <h3 className="text-base font-bold text-slate-100">App Appearance</h3>
                 <p className="text-xs text-slate-400">
                   Cart position on Left vs Right, product grid display toggle, and color accents.
                 </p>
               </div>
+
+              <fieldset className="rounded-2xl border border-slate-800 p-4">
+                <legend className="px-2 text-sm font-bold text-teal-400">Light / dark theme</legend>
+                <div className="grid grid-cols-2 gap-3">
+                  {(['light', 'dark'] as const).map(mode => <button key={mode} type="button" aria-label={`${mode === 'light' ? 'Light' : 'Dark'} theme`} aria-pressed={formSettings.appearance.theme === mode}
+                    onClick={() => setFormSettings({ ...formSettings, appearance: { ...formSettings.appearance, theme: mode } })}
+                    className={`rounded-xl border p-4 text-left text-sm ${formSettings.appearance.theme === mode ? 'border-teal-500 ring-2 ring-teal-500/30' : 'border-slate-700'}`}>
+                    <span className="flex items-center gap-2 font-bold">{mode === 'light' ? <Sun size={19} /> : <Moon size={19} />}{mode === 'light' ? 'Light' : 'Dark'}</span>
+                    <span data-preview-theme={mode} className="appearance-theme-sample mt-3 block rounded-lg border px-3 py-4 text-xs">Sales · Inventory · Reports</span>
+                  </button>)}
+                </div>
+                <p className="mt-3 text-xs text-slate-400">Choose a theme, then Save All Settings Changes. This affects the POS workspace, not the CODE76 website or the private business-page design.</p>
+              </fieldset>
 
               {/* Cart Position Selection: LEFT vs RIGHT */}
               <div>
@@ -887,6 +919,7 @@ export const SettingsPlatform: React.FC = () => {
               {/* Restore */}
               <div className="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-3">
                 <h4 className="text-sm font-bold text-slate-100">Restore System From Backup JSON</h4>
+                {!currentUser?.isAdmin && <p className="text-xs text-amber-300">Only an administrator can restore a database snapshot, because it can replace role privileges and history.</p>}
                 <textarea
                   rows={4}
                   value={restoreJson}
@@ -897,6 +930,7 @@ export const SettingsPlatform: React.FC = () => {
                 <button
                   type="button"
                   onClick={handleRestoreBackup}
+                  disabled={!currentUser?.isAdmin} title="Full database restores require administrator access"
                   className="px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-semibold flex items-center gap-2 cursor-pointer"
                 >
                   <Upload className="w-4 h-4" />
@@ -907,7 +941,8 @@ export const SettingsPlatform: React.FC = () => {
           )}
 
           {/* TAB 8: PRIVILEGES (RBAC) */}
-          {activeTab === 'privileges' && (
+          {activeTab === 'privileges' && !currentUser?.isAdmin && <div role="alert" className="rounded-xl border border-amber-700 bg-amber-950/30 p-5 text-sm text-amber-200">Only an administrator can change role privileges. Ask your administrator to grant Audit Logs and Export Reports access when needed.</div>}
+          {activeTab === 'privileges' && currentUser?.isAdmin && (
             <div className="space-y-4">
               <div>
                 <h3 className="text-base font-bold text-slate-100">App User Privilege Settings (RBAC)</h3>
@@ -929,6 +964,7 @@ export const SettingsPlatform: React.FC = () => {
                       <th className="py-2.5 px-2 text-center">Manage People</th>
                       <th className="py-2.5 px-2 text-center">Import CSV</th>
                       <th className="py-2.5 px-2 text-center">Audit Logs</th>
+                      <th className="py-2.5 px-2 text-center">Export Reports (PDF / TXT / CSV)</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-800 text-slate-300">
@@ -1038,6 +1074,7 @@ export const SettingsPlatform: React.FC = () => {
                           <td className="py-2 px-2 text-center">
                             <input
                               type="checkbox"
+                              aria-label={`${role} Audit Logs privilege`}
                               checked={priv.canViewAuditLogs}
                               onChange={(e) => {
                                 const next = { ...priv, canViewAuditLogs: e.target.checked };
@@ -1049,6 +1086,7 @@ export const SettingsPlatform: React.FC = () => {
                               className="rounded text-teal-500"
                             />
                           </td>
+                          <td className="py-2 px-2 text-center"><input type="checkbox" aria-label={`${role} Export Reports privilege`} checked={priv.canExportPdf} onChange={event => setFormSettings({ ...formSettings, privileges: { ...formSettings.privileges, [role]: { ...priv, canExportPdf: event.target.checked } } })} className="rounded text-teal-500" /></td>
                         </tr>
                       );
                     })}

@@ -1,3 +1,4 @@
+import { serviceUnitLabel } from '../../utils/serviceUnits.ts';
 import React, { useState, useMemo } from 'react';
 import { usePOS } from '../../context/POSContext.tsx';
 import {
@@ -454,7 +455,7 @@ export const SalesPlatform: React.FC = () => {
                               </div>
                             )}
                             <div className="text-[10px] text-slate-400">
-                              {p.type === 'service' ? 'Service' : `${p.stock} in stock`}
+                              {p.type === 'service' ? serviceUnitLabel(p) : `${p.stock} in stock`}
                             </div>
                           </div>
 
@@ -528,7 +529,7 @@ export const SalesPlatform: React.FC = () => {
                         {p.name}
                       </div>
                       <div className="text-[10px] text-slate-400 mt-0.5">
-                        {p.category} | {p.type === 'service' ? 'Service' : `Stock: ${p.stock}`}
+                        {p.category} | {p.type === 'service' ? serviceUnitLabel(p) : `Stock: ${p.stock}`}
                       </div>
                     </div>
 
@@ -619,12 +620,14 @@ export const SalesPlatform: React.FC = () => {
                       </div>
                     </div>
 
+                    {item.product.type === 'service' && <p className="mt-1 text-[10px] text-purple-300">Rate: {serviceUnitLabel(item.product).toLowerCase()} · quantity counts billable units</p>}
                     {/* Qty & Item Discount Controls */}
                     <div className="flex items-center justify-between gap-2 text-xs">
                       {/* Qty controls */}
                       <div className="flex items-center bg-slate-950 rounded-lg border border-slate-800 p-0.5">
                         <button
                           onClick={() => updateCartItemQty(item.product.id, -1)}
+                          aria-label={`Decrease quantity for ${item.product.name}`}
                           className="w-6 h-6 flex items-center justify-center text-slate-400 hover:text-white cursor-pointer"
                         >
                           <Minus className="w-3 h-3" />
@@ -634,6 +637,7 @@ export const SalesPlatform: React.FC = () => {
                         </span>
                         <button
                           onClick={() => updateCartItemQty(item.product.id, 1)}
+                          aria-label={`Increase quantity for ${item.product.name}`}
                           className="w-6 h-6 flex items-center justify-center text-slate-400 hover:text-white cursor-pointer"
                         >
                           <Plus className="w-3 h-3" />

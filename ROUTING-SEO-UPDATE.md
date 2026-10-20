@@ -1,5 +1,7 @@
 # CODE76 public root, private business builder and SEO
 
+> **Latest navbar/service/history update:** see [WORKSPACE-UPDATE.md](WORKSPACE-UPDATE.md). Root/public versus authenticated builder ownership remains unchanged.
+
 ## Delivered behavior
 
 - **`/` is always the CODE76 product marketing/sign-in/register page**, including when the user is already signed in. `/index.html` serves the same public shell with a root canonical.

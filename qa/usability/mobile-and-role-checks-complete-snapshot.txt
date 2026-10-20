@@ -1,0 +1,116 @@
+### Page
+- Page URL: http://127.0.0.1:5173/#/pos/settings
+- Page Title: CODE76 POS — Private Workspace
+### Snapshot
+```yaml
+- generic [ref=e4]:
+  - banner [ref=e11427]:
+    - generic [ref=e11428]:
+      - button "76 CODE76 POS Enterprise Product & Service SaaS ERP System" [ref=e11430] [cursor=pointer]:
+        - generic [ref=e11431]: "76"
+        - generic [ref=e11432]:
+          - generic [ref=e11433]:
+            - generic [ref=e11434]: CODE76 POS
+            - generic [ref=e11435]: Enterprise
+          - paragraph [ref=e11436]: Product & Service SaaS ERP System
+      - generic [ref=e11437]:
+        - generic [ref=e11438]:
+          - button "Desktop View (Full Width)" [ref=e11439] [cursor=pointer]
+          - button "Laptop View (1024px)" [ref=e11442] [cursor=pointer]
+          - button "Tablet View (768px)" [ref=e11445] [cursor=pointer]
+          - button "Phone Mobile View (390px)" [ref=e11448] [cursor=pointer]
+        - generic [ref=e11451]:
+          - button "Demo Data" [ref=e11452] [cursor=pointer]
+          - button "Business Page" [ref=e11459] [cursor=pointer]
+          - button "Click to view help guide and settings for this platform" [ref=e11464] [cursor=pointer]
+          - button "Active user session and access controls" [ref=e11469] [cursor=pointer]:
+            - generic [ref=e11470]: DR
+            - generic [ref=e11471]:
+              - generic [ref=e11472]: Dr. David Kimani
+              - generic [ref=e11473]: "Role: CEO"
+    - generic [ref=e11474]:
+      - generic [ref=e11475]:
+        - generic [ref=e11479]: App link
+        - generic [ref=e11480]:
+          - generic [ref=e11481]:
+            - generic [ref=e11482]: App link
+            - textbox "App link" [ref=e11483]: http://127.0.0.1:5173/
+            - button "Copy app link" [ref=e11484] [cursor=pointer]:
+              - generic [ref=e11488]: Copy link
+            - link "Open app link in a new tab" [ref=e11489] [cursor=pointer]:
+              - /url: http://127.0.0.1:5173/
+          - status [ref=e11494]
+      - paragraph [ref=e11495]: Open this root link to reach CODE76 sign-in/register. Browser-local records and sessions do not sync between browsers.
+    - generic [ref=e11497]:
+      - button "Sales POS" [ref=e11498] [cursor=pointer]
+      - button "Sales History" [ref=e11502] [cursor=pointer]
+      - button "Inventory" [ref=e11507] [cursor=pointer]
+      - button "Expenses" [ref=e11512] [cursor=pointer]
+      - button "Invoices" [ref=e11516] [cursor=pointer]
+      - button "Analytics & P&L" [ref=e11520] [cursor=pointer]
+      - button "Customers" [ref=e11523] [cursor=pointer]
+      - button "Vendors" [ref=e11529] [cursor=pointer]
+      - button "Transporters" [ref=e11534] [cursor=pointer]
+      - button "Marketing Team" [ref=e11540] [cursor=pointer]
+      - button "Company Members" [ref=e11544] [cursor=pointer]
+      - button "My Company" [ref=e11550] [cursor=pointer]
+      - button "Messaging" [ref=e11554] [cursor=pointer]
+      - button "Business Landing Page" [ref=e11557] [cursor=pointer]
+      - button "Settings" [ref=e11562] [cursor=pointer]
+      - button "Audit & Access Logs" [ref=e11566] [cursor=pointer]
+      - button "About & Manual" [ref=e11570] [cursor=pointer]
+  - main [ref=e5]:
+    - generic [ref=e11686]:
+      - generic [ref=e11688]:
+        - generic [ref=e11689]:
+          - heading "System Settings Platform" [level=1] [ref=e11690]
+          - button "Click for platform guidance & settings" [ref=e11691] [cursor=pointer]
+        - paragraph [ref=e11695]: Configure payment methods, responsive text sizing, landing page rules, receipts, appearance, font families, backups, privileges, and PDF/Excel import pipeline.
+      - generic [ref=e11696]:
+        - generic [ref=e11697]:
+          - button "Payment Settings" [ref=e11698] [cursor=pointer]
+          - button "Text Sizing Settings" [ref=e11702] [cursor=pointer]
+          - button "Business Landing Page Settings" [ref=e11706] [cursor=pointer]
+          - button "Receipts Settings" [ref=e11711] [cursor=pointer]
+          - button "App Appearance Settings" [active] [ref=e11716] [cursor=pointer]
+          - button "Font Text Settings" [ref=e11724] [cursor=pointer]
+          - button "Data Backup Settings" [ref=e11729] [cursor=pointer]
+          - button "App User Privilege Settings" [ref=e11733] [cursor=pointer]
+          - button "PDF & Excel Settings (CSV Import)" [ref=e11737] [cursor=pointer]
+          - button "Email Marketing Templates" [ref=e11742] [cursor=pointer]
+          - button "Audit Logs & Login History" [ref=e11747] [cursor=pointer]
+        - generic [ref=e11752]:
+          - generic [ref=e12601]:
+            - generic [ref=e12602]:
+              - heading "App Appearance" [level=3] [ref=e12603]
+              - paragraph [ref=e12604]: Cart position on Left vs Right, product grid display toggle, and color accents.
+            - group "Light / dark theme" [ref=e12605]:
+              - generic [ref=e12607]:
+                - button "Light theme" [pressed] [ref=e12608]:
+                  - generic [ref=e12609]: Light
+                  - generic [ref=e12616]: Sales · Inventory · Reports
+                - button "Dark theme" [ref=e12617]:
+                  - generic [ref=e12618]: Dark
+                  - generic [ref=e12621]: Sales · Inventory · Reports
+              - paragraph [ref=e12622]: Choose a theme, then Save All Settings Changes. This affects the POS workspace, not the CODE76 website or the private business-page design.
+            - generic [ref=e12623]:
+              - generic [ref=e12624]: Sales Terminal Cart Placement
+              - generic [ref=e12625]:
+                - button "Cart on Left Side Products & search on right side" [ref=e12626] [cursor=pointer]:
+                  - generic [ref=e12627]: Cart on Left Side
+                  - generic [ref=e12628]: Products & search on right side
+                - button "Cart on Right Side (Default) Products & search on left side" [ref=e12629] [cursor=pointer]:
+                  - generic [ref=e12630]: Cart on Right Side (Default)
+                  - generic [ref=e12631]: Products & search on left side
+            - generic [ref=e12632]:
+              - generic [ref=e12633]:
+                - generic [ref=e12634]: Showcase Product Grid Below Search
+                - generic [ref=e12635]: Display visual card catalog under the sales search bar in addition to autocomplete.
+              - checkbox [checked] [ref=e12636] [cursor=pointer]
+            - generic [ref=e12637]:
+              - generic [ref=e12638]: Display Mode
+              - generic [ref=e12639]:
+                - button "Dark Enterprise Theme" [ref=e12640] [cursor=pointer]
+                - button "Clean Light Theme" [ref=e12641] [cursor=pointer]
+          - button "Save All Settings Changes" [ref=e12596] [cursor=pointer]
+```

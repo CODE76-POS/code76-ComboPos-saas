@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import { accessHistoryPermissions } from '../../utils/accessHistory.ts';
+import React, { useEffect, useRef, useState } from 'react';
 import { usePOS } from '../../context/POSContext.tsx';
-import { Lock, Mail, KeyRound, Shield, X, UserPlus, LogIn, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Lock, Mail, KeyRound, Shield, X, UserPlus, LogIn, CheckCircle2, AlertCircle, History, Info } from 'lucide-react';
 import { ALL_ROLES, UserRole } from '../../types/index.ts';
 
 export const LoginModal: React.FC = () => {
-  const { loginModalOpen, setLoginModalOpen, currentUser, loginUser, logoutUser, registerUser } = usePOS();
+  const { loginModalOpen, setLoginModalOpen, currentUser, loginUser, logoutUser, registerUser, settings, setActivePlatform } = usePOS();
 
   const [mode, setMode] = useState<'login' | 'register'>('login');
   const [email, setEmail] = useState<string>('');
@@ -14,6 +15,24 @@ export const LoginModal: React.FC = () => {
   const [errorMsg, setErrorMsg] = useState<string>('');
   const [successMsg, setSuccessMsg] = useState<string>('');
 
+  const historyAccess = accessHistoryPermissions(currentUser, settings);
+  const dialog = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!loginModalOpen) return;
+    const previous = document.activeElement as HTMLElement | null;
+    const handleKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setLoginModalOpen(false);
+      if (event.key === 'Tab') {
+        const controls = [...(dialog.current?.querySelectorAll<HTMLElement>('button:not([disabled]), input, select, a[href]') || [])].filter(element => element.offsetParent !== null);
+        const first = controls[0], last = controls[controls.length - 1];
+        if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+        else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+      }
+    };
+    dialog.current?.querySelector<HTMLElement>('button')?.focus();
+    document.addEventListener('keydown', handleKey);
+    return () => { document.removeEventListener('keydown', handleKey); if (previous?.isConnected) previous.focus(); };
+  }, [loginModalOpen, setLoginModalOpen]);
   if (!loginModalOpen) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -54,17 +73,13 @@ export const LoginModal: React.FC = () => {
   };
 
   const handleLogout = () => {
-    logoutUser();
-    setSuccessMsg('Logged out successfully.');
-    setTimeout(() => {
-      setSuccessMsg('');
-      setLoginModalOpen(false);
-    }, 1000);
+    setLoginModalOpen(false);
+    logoutUser(); // Immediately returns to the CODE76 public root, including its account portal.
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-xs p-4">
-      <div className="relative w-full max-w-md max-h-[90vh] overflow-y-auto rounded-2xl bg-slate-900 border border-slate-700 shadow-2xl p-4 sm:p-6 text-white animate-in fade-in zoom-in-95 duration-200">
+      <div ref={dialog} role="dialog" aria-modal="true" aria-labelledby="session-dialog-heading" className="relative w-full max-w-md max-h-[90vh] overflow-y-auto rounded-2xl bg-slate-900 border border-slate-700 shadow-2xl p-4 sm:p-6 text-white animate-in fade-in zoom-in-95 duration-200">
         <button
           onClick={() => setLoginModalOpen(false)}
           className="absolute top-4 right-4 text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition cursor-pointer"
@@ -81,7 +96,7 @@ export const LoginModal: React.FC = () => {
             <span className="text-xs uppercase tracking-wider font-bold text-teal-400">
               Role-Based Access Control
             </span>
-            <h3 className="text-xl font-bold text-slate-100">
+            <h3 id="session-dialog-heading" className="text-xl font-bold text-slate-100">
               {currentUser ? 'Active User Session' : mode === 'login' ? 'Sign In to CODE76 POS' : 'Register New User'}
             </h3>
           </div>
@@ -106,6 +121,16 @@ export const LoginModal: React.FC = () => {
                 ))}
               </div>
             </div>
+
+            <div className="rounded-xl border border-teal-800 bg-teal-950/40 p-3 text-xs text-slate-300">
+              <p className="flex items-center gap-2 font-bold text-teal-300"><Info size={15} /> Access-history tip</p>
+              {historyAccess.canView ? <>
+                <p className="mt-2">Find app user access history in <strong>Audit & Access Logs</strong>, or <strong>Settings → Audit Logs & Login History</strong>.</p>
+                <p className="mt-2">{historyAccess.canExport ? 'You can download the filtered results as PDF, TXT or CSV files.' : 'Your role can view history. Downloads also require the Export Reports privilege; ask an administrator.'}</p>
+                <button type="button" onClick={() => { if (!accessHistoryPermissions(currentUser, settings).canView) return; setLoginModalOpen(false); setActivePlatform('audit_logs'); }} className="mt-3 inline-flex items-center gap-2 rounded-lg bg-teal-700 px-3 py-2 font-semibold text-white"><History size={14} /> Open access history</button>
+              </> : <p className="mt-2">Access history and its PDF, TXT and CSV downloads are restricted to administrators or users with the required Audit Logs and Export Reports privileges. Ask your administrator for access.</p>}
+            </div>
+            <p className="text-xs text-slate-400">Use Sign Out below to return to the public CODE76 landing page with sign-in/register. Change light/dark mode in Settings → App Appearance Settings.</p>
 
             <div className="flex justify-end gap-3 pt-2">
               <button

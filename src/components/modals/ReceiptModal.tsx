@@ -1,3 +1,4 @@
+import { serviceUnitLabel } from '../../utils/serviceUnits.ts';
 import React from 'react';
 import { usePOS } from '../../context/POSContext.tsx';
 import { Printer, Download, X, CheckCircle, Receipt } from 'lucide-react';
@@ -81,6 +82,7 @@ export const ReceiptModal: React.FC = () => {
                   <tr key={idx} className="text-[11px]">
                     <td className="py-1.5 pr-2">
                       <div className="font-semibold">{item.product.name}</div>
+                      {item.product.type === 'service' && item.product.serviceUnit && <div className="text-[9px] text-slate-600">{serviceUnitLabel(item.product)}</div>}
                       {item.discountValue > 0 && (
                         <div className="text-[9px] text-emerald-700">
                           Disc: -{item.discountType === 'percentage' ? `${item.discountValue}%` : `$${item.discountValue}`}

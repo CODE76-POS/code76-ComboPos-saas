@@ -35,7 +35,7 @@ export function catalogChatContext(surface: LandingSurface, merchant: MerchantPa
     },
     products: data.products.map(product => ({
       id: product.id, sku: product.sku, name: product.name, category: product.category,
-      type: product.type, sellingPrice: product.sellingPrice, stock: product.stock,
+      type: product.type, serviceUnit: product.type === 'service' ? product.serviceUnit : undefined, sellingPrice: product.sellingPrice, stock: product.stock,
       isOnPromo: product.isOnPromo, promoDiscountPrice: product.promoDiscountPrice, description: product.description,
     })),
     reviews: data.reviews.filter(review => review.isApprovedForLanding).map(review => ({

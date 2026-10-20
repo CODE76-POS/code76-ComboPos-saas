@@ -1,3 +1,6 @@
+import { LinkCopyField } from '../common/LinkCopyField.tsx';
+import { applicationUrl, isWorkspacePreview } from '../../utils/clipboard.ts';
+import { accessHistoryPermissions } from '../../utils/accessHistory.ts';
 import React from 'react';
 import { usePOS } from '../../context/POSContext.tsx';
 import {
@@ -7,7 +10,6 @@ import {
   Smartphone,
   Database,
   HelpCircle,
-  Globe,
   Store,
   User,
   ShieldCheck,
@@ -26,10 +28,8 @@ import {
   MessageSquare,
   Settings,
   Info,
-  Sun,
-  Moon,
   LogIn,
-  LogOut,
+  Link2,
 } from 'lucide-react';
 import { PlatformId } from '../../types/index.ts';
 
@@ -65,13 +65,13 @@ export const TopNavBar: React.FC = () => {
     setHoverHelpPlatform,
     currentUser,
     setLoginModalOpen,
-    logoutUser,
     theme,
-    toggleTheme,
-    setSettingsSection,
+    settings,
   } = usePOS();
 
   const isLight = theme === 'light';
+  const appUrl = applicationUrl(window.location.href, import.meta.env.BASE_URL);
+  const historyAccess = accessHistoryPermissions(currentUser, settings);
 
   return (
     <header
@@ -124,19 +124,8 @@ export const TopNavBar: React.FC = () => {
             </div>
           </button>
 
-          {/* User & Theme button on mobile */}
+          {/* Active session and help on mobile */}
           <div className="flex items-center gap-1.5 sm:hidden">
-            <button
-              onClick={toggleTheme}
-              title={isLight ? 'Switch to Dark Mode' : 'Switch to High-Contrast Light Mode'}
-              className={`p-1.5 rounded-xl border transition cursor-pointer ${
-                isLight
-                  ? 'bg-slate-100 text-amber-700 border-slate-300'
-                  : 'bg-slate-800 text-amber-300 border-slate-700'
-              }`}
-            >
-              {isLight ? <Moon className="w-3.5 h-3.5 text-indigo-600" /> : <Sun className="w-3.5 h-3.5 text-amber-400" />}
-            </button>
             <button
               onClick={() => setHoverHelpPlatform(activePlatform)}
               title="Click to view help guide and settings for this platform"
@@ -150,6 +139,7 @@ export const TopNavBar: React.FC = () => {
             </button>
             <button
               onClick={() => setLoginModalOpen(true)}
+              aria-label="Active user session and access controls" aria-haspopup="dialog"
               className={`flex items-center gap-1.5 px-2 py-1.5 rounded-xl border text-xs transition cursor-pointer ${
                 isLight
                   ? 'bg-slate-100 text-slate-800 border-slate-300'
@@ -225,30 +215,9 @@ export const TopNavBar: React.FC = () => {
             </button>
           </div>
 
-          {/* Right Actions: Theme Toggle, Demo Data Button, View Toggle, User/Role */}
+          {/* Demo data, private business preview, help and the active session */}
           <div className="flex items-center gap-1.5 sm:gap-2">
-            {/* Theme Toggle (Light / Dark Mode) */}
-            <button
-              onClick={toggleTheme}
-              title={isLight ? 'Switch to Dark Mode' : 'Switch to High-Contrast Light Mode'}
-              className={`px-2.5 py-1.5 rounded-xl border text-[11px] sm:text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer shadow-xs ${
-                isLight
-                  ? 'bg-amber-50 hover:bg-amber-100 text-amber-900 border-amber-300'
-                  : 'bg-slate-800 hover:bg-slate-700 text-amber-300 border-slate-700'
-              }`}
-            >
-              {isLight ? (
-                <>
-                  <Moon className="w-3.5 h-3.5 text-indigo-600" />
-                  <span className="hidden sm:inline">Dark</span>
-                </>
-              ) : (
-                <>
-                  <Sun className="w-3.5 h-3.5 text-amber-400" />
-                  <span className="hidden sm:inline">Light</span>
-                </>
-              )}
-            </button>
+
 
             {/* Demo Data button with confirmation modal */}
             <button
@@ -260,7 +229,7 @@ export const TopNavBar: React.FC = () => {
               <span>Demo Data</span>
             </button>
 
-            {/* Internal business preview and the separate public CODE76 website */}
+            {/* Internal business-page shortcut; public return is through session sign-out */}
             {currentUser && (
               <div className="flex items-center gap-1">
                 <button
@@ -276,21 +245,6 @@ export const TopNavBar: React.FC = () => {
                 >
                   <ShoppingBag className="w-3.5 h-3.5 text-teal-400" />
                   <span className="hidden sm:inline">Business Page</span>
-                </button>
-
-                <button
-                  onClick={() => setActiveView('landing')}
-                  title="CODE76 main site — product information and sign-in, separate from your business page"
-                  className={`px-2.5 sm:px-3 py-1.5 rounded-xl text-[11px] sm:text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer shadow-xs ${
-                    activeView === 'landing'
-                      ? 'bg-teal-600 text-white'
-                      : isLight
-                      ? 'bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300'
-                      : 'bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700'
-                  }`}
-                >
-                  <Globe className="w-3.5 h-3.5 text-teal-400" />
-                  <span className="hidden sm:inline">CODE76 Site</span>
                 </button>
               </div>
             )}
@@ -313,6 +267,7 @@ export const TopNavBar: React.FC = () => {
               <div className="flex items-center gap-1">
                 <button
                   onClick={() => setLoginModalOpen(true)}
+              aria-label="Active user session and access controls" aria-haspopup="dialog"
                   className={`hidden sm:flex items-center gap-1.5 sm:gap-2 px-2 sm:px-2.5 py-1.5 rounded-xl border text-xs transition cursor-pointer ${
                     isLight
                       ? 'bg-slate-100 hover:bg-slate-200 border-slate-300 text-slate-900'
@@ -329,17 +284,11 @@ export const TopNavBar: React.FC = () => {
                     </div>
                   </div>
                 </button>
-                <button
-                  onClick={logoutUser}
-                  title="Sign out and return to landing page"
-                  className={`hidden sm:flex items-center p-1.5 rounded-xl border text-rose-400 hover:text-rose-300 hover:bg-rose-950/40 border-rose-500/30 transition cursor-pointer text-xs`}
-                >
-                  <LogOut className="w-3.5 h-3.5" />
-                </button>
               </div>
             ) : (
               <button
                 onClick={() => setLoginModalOpen(true)}
+              aria-label="Active user session and access controls" aria-haspopup="dialog"
                 className="px-3 py-1.5 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold shadow-md transition cursor-pointer flex items-center gap-1.5"
               >
                 <LogIn className="w-3.5 h-3.5" />
@@ -350,11 +299,24 @@ export const TopNavBar: React.FC = () => {
         </div>
       </div>
 
+      {/* Copy the actual application root, never a private route or access token. */}
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 pb-2">
+        <div className="flex min-w-0 items-center gap-2">
+          <Link2 className="w-4 h-4 shrink-0 text-teal-500" aria-hidden="true" />
+          <span className="hidden sm:block shrink-0 text-xs font-semibold">App link</span>
+          <LinkCopyField value={appUrl} label="App link" compact openLink />
+        </div>
+        <p className={`mt-1 text-[10px] ${isLight ? 'text-slate-600' : 'text-slate-400'}`}>
+          {isWorkspacePreview(appUrl) ? 'Workspace preview: another browser may need authorized Arena preview access. ' : 'Open this root link to reach CODE76 sign-in/register. '}
+          Browser-local records and sessions do not sync between browsers.
+        </p>
+      </div>
+
       {/* Lower Platform Navigation Strip (Only shown when authenticated in POS view) */}
       {currentUser && activeView === 'pos' && (
         <div className="border-t border-slate-800/80 bg-slate-950/60 overflow-x-auto scrollbar-thin">
           <div className="max-w-7xl mx-auto px-4 flex items-center gap-1 py-1.5 min-w-max">
-            {PLATFORMS.map((plat) => {
+            {PLATFORMS.filter(platform => platform.id !== 'audit_logs' || historyAccess.canView).map((plat) => {
               const Icon = plat.icon;
               const isActive = activePlatform === plat.id;
               return (

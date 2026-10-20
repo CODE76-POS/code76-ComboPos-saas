@@ -1,3 +1,5 @@
+import { CODE76_PLATFORMS } from '../../config/code76Platforms.ts';
+import { LinkCopyField } from '../common/LinkCopyField.tsx';
 import React, { useState, useEffect } from 'react';
 import { usePOS } from '../../context/POSContext.tsx';
 import { useCode76Site } from '../../context/Code76SiteContext.tsx';
@@ -62,180 +64,10 @@ import {
 
 
 // Real-World Commercial Businesses CODE76 Powers & Works On
-export const BUSINESS_SECTORS = [
-  {
-    id: 'retail',
-    title: 'Supermarkets & Retail Stores',
-    icon: Store,
-    badge: 'High-Volume Lanes',
-    desc: 'Engineered for rapid barcode scanning, electronic scale integrations, weight barcodes, dual display customer pricing, and low-stock automatic reorder triggers.',
-    features: [
-      'High-speed barcode scanner & scale barcode support',
-      'Multi-cashier lane management with independent shifts',
-      'Automatic low-stock threshold triggers & reorder alerts',
-      'Promotional discount codes & bulk pricing rules',
-    ],
-    recommendedHardware: '15.6" Touch Terminal + 80mm High-Speed Thermal Printer + 2D Hands-Free Barcode Scanner',
-  },
-  {
-    id: 'hospitality',
-    title: 'Restaurants, Cafés & Hospitality',
-    icon: Utensils,
-    badge: 'Table & Kitchen Routing',
-    desc: 'Table layout management, instant kitchen order ticket (KOT) routing to food and bar stations, split billing among dining guests, and tip management.',
-    features: [
-      'Table seating and visual section management',
-      'Wireless tablet order taking with instant kitchen printing',
-      'Split bill payments: cash, card, and mobile split effortlessly',
-      'Food modifier options (extra toppings, cooking degrees)',
-    ],
-    recommendedHardware: 'Wireless Order Tablets + Kitchen Thermal Display Printer + POS Cash Drawer',
-  },
-  {
-    id: 'pharmacy',
-    title: 'Pharmacies & Healthcare Dispensaries',
-    icon: Pill,
-    badge: 'Batch & Expiry Safe',
-    desc: 'Precise batch number tracking, expiry date monitoring with early warning alerts, doctor prescription logging, and dosage instruction label printing.',
-    features: [
-      'Mandatory batch number and expiry date validation',
-      'Early expiry date alerts preventing expired medicine sales',
-      'Doctor prescription tracking & dosage record filing',
-      'Role-restricted access for licensed pharmacists only',
-    ],
-    recommendedHardware: 'Touchscreen Terminal + Precision Label Barcode Printer + Secure Cash Safe',
-  },
-  {
-    id: 'wholesale',
-    title: 'Wholesale, Warehousing & Logistics',
-    icon: Truck,
-    badge: 'B2B & Credit Ledgers',
-    desc: 'Multi-unit packaging (piece, dozen, carton, pallet), tiered wholesale pricing matrices, customer credit limit enforcement, and delivery dispatch manifest generation.',
-    features: [
-      'Multi-tier bulk volume pricing automatically applied',
-      'Comprehensive customer credit balance and aging ledgers',
-      'Official commercial sales and purchase invoice generation',
-      'Transporter dispatch notes with freight tracking',
-    ],
-    recommendedHardware: 'Industrial Handheld Barcode Scanner + A4 Ledger Printer + Multi-Branch Server Sync',
-  },
-  {
-    id: 'electronics',
-    title: 'Hardware, Electronics & Boutiques',
-    icon: Cpu,
-    badge: 'Serial & IMEI Tracking',
-    desc: 'Individual serial number and IMEI tracking for phones, laptops, and appliances, warranty certificate generation, and layaway deposit reservations.',
-    features: [
-      'Serialized item tracking from vendor receiving to customer sale',
-      'Automated warranty certificate generation on receipts',
-      'Layaway / installment deposit holding and release',
-      'Trade-in and repair job card status tracking',
-    ],
-    recommendedHardware: 'Interactive POS Station + Serial Barcode Reader + Thermal Receipt Printer',
-  },
-  {
-    id: 'services',
-    title: 'Salons, Spas & Professional Services',
-    icon: Sparkles,
-    badge: 'Appointments & Staff Pay',
-    desc: 'Service appointment scheduling, staff commission calculations, client service package bundles, and automated SMS appointment reminders.',
-    features: [
-      'Technician and stylist service commission tracking',
-      'Prepaid service packages and membership vouchers',
-      'Walk-in queue management and appointment booking',
-      'Client preference logs and loyalty VIP scoring',
-    ],
-    recommendedHardware: 'Sleek Countertop All-in-One Tablet Terminal + Wireless Receipt Printer',
-  },
-];
+
 
 // Top 12 Powerful Features of CODE76 POS Supercharging Modern Businesses
-export const CODE76_TOP_FEATURES = [
-  {
-    title: 'Lightning Fast Multi-Split Checkout',
-    tag: 'Checkout & POS',
-    desc: 'Accept multi-split payments simultaneously across Cash, M-Pesa, Card, Bank Wire, and Store Credit on a single transaction.',
-    icon: Zap,
-    color: 'text-amber-400 bg-amber-500/10 border-amber-500/30',
-  },
-  {
-    title: 'Automated Real-Time Stock Deduction Trigger',
-    tag: 'Inventory Sync',
-    desc: 'Finalizing a sale cross-references catalog quantities instantly and reconciles stock levels without duplicate manual adjustments.',
-    icon: Database,
-    color: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30',
-  },
-  {
-    title: 'Dual-Role Staff Security & PIN Authorization',
-    tag: 'Enterprise Security',
-    desc: 'Fine-grained permissions for Cashiers, Managers, Accountants, and Auditors with supervisor PIN protection for price edits and refunds.',
-    icon: Lock,
-    color: 'text-teal-400 bg-teal-500/10 border-teal-500/30',
-  },
-  {
-    title: 'Commercial B2B Sales & Purchase Invoicing',
-    tag: 'Billing Engine',
-    desc: 'Issue official commercial invoices, manage accounts receivable & payable, print PDF statements, and auto-sync vendor restocks.',
-    icon: FileText,
-    color: 'text-sky-400 bg-sky-500/10 border-sky-500/30',
-  },
-  {
-    title: 'Real-Time Financial Intelligence & P&L',
-    tag: 'Analytics & Profit',
-    desc: 'Instant calculations of COGS, gross margin, operating overhead, and net profitability charts powered by interactive Recharts and D3.',
-    icon: BarChart3,
-    color: 'text-indigo-400 bg-indigo-500/10 border-indigo-500/30',
-  },
-  {
-    title: 'Compliance Audit Trail & Security Logs',
-    tag: 'Audit & Governance',
-    desc: 'Cryptographically track every login, price adjustment, sale deletion, and export with one-click official PDF and CSV audit trail downloads.',
-    icon: ShieldCheck,
-    color: 'text-purple-400 bg-purple-500/10 border-purple-500/30',
-  },
-  {
-    title: 'Universal Multi-Party Email Dispatch',
-    tag: 'Communication',
-    desc: 'Email single receipts or entire platform tables in .PDF, .TXT, and .CSV formats to customers, marketers, staff, vendors, and transporters.',
-    icon: Mail,
-    color: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30',
-  },
-  {
-    title: 'Customer CRM Directory & Debt Tracking',
-    tag: 'CRM & Loyalty',
-    desc: 'Track customer purchase history, outstanding debt balances with WhatsApp and email reminders, and lifetime value rankings.',
-    icon: Users,
-    color: 'text-blue-400 bg-blue-500/10 border-blue-500/30',
-  },
-  {
-    title: 'Operating Expense & Overhead Management',
-    tag: 'Cost Control',
-    desc: 'Record and categorize operational disbursements (rent, utilities, salaries, maintenance) with automatic deductions from net profit.',
-    icon: Receipt,
-    color: 'text-rose-400 bg-rose-500/10 border-rose-500/30',
-  },
-  {
-    title: 'Viral Friend & Customer Referral Engine',
-    tag: 'Growth Automation',
-    desc: 'Built-in referral tracking engine giving advocates custom codes and rewarding $50 credits to drive organic word-of-mouth retail growth.',
-    icon: Gift,
-    color: 'text-amber-400 bg-amber-500/10 border-amber-500/30',
-  },
-  {
-    title: 'Multi-Device Responsive Portals',
-    tag: 'Any Device',
-    desc: 'Engineered with flexible responsive grid layouts optimized for mobile phones (390px), tablets (768px), laptops (1024px), and wide monitors.',
-    icon: Smartphone,
-    color: 'text-cyan-400 bg-cyan-500/10 border-cyan-500/30',
-  },
-  {
-    title: 'Selective Platform Wipe & Modular Reset',
-    tag: 'Data Administration',
-    desc: 'Selectively purge individual databases (products, sales, expenses, invoices, CRM) without losing your corporate configuration or theme.',
-    icon: Sliders,
-    color: 'text-violet-400 bg-violet-500/10 border-violet-500/30',
-  },
-];
+
 
 // Commercial Companies and Brands Running Daily on CODE76 POS
 export const COMPANIES_USING_CODE76 = [
@@ -315,7 +147,6 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
   const settings = { landingPage: CODE76_SITE.landingPage };
 
   // Selected business type for "Find What Fits Your Needs" guided matcher
-  const [businessType, setBusinessType] = useState<string>('retail');
   // Inquiry modal state with rich customer lead details
   const [inquiryModalProduct, setInquiryModalProduct] = useState<ProductItem | null>(null);
   const [inquiryFirstName, setInquiryFirstName] = useState('');
@@ -334,7 +165,6 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
   // Referral generator state
   const [referralName, setReferralName] = useState('');
   const [generatedReferralLink, setGeneratedReferralLink] = useState('');
-  const [copiedLink, setCopiedLink] = useState(false);
 
   // CODE76 illustrative catalogue. Merchant edits cannot replace this website's content.
   const displayCompany = company;
@@ -382,12 +212,7 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
     setGeneratedReferralLink(url.href);
   };
 
-  const handleCopyLink = () => {
-    if (!generatedReferralLink) return;
-    navigator.clipboard?.writeText(generatedReferralLink);
-    setCopiedLink(true);
-    setTimeout(() => setCopiedLink(false), 2000);
-  };
+
 
   // Contact Form State (Direct Email to code76pos@gmail.com)
   const [contactName, setContactName] = useState('');
@@ -598,8 +423,7 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
 
         <div className="hidden lg:flex items-center gap-6 text-xs text-slate-300 font-medium">
           <a href="#about" className="hover:text-teal-400 transition">About CODE76</a>
-          <a href="#businesses" className="hover:text-teal-400 transition">Businesses Supported</a>
-          <a href="#features" className="hover:text-teal-400 transition">Top 12 Features</a>
+          <a href="#features" className="hover:text-teal-400 transition">Platforms & Features</a>
           <a href="#companies" className="hover:text-teal-400 transition">Companies Using CODE76</a>
           <a href="#reviews" className="hover:text-teal-400 transition">Customer Proof</a>
           <a href="#referrals" className="hover:text-teal-400 transition">Referral Rewards</a>
@@ -988,177 +812,25 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
           </section>
 
           {/* 2. BUSINESSES CODE76 WORKS ON & POWERS */}
-          <section id="businesses" className="max-w-7xl mx-auto px-4 py-12 scroll-mt-20">
-            <div className="text-center max-w-2xl mx-auto mb-8">
-              <span className="text-xs uppercase font-extrabold tracking-widest text-teal-400 flex items-center justify-center gap-1.5 mb-1">
-                <Store className="w-4 h-4" />
-                Commercial Versatility
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-black text-slate-100">
-                Different Businesses CODE76 Powers & Works On
-              </h2>
-              <p className="text-xs sm:text-sm text-slate-400 mt-1.5">
-                Explore how CODE76 adapts to the distinct workflows, hardware setups, and compliance rules of each commercial sector.
-              </p>
+          <section id="features" aria-label="CODE76 platforms and features" className="max-w-7xl mx-auto px-4 py-12 scroll-mt-20">
+            <span id="businesses" className="block scroll-mt-20" aria-hidden="true" />
+            <span id="platforms" className="block scroll-mt-20" aria-hidden="true" />
+            <div className="text-center max-w-3xl mx-auto mb-8">
+              <span className="text-xs uppercase font-bold tracking-widest text-teal-400">One workspace, practical tools</span>
+              <h2 className="mt-2 text-2xl sm:text-3xl font-black text-slate-100">CODE76 Platforms & Features for Your Business</h2>
+              <p className="mt-3 text-sm text-slate-400">Explore 18 tools and the everyday business jobs they help you handle. Sign in to explore the POS workspace; merchant business pages remain private.</p>
             </div>
-
-            {/* Interactive Sector Selector Pills */}
-            <div className="flex flex-wrap justify-center gap-2 mb-8">
-              {BUSINESS_SECTORS.map((sector) => {
-                const IconComp = sector.icon;
-                const isActive = businessType === sector.id;
-                return (
-                  <button
-                    key={sector.id}
-                    onClick={() => setBusinessType(sector.id)}
-                    className={`px-4 py-2.5 rounded-2xl text-xs font-bold transition flex items-center gap-2 cursor-pointer ${
-                      isActive
-                        ? 'bg-teal-600 text-white shadow-lg shadow-teal-600/30 border border-teal-400'
-                        : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800 hover:border-slate-700'
-                    }`}
-                  >
-                    <IconComp className="w-4 h-4" />
-                    <span>{sector.title}</span>
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Detailed Active Business Showcase Card */}
-            {(() => {
-              const currentSector = BUSINESS_SECTORS.find((s) => s.id === businessType) || BUSINESS_SECTORS[0];
-              const IconComponent = currentSector.icon;
-              return (
-                <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl mb-8">
-                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-                    <div className="lg:col-span-7 space-y-4 text-left">
-                      <div className="flex items-center gap-2.5">
-                        <div className="w-10 h-10 rounded-2xl bg-teal-500/20 text-teal-400 flex items-center justify-center border border-teal-500/30">
-                          <IconComponent className="w-5 h-5" />
-                        </div>
-                        <div>
-                          <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-teal-300 bg-teal-950/80 px-2 py-0.5 rounded border border-teal-800/40">
-                            {currentSector.badge}
-                          </span>
-                          <h3 className="text-xl sm:text-2xl font-black text-slate-100 mt-0.5">
-                            {currentSector.title}
-                          </h3>
-                        </div>
-                      </div>
-
-                      <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                        {currentSector.desc}
-                      </p>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-2">
-                        {currentSector.features.map((feat, i) => (
-                          <div key={i} className="flex items-start gap-2 text-xs text-slate-300 bg-slate-950/80 p-2.5 rounded-xl border border-slate-800/80">
-                            <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                            <span>{feat}</span>
-                          </div>
-                        ))}
-                      </div>
-
-                      <div className="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-950 p-3.5 rounded-2xl border border-slate-800">
-                        <div>
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
-                            Recommended Hardware Ecosystem:
-                          </span>
-                          <span className="text-xs text-teal-300 font-semibold">
-                            {currentSector.recommendedHardware}
-                          </span>
-                        </div>
-                        <a
-                          href="#contact"
-                          className="px-4 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition cursor-pointer shadow-md shadow-teal-600/20 shrink-0"
-                        >
-                          <span>Get Setup for My Business</span>
-                          <ArrowRight className="w-3.5 h-3.5" />
-                        </a>
-                      </div>
-                    </div>
-
-                    <div className="lg:col-span-5 grid grid-cols-2 gap-3">
-                      {BUSINESS_SECTORS.map((item) => {
-                        const ItemIcon = item.icon;
-                        const isSelected = item.id === businessType;
-                        return (
-                          <button
-                            key={item.id}
-                            onClick={() => setBusinessType(item.id)}
-                            className={`p-3.5 rounded-2xl border text-left transition cursor-pointer ${
-                              isSelected
-                                ? 'bg-teal-950/50 border-teal-500 text-white shadow-md'
-                                : 'bg-slate-950 border-slate-800 text-slate-400 hover:border-slate-700 hover:text-slate-200'
-                            }`}
-                          >
-                            <div className="flex items-center gap-2 mb-1.5">
-                              <ItemIcon className={`w-4 h-4 ${isSelected ? 'text-teal-400' : 'text-slate-500'}`} />
-                              <span className="font-bold text-xs truncate text-slate-100">{item.title.split('&')[0]}</span>
-                            </div>
-                            <p className="text-[10px] text-slate-400 line-clamp-2 leading-relaxed">
-                              {item.badge}
-                            </p>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </div>
-              );
-            })()}
-          </section>
-
-          {/* 3. TOP 12 POWERFUL FEATURES OF CODE76 POS */}
-          <section id="features" className="max-w-7xl mx-auto px-4 py-12 scroll-mt-20">
-            <div className="text-center max-w-2xl mx-auto mb-10">
-              <span className="text-xs uppercase font-extrabold tracking-widest text-teal-400 flex items-center justify-center gap-1.5 mb-1">
-                <Sparkles className="w-4 h-4" />
-                Platform Capabilities
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-black text-slate-100">
-                Top 12 Powerful Features of CODE76 POS
-              </h2>
-              <p className="text-xs sm:text-sm text-slate-400 mt-1.5">
-                Every feature is designed to eliminate tedious retail overhead, prevent stock loss, and elevate customer experience.
-              </p>
-            </div>
-
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {CODE76_TOP_FEATURES.map((feature, idx) => {
-                const FeatIcon = feature.icon;
-                return (
-                  <div
-                    key={idx}
-                    className="bg-slate-900 border border-slate-800 hover:border-teal-500/50 rounded-3xl p-5 flex flex-col justify-between transition-all duration-300 hover:shadow-xl hover:shadow-teal-500/10 group"
-                  >
-                    <div>
-                      <div className="flex items-center justify-between mb-3">
-                        <div className={`w-9 h-9 rounded-xl flex items-center justify-center border ${feature.color}`}>
-                          <FeatIcon className="w-4 h-4" />
-                        </div>
-                        <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-teal-400 bg-slate-950 px-2 py-0.5 rounded border border-slate-800">
-                          {feature.tag}
-                        </span>
-                      </div>
-
-                      <h3 className="font-extrabold text-slate-100 text-sm group-hover:text-teal-300 transition mb-2">
-                        {feature.title}
-                      </h3>
-
-                      <p className="text-xs text-slate-400 leading-relaxed">
-                        {feature.desc}
-                      </p>
-                    </div>
-
-                    <div className="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-teal-400 font-semibold">
-                      <span>Feature #{idx + 1} Included</span>
-                      <Check className="w-3.5 h-3.5 text-emerald-400" />
-                    </div>
-                  </div>
-                );
+              {CODE76_PLATFORMS.map((platform, index) => {
+                const Icon = platform.icon;
+                return <article key={platform.id} data-code76-platform={platform.id} className="rounded-2xl border border-slate-800 bg-slate-900 p-5 hover:border-teal-600 transition">
+                  <div className="flex items-center justify-between mb-4"><span className="rounded-xl border border-teal-800 bg-teal-900/30 p-2 text-teal-300"><Icon size={21} aria-hidden="true" /></span><span className="text-xs font-mono text-slate-500">{String(index + 1).padStart(2, '0')}</span></div>
+                  <h3 className="font-bold text-base text-slate-100">{platform.name}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-slate-400">{platform.benefit}</p>
+                </article>;
               })}
             </div>
+            <div className="mt-7 text-center"><a href="#portal-access" className="inline-flex rounded-xl bg-teal-700 px-5 py-3 text-sm font-bold text-white hover:bg-teal-600">Sign in or register to explore</a></div>
           </section>
 
           {/* 4. COMPANIES & BRANDS USING CODE76 POS */}
@@ -1370,15 +1042,7 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
                 </form>
 
                 {generatedReferralLink && (
-                  <div className="mt-4 p-3 bg-slate-950 rounded-xl border border-amber-600/40 flex items-center justify-between gap-3 max-w-md mx-auto text-xs">
-                    <span className="font-mono text-amber-300 truncate">{generatedReferralLink}</span>
-                    <button
-                      onClick={handleCopyLink}
-                      className="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg font-bold text-xs shrink-0 cursor-pointer"
-                    >
-                      {copiedLink ? 'Copied!' : 'Copy'}
-                    </button>
-                  </div>
+                  <div className="mt-4"><LinkCopyField value={generatedReferralLink} label="CODE76 referral link" /></div>
                 )}
 
                 {/* Top Referrers on Landing Page */}
@@ -1686,8 +1350,7 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
               </div>
               <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-slate-400">
                 <a href="#about" className="hover:text-teal-400">About</a>
-                <a href="#businesses" className="hover:text-teal-400">Businesses</a>
-                <a href="#features" className="hover:text-teal-400">Features</a>
+                <a href="#features" className="hover:text-teal-400">Platforms & Features</a>
                 <a href="#companies" className="hover:text-teal-400">Companies</a>
                 <a href="#contact" className="hover:text-teal-400">Contact Sales</a>
                 <a href="mailto:code76pos@gmail.com" className="text-teal-400 hover:underline">code76pos@gmail.com</a>

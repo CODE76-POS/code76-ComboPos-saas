@@ -1,3 +1,5 @@
+import { AuditLogPlatform } from './AuditLogPlatform.tsx';
+import { accessHistoryPermissions } from '../../utils/accessHistory.ts';
 import React, { useState } from 'react';
 import { usePOS } from '../../context/POSContext.tsx';
 import {
@@ -17,8 +19,6 @@ import {
   Lock,
   Mail,
 } from 'lucide-react';
-import { printPDFReport } from '../../utils/exportUtils.ts';
-import { EmailExportModal } from '../modals/EmailExportModal.tsx';
 
 const USER_MANUAL_SECTIONS = [
   {
@@ -29,6 +29,11 @@ const USER_MANUAL_SECTIONS = [
 • Add zero to three starter products or services. Only saved items are added; skip and add more later in Inventory (Package icon).
 • Settings uses the gear icon. Platform guidance uses the question-mark circle (HelpCircle). About & Manual uses the information-circle icon (Info).
 • CODE76 main site: the base URL always shows product information and sign-in/register, even if you are already signed in. Merchant company and inventory changes never edit this website.
+• Service billing: select Per task completion, Per hour, Per day, Per session, etc. in Inventory or first-inventory setup. The selling price is for one selected unit; services have no stock count.
+• Theme: use Settings → App Appearance Settings, choose light/dark and save.
+• Session: open your user/role avatar in the top navbar for access-history guidance or to sign out to CODE76.
+• App link: the top navbar contains the root URL and a copy button. Preview-host access may still be required in another browser; local records do not sync.
+• Access history: administrators or permitted roles can view Audit & Access Logs. Downloads require Export Reports too; use PDF, TXT or CSV.
 • Your Business Landing Page: signed-in users only, inside POS → Business Landing Page (#/pos/landing_page_builder). It uses My Company, Inventory, approved reviews and Settings → Business Landing Page Settings. Its assistant, leads and metrics are separate.
 • Private workspace links require sign-in. There is no standalone public storefront or ?view=storefront access. This browser-local prototype does not publish merchant data to other browsers; its client-side authentication is not production server/tenant security.`,
   },
@@ -132,7 +137,7 @@ const USER_MANUAL_SECTIONS = [
 ];
 
 export const AboutPlatform: React.FC = () => {
-  const { auditLogs, company, hasPrivilege } = usePOS();
+  const { company, currentUser, settings } = usePOS();
 
   const [activeTab, setActiveTab] = useState<'manual' | 'about' | 'license' | 'terms' | 'audit'>('manual');
   const [searchManual, setSearchManual] = useState('');
@@ -144,39 +149,8 @@ export const AboutPlatform: React.FC = () => {
       s.content.toLowerCase().includes(searchManual.toLowerCase())
   );
 
-  const [emailModalOpen, setEmailModalOpen] = useState(false);
-
-  const canViewAudit = hasPrivilege('canViewAuditLogs');
-
-  const auditExportColumns = [
-    { header: 'Timestamp', dataKey: 'formattedTimestamp' },
-    { header: 'User Name', dataKey: 'userName' },
-    { header: 'User Role', dataKey: 'userRole' },
-    { header: 'Security Action', dataKey: 'action' },
-    { header: 'Event Details', dataKey: 'details' },
-    { header: 'Terminal / IP', dataKey: 'ipOrDevice' },
-  ];
-
-  const handleExportAuditPDF = () => {
-    printPDFReport(
-      'System Security & Activity Audit Log',
-      company,
-      [
-        { header: 'Timestamp', dataKey: 'timestamp' },
-        { header: 'User', dataKey: 'user' },
-        { header: 'Role', dataKey: 'role' },
-        { header: 'Action', dataKey: 'action' },
-        { header: 'Details', dataKey: 'details' },
-      ],
-      auditLogs.map((l) => ({
-        timestamp: new Date(l.timestamp).toLocaleString(),
-        user: l.userName,
-        role: l.userRole,
-        action: l.action,
-        details: l.details,
-      }))
-    );
-  };
+  const canViewAudit = accessHistoryPermissions(currentUser, settings).canView;
+  const openAccessHistory = () => setActiveTab('audit');
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-6">
@@ -193,18 +167,11 @@ export const AboutPlatform: React.FC = () => {
           {canViewAudit && (
             <>
               <button
-                onClick={handleExportAuditPDF}
+                onClick={openAccessHistory}
                 className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-teal-300 border border-slate-700 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
               >
                 <Download className="w-4 h-4" />
-                <span>Export Audit PDF</span>
-              </button>
-              <button
-                onClick={() => setEmailModalOpen(true)}
-                className="px-3.5 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer shadow-md shadow-teal-600/20"
-              >
-                <Mail className="w-4 h-4" />
-                <span>Email PDF & CSV Audit Trail</span>
+                <span>Access history & exports</span>
               </button>
             </>
           )}
@@ -378,77 +345,8 @@ export const AboutPlatform: React.FC = () => {
             </div>
           )}
 
-          {/* TAB 4: AUDIT LOGS */}
-          {activeTab === 'audit' && (
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-base font-bold text-slate-100">User Activity & Security Audit Trail</h3>
-                  <p className="text-xs text-slate-400">
-                    Tracks who logged in, logged out, sales completed, inventory changes, and data imports.
-                  </p>
-                </div>
-                {canViewAudit && (
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={handleExportAuditPDF}
-                      className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-teal-300 border border-slate-700 text-xs font-semibold flex items-center gap-1 cursor-pointer"
-                    >
-                      <Download className="w-3.5 h-3.5" />
-                      Export PDF
-                    </button>
-                    <button
-                      onClick={() => setEmailModalOpen(true)}
-                      className="px-3 py-1.5 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-semibold flex items-center gap-1 cursor-pointer shadow-md shadow-teal-600/20"
-                    >
-                      <Mail className="w-3.5 h-3.5" />
-                      Email Audit Trail (PDF & CSV)
-                    </button>
-                  </div>
-                )}
-              </div>
-
-              {!canViewAudit ? (
-                <div className="bg-slate-950 p-6 rounded-2xl border border-slate-800 text-center">
-                  <Lock className="w-8 h-8 text-amber-400 mx-auto mb-2" />
-                  <p className="text-xs text-slate-300">
-                    Audit log viewing is restricted by your role privilege settings.
-                  </p>
-                </div>
-              ) : (
-                <div className="overflow-x-auto max-h-80 border border-slate-800 rounded-2xl">
-                  <table className="w-full text-left text-xs">
-                    <thead className="bg-slate-950 text-[10px] uppercase font-bold text-slate-400 border-b border-slate-800">
-                      <tr>
-                        <th className="py-2.5 px-3">Timestamp</th>
-                        <th className="py-2.5 px-3">User</th>
-                        <th className="py-2.5 px-3">Role</th>
-                        <th className="py-2.5 px-3">Action</th>
-                        <th className="py-2.5 px-3">Activity Details</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-800 text-slate-200">
-                      {auditLogs.map((log) => (
-                        <tr key={log.id} className="hover:bg-slate-800/40">
-                          <td className="py-2 px-3 whitespace-nowrap text-slate-400 font-mono text-[11px]">
-                            {new Date(log.timestamp).toLocaleString()}
-                          </td>
-                          <td className="py-2 px-3 font-semibold text-slate-200">{log.userName}</td>
-                          <td className="py-2 px-3">
-                            <span className="px-2 py-0.5 rounded text-[10px] bg-slate-800 text-teal-300 border border-slate-700">
-                              {log.userRole}
-                            </span>
-                          </td>
-                          <td className="py-2 px-3 font-bold text-slate-100">{log.action}</td>
-                          <td className="py-2 px-3 text-slate-300 text-xs">{log.details}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              )}
-            </div>
-          )}
+          {/* One consistent permission-checked history/export surface. */}
+          {activeTab === 'audit' && <AuditLogPlatform />}
 
           {/* TAB 5: TERMS AND CONDITIONS */}
           {activeTab === 'terms' && (
@@ -471,28 +369,7 @@ export const AboutPlatform: React.FC = () => {
         </div>
       </div>
 
-      {/* Email Export Modal for System Audit Trail (.pdf, .csv, and .txt formats) */}
-      {emailModalOpen && (
-        <EmailExportModal
-          isOpen={emailModalOpen}
-          onClose={() => setEmailModalOpen(false)}
-          title="System Security & Activity Audit Trail"
-          moduleName="Audit Logs"
-          isSingleRow={false}
-          availableFormats={['pdf', 'csv', 'txt']}
-          data={auditLogs.map((l) => ({
-            ...l,
-            formattedTimestamp: new Date(l.timestamp).toLocaleString(),
-          }))}
-          columns={auditExportColumns}
-          metadata={[
-            { label: 'Total Events Logged', value: `${auditLogs.length} Events` },
-            { label: 'Security Level', value: 'Enterprise Role-Enforced' },
-            { label: 'Company', value: company.name },
-            { label: 'Tax PIN', value: company.taxPin },
-          ]}
-        />
-      )}
+
     </div>
   );
 };

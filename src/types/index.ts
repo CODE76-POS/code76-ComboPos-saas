@@ -89,6 +89,8 @@ export interface PersonRecord {
   isTopReferrer?: boolean;
 }
 
+export type ServiceBillingUnit = 'task' | 'minute' | 'hour' | 'day' | 'week' | 'month' | 'year' | 'session' | 'visit' | 'project';
+
 export interface ProductItem {
   id: string;
   sku: string;
@@ -97,7 +99,8 @@ export interface ProductItem {
   name2?: string; // Item Name 2 / Nickname
   category: string; // Main Category / Main Niche
   subCategory?: string; // Sub-Category / Sub-Niche
-  type: 'product' | 'service'; // THIS IS A PRODUCT vs THIS IS A SERVICE
+  type: 'product' | 'service'; // Product stock or a billable service
+  serviceUnit?: ServiceBillingUnit; // Service rate basis; never a stock quantity
   ageRestriction?: string; // Age restriction (e.g. 'All Ages', '13+', '18+', '21+')
   costPrice: number;
   sellingPrice: number;

@@ -1,0 +1,361 @@
+[
+  {
+    "name": "public CODE76 homepage shows exactly 18 practical platform/feature cards",
+    "passed": true,
+    "detail": {
+      "cards": 18
+    }
+  },
+  {
+    "name": "root still exposes public marketing and sign-in/register",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "public canonical and SEO title remain rooted and query-free",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "anonymous builder URL still shows the sign-in page, not merchant content",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "top navbar exposes a clean root app link, not a merchant hash route",
+    "passed": true,
+    "detail": {
+      "url": "http://127.0.0.1:5173/"
+    }
+  },
+  {
+    "name": "navbar removes CODE76 Site, far-right logout and light/dark toggles",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "empty business page has no review placeholder, rating badge or reviews nav",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "copy app link reports confirmed clipboard success",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "real clipboard paste matches the exact copied app URL",
+    "passed": true,
+    "detail": {
+      "pasted": "http://127.0.0.1:5173/"
+    }
+  },
+  {
+    "name": "service entry replaces numeric stock with billing-unit choices",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "saved hourly service has the chosen basis and no fabricated stock",
+    "passed": true,
+    "detail": {
+      "type": "service",
+      "unit": "hour",
+      "stock": 0,
+      "price": 100
+    }
+  },
+  {
+    "name": "inventory quantity column shows Per hour instead of Unlimited Service",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "editing an existing service restores the saved billing unit",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "service billing unit can be edited and persisted without changing its price",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "private business catalog automatically reflects saved service units",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "empty approved reviews remain fully hidden after catalog updates",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "business copy dialog makes authenticated-only access explicit",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "original business-page copy link control now confirms actual success",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "pasting the copied business link yields the protected builder URL",
+    "passed": true,
+    "detail": {
+      "pasted": "http://127.0.0.1:5173/#/pos/landing_page_builder"
+    }
+  },
+  {
+    "name": "sales search describes the chosen service rate basis",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "service checkout counts two billable units and keeps the selected daily rate",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "TEST service checkout records quantity and rate without decrementing service stock",
+    "passed": false,
+    "detail": null
+  },
+  {
+    "name": "TEST service checkout records quantity and rate without decrementing service stock",
+    "passed": true,
+    "detail": {
+      "actual": {
+        "netTotal": 200,
+        "quantity": 2,
+        "unit": "day",
+        "stock": 0
+      },
+      "note": "Corrected test to use the actual SaleTransaction.netTotal field; no app math defect."
+    }
+  },
+  {
+    "name": "actual consented purchase feedback is saved as an approved merchant review",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "approved review appears automatically without inventing placeholder reviews",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "role widget contains sign-out plus privileged history location and file guidance",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "authorized session shortcut opens the protected access-history platform",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "history search narrows records before exporting",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "actual CSV download contains only the filtered access-history records",
+    "passed": true,
+    "detail": {
+      "records": 2
+    }
+  },
+  {
+    "name": "actual TXT download includes readable export metadata and filtered records",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "actual PDF download parses and contains the requested filtered records",
+    "passed": true,
+    "detail": {
+      "pages": 1
+    }
+  },
+  {
+    "name": "embedded PDF font preserves Unicode names and plain-text special characters",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "light and dark controls live in App Appearance settings rather than navbar",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "saving light appearance updates and persists the actual workspace theme",
+    "passed": true,
+    "detail": {
+      "theme": "light",
+      "saved": "light",
+      "samples": [
+        {
+          "text": "Sales \u00b7 Inventory \u00b7 Reports",
+          "bg": "rgb(255, 255, 255)",
+          "color": "oklch(0.208 0.042 265.755)"
+        },
+        {
+          "text": "Sales \u00b7 Inventory \u00b7 Reports",
+          "bg": "rgb(242, 246, 249)",
+          "color": "rgb(20, 43, 58)"
+        }
+      ]
+    }
+  },
+  {
+    "name": "admin can explicitly grant history view and withhold report-export privileges",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "session-widget Sign Out immediately returns to public CODE76 sign-in/register",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "read-only non-admin session receives view guidance but not an export entitlement",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "view-only role can read history but has no PDF/TXT/CSV/email export controls",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "non-admin cannot grant itself history/export privileges",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "non-admin privilege-save attempt leaves the saved permission map unchanged",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "read-only history privilege cannot bypass export restrictions through JSON backup",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "explicitly privileged non-admin session is told it can export history",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "delegated audit plus export rights enable all three formats without requiring admin status",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "non-admin export with explicitly granted privileges starts a real download",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "revoking a role privilege removes the Audit & Access Logs navbar entry",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "direct audit hash cannot bypass missing privileges",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "settings access-history entry uses the same permission guard",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "About/Manual has no alternative history or file-export bypass",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "unprivileged role widget explains restriction without an open-history shortcut",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "new navbar URL/copy/session controls fit a 390px mobile viewport",
+    "passed": true,
+    "detail": {
+      "width": 390,
+      "documentWidth": 390,
+      "appLink": "http://127.0.0.1:5173/"
+    }
+  },
+  {
+    "name": "mobile session widget remains accessible and offers Sign Out",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "mobile session sign-out returns to public marketing and account portal",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "public 18-feature replacement also fits the mobile viewport",
+    "passed": true,
+    "detail": {
+      "width": 390,
+      "documentWidth": 390,
+      "cards": 18
+    }
+  },
+  {
+    "name": "refresh requires sign-in but preserves service-unit and review records",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "dark and light examples keep honest colors while the workspace uses light mode",
+    "passed": true,
+    "detail": [
+      {
+        "mode": "light",
+        "bg": "rgb(255, 255, 255)",
+        "color": "rgb(15, 23, 42)"
+      },
+      {
+        "mode": "dark",
+        "bg": "rgb(2, 6, 23)",
+        "color": "rgb(241, 245, 249)"
+      }
+    ]
+  },
+  {
+    "name": "dark theme also applies through App Appearance settings only",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "persisted private catalog and approved reviews still render after the rebuilt app reloads",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "non-admin full-snapshot restore is disabled, preventing a permission-map replacement bypass",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "finished app returns cleanly to the public 18-platform marketing root",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "full usability flow has zero browser console errors",
+    "passed": true,
+    "detail": "### Result\nTotal messages: 3 (Errors: 0, Warnings: 0)\nReturning 0 messages for level \"error\"\n\n"
+  }
+]

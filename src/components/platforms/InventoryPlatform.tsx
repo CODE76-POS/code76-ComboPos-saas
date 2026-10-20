@@ -1,3 +1,4 @@
+import { DEFAULT_SERVICE_UNIT, serviceUnitLabel } from '../../utils/serviceUnits.ts';
 import React, { useState } from 'react';
 import { usePOS } from '../../context/POSContext.tsx';
 import {
@@ -74,7 +75,7 @@ export const InventoryPlatform: React.FC = () => {
     { header: 'Barcode', dataKey: 'barcode' },
     { header: 'Cost ($)', dataKey: 'costPrice' },
     { header: 'Selling ($)', dataKey: 'sellingPrice' },
-    { header: 'Stock Units', dataKey: 'stock' },
+    { header: 'Quantity / Billing Unit', dataKey: 'quantityBasis' },
     { header: 'Min Alert', dataKey: 'minStockAlert' },
   ];
 
@@ -209,7 +210,7 @@ export const InventoryPlatform: React.FC = () => {
         { key: 'Standard Retail Selling Price', val: `$${p.sellingPrice.toFixed(2)}` },
         { key: 'Active Promo / Discount', val: p.isOnPromo ? `YES (Code: ${p.promoCode}, Price: $${(p.promoDiscountPrice || p.sellingPrice).toFixed(2)})` : 'No' },
         { key: 'Profit / Margin Status', val: p.type === 'service' ? '100% Service Margin' : margin.statusText },
-        { key: 'Current Stock on Hand', val: p.type === 'service' ? 'Unlimited Service' : `${p.stock} units` },
+        { key: 'Quantity / Billing Unit', val: p.type === 'service' ? serviceUnitLabel(p) : `${p.stock} units` },
         { key: 'Low Stock Alert Threshold', val: `${p.minStockAlert} units` },
         { key: 'Featured on Landing Page', val: p.isFeatured ? 'Yes (Visible to Buyers)' : 'No' },
         { key: 'Description', val: p.description },
@@ -239,7 +240,8 @@ export const InventoryPlatform: React.FC = () => {
         'Promo Expiration': p.promoExpiresAt || 'N/A',
         'Profit Diff ($)': p.type === 'service' ? p.sellingPrice : margin.diffAmount,
         'Profit Margin (%)': p.type === 'service' ? 100 : margin.marginPercent,
-        'Stock Units': p.type === 'service' ? 'Unlimited' : p.stock,
+        'Stock Units': p.type === 'service' ? serviceUnitLabel(p) : p.stock,
+        serviceUnit: p.type === 'service' ? p.serviceUnit || DEFAULT_SERVICE_UNIT : '',
         'Min Alert Threshold': p.minStockAlert,
         'Landing Page Featured': p.isFeatured ? 'Yes' : 'No',
         'Description': p.description || 'This product is for sale.',
@@ -388,7 +390,7 @@ export const InventoryPlatform: React.FC = () => {
                 <th className="py-3 px-3 text-right">Cost (Buy)</th>
                 <th className="py-3 px-3 text-right">Selling Price</th>
                 <th className="py-3 px-3 text-center">Profit / Loss</th>
-                <th className="py-3 px-3 text-center">Stock Level</th>
+                <th className="py-3 px-3 text-center">Quantity / Billing Unit</th>
                 <th className="py-3 px-3 text-center">Marketing Campaign</th>
                 {/* END ACTION COLUMN */}
                 <th className="py-3 px-3 text-center w-28 text-teal-400">Actions (End)</th>
@@ -578,7 +580,7 @@ export const InventoryPlatform: React.FC = () => {
                       <td className="py-2.5 px-3 text-center">
                         {item.type === 'service' ? (
                           <span className="text-purple-300 text-[10px] font-semibold">
-                            Unlimited Service
+                            {serviceUnitLabel(item)}
                           </span>
                         ) : (
                           <div className="flex items-center justify-center gap-1.5">
@@ -772,7 +774,7 @@ export const InventoryPlatform: React.FC = () => {
           isSingleRow={Boolean(selectedProductForEmail)}
           entityName={selectedProductForEmail?.name}
           availableFormats={['txt', 'pdf']}
-          data={selectedProductForEmail || filtered}
+          data={selectedProductForEmail ? { ...selectedProductForEmail, quantityBasis: selectedProductForEmail.type === 'service' ? serviceUnitLabel(selectedProductForEmail) : selectedProductForEmail.stock } : filtered.map(product => ({ ...product, quantityBasis: product.type === 'service' ? serviceUnitLabel(product) : product.stock }))}
           columns={inventoryExportColumns}
           metadata={[
             { label: 'Category Filter', value: categoryFilter },

@@ -1,3 +1,4 @@
+import { serviceUnitLabel } from './src/utils/serviceUnits.ts';
 import express from 'express';
 import { createServer as createViteServer, type ViteDevServer } from 'vite';
 import dotenv from 'dotenv';
@@ -64,7 +65,7 @@ app.post('/api/gemini/chat', async (req, res) => {
     const inventoryList = (posContext?.products || [])
       .map(
         (p: any) =>
-          `- ${p.name} (${p.category}, Type: ${p.type}): Selling Price ${posContext?.company?.currency || '$'} ${p.sellingPrice}, Stock: ${p.stock} units. Description: ${p.description}`
+          `- ${p.name} (${p.category}, Type: ${p.type}): Selling Price ${posContext?.company?.currency || '$'} ${p.sellingPrice}, ${p.type === 'service' ? `Service rate: ${p.serviceUnit ? serviceUnitLabel(p) : 'contact business for billing unit'}; no stock tracking` : `Stock: ${p.stock} units`}. Description: ${p.description}`
       )
       .join('\n');
 

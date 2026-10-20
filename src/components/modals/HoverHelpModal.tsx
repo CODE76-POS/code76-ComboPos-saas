@@ -219,9 +219,9 @@ const PLATFORM_HELP_MAP: Record<
     description: 'Detailed security and activity audit trail tracking who logged in, timestamps, actions taken, and session logout times.',
     whatItDoes: [
       'Tracks user login timestamps, IP/device sessions, exact actions performed, and logout events.',
-      'Protected with admin login credential authorization gate.',
+      'Administrators or roles with Audit Logs permission may view history; no PIN/toggle bypass is available.',
       'Filter and search access history by date, user name, role, and action type.',
-      'Export audit trail records to CSV or PDF for compliance.',
+      'Export filtered records as real PDF, TXT or CSV files when Export Reports permission is also granted.',
     ],
     settingsLocation: 'Settings > App User Privilege Settings',
     settingsTab: 'privileges',

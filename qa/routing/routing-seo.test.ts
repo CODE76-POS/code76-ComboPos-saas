@@ -52,7 +52,8 @@ test('merchant component checks auth again and cannot count anonymous visits', (
   assert.match(page, /if \(!currentUser\) return;\s*setLandingMetrics/);
   assert.ok(!page.includes("viewUrl('storefront'"));
   assert.ok(!page.includes('Share this public store catalog'));
-  assert.match(page, /viewUrl\('pos', window.location.href, 'landing_page_builder'\)/);
+  assert.match(page, /viewUrl\('pos', applicationUrl\(window.location.href/);
+  assert.ok(page.includes("'landing_page_builder')"));
 });
 test('all eight merchant section links scroll without overwriting the private hash route', () => {
   const page = source('src/components/landing/BusinessStorefrontLandingPage.tsx');

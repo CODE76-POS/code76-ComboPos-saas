@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import { copyTextToClipboard } from '../../utils/clipboard.ts';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { usePOS } from '../../context/POSContext.tsx';
 import {
   Mail,
@@ -78,6 +79,8 @@ export const EmailExportModal: React.FC<EmailExportModalProps> = ({
   const [emailSubject, setEmailSubject] = useState<string>('');
   const [emailMessage, setEmailMessage] = useState<string>('');
   const [copiedText, setCopiedText] = useState(false);
+  const [copyNotice, setCopyNotice] = useState('');
+  const previewRef = useRef<HTMLPreElement>(null);
   const [isSending, setIsSending] = useState(false);
   const [sendSuccess, setSendSuccess] = useState(false);
 
@@ -271,10 +274,16 @@ export const EmailExportModal: React.FC<EmailExportModalProps> = ({
     logAuditAction('Downloaded CSV Export', `Exported CSV for ${title} (${moduleName})`);
   };
 
-  const handleCopyClipboard = () => {
-    navigator.clipboard?.writeText(generatedTextDocument);
-    setCopiedText(true);
-    setTimeout(() => setCopiedText(false), 2000);
+  const handleCopyClipboard = async () => {
+    const result = await copyTextToClipboard(generatedTextDocument);
+    setCopiedText(result.ok);
+    setCopyNotice(result.ok ? 'Preview copied to clipboard.' : 'Clipboard access is blocked. The preview is selected: press Ctrl+C or Command+C to copy.');
+    if (!result.ok && previewRef.current) {
+      previewRef.current.focus();
+      const range = document.createRange(); range.selectNodeContents(previewRef.current);
+      const selection = window.getSelection(); selection?.removeAllRanges(); selection?.addRange(range);
+    }
+    if (result.ok) setTimeout(() => setCopiedText(false), 2000);
   };
 
   const handleSendEmail = (e: React.FormEvent) => {
@@ -640,9 +649,10 @@ export const EmailExportModal: React.FC<EmailExportModalProps> = ({
                   </button>
                 </div>
               </div>
-              <pre className="max-h-28 overflow-y-auto text-[10px] font-mono text-slate-300 bg-slate-900/90 p-2.5 rounded-lg border border-slate-800 scrollbar-thin">
+              <pre ref={previewRef} tabIndex={0} className="max-h-28 overflow-y-auto text-[10px] font-mono text-slate-300 bg-slate-900/90 p-2.5 rounded-lg border border-slate-800 scrollbar-thin">
                 {generatedTextDocument}
               </pre>
+              {copyNotice && <p role="status" className="mt-2 text-xs text-teal-300">{copyNotice}</p>}
             </div>
 
             {/* 6. Direct Download Buttons Bar */}

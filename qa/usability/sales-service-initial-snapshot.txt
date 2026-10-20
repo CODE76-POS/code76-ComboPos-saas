@@ -1,0 +1,149 @@
+### Page
+- Page URL: http://127.0.0.1:5173/#/pos
+- Page Title: CODE76 POS — Private Workspace
+### Snapshot
+```yaml
+- generic [ref=e4]:
+  - banner [ref=e655]:
+    - generic [ref=e656]:
+      - button "76 CODE76 POS Enterprise Product & Service SaaS ERP System" [ref=e658] [cursor=pointer]:
+        - generic [ref=e659]: "76"
+        - generic [ref=e660]:
+          - generic [ref=e661]:
+            - generic [ref=e662]: CODE76 POS
+            - generic [ref=e663]: Enterprise
+          - paragraph [ref=e664]: Product & Service SaaS ERP System
+      - generic [ref=e665]:
+        - generic [ref=e666]:
+          - button "Desktop View (Full Width)" [ref=e667] [cursor=pointer]
+          - button "Laptop View (1024px)" [ref=e670] [cursor=pointer]
+          - button "Tablet View (768px)" [ref=e673] [cursor=pointer]
+          - button "Phone Mobile View (390px)" [ref=e676] [cursor=pointer]
+        - generic [ref=e679]:
+          - button "Demo Data" [ref=e680] [cursor=pointer]
+          - button "Business Page" [ref=e687] [cursor=pointer]
+          - button "Click to view help guide and settings for this platform" [ref=e692] [cursor=pointer]
+          - button "Active user session and access controls" [ref=e697] [cursor=pointer]:
+            - generic [ref=e698]: DR
+            - generic [ref=e699]:
+              - generic [ref=e700]: Dr. David Kimani
+              - generic [ref=e701]: "Role: CEO"
+    - generic [ref=e702]:
+      - generic [ref=e703]:
+        - generic [ref=e707]: App link
+        - generic [ref=e708]:
+          - generic [ref=e709]:
+            - generic [ref=e710]: App link
+            - textbox "App link" [ref=e711]: http://127.0.0.1:5173/
+            - button "Copy app link" [ref=e712] [cursor=pointer]:
+              - generic [ref=e716]: Copy link
+            - link "Open app link in a new tab" [ref=e717] [cursor=pointer]:
+              - /url: http://127.0.0.1:5173/
+          - status [ref=e722]
+      - paragraph [ref=e723]: Open this root link to reach CODE76 sign-in/register. Browser-local records and sessions do not sync between browsers.
+    - generic [ref=e725]:
+      - button "Sales POS" [active] [ref=e726] [cursor=pointer]
+      - button "Sales History" [ref=e730] [cursor=pointer]
+      - button "Inventory" [ref=e735] [cursor=pointer]
+      - button "Expenses" [ref=e740] [cursor=pointer]
+      - button "Invoices" [ref=e744] [cursor=pointer]
+      - button "Analytics & P&L" [ref=e748] [cursor=pointer]
+      - button "Customers" [ref=e751] [cursor=pointer]
+      - button "Vendors" [ref=e757] [cursor=pointer]
+      - button "Transporters" [ref=e762] [cursor=pointer]
+      - button "Marketing Team" [ref=e768] [cursor=pointer]
+      - button "Company Members" [ref=e772] [cursor=pointer]
+      - button "My Company" [ref=e778] [cursor=pointer]
+      - button "Messaging" [ref=e782] [cursor=pointer]
+      - button "Business Landing Page" [ref=e785] [cursor=pointer]
+      - button "Settings" [ref=e790] [cursor=pointer]
+      - button "Audit & Access Logs" [ref=e794] [cursor=pointer]
+      - button "About & Manual" [ref=e798] [cursor=pointer]
+  - main [ref=e5]:
+    - generic [ref=e2023]:
+      - generic [ref=e2024]:
+        - generic [ref=e2025]:
+          - generic [ref=e2026]:
+            - heading "Sales POS Terminal" [level=1] [ref=e2027]
+            - button "Click for platform guidance & settings" [ref=e2028] [cursor=pointer]
+          - paragraph [ref=e2032]: Multi-payment splits, live autocomplete, line & cart discounts, extra charges, and social referral tagging.
+        - generic [ref=e2033]:
+          - combobox [ref=e2039] [cursor=pointer]:
+            - option "Walk-in Customer" [selected]
+          - combobox [ref=e2044] [cursor=pointer]:
+            - 'option "Referred By: None" [selected]'
+      - generic [ref=e2045]:
+        - generic [ref=e2046]:
+          - textbox "Type product name, SKU, or scan barcode to search & add..." [ref=e2052]
+          - generic [ref=e2053]:
+            - button "All" [ref=e2054] [cursor=pointer]
+            - button "IT, Software & Systems Consulting" [ref=e2055] [cursor=pointer]
+          - generic [ref=e2056]:
+            - generic [ref=e2057]:
+              - generic [ref=e2058]: Product Showcase Catalog (1)
+              - generic [ref=e2059]: (Toggle grid in Settings > Color & Appearance)
+            - generic [ref=e2061] [cursor=pointer]:
+              - generic [ref=e2062]:
+                - img "TEST service support" [ref=e2064]
+                - generic [ref=e2065]: TEST service support
+                - generic [ref=e2066]: IT, Software & Systems Consulting | Per day
+              - generic [ref=e2067]:
+                - generic [ref=e2068]: $100.00
+                - button [ref=e2070]
+        - generic [ref=e2073]:
+          - heading "Active Cart (0 items)" [level=3] [ref=e2079]
+          - generic [ref=e2080]:
+            - paragraph [ref=e2084]: Cart is currently empty
+            - paragraph [ref=e2085]: Search products or click catalog items above to add.
+          - generic [ref=e2086]:
+            - generic [ref=e2087]:
+              - generic [ref=e2088]: "Cart-wide Discount:"
+              - generic [ref=e2089]:
+                - spinbutton "0" [ref=e2090]
+                - button "%" [ref=e2091] [cursor=pointer]
+            - generic [ref=e2092]:
+              - generic [ref=e2093]: "Add Extra Charge:"
+              - generic [ref=e2095]:
+                - combobox [ref=e2096]:
+                  - option "Transportation" [selected]
+                  - option "Tax"
+                  - option "Packaging"
+                  - option "Delivery"
+                  - option "Service Fee"
+                  - option "Installation"
+                  - option "Custom"
+                - generic [ref=e2097]:
+                  - spinbutton "Amount $" [ref=e2098]
+                  - generic [ref=e2099]: $
+                - button "+ Add" [ref=e2100] [cursor=pointer]
+          - generic [ref=e2101]:
+            - generic [ref=e2102]:
+              - generic [ref=e2103]: "Subtotal:"
+              - generic [ref=e2104]: $0.00
+            - generic [ref=e2105]:
+              - generic [ref=e2106]: "Net Total:"
+              - generic [ref=e2107]: $0.00
+          - generic [ref=e2108]:
+            - generic [ref=e2109]:
+              - generic [ref=e2110]: Split Payment Breakdown
+              - generic [ref=e2113]:
+                - button "One payment" [ref=e2114] [cursor=pointer]
+                - button "+ Add Payment Option" [ref=e2115] [cursor=pointer]
+            - generic [ref=e2118]:
+              - combobox "Payment 1 method" [ref=e2119]:
+                - option "Cash" [selected]
+                - option "M-Pesa"
+                - option "Card"
+                - option "Bank Wire"
+                - option "Debit Card"
+                - option "Credit / Debt"
+              - generic [ref=e2120]:
+                - spinbutton "Payment 1 amount" [ref=e2121]
+                - generic [ref=e2122]: $
+            - generic [ref=e2123]:
+              - generic [ref=e2124]: "Total Tendered:"
+              - generic [ref=e2125]: $0.00
+          - generic [ref=e2126]:
+            - button "Complete Sale & Print Receipt ($0.00)" [disabled] [ref=e2127] [cursor=pointer]
+            - button "Convert to Sales Invoice (B2B Quick Invoice)" [disabled] [ref=e2131] [cursor=pointer]
+```

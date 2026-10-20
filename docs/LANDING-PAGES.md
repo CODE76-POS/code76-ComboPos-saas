@@ -1,5 +1,7 @@
 # Two landing pages: independent ownership and authenticated access
 
+> **Latest navbar/service/history update:** see [../WORKSPACE-UPDATE.md](../WORKSPACE-UPDATE.md). Root/public versus authenticated builder ownership remains unchanged.
+
 The CODE76 product website and the merchant Business Landing Page are **independently managed**. They share authentication/navigation and a reusable assistant UI, not content or settings.
 
 **Current access policy:** the merchant page is private and exists only inside the authenticated POS `landing_page_builder` screen. This supersedes the earlier guest-accessible storefront design and its historical browser evidence.

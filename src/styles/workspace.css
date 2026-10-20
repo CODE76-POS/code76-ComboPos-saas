@@ -192,3 +192,7 @@
 .pos-workspace[data-pos-theme="light"] .payment-add-button:hover { background-color: #115e59; }
 
 .pos-workspace[data-pos-theme="light"] .payment-add-button svg { color: inherit; }
+
+/* Samples keep their own colors even while the POS uses the opposite theme. */
+.pos-workspace .appearance-theme-sample[data-preview-theme="light"] { background: #fff; color: #0f172a; border-color: #cbd5e1; }
+.pos-workspace .appearance-theme-sample[data-preview-theme="dark"] { background: #020617; color: #f1f5f9; border-color: #334155; }

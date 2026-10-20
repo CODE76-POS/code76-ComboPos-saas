@@ -1,4 +1,5 @@
-import type { AppSettings, CompanyData, ProductItem } from '../types/index.ts';
+import { DEFAULT_SERVICE_UNIT, parseServiceUnit } from './serviceUnits.ts';
+import type { ServiceBillingUnit, AppSettings, CompanyData, ProductItem } from '../types/index.ts';
 
 export const SETUP_STORAGE_KEY = 'code76_guided_setup_v2';
 export const SETUP_STAGES = ['appearance', 'company', 'inventory', 'tour'] as const;
@@ -61,6 +62,7 @@ export interface StarterProductDraft {
   name: string;
   category: string;
   type: 'product' | 'service';
+  serviceUnit?: ServiceBillingUnit;
   sellingPrice: string;
   costPrice: string;
   stock: string;
@@ -68,7 +70,7 @@ export interface StarterProductDraft {
 }
 
 export const emptyStarterProduct = (): StarterProductDraft => ({
-  name: '', category: '', type: 'product', sellingPrice: '', costPrice: '', stock: '', barcode: '',
+  name: '', category: '', type: 'product', serviceUnit: DEFAULT_SERVICE_UNIT, sellingPrice: '', costPrice: '', stock: '', barcode: '',
 });
 
 export function makeStarterProduct(draft: StarterProductDraft): ProductItem {
@@ -81,12 +83,14 @@ export function makeStarterProduct(draft: StarterProductDraft): ProductItem {
     throw new Error('Prices must be non-negative numbers. Stock must be a whole number of zero or more.');
   }
   if (![price, cost].every(value => Number.isSafeInteger(Math.round(value * 100)))) throw new Error('Enter a price within the supported currency range.');
+  if (draft.type === 'service' && draft.serviceUnit && !parseServiceUnit(draft.serviceUnit)) throw new Error('Select a supported service billing unit.');
   const token = globalThis.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
   return {
     id: `ITEM-${new Date().getFullYear()}-${token}`,
     sku: `SKU-${token.slice(0, 8).toUpperCase()}`,
     barcode: draft.barcode.trim(),
     name: draft.name.trim(), category: draft.category.trim() || 'General', type: draft.type,
+    serviceUnit: draft.type === 'service' ? parseServiceUnit(draft.serviceUnit) || DEFAULT_SERVICE_UNIT : undefined,
     costPrice: Math.round(cost * 100) / 100,
     sellingPrice: Math.round(price * 100) / 100,
     stock, minStockAlert: draft.type === 'service' ? 0 : 3,

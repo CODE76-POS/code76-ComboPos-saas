@@ -1,3 +1,4 @@
+import { serviceUnitLabel } from '../utils/serviceUnits.ts';
 import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import {
   AppSettings,
@@ -711,7 +712,7 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       date: new Date().toISOString().split('T')[0],
       dueDate: dueDate || new Date(Date.now() + 14 * 86400000).toISOString().split('T')[0],
       items: items.map((i) => ({
-        description: i.product.name,
+        description: i.product.type === 'service' && i.product.serviceUnit ? `${i.product.name} (${serviceUnitLabel(i.product)})` : i.product.name,
         quantity: i.quantity,
         unitPrice: i.unitPrice,
         total: i.total,

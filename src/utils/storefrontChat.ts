@@ -1,6 +1,8 @@
+import { serviceUnitLabel } from './serviceUnits.ts';
+import type { ServiceBillingUnit } from '../types/index.ts';
 export interface CatalogChatContext {
   company?: { name?: string; currency?: string; tel1?: string; whatsapp?: string; email?: string; address?: string; location?: string; country?: string; operatingHours?: string; slogan?: string; vision?: string };
-  products?: { name: string; category?: string; type?: string; sellingPrice: number; stock?: number; isOnPromo?: boolean; promoDiscountPrice?: number; description?: string }[];
+  products?: { name: string; category?: string; type?: string; serviceUnit?: ServiceBillingUnit; sellingPrice: number; stock?: number; isOnPromo?: boolean; promoDiscountPrice?: number; description?: string }[];
 }
 
 /** Business fallback ONLY: no CODE76 hardware, fictitious stock, bookings, credits or warranties. */
@@ -28,7 +30,7 @@ export function businessCatalogReply(message: string, context?: CatalogChatConte
   if (/budget|cheap|alternative|afford/.test(query)) choices.sort((a, b) => a.sellingPrice - b.sellingPrice);
   const catalog = choices.slice(0, 3).map(product => {
     const price = product.isOnPromo && Number.isFinite(product.promoDiscountPrice) ? product.promoDiscountPrice! : product.sellingPrice;
-    const availability = product.type === 'service' ? 'service; contact to arrange' : (product.stock || 0) > 0 ? `${product.stock} in stock` : 'out of stock';
+    const availability = product.type === 'service' ? `${product.serviceUnit ? serviceUnitLabel({ type: 'service', serviceUnit: product.serviceUnit }) + '; ' : ''}service; contact to arrange` : (product.stock || 0) > 0 ? `${product.stock} in stock` : 'out of stock';
     return `• ${product.name} — ${company.currency || ''} ${price.toFixed(2)} (${availability})`;
   }).join('\n');
   return `Here is the current catalog from ${name}:\n\n${catalog}\n\nWhich item interests you? Please confirm availability and terms directly with the business.\n${nextStep}`;
