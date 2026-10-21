@@ -279,7 +279,7 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
           sections={[
             { id: 'start', label: 'Overview' },
             { id: 'benefits', label: 'Why Choose CODE76 POS' },
-            { id: 'platforms', label: 'Over 15+ Platforms' },
+            { id: 'platforms', label: 'Over 15+ Platforms/Features' },
             { id: 'plans', label: 'Plans & Pricing' },
             { id: 'contact', label: 'Contact Sales' },
             { id: 'portal-access', label: 'Sign In / Register' },
@@ -303,7 +303,7 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
 
             {/* Requested Enterprise Paragraph */}
             <p className="text-sm sm:text-base text-slate-300 leading-relaxed max-w-2xl font-medium">
-              CODE76 POS is an enterprise-grade Point of Sale and ERP management suite crafted specifically for supermarkets, pharmacies, restaurants, wholesale distributors, and retail businesses. From multi-split checkouts to automated stock deduction and compliance audit trails, we empower businesses with uncompromised speed and transparency.
+              CODE76 POS is an All-in-One Business ToolKit, enterprise-grade Point of Sale and ERP management suite crafted specifically for supermarkets, pharmacies, restaurants, wholesale distributors, and retail businesses. From multi-split checkouts to automated stock deduction and compliance audit trails, we empower businesses with uncompromised speed and transparency.
             </p>
 
             <p className="text-sm sm:text-base text-slate-400 leading-relaxed max-w-2xl">
