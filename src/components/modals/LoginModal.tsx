@@ -117,14 +117,14 @@ export const LoginModal: React.FC = () => {
       setRecoveryProfile(result.value);
       setRecoveryAnswers({});
       setRecoveryStep('questions');
-      setSuccessMsg(`Recovery questions loaded for ${result.value.email}.`);
+      setSuccessMsg(`Security question loaded for ${result.value.email}.`);
       return;
     }
 
     if (recoveryStep === 'questions' && recoveryProfile) {
       const ok = verifyRecoveryAnswersFor(recoveryProfile.email, recoveryAnswers);
       if (!ok) {
-        setErrorMsg('One or more security answers did not match. Check capitals/spacing are not the issue, then try again.');
+        setErrorMsg('That security answer did not match. Capitals and extra spaces are ignored — check the spelling and try again.');
         return;
       }
       setErrorMsg('');
@@ -322,7 +322,7 @@ export const LoginModal: React.FC = () => {
             )}
 
             {mode === 'register' && (
-              <SecurityQuestionFields value={security} onChange={setSecurity} />
+              <SecurityQuestionFields value={security} onChange={setSecurity} label="Security question" hint="Choose one question only you can answer. It recovers your username or resets a forgotten password." />
             )}
 
             {mode === 'recover' && (
@@ -330,7 +330,7 @@ export const LoginModal: React.FC = () => {
                 {recoveryStep === 'identify' && (
                   <>
                     <p className="text-xs leading-relaxed text-slate-400">
-                      Forgot your password or username? Enter your account email — or, if you forget the email, your business name plus your full name. We then ask the {RECOVERY_QUESTION_COUNT} security questions you chose.
+                      Forgot your password or username? Enter your account email — or, if you forget the email, your business name plus your full name. We then ask the security question you chose.
                     </p>
                     <div>
                       <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Account email or your full name</label>
@@ -353,7 +353,7 @@ export const LoginModal: React.FC = () => {
                 {recoveryStep === 'questions' && recoveryProfile && (
                   <>
                     <p className="text-xs leading-relaxed text-slate-400">
-                      Answer the three questions for <strong className="text-slate-200">{recoveryProfile.name}</strong>. Answers ignore capitals and extra spaces.
+                      Answer the security question for <strong className="text-slate-200">{recoveryProfile.name}</strong>. Capitals and extra spaces are ignored.
                     </p>
                     {recoveryProfile.questions.map((question) => (
                       <label key={question.id} className="block text-xs font-semibold text-slate-300">
@@ -388,7 +388,7 @@ export const LoginModal: React.FC = () => {
                         className="mt-1 w-full rounded-xl border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-slate-100 focus:border-teal-500 focus:outline-none"
                       />
                     </label>
-                    <p className="text-[10px] text-slate-500">At least 6 characters. Your security questions stay the same.</p>
+                    <p className="text-[10px] text-slate-500">At least 6 characters. Your security question stays the same.</p>
                   </>
                 )}
 

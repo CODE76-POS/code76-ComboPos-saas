@@ -262,7 +262,7 @@ export const AboutPlatform: React.FC = () => {
                     { title: 'Analytics', copy: 'Filterable operational insights, margin/COGS, payment mix, top items, checkout hours and aging.' },
                     { title: 'Growth tools', copy: 'Private business landing page, review capture and a configurable catalogue-only assistant.' },
                     { title: 'Separate business workspaces', copy: 'Registering a business creates its own workspace. The person who registers is the administrator; staff logins are attached to company members and load only that business\'s records.' },
-                    { title: 'Team access & recovery', copy: 'Administrators create staff usernames from company members. Three security questions reveal a forgotten username or reset a password using hashed answers stored in this browser.' },
+                    { title: 'Team access & recovery', copy: 'Administrators create staff usernames from company members. A security question reveals a forgotten username or resets a password using a hashed answer stored in this browser.' },
                     { title: 'Controls', copy: 'Role privilege matrix, audit trail, CSV import, JSON backup/restore and per-platform deletion.' },
                     { title: 'In-app dialogs', copy: 'Notices, confirmations, choices and prompts render as widgets — browser pop-up blocking cannot hide them.' },
                   ].map((card) => (

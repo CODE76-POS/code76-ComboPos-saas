@@ -122,7 +122,7 @@ export interface RecoveryProfile {
 }
 
 export const MIN_PASSWORD_LENGTH = 6;
-export const RECOVERY_QUESTION_COUNT = 3;
+export const RECOVERY_QUESTION_COUNT = 1;
 const MAX_FAILED_ATTEMPTS = 5;
 const LOCK_MS = 5 * 60 * 1000;
 
@@ -224,14 +224,16 @@ export const isEmailLike = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.te
 
 export function validateSecurityDrafts(security: SecurityDraft[]): string | null {
   if (!Array.isArray(security) || security.length !== RECOVERY_QUESTION_COUNT) {
-    return `Choose exactly ${RECOVERY_QUESTION_COUNT} security questions.`;
+    return RECOVERY_QUESTION_COUNT === 1
+      ? 'Choose one security question.'
+      : `Choose exactly ${RECOVERY_QUESTION_COUNT} security questions.`;
   }
   const ids = new Set<string>();
   for (const entry of security) {
     if (!SECURITY_QUESTION_BY_ID[entry.questionId]) return 'Choose a security question from the list.';
     if (ids.has(entry.questionId)) return 'Each security question can be used only once.';
     ids.add(entry.questionId);
-    if (normalizeAnswer(entry.answer).length < 3) return 'Each security answer needs at least 3 characters.';
+    if (normalizeAnswer(entry.answer).length < 3) return 'The security answer needs at least 3 characters.';
   }
   return null;
 }
@@ -401,6 +403,15 @@ export function ensureAccountStore(storage: StorageLike | undefined = typeof loc
     }
   } catch (error) {
     console.warn('Unable to migrate legacy local accounts', error);
+  }
+
+  // Older builds stored three questions. Keep the first one so recovery stays
+  // usable after the switch to a single question.
+  for (const account of Object.values(store.accounts)) {
+    if (Array.isArray(account.security) && account.security.length > RECOVERY_QUESTION_COUNT) {
+      account.security = account.security.slice(0, RECOVERY_QUESTION_COUNT);
+      changed = true;
+    }
   }
 
   // One-time adoption of a snapshot written by the older single-business build.
@@ -595,7 +606,7 @@ export function findRecoveryProfile(query: string, companyName = '', storage?: S
     return { success: false, message: 'No local account matches those details. Check the spelling, or ask your administrator.' };
   }
   if (!account.security.length) {
-    return { success: false, message: 'This account has no recovery questions yet. Ask an administrator to set them in Settings → Team access.' };
+    return { success: false, message: 'This account has no recovery question yet. Ask an administrator to set one in Settings → Team access.' };
   }
   return {
     success: true,
@@ -632,7 +643,7 @@ export function resetPasswordWithRecovery(
   const account = store.accounts[normalizeEmail(email)];
   if (!account) return { success: false, message: 'No local account matches that email.' };
   if (!verifyRecoveryAnswers(email, answers, storage)) {
-    return { success: false, message: 'One or more security answers did not match. Nothing was changed.' };
+    return { success: false, message: 'That security answer did not match. Nothing was changed.' };
   }
   const passwordError = validatePassword(newPassword);
   if (passwordError) return { success: false, message: passwordError };

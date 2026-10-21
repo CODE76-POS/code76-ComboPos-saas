@@ -605,7 +605,7 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
                         </div>
 
                         {authMode === 'register' ? (
-                          <SecurityQuestionFields value={authSecurity} onChange={setAuthSecurity} label="Recovery questions" hint="Choose three questions so you can recover your username or reset your password without a server." />
+                          <SecurityQuestionFields value={authSecurity} onChange={setAuthSecurity} label="Recovery question" hint="Choose one question so you can recover your username or reset your password without a server." />
                         ) : (
                           <p className="rounded-xl border border-slate-800 bg-slate-900/70 p-2.5 text-[10px] leading-relaxed text-slate-400">
                             Your roles come from the account the administrator created — picking a different role here cannot grant extra access.

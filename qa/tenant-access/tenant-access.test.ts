@@ -39,8 +39,6 @@ class MemoryStorage implements StorageLike {
 
 const security = (offset = 0) => [
   { questionId: SECURITY_QUESTIONS[offset].id, answer: 'Nairobi' },
-  { questionId: SECURITY_QUESTIONS[offset + 1].id, answer: 'Kianda School' },
-  { questionId: SECURITY_QUESTIONS[offset + 2].id, answer: 'Rex' },
 ];
 
 const business = (patch: Partial<BusinessRegistrationInput> = {}): BusinessRegistrationInput => ({
@@ -66,7 +64,7 @@ test('registering a business creates its own workspace and administrator', () =>
   assert.equal(account.workspaceId, workspace.id);
   assert.equal(workspace.companyName, 'Wanjiku Hardware');
   assert.equal(workspace.ownerEmail, 'mary@wanjiku.test');
-  assert.equal(account.security.length, 3);
+  assert.equal(account.security.length, 1);
   assert.ok(account.passwordHash && account.passwordHash !== 'hardware2026');
   assert.ok(!JSON.stringify(account).includes('hardware2026'), 'plaintext password is never stored');
   assert.ok(!JSON.stringify(account).includes('Nairobi'), 'plaintext answers are never stored');
@@ -79,7 +77,9 @@ test('one email cannot join two businesses and weak registrations are rejected',
   assert.equal(registerBusiness(business(), storage).success, true);
   assert.equal(registerBusiness(business({ companyName: 'Other Shop' }), storage).success, false);
   assert.match(registerBusiness(business({ email: 'new@shop.test', password: '123' }), storage).message, /at least 6/);
-  assert.match(registerBusiness(business({ email: 'new2@shop.test', security: security(0).map((entry) => ({ ...entry, questionId: SECURITY_QUESTIONS[0].id })) }), storage).message, /only once/);
+  assert.match(registerBusiness(business({ email: 'new2@shop.test', security: [{ questionId: SECURITY_QUESTIONS[0].id, answer: '   ' }] }), storage).message, /at least 3/);
+  assert.match(registerBusiness(business({ email: 'new3@shop.test', security: [{ questionId: 'not-a-question', answer: 'Nairobi' }] }), storage).message, /from the list/);
+  assert.match(registerBusiness(business({ email: 'new4@shop.test', security: [security()[0], security(1)[0]] }), storage).message, /Choose one security question/);
   assert.match(registerBusiness(business({ email: 'not-an-email' }), storage).message, /valid email/);
 });
 
@@ -149,7 +149,7 @@ test('security questions recover the username and reset the password', () => {
   const profile = findRecoveryProfile('mary@wanjiku.test', '', storage);
   assert.equal(profile.success, true);
   assert.equal(profile.value!.email, 'mary@wanjiku.test');
-  assert.equal(profile.value!.questions.length, 3);
+  assert.equal(profile.value!.questions.length, 1);
 
   const byName = findRecoveryProfile('Mary Wanjiku', 'Wanjiku Hardware', storage);
   assert.equal(byName.success, true);
@@ -158,6 +158,7 @@ test('security questions recover the username and reset the password', () => {
 
   const answers: Record<string, string> = {};
   for (const entry of security()) answers[entry.questionId] = entry.answer;
+  assert.equal(Object.keys(answers).length, 1);
   assert.equal(verifyRecoveryAnswers('mary@wanjiku.test', answers, storage), true);
   assert.equal(verifyRecoveryAnswers('mary@wanjiku.test', { ...answers, [SECURITY_QUESTIONS[0].id]: 'Mombasa' }, storage), false);
 
@@ -171,7 +172,8 @@ test('security questions recover the username and reset the password', () => {
   assert.equal(authenticate('mary@wanjiku.test', 'new-password-2026', storage).success, true);
   // Recovery keeps working after the password salt changes.
   assert.equal(verifyRecoveryAnswers('mary@wanjiku.test', answers, storage), true);
-  assert.equal(resetPasswordWithRecovery('mary@wanjiku.test', { ...answers, [SECURITY_QUESTIONS[1].id]: 'wrong' }, 'another-pass', storage).success, false);
+  assert.equal(verifyRecoveryAnswers('mary@wanjiku.test', {}, storage), false);
+  assert.equal(resetPasswordWithRecovery('mary@wanjiku.test', {}, 'another-pass', storage).success, false);
 });
 
 test('business administrator cannot be removed but staff logins can', () => {
@@ -229,6 +231,26 @@ test('legacy single-tenant accounts migrate into the demo workspace once', () =>
   // Running again must not duplicate or reset the migrated record.
   const salt = store.accounts['legacy@shop.test'].salt;
   assert.equal(ensureAccountStore(storage).accounts['legacy@shop.test'].salt, salt);
+});
+
+test('older three-question accounts keep their first question after the switch to one', () => {
+  const storage = new MemoryStorage();
+  const registered = registerBusiness(business(), storage).value!;
+  const store = readStore(storage);
+  const account = store.accounts[registered.account.email];
+  const base = account.security[0];
+  account.security = [
+    base,
+    { questionId: SECURITY_QUESTIONS[3].id, answerHash: base.answerHash },
+    { questionId: SECURITY_QUESTIONS[5].id, answerHash: base.answerHash },
+  ];
+  writeStore(store, storage);
+
+  const migrated = ensureAccountStore(storage).accounts[registered.account.email];
+  assert.equal(migrated.security.length, 1);
+  assert.equal(migrated.security[0].questionId, base.questionId);
+  // The retained first question still works for recovery.
+  assert.equal(verifyRecoveryAnswers(registered.account.email, { [base.questionId]: 'Nairobi' }, storage), true);
 });
 
 test('the store persists accounts keyed by normalised email', () => {

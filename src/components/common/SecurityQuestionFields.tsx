@@ -9,12 +9,12 @@ interface SecurityQuestionFieldsProps {
   disabled?: boolean;
 }
 
-/** Three distinct security questions plus their answers. */
+/** The account recovery question and its answer. */
 export const SecurityQuestionFields: React.FC<SecurityQuestionFieldsProps> = ({
   value,
   onChange,
-  label = 'Account recovery questions',
-  hint = 'Choose three questions only you can answer. Answers are stored hashed on this device, never in plain text.',
+  label = 'Account recovery question',
+  hint = 'Choose one question only you can answer. The answer is stored hashed on this device, never in plain text.',
   disabled = false,
 }) => {
   const rows: SecurityDraft[] = Array.from({ length: RECOVERY_QUESTION_COUNT }, (_, index) =>
@@ -35,9 +35,9 @@ export const SecurityQuestionFields: React.FC<SecurityQuestionFieldsProps> = ({
         return (
           <div key={index} className="rounded-xl border border-slate-700 bg-slate-800/60 p-3 space-y-2">
             <label className="block text-[11px] font-semibold text-slate-300">
-              Question {index + 1}
+              Security question{RECOVERY_QUESTION_COUNT > 1 ? ` ${index + 1}` : ''}
               <select
-                aria-label={`Security question ${index + 1}`}
+                aria-label={RECOVERY_QUESTION_COUNT > 1 ? `Security question ${index + 1}` : 'Security question'}
                 required
                 value={row.questionId}
                 onChange={(event) => update(index, { questionId: event.target.value })}
@@ -52,7 +52,7 @@ export const SecurityQuestionFields: React.FC<SecurityQuestionFieldsProps> = ({
             <label className="block text-[11px] font-semibold text-slate-300">
               Your answer
               <input
-                aria-label={`Answer to security question ${index + 1}`}
+                aria-label={RECOVERY_QUESTION_COUNT > 1 ? `Answer to security question ${index + 1}` : 'Answer to your security question'}
                 type="text"
                 required
                 autoComplete="off"
@@ -68,7 +68,7 @@ export const SecurityQuestionFields: React.FC<SecurityQuestionFieldsProps> = ({
         );
       })}
       <p className="text-[10px] text-slate-500">
-        Answers ignore capitals and extra spaces. There is no server copy — if you forget both the password and these answers, only an administrator can reset the login on this device.
+        The answer ignores capitals and extra spaces. There is no server copy — if you forget both the password and the answer, only an administrator can reset the login on this device.
       </p>
     </fieldset>
   );

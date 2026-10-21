@@ -123,7 +123,7 @@ export const MemberAccessDialog: React.FC<LoginEditorProps> = ({ member = null, 
             </div>
           </div>
 
-          <SecurityQuestionFields value={security} onChange={setSecurity} label={existing ? 'New recovery questions' : 'Recovery questions'} hint="Required. These let the member recover their username or reset a forgotten password without help." />
+          <SecurityQuestionFields value={security} onChange={setSecurity} label={existing ? 'New recovery question' : 'Recovery question'} hint="Required. This lets the member recover their username or reset a forgotten password without help." />
 
           <div className="flex justify-end gap-2 pt-2">
             <button type="button" onClick={onClose} className={buttonClass}>Close</button>
@@ -167,7 +167,7 @@ export const TeamAccessPanel: React.FC = () => {
   const resetPassword = async (account: AccountRecord) => {
     const ok = await appDialogs.confirm({
       title: `Reset password for ${account.name}?`,
-      message: 'You will be asked for a new password and fresh recovery questions. The old password stops working immediately.',
+      message: 'You will be asked for a new password and a fresh recovery question. The old password stops working immediately.',
       confirmLabel: 'Continue',
       tone: 'warning',
     });
@@ -228,7 +228,7 @@ export const TeamAccessPanel: React.FC = () => {
                   </td>
                   <td className="p-2 text-slate-300"><Mail size={12} className="mr-1 inline" />{account.email}</td>
                   <td className="p-2 text-slate-300">{account.roles.join(' / ')}</td>
-                  <td className="p-2 text-slate-300">{account.security.length ? `${account.security.length} questions set` : <span className="text-amber-300">Not set</span>}</td>
+                  <td className="p-2 text-slate-300">{account.security.length ? `${account.security.length} question${account.security.length === 1 ? '' : 's'} set` : <span className="text-amber-300">Not set</span>}</td>
                   <td className="p-2">
                     <div className="flex flex-wrap gap-1">
                       <button type="button" onClick={() => resetPassword(account)} className={buttonClass}><KeyRound size={13} /> Reset</button>
@@ -270,9 +270,9 @@ export const TeamAccessPanel: React.FC = () => {
         <div className="mt-2 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-slate-800 bg-slate-900/50 p-3">
           <div>
             <strong className="block text-xs text-slate-200">{currentUser.name}</strong>
-            <span className="text-[10px] text-slate-400">{currentUser.email} · {scopedAccounts.find((account) => account.email === currentUser.email)?.security.length || 0} recovery questions</span>
+            <span className="text-[10px] text-slate-400">{currentUser.email} · {scopedAccounts.find((account) => account.email === currentUser.email)?.security.length || 0} recovery question</span>
           </div>
-          <button type="button" onClick={() => setEditing({ account: scopedAccounts.find((account) => account.email === currentUser.email) || null })} className={buttonClass}><KeyRound size={13} /> Change password / questions</button>
+          <button type="button" onClick={() => setEditing({ account: scopedAccounts.find((account) => account.email === currentUser.email) || null })} className={buttonClass}><KeyRound size={13} /> Change password / question</button>
         </div>
       </section>
 
