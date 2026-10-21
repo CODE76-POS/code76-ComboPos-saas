@@ -63,7 +63,9 @@ import {
   Cpu,
 } from 'lucide-react';
 import { AIChatbotWidget, InquiryLeadData } from './AIChatbotWidget.tsx';
-import { ALL_ROLES, ProductItem, UserRole } from '../../types/index.ts';
+import { ProductItem } from '../../types/index.ts';
+import { SecurityQuestionFields } from '../common/SecurityQuestionFields.tsx';
+import { RECOVERY_QUESTION_COUNT, type SecurityDraft } from '../../utils/accounts.ts';
 import {
   getCustomerReviewAvatar,
   getDefaultCatalogImageAndEmoji,
@@ -120,7 +122,8 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
   const [authEmail, setAuthEmail] = useState('');
   const [authPassword, setAuthPassword] = useState('');
   const [authFullName, setAuthFullName] = useState('');
-  const [authRole, setAuthRole] = useState<UserRole>('Cashier');
+  const [authCompanyName, setAuthCompanyName] = useState('');
+  const [authSecurity, setAuthSecurity] = useState<SecurityDraft[]>(() => Array.from({ length: RECOVERY_QUESTION_COUNT }, () => ({ questionId: '', answer: '' })));
   const [authError, setAuthError] = useState('');
   const [authSuccess, setAuthSuccess] = useState('');
 
@@ -276,8 +279,14 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
     }
 
     const res = authMode === 'register'
-      ? registerUser(authFullName, authEmail.trim(), authPassword, authRole)
-      : loginUser(authEmail.trim(), authPassword, authRole);
+      ? registerUser({
+          companyName: authCompanyName,
+          adminName: authFullName,
+          email: authEmail.trim(),
+          password: authPassword,
+          security: authSecurity,
+        })
+      : loginUser(authEmail.trim(), authPassword);
     if (res.success) {
       setAuthSuccess(
         authMode === 'register'
@@ -538,7 +547,22 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
                       <form onSubmit={handleAuthSubmit} className="space-y-3 text-xs">
                         {authMode === 'register' && (
                           <div>
-                            <label className="block text-slate-300 font-semibold mb-1">Full Name</label>
+                            <label className="block text-slate-300 font-semibold mb-1">Business Name</label>
+                            <input
+                              type="text"
+                              required
+                              value={authCompanyName}
+                              onChange={(e) => setAuthCompanyName(e.target.value)}
+                              placeholder="e.g. Wanjiku Hardware"
+                              className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-slate-100 focus:outline-none focus:border-teal-500"
+                            />
+                            <p className="mt-1 text-[10px] text-slate-500">Only this business's records can be opened by its members.</p>
+                          </div>
+                        )}
+
+                        {authMode === 'register' && (
+                          <div>
+                            <label className="block text-slate-300 font-semibold mb-1">Administrator Full Name</label>
                             <input
                               type="text"
                               required
@@ -580,23 +604,14 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
                           />
                         </div>
 
-                        <div>
-                          <label className="block text-slate-300 font-semibold mb-1 flex items-center gap-1.5">
-                            <Shield className="w-3.5 h-3.5 text-teal-400" />
-                            Role / Permission Level
-                          </label>
-                          <select
-                            value={authRole}
-                            onChange={(e) => setAuthRole(e.target.value as UserRole)}
-                            className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-slate-100 focus:outline-none focus:border-teal-500"
-                          >
-                            {ALL_ROLES.map((r) => (
-                              <option key={r} value={r}>
-                                {r}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
+                        {authMode === 'register' ? (
+                          <SecurityQuestionFields value={authSecurity} onChange={setAuthSecurity} label="Recovery questions" hint="Choose three questions so you can recover your username or reset your password without a server." />
+                        ) : (
+                          <p className="rounded-xl border border-slate-800 bg-slate-900/70 p-2.5 text-[10px] leading-relaxed text-slate-400">
+                            Your roles come from the account the administrator created — picking a different role here cannot grant extra access.
+                            <span className="mt-1 block">Forgot your password or email? Open <strong className="text-slate-200">Sign In</strong> in the top menu and choose “Forgot password or email?”.</span>
+                          </p>
+                        )}
 
                         <button
                           type="submit"
@@ -615,7 +630,7 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
                             <button
                               type="button"
                               onClick={() => {
-                                loginUser('sarah.k@code76.com', 'password123', 'Cashier');
+                                loginUser('sarah.k@code76.com', 'password123');
                                 setActiveView('pos');
                               }}
                               className="px-2 py-1.5 rounded-lg bg-teal-950/60 hover:bg-teal-900 border border-teal-700/50 text-teal-300 font-bold text-[10px] text-center transition cursor-pointer"
@@ -625,7 +640,7 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
                             <button
                               type="button"
                               onClick={() => {
-                                loginUser('samuel.m@code76.com', 'password123', 'Manager');
+                                loginUser('samuel.m@code76.com', 'password123');
                                 setActiveView('pos');
                               }}
                               className="px-2 py-1.5 rounded-lg bg-indigo-950/60 hover:bg-indigo-900 border border-indigo-700/50 text-indigo-300 font-bold text-[10px] text-center transition cursor-pointer"
@@ -635,7 +650,7 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
                             <button
                               type="button"
                               onClick={() => {
-                                loginUser('david.k@code76.com', 'password123', 'CEO');
+                                loginUser('david.k@code76.com', 'password123');
                                 setActiveView('pos');
                               }}
                               className="px-2 py-1.5 rounded-lg bg-purple-950/60 hover:bg-purple-900 border border-purple-700/50 text-purple-300 font-bold text-[10px] text-center transition cursor-pointer"

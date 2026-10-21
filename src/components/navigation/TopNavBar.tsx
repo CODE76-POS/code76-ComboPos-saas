@@ -71,6 +71,7 @@ export const TopNavBar: React.FC = () => {
     theme,
     settings,
     company,
+    workspace,
     setSettingsSection,
   } = usePOS();
 
@@ -286,8 +287,8 @@ export const TopNavBar: React.FC = () => {
                   </div>
                   <div className="text-left hidden lg:block">
                     <div className="font-semibold leading-none">{currentUser.name}</div>
-                    <div className="text-[10px] text-teal-500 leading-none mt-0.5">
-                      Role: {currentUser.roles[0] || 'Member'}
+                    <div className="max-w-[170px] truncate text-[10px] text-teal-500 leading-none mt-0.5">
+                      {workspace?.companyName || company.name || 'Business'} · {currentUser.roles[0] || 'Member'}
                     </div>
                   </div>
                 </button>

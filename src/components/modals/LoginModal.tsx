@@ -2,19 +2,37 @@ import { PLAN_INFO, planTier } from '../../utils/plans.ts';
 import { accessHistoryPermissions } from '../../utils/accessHistory.ts';
 import React, { useEffect, useRef, useState } from 'react';
 import { usePOS } from '../../context/POSContext.tsx';
-import { Lock, Mail, KeyRound, Shield, X, UserPlus, LogIn, CheckCircle2, AlertCircle, History, Info } from 'lucide-react';
-import { ALL_ROLES, UserRole } from '../../types/index.ts';
+import { Lock, Mail, Shield, X, UserPlus, LogIn, CheckCircle2, AlertCircle, History, Info, Building2, KeyRound, ArrowLeft, HelpCircle } from 'lucide-react';
+import { SecurityQuestionFields } from '../common/SecurityQuestionFields.tsx';
+import { RECOVERY_QUESTION_COUNT, type RecoveryProfile, type SecurityDraft } from '../../utils/accounts.ts';
+
+type AuthMode = 'login' | 'register' | 'recover';
+type RecoveryStep = 'identify' | 'questions' | 'reset' | 'done';
+
+const emptySecurity = (): SecurityDraft[] => Array.from({ length: RECOVERY_QUESTION_COUNT }, () => ({ questionId: '', answer: '' }));
 
 export const LoginModal: React.FC = () => {
-  const { loginModalOpen, setLoginModalOpen, currentUser, loginUser, logoutUser, registerUser, settings, setActivePlatform, hasFeature } = usePOS();
+  const {
+    loginModalOpen, setLoginModalOpen, currentUser, loginUser, logoutUser, registerUser,
+    settings, setActivePlatform, hasFeature, workspace,
+    lookupRecoveryAccount, verifyRecoveryAnswersFor, resetAccountPassword,
+  } = usePOS();
 
-  const [mode, setMode] = useState<'login' | 'register'>('login');
+  const [mode, setMode] = useState<AuthMode>('login');
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [role, setRole] = useState<UserRole>('Cashier');
   const [fullName, setFullName] = useState<string>('');
+  const [companyName, setCompanyName] = useState<string>('');
+  const [security, setSecurity] = useState<SecurityDraft[]>(emptySecurity);
   const [errorMsg, setErrorMsg] = useState<string>('');
   const [successMsg, setSuccessMsg] = useState<string>('');
+
+  const [recoveryStep, setRecoveryStep] = useState<RecoveryStep>('identify');
+  const [recoveryQuery, setRecoveryQuery] = useState('');
+  const [recoveryCompany, setRecoveryCompany] = useState('');
+  const [recoveryProfile, setRecoveryProfile] = useState<RecoveryProfile | null>(null);
+  const [recoveryAnswers, setRecoveryAnswers] = useState<Record<string, string>>({});
+  const [newPassword, setNewPassword] = useState('');
 
   const historyAccess = accessHistoryPermissions(currentUser, settings);
   const dialog = useRef<HTMLDivElement>(null);
@@ -36,20 +54,29 @@ export const LoginModal: React.FC = () => {
   }, [loginModalOpen, setLoginModalOpen]);
   if (!loginModalOpen) return null;
 
+  const switchMode = (next: AuthMode) => {
+    setMode(next);
+    setErrorMsg('');
+    setSuccessMsg('');
+    setRecoveryStep('identify');
+    setRecoveryProfile(null);
+    setRecoveryAnswers({});
+    setNewPassword('');
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg('');
     setSuccessMsg('');
 
-    if (!email.trim() || !password.trim()) {
-      setErrorMsg('Please enter both your email address and password.');
-      return;
-    }
-
     if (mode === 'login') {
-      const res = loginUser(email, password, role);
+      if (!email.trim() || !password) {
+        setErrorMsg('Please enter both your email address and password.');
+        return;
+      }
+      const res = loginUser(email, password);
       if (res.success) {
-        setSuccessMsg('Authentication successful! Welcome to CODE76 POS.');
+        setSuccessMsg('Authentication successful! Only your business workspace was loaded.');
         setTimeout(() => {
           setSuccessMsg('');
           setLoginModalOpen(false);
@@ -57,19 +84,62 @@ export const LoginModal: React.FC = () => {
       } else {
         setErrorMsg(res.message);
       }
-    } else {
-      // Registration: registers user and automatically sets them as active user
-      if (password.length < 4) {
-        setErrorMsg('Password must be at least 4 characters.');
+      return;
+    }
+
+    if (mode === 'register') {
+      if (!companyName.trim() || !fullName.trim()) {
+        setErrorMsg('Enter your business name and your full name — the person who registers is the administrator.');
         return;
       }
-      const result = registerUser(fullName, email, password, role);
+      if (password.length < 6) {
+        setErrorMsg('Password must be at least 6 characters.');
+        return;
+      }
+      const result = registerUser({ companyName, adminName: fullName, email, password, security });
       if (!result.success) { setErrorMsg(result.message); return; }
-      setSuccessMsg(`User account registered with role: ${role}!`);
+      setSuccessMsg(result.message);
       setTimeout(() => {
         setSuccessMsg('');
         setLoginModalOpen(false);
-      }, 1200);
+      }, 1400);
+      return;
+    }
+
+    // Recovery — identify the account first.
+    if (recoveryStep === 'identify') {
+      if (!recoveryQuery.trim()) {
+        setErrorMsg('Enter your account email, or your business name and full name.');
+        return;
+      }
+      const result = lookupRecoveryAccount(recoveryQuery, recoveryCompany);
+      if (!result.success || !result.value) { setErrorMsg(result.message); return; }
+      setRecoveryProfile(result.value);
+      setRecoveryAnswers({});
+      setRecoveryStep('questions');
+      setSuccessMsg(`Recovery questions loaded for ${result.value.email}.`);
+      return;
+    }
+
+    if (recoveryStep === 'questions' && recoveryProfile) {
+      const ok = verifyRecoveryAnswersFor(recoveryProfile.email, recoveryAnswers);
+      if (!ok) {
+        setErrorMsg('One or more security answers did not match. Check capitals/spacing are not the issue, then try again.');
+        return;
+      }
+      setErrorMsg('');
+      setSuccessMsg('');
+      setRecoveryStep('reset');
+      return;
+    }
+
+    if (recoveryStep === 'reset' && recoveryProfile) {
+      const result = resetAccountPassword(recoveryProfile.email, recoveryAnswers, newPassword);
+      if (!result.success) { setErrorMsg(result.message); return; }
+      setRecoveryStep('done');
+      setSuccessMsg(`Your username is ${recoveryProfile.email}. ${result.message}`);
+      setEmail(recoveryProfile.email);
+      setPassword('');
     }
   };
 
@@ -78,9 +148,14 @@ export const LoginModal: React.FC = () => {
     logoutUser(); // Immediately returns to the CODE76 public root, including its account portal.
   };
 
+  const heading = currentUser
+    ? 'Active User Session'
+    : mode === 'login' ? 'Sign In to CODE76 POS'
+    : mode === 'register' ? 'Register Your Business' : 'Recover Login Credentials';
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-xs p-4">
-      <div ref={dialog} role="dialog" aria-modal="true" aria-labelledby="session-dialog-heading" className="relative w-full max-w-md max-h-[90vh] overflow-y-auto rounded-2xl bg-slate-900 border border-slate-700 shadow-2xl p-4 sm:p-6 text-white animate-in fade-in zoom-in-95 duration-200">
+      <div ref={dialog} role="dialog" aria-modal="true" aria-labelledby="session-dialog-heading" className="relative w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-2xl bg-slate-900 border border-slate-700 shadow-2xl p-4 sm:p-6 text-white animate-in fade-in zoom-in-95 duration-200">
         <button
           onClick={() => setLoginModalOpen(false)}
           className="absolute top-4 right-4 text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition cursor-pointer"
@@ -95,10 +170,10 @@ export const LoginModal: React.FC = () => {
           </div>
           <div>
             <span className="text-xs uppercase tracking-wider font-bold text-teal-400">
-              Role-Based Access Control
+              {currentUser ? 'Role-Based Access Control' : 'Business workspace access'}
             </span>
             <h3 id="session-dialog-heading" className="text-xl font-bold text-slate-100">
-              {currentUser ? 'Active User Session' : mode === 'login' ? 'Sign In to CODE76 POS' : 'Register New User'}
+              {heading}
             </h3>
           </div>
         </div>
@@ -111,6 +186,9 @@ export const LoginModal: React.FC = () => {
               </div>
               <h4 className="font-bold text-lg text-slate-100">{currentUser.name}</h4>
               <p className="text-xs text-slate-400">{currentUser.email}</p>
+              <p className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-teal-500/30 bg-teal-500/10 px-2.5 py-1 text-[11px] font-semibold text-teal-300">
+                <Building2 size={13} /> {workspace?.companyName || 'Business workspace'}
+              </p>
               <div className="flex justify-center gap-2 mt-3">
                 {currentUser.roles.map((r, i) => (
                   <span
@@ -120,8 +198,16 @@ export const LoginModal: React.FC = () => {
                     Role: {r}
                   </span>
                 ))}
+                <span className="px-2.5 py-1 text-xs rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 font-semibold">
+                  {currentUser.isAdmin ? 'Administrator' : 'Team member'}
+                </span>
               </div>
             </div>
+
+            <p className="rounded-xl border border-slate-700 bg-slate-800/50 p-3 text-[11px] leading-relaxed text-slate-400">
+              This session can only read and write <strong className="text-slate-200">{workspace?.companyName || 'this business'}</strong> records.
+              Staff logins are created by the administrator against a company member, and data from other businesses on this device is never loaded here.
+            </p>
 
             <p className="text-xs text-teal-400">Current plan: {PLAN_INFO[planTier(settings)].name} · demo entitlements only, no billing</p>
             <div className="rounded-xl border border-teal-800 bg-teal-950/40 p-3 text-xs text-slate-300">
@@ -167,85 +253,180 @@ export const LoginModal: React.FC = () => {
             )}
 
             {mode === 'register' && (
+              <>
+                <div>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1 flex items-center gap-1.5">
+                    <Building2 className="w-3.5 h-3.5 text-slate-400" /> Business name
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={companyName}
+                    onChange={(e) => setCompanyName(e.target.value)}
+                    placeholder="e.g. Wanjiku Hardware"
+                    className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-teal-500"
+                  />
+                  <p className="mt-1 text-[10px] text-slate-500">This becomes its own workspace. Only people you register can open its records.</p>
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1 flex items-center gap-1.5">
+                    <UserPlus className="w-3.5 h-3.5 text-slate-400" /> Administrator full name
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                    placeholder="e.g. Samuel Kiprono"
+                    className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-teal-500"
+                  />
+                  <p className="mt-1 text-[10px] text-slate-500">The person who registers and pays for CODE76 POS becomes this business's administrator.</p>
+                </div>
+              </>
+            )}
+
+            {mode !== 'recover' && (
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">
-                  Full Name
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1 flex items-center gap-1.5">
+                  <Mail className="w-3.5 h-3.5 text-slate-400" />
+                  {mode === 'register' ? 'Administrator email (username)' : 'Email Address'}
                 </label>
                 <input
-                  type="text"
+                  type="email"
                   required
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
-                  placeholder="e.g. Samuel Kiprono"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="name@business.com"
+                  autoComplete="username"
                   className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-teal-500"
                 />
               </div>
             )}
 
-            <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1 flex items-center gap-1.5">
-                <Mail className="w-3.5 h-3.5 text-slate-400" />
-                Email Address
-              </label>
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="name@business.com"
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-teal-500"
-              />
-            </div>
+            {mode !== 'recover' && (
+              <div>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1 flex items-center gap-1.5">
+                  <Lock className="w-3.5 h-3.5 text-slate-400" /> Password
+                </label>
+                <input
+                  type="password"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  autoComplete={mode === 'register' ? 'new-password' : 'current-password'}
+                  className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-teal-500"
+                />
+                {mode === 'register' && <p className="mt-1 text-[10px] text-slate-500">At least 6 characters. Staff members get their own logins from the administrator.</p>}
+              </div>
+            )}
 
-            <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1 flex items-center gap-1.5">
-                <Lock className="w-3.5 h-3.5 text-slate-400" />
-                Password
-              </label>
-              <input
-                type="password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-teal-500"
-              />
-            </div>
+            {mode === 'register' && (
+              <SecurityQuestionFields value={security} onChange={setSecurity} />
+            )}
 
-            <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1 flex items-center gap-1.5">
-                <Shield className="w-3.5 h-3.5 text-teal-400" />
-                App Role
-              </label>
-              <select
-                value={role}
-                onChange={(e) => setRole(e.target.value as UserRole)}
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-teal-500"
-              >
-                {ALL_ROLES.map((r) => (
-                  <option key={r} value={r}>
-                    {r}
-                  </option>
-                ))}
-              </select>
-            </div>
+            {mode === 'recover' && (
+              <div className="space-y-4">
+                {recoveryStep === 'identify' && (
+                  <>
+                    <p className="text-xs leading-relaxed text-slate-400">
+                      Forgot your password or username? Enter your account email — or, if you forget the email, your business name plus your full name. We then ask the {RECOVERY_QUESTION_COUNT} security questions you chose.
+                    </p>
+                    <div>
+                      <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Account email or your full name</label>
+                      <input
+                        type="text"
+                        value={recoveryQuery}
+                        onChange={(e) => setRecoveryQuery(e.target.value)}
+                        placeholder="name@business.com — or your full name"
+                        className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-teal-500"
+                      />
+                      <p className="mt-1 text-[10px] text-slate-500">If you forgot the email, type your full name and fill in the business name below.</p>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Business name (helps find your account)</label>
+                      <input type="text" value={recoveryCompany} onChange={(e) => setRecoveryCompany(e.target.value)} placeholder="e.g. Wanjiku Hardware" className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-teal-500" />
+                    </div>
+                  </>
+                )}
 
-            <div className="flex items-center justify-between pt-2">
-              <button
-                type="button"
-                onClick={() => setMode(mode === 'login' ? 'register' : 'login')}
-                className="text-xs text-teal-400 hover:text-teal-300 font-medium hover:underline cursor-pointer"
-              >
-                {mode === 'login' ? 'Need an account? Register new user' : 'Already registered? Switch to Login'}
-              </button>
+                {recoveryStep === 'questions' && recoveryProfile && (
+                  <>
+                    <p className="text-xs leading-relaxed text-slate-400">
+                      Answer the three questions for <strong className="text-slate-200">{recoveryProfile.name}</strong>. Answers ignore capitals and extra spaces.
+                    </p>
+                    {recoveryProfile.questions.map((question) => (
+                      <label key={question.id} className="block text-xs font-semibold text-slate-300">
+                        {question.prompt}
+                        <input
+                          type="text"
+                          required
+                          autoComplete="off"
+                          value={recoveryAnswers[question.id] || ''}
+                          onChange={(e) => setRecoveryAnswers((previous) => ({ ...previous, [question.id]: e.target.value }))}
+                          className="mt-1 w-full rounded-xl border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-slate-100 focus:border-teal-500 focus:outline-none"
+                        />
+                      </label>
+                    ))}
+                  </>
+                )}
 
-              <button
-                type="submit"
-                className="px-5 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-sm font-semibold shadow-lg shadow-teal-600/30 transition flex items-center gap-2 cursor-pointer"
-              >
-                {mode === 'login' ? <LogIn className="w-4 h-4" /> : <UserPlus className="w-4 h-4" />}
-                {mode === 'login' ? 'Sign In' : 'Register User'}
-              </button>
+                {recoveryStep === 'reset' && recoveryProfile && (
+                  <>
+                    <div className="rounded-xl border border-emerald-800 bg-emerald-950/40 p-3 text-xs text-emerald-300">
+                      Answers verified. Your username is <strong>{recoveryProfile.email}</strong> for {recoveryProfile.companyName}.
+                    </div>
+                    <label className="block text-xs font-semibold text-slate-300">
+                      New password
+                      <input
+                        type="password"
+                        required
+                        minLength={6}
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                        autoComplete="new-password"
+                        className="mt-1 w-full rounded-xl border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-slate-100 focus:border-teal-500 focus:outline-none"
+                      />
+                    </label>
+                    <p className="text-[10px] text-slate-500">At least 6 characters. Your security questions stay the same.</p>
+                  </>
+                )}
+
+                {recoveryStep === 'done' && recoveryProfile && (
+                  <div className="rounded-xl border border-emerald-700 bg-emerald-950/50 p-4 text-xs text-emerald-200">
+                    <p className="flex items-center gap-2 font-bold"><CheckCircle2 size={15} /> Recovery complete</p>
+                    <p className="mt-2">Username: <strong>{recoveryProfile.email}</strong></p>
+                    <p className="mt-1">Password changed on this device. Return to Sign In with the same email.</p>
+                  </div>
+                )}
+              </div>
+            )}
+
+            <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
+              {mode === 'login' ? (
+                <>
+                  <button type="button" onClick={() => switchMode('register')} className="text-xs text-teal-400 hover:text-teal-300 font-medium hover:underline cursor-pointer">
+                    New business? Register as administrator
+                  </button>
+                  <button type="button" onClick={() => switchMode('recover')} className="text-xs text-amber-300 hover:text-amber-200 font-medium hover:underline cursor-pointer inline-flex items-center gap-1">
+                    <HelpCircle size={13} /> Forgot password or email?
+                  </button>
+                </>
+              ) : (
+                <button type="button" onClick={() => switchMode('login')} className="inline-flex items-center gap-1 text-xs text-teal-400 hover:text-teal-300 font-medium hover:underline cursor-pointer">
+                  <ArrowLeft size={13} /> Back to Sign In
+                </button>
+              )}
+
+              {!(mode === 'recover' && recoveryStep === 'done') && (
+                <button
+                  type="submit"
+                  className="px-5 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-sm font-semibold shadow-lg shadow-teal-600/30 transition flex items-center gap-2 cursor-pointer"
+                >
+                  {mode === 'login' ? <LogIn className="w-4 h-4" /> : mode === 'register' ? <UserPlus className="w-4 h-4" /> : <KeyRound className="w-4 h-4" />}
+                  {mode === 'login' ? 'Sign In' : mode === 'register' ? 'Register Business' : recoveryStep === 'identify' ? 'Find My Account' : recoveryStep === 'questions' ? 'Verify Answers' : 'Set New Password'}
+                </button>
+              )}
             </div>
           </form>
         )}

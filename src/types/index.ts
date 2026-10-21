@@ -352,7 +352,7 @@ export interface EmailTemplate {
   body: string;
 }
 
-export type SettingsSection = 'payments' | 'textSizing' | 'landingPage' | 'receipts' | 'appearance' | 'font' | 'backup' | 'privileges' | 'pdfExcel' | 'emailTemplates' | 'auditLogs' | 'dataEraser' | 'regional' | 'plans' | 'teamServices' | 'demoData' | 'chatbot';
+export type SettingsSection = 'payments' | 'textSizing' | 'landingPage' | 'receipts' | 'appearance' | 'font' | 'backup' | 'privileges' | 'pdfExcel' | 'emailTemplates' | 'auditLogs' | 'dataEraser' | 'regional' | 'plans' | 'teamServices' | 'demoData' | 'chatbot' | 'teamAccess';
 
 /** Output formats a receipt can be exported to without a print dialog. */
 export type ReceiptFormat = 'pdf' | 'txt' | 'csv' | 'json' | 'html';
@@ -486,4 +486,6 @@ export interface AuthUser {
   roles: [UserRole, UserRole];
   avatarUrl?: string;
   isAdmin: boolean;
+  /** Business workspace this session may read. Data from other workspaces is never loaded. */
+  workspaceId?: string;
 }

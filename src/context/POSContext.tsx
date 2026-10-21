@@ -53,6 +53,14 @@ import { AppRoute, AppView, parseAppRoute, viewUrl } from '../utils/appRouting.t
 import { isCompanyConfigured, readSetupProgress } from '../utils/onboarding.ts';
 import { privilegeValue, type PrivilegeKey } from '../utils/privileges.ts';
 import { DATASET_DEFINITIONS, type DatasetKey } from '../utils/dataDeletion.ts';
+import {
+  ensureAccountStore, readStore, authenticate, registerBusiness, createTeamAccount,
+  updateTeamAccount, removeTeamAccount, findRecoveryProfile, verifyRecoveryAnswers,
+  resetPasswordWithRecovery, writeActiveWorkspaceId,
+  readWorkspaceData, writeWorkspaceData,
+  type AccountRecord, type AccountResult, type BusinessRegistrationInput,
+  type RecoveryProfile, type TeamLoginInput, type TeamLoginUpdate, type WorkspaceRecord,
+} from '../utils/accounts.ts';
 
 interface POSContextType {
   // Data
@@ -163,9 +171,18 @@ interface POSContextType {
     dueDate: string,
     notes?: string
   ) => InvoiceItem;
-  loginUser: (email: string, pass: string, role: UserRole) => { success: boolean; message: string };
-  registerUser: (fullName: string, email: string, pass: string, role: UserRole) => { success: boolean; message: string };
+  loginUser: (email: string, pass: string, role?: UserRole) => { success: boolean; message: string };
+  registerUser: (input: BusinessRegistrationInput) => { success: boolean; message: string };
   logoutUser: () => void;
+  /** Business workspace for the signed-in session; null while signed out. */
+  workspace: WorkspaceRecord | null;
+  workspaceAccounts: AccountRecord[];
+  lookupRecoveryAccount: (query: string, companyName?: string) => AccountResult<RecoveryProfile>;
+  verifyRecoveryAnswersFor: (email: string, answers: Record<string, string>) => boolean;
+  resetAccountPassword: (email: string, answers: Record<string, string>, newPassword: string) => { success: boolean; message: string };
+  createTeamLogin: (input: Omit<TeamLoginInput, 'workspaceId'>) => { success: boolean; message: string };
+  updateTeamLogin: (email: string, update: TeamLoginUpdate) => { success: boolean; message: string };
+  removeTeamLogin: (email: string) => { success: boolean; message: string };
 }
 
 const POSContext = createContext<POSContextType | undefined>(undefined);
@@ -174,14 +191,14 @@ const LOCAL_STORAGE_KEY = 'code76_pos_state_v1';
 
 export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // Load initial from localStorage or fallback
-  const loadSaved = () => {
+  // Accounts are browser-local. Nothing merchant-specific is preloaded before
+  // sign-in: a signed-out browser shows only the public CODE76 website.
+  const loadSaved = (): Record<string, any> | null => {
     try {
-      const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
-      if (saved) {
-        return JSON.parse(saved);
-      }
+      // Seeds demo logins and migrates the old single-business snapshot once.
+      ensureAccountStore();
     } catch (e) {
-      console.error('Failed to parse saved POS state', e);
+      console.error('Unable to prepare the local account store', e);
     }
     return null;
   };
@@ -225,6 +242,13 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // Authentication stays explicit. Saved merchant data is not an authenticated session.
   const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
+  const [workspaceId, setWorkspaceId] = useState<string | null>(null);
+  const workspaceIdRef = useRef<string | null>(null);
+  const [workspaceAccounts, setWorkspaceAccounts] = useState<AccountRecord[]>([]);
+  const workspaceRecord = (() => {
+    if (!workspaceId) return null;
+    try { return ensureAccountStore().workspaces[workspaceId] || null; } catch { return null; }
+  })();
 
   // A small hash router: no hosting rewrite is needed for /#/pos/... links.
   // The base URL and normal marketing section anchors always select the public site.
@@ -315,7 +339,12 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         landingMetrics,
         settings,
       };
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(stateToSave));
+      const active = workspaceIdRef.current;
+      if (active) {
+        writeWorkspaceData(active, stateToSave);
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify({ ...stateToSave, workspaceId: active }));
+      }
+      // Signed out: nothing merchant-specific is written or restored.
     } catch (e) {
       console.warn('Unable to persist to localStorage', e);
     }
@@ -966,122 +995,187 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     logAuditAction('Added Customer Review', `Received ${review.rating}-star review from ${review.customerName}`);
   };
 
-  // Registered user accounts persisted in localStorage
-  const USERS_STORAGE_KEY = 'code76_pos_registered_users_v1';
-  const loadSavedUsers = (): Record<string, { name: string; password: string; roles: [UserRole, UserRole]; isAdmin: boolean }> => {
-    const defaults: Record<string, { name: string; password: string; roles: [UserRole, UserRole]; isAdmin: boolean }> = {
-      'code76pos@gmail.com': { name: 'Lead Developer Admin', password: '7676', roles: ['CEO', 'Developer'], isAdmin: true },
-      'admin@code76.com': { name: 'System Administrator', password: 'admin123', roles: ['Manager', 'Associate'], isAdmin: true },
-      'sarah.k@code76.com': { name: 'Sarah Kiprono', password: 'password123', roles: ['Cashier', 'Associate'], isAdmin: false },
-      'samuel.m@code76.com': { name: 'Samuel Mwangi', password: 'password123', roles: ['Manager', 'Developer'], isAdmin: true },
-      'david.k@code76.com': { name: 'Dr. David Kimani', password: 'password123', roles: ['CEO', 'Director'], isAdmin: true },
-    };
+  // ------------------------------------------------------------------
+  // Multi-business accounts. Each business is a workspace; signing in as a
+  // member of another business swaps the whole dataset instead of merging it.
+  // ------------------------------------------------------------------
+  const snapshotWorkspace = () => ({
+    company, products, sales, expenses, invoices, customers, vendors, transporters,
+    marketingTeam, companyMembers, relatedCompanies, salaryPayments, teamServiceBriefs,
+    reviews, receiptDispatches, auditLogs, landingMetrics, settings,
+  });
+
+  const refreshAccounts = () => {
     try {
-      const saved = localStorage.getItem(USERS_STORAGE_KEY);
-      if (saved) {
-        return { ...defaults, ...JSON.parse(saved) };
-      }
-    } catch (e) {
-      console.error('Failed to load registered accounts', e);
-    }
-    return defaults;
+      const active = workspaceIdRef.current;
+      if (!active) { setWorkspaceAccounts([]); return; }
+      const scoped = Object.values(ensureAccountStore().accounts)
+        .filter((account) => account.workspaceId === active);
+      setWorkspaceAccounts(scoped);
+    } catch { /* storage blocked */ }
   };
 
-  const [registeredAccounts, setRegisteredAccounts] = useState(loadSavedUsers);
-
-  const saveRegisteredAccount = (email: string, pass: string, name: string, role: UserRole) => {
-    const normEmail = email.trim().toLowerCase();
-    const updated = {
-      ...registeredAccounts,
-      [normEmail]: {
-        name: name || normEmail.split('@')[0],
-        password: pass,
-        roles: [role, 'Associate'] as [UserRole, UserRole],
-        isAdmin: normEmail === 'code76pos@gmail.com' || role === 'CEO' || role === 'Developer',
-      },
+  const applyWorkspaceData = (data: Record<string, any> | null, record: WorkspaceRecord) => {
+    const next = data || {};
+    const blankCompany: CompanyData = {
+      ...INITIAL_COMPANY,
+      name: record.companyName,
+      slogan: '', vision: '', logoUrl: '', coverUrl: '', regNumber: '', taxPin: '',
+      email: record.ownerEmail, tel1: '', tel2: '', whatsapp: '', address: '',
+      location: '', country: '', operatingHours: '',
+      isConfiguredByMerchant: false, isDemo: false,
     };
-    setRegisteredAccounts(updated);
-    try {
-      localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(updated));
-    } catch (e) {
-      console.error('Failed to save user account', e);
-    }
+    setCompany(next.company || blankCompany);
+    setProducts(next.products || []);
+    setSales(next.sales || []);
+    salesRef.current = next.sales || [];
+    setExpenses(next.expenses || []);
+    setInvoices(next.invoices || []);
+    setCustomers(next.customers || []);
+    setVendors(next.vendors || []);
+    setTransporters(next.transporters || []);
+    setMarketingTeam(next.marketingTeam || []);
+    setCompanyMembers(next.companyMembers || []);
+    setRelatedCompanies(next.relatedCompanies || []);
+    directoriesRef.current = {
+      customers: next.customers || [], vendors: next.vendors || [], transporters: next.transporters || [],
+      marketingTeam: next.marketingTeam || [], companyMembers: next.companyMembers || [], relatedCompanies: next.relatedCompanies || [],
+    };
+    setSalaryPayments(next.salaryPayments || []);
+    salaryRef.current = next.salaryPayments || [];
+    setTeamServiceBriefs(next.teamServiceBriefs || []);
+    setReviews(next.reviews || []);
+    setReceiptDispatches(next.receiptDispatches || []);
+    setAuditLogs(next.auditLogs || []);
+    setLandingMetrics(next.landingMetrics || EMPTY_BUSINESS_METRICS);
+    setSettings(mergeAppSettings(
+      INITIAL_SETTINGS,
+      data ? next.settings : { ...INITIAL_SETTINGS, planTier: record.planTier },
+    ));
   };
 
-  const registerUser = (fullName: string, email: string, pass: string, role: UserRole): { success: boolean; message: string } => {
-    const normEmail = email.trim().toLowerCase();
-    if (!normEmail || !pass) {
-      return { success: false, message: 'Please enter both your email address and password.' };
+  /** Switches the in-memory dataset to one business and remembers the choice. */
+  const enterWorkspace = (account: AccountRecord, record: WorkspaceRecord, action: string) => {
+    const previousId = workspaceIdRef.current;
+    if (previousId && previousId !== record.id) {
+      writeWorkspaceData(previousId, snapshotWorkspace());
     }
-    if (pass.length < 4) {
-      return { success: false, message: 'Password must be at least 4 characters long.' };
-    }
-    if (registeredAccounts[normEmail] && normEmail === 'code76pos@gmail.com') {
-      return { success: false, message: 'This official admin account already exists. Please sign in with password 7676.' };
-    }
-    saveRegisteredAccount(normEmail, pass, fullName, role);
+    applyWorkspaceData(readWorkspaceData(record.id), record);
+
+    workspaceIdRef.current = record.id;
+    setWorkspaceId(record.id);
+    writeActiveWorkspaceId(record.id);
+
     const auth: AuthUser = {
-      id: `user-${Date.now()}`,
-      email: normEmail,
-      name: fullName.trim() || normEmail.split('@')[0],
-      roles: [role, 'Associate'],
-      isAdmin: normEmail === 'code76pos@gmail.com' || role === 'CEO' || role === 'Developer',
+      id: account.id,
+      email: account.email,
+      name: account.name,
+      roles: account.roles,
+      isAdmin: account.isAdmin,
+      workspaceId: record.id,
     };
     setCurrentUser(auth);
     setActiveView('pos');
-    logAuditAction('User Registered', `New user ${normEmail} registered with role: ${role}`);
-    return { success: true, message: `Account registered for ${fullName || normEmail}! Launching POS...` };
+    setLoginModalOpen(false);
+    setAuditLogs((previous) => [{
+      id: `log-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+      timestamp: new Date().toISOString(),
+      userId: account.id,
+      userName: account.name,
+      userRole: account.roles[0],
+      action,
+      details: `${account.email} signed in to ${record.companyName} only (${account.isAdmin ? 'administrator' : 'team member'}).`,
+      ipOrDevice: `${navigator.platform || 'Device'} (${navigator.userAgent.slice(0, 32)})`,
+    }, ...previous]);
+    refreshAccounts();
   };
 
-  const loginUser = (email: string, pass: string, role: UserRole): { success: boolean; message: string } => {
-    const normEmail = email.trim().toLowerCase();
-    
-    // 1. Strict verification for code76pos@gmail.com
-    if (normEmail === 'code76pos@gmail.com') {
-      if (pass !== '7676') {
-        logAuditAction('Failed Login Attempt', `Invalid password entered for admin ${normEmail}`);
-        return { success: false, message: 'Incorrect password for administrator account code76pos@gmail.com. Please enter the correct password.' };
-      }
-      const auth: AuthUser = {
-        id: 'user-admin-76',
-        email: normEmail,
-        name: 'Lead Developer Admin',
-        roles: [role || 'CEO', 'Developer'],
-        isAdmin: true,
-      };
-      setCurrentUser(auth);
-      setActiveView('pos');
-      logAuditAction('User Logged In', `Admin ${normEmail} signed in successfully`);
-      return { success: true, message: 'Welcome back Administrator! Authentication successful.' };
+  const registerUser = (input: BusinessRegistrationInput): { success: boolean; message: string } => {
+    const result = registerBusiness(input);
+    if (!result.success || !result.value) {
+      return { success: false, message: result.message };
     }
+    const { account, workspace: record } = result.value;
+    const previousId = workspaceIdRef.current;
+    if (previousId) writeWorkspaceData(previousId, snapshotWorkspace());
+    applyWorkspaceData(null, record);
+    workspaceIdRef.current = record.id;
+    setWorkspaceId(record.id);
+    writeActiveWorkspaceId(record.id);
+    setCurrentUser({
+      id: account.id, email: account.email, name: account.name,
+      roles: account.roles, isAdmin: true, workspaceId: record.id,
+    });
+    setActiveView('pos');
+    setLoginModalOpen(false);
+    setHasDismissedCompanyQA(false);
+    setCompanyQAModalOpen(true);
+    setAuditLogs([{
+      id: `log-${Date.now()}-1`,
+      timestamp: new Date().toISOString(),
+      userId: account.id,
+      userName: account.name,
+      userRole: account.roles[0],
+      action: 'Business Workspace Registered',
+      details: `${record.companyName} created. ${account.email} is the administrator; only this workspace's records are loaded.`,
+      ipOrDevice: `${navigator.platform || 'Device'} (${navigator.userAgent.slice(0, 32)})`,
+    }]);
+    refreshAccounts();
+    return { success: true, message: `${record.companyName} is ready. ${account.name} is the administrator — create staff logins under Company Members or Settings → Team access.` };
+  };
 
-    // 2. Check registered accounts and demo profiles
-    const account = registeredAccounts[normEmail];
-    if (account) {
-      if (account.password !== pass) {
-        logAuditAction('Failed Login Attempt', `Failed login for ${normEmail} - wrong password`);
-        return { success: false, message: 'Incorrect password for this account. Please verify your credentials and try again.' };
-      }
-      const auth: AuthUser = {
-        id: `user-${Date.now()}`,
-        email: normEmail,
-        name: account.name,
-        roles: [role || account.roles[0], account.roles[1] || 'Associate'],
-        isAdmin: account.isAdmin,
-      };
-      setCurrentUser(auth);
-      setActiveView('pos');
-      logAuditAction('User Logged In', `User ${normEmail} signed in with role: ${role || account.roles[0]}`);
-      return { success: true, message: 'Welcome back! Authentication successful.' };
+  const loginUser = (email: string, pass: string, role?: UserRole): { success: boolean; message: string } => {
+    const result = authenticate(email, pass);
+    if (!result.success || !result.value) {
+      logAuditAction('Failed Login Attempt', `${email || 'unknown email'}: ${result.message}`);
+      return { success: false, message: result.message };
     }
-
-    // 3. Email not found
-    logAuditAction('Failed Login Attempt', `Login attempted for unknown email: ${normEmail}`);
-    return { success: false, message: `No account found with email "${normEmail}". Please click "Create Account" or use a quick demo profile.` };
+    const account = result.value;
+    const store = ensureAccountStore();
+    const record = store.workspaces[account.workspaceId];
+    if (!record) {
+      return { success: false, message: 'This login no longer belongs to a business workspace. Ask an administrator to recreate it.' };
+    }
+    if (role && !account.roles.includes(role)) {
+      // The UI no longer lets people pick a different role at sign-in.
+      logAuditAction('Role Override Refused', `${account.email} tried to sign in as ${role}; stored role(s) kept.`);
+    }
+    enterWorkspace(account, record, 'User Logged In');
+    return {
+      success: true,
+      message: `Welcome back, ${account.name}. You are signed in to ${record.companyName} only.`,
+    };
   };
 
   const logoutUser = () => {
+    const activeId = workspaceIdRef.current;
+    if (activeId) writeWorkspaceData(activeId, snapshotWorkspace());
     logAuditAction('User Logged Out', `User ${currentUser?.email} signed out`);
+    // Drop merchant records from memory. They stay in their own workspace file
+    // and are only restored when that same business signs in again.
+    workspaceIdRef.current = null;
+    setWorkspaceId(null);
+    setCompany(INITIAL_COMPANY);
+    setProducts([]);
+    setSales([]);
+    salesRef.current = [];
+    setExpenses([]);
+    setInvoices([]);
+    setCustomers([]);
+    setVendors([]);
+    setTransporters([]);
+    setMarketingTeam([]);
+    setCompanyMembers([]);
+    setRelatedCompanies([]);
+    directoriesRef.current = { customers: [], vendors: [], transporters: [], marketingTeam: [], companyMembers: [], relatedCompanies: [] };
+    setSalaryPayments([]);
+    salaryRef.current = [];
+    setTeamServiceBriefs([]);
+    setReviews([]);
+    setReceiptDispatches([]);
+    setAuditLogs([]);
+    setLandingMetrics(EMPTY_BUSINESS_METRICS);
+    setSettings(INITIAL_SETTINGS);
     setCurrentUser(null);
     setCompanyQAModalOpen(false);
     setDemoWarningOpen(false);
@@ -1091,6 +1185,73 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setReviewModalSale(null);
     setLoginModalOpen(false);
     setActiveView('landing');
+  };
+
+  const lookupRecoveryAccount = (query: string, companyName = '') => findRecoveryProfile(query, companyName);
+  const verifyRecoveryAnswersFor = (email: string, answers: Record<string, string>) => verifyRecoveryAnswers(email, answers);
+  const resetAccountPassword = (email: string, answers: Record<string, string>, newPassword: string) => {
+    const result = resetPasswordWithRecovery(email, answers, newPassword);
+    if (result.success) {
+      logAuditAction('Password Reset', `Recovery questions verified locally for ${email}; password changed in this browser.`);
+      refreshAccounts();
+    }
+    return { success: result.success, message: result.message };
+  };
+
+  const assertWorkspaceAdmin = (action: string): { success: boolean; message: string } | null => {
+    if (!currentUser) return { success: false, message: 'Sign in before managing team access.' };
+    if (!currentUser.isAdmin) return { success: false, message: `Only the business administrator can ${action}.` };
+    if (!workspaceIdRef.current) return { success: false, message: 'No business workspace is open.' };
+    return null;
+  };
+
+  const createTeamLogin = (input: Omit<TeamLoginInput, 'workspaceId'>): { success: boolean; message: string } => {
+    const denied = assertWorkspaceAdmin('create staff logins');
+    if (denied) return denied;
+    const result = createTeamAccount({ ...input, workspaceId: workspaceIdRef.current! });
+    if (result.success) {
+      refreshAccounts();
+      logAuditAction('Team Login Created', `${input.memberName} (${input.email}) can now sign in to ${company.name} only.`);
+    }
+    return { success: result.success, message: result.message };
+  };
+
+  const updateTeamLogin = (email: string, update: TeamLoginUpdate): { success: boolean; message: string } => {
+    const denied = assertWorkspaceAdmin('change staff logins');
+    if (denied) return denied;
+    const store = ensureAccountStore();
+    const target = store.accounts[email.trim().toLowerCase()];
+    if (!target || target.workspaceId !== workspaceIdRef.current) {
+      return { success: false, message: 'That login belongs to another business workspace and cannot be changed here.' };
+    }
+    if (target.isAdmin && update.roles) {
+      return { success: false, message: 'Administrator roles cannot be reduced from the team panel.' };
+    }
+    const result = updateTeamAccount(email, update);
+    if (result.success) {
+      refreshAccounts();
+      logAuditAction('Team Login Updated', `Credentials for ${target.name} were updated by ${currentUser?.name}.`);
+    }
+    return { success: result.success, message: result.message };
+  };
+
+  const removeTeamLogin = (email: string): { success: boolean; message: string } => {
+    const denied = assertWorkspaceAdmin('remove staff logins');
+    if (denied) return denied;
+    const store = ensureAccountStore();
+    const target = store.accounts[email.trim().toLowerCase()];
+    if (!target || target.workspaceId !== workspaceIdRef.current) {
+      return { success: false, message: 'That login belongs to another business workspace and cannot be removed here.' };
+    }
+    if (currentUser?.email === target.email) {
+      return { success: false, message: 'You cannot delete the login you are using. Sign in as another administrator first.' };
+    }
+    const result = removeTeamAccount(email);
+    if (result.success) {
+      refreshAccounts();
+      logAuditAction('Team Login Removed', `${target.name} can no longer sign in. Their historical records stay in this workspace.`);
+    }
+    return { success: result.success, message: result.message };
   };
 
   return (
@@ -1183,6 +1344,14 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         loginUser,
         logoutUser,
         registerUser,
+        workspace: workspaceRecord,
+        workspaceAccounts,
+        lookupRecoveryAccount,
+        verifyRecoveryAnswersFor,
+        resetAccountPassword,
+        createTeamLogin,
+        updateTeamLogin,
+        removeTeamLogin,
         companyQAModalOpen,
         setCompanyQAModalOpen,
         hasDismissedCompanyQA,

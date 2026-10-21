@@ -1,6 +1,8 @@
 import { appDialogs } from '../../utils/appDialogs.ts';
 import {DemoTrainingSettings} from '../common/DemoTrainingSettings.tsx';
 import { TeamServicesPanel } from '../common/TeamServicesPanel.tsx';
+import { TeamAccessPanel } from '../common/TeamAccessPanel.tsx';
+import { writeWorkspaceData } from '../../utils/accounts.ts';
 import { canOpenSettings, planTier } from '../../utils/plans.ts';
 import { regional, validTimeZone } from '../../utils/regional.ts';
 import { PAYMENT_METHODS } from '../../config/paymentMethods.ts';
@@ -28,6 +30,7 @@ import {
   Lock,
   Upload,
   Download,
+  KeyRound,
   HelpCircle,
   FileText,
   UserCheck,
@@ -304,8 +307,11 @@ export const SettingsPlatform: React.FC = () => {
     if (!currentUser?.isAdmin) { setSaveAlert('Only an administrator can restore a full database snapshot.'); return; }
     try {
       if (!restoreJson.trim()) return;
-      JSON.parse(restoreJson);
+      const parsed = JSON.parse(restoreJson);
       localStorage.setItem('code76_pos_state_v1', restoreJson);
+      // The signed-in business also keeps its own scoped snapshot; update both
+      // so a restore can never leak records into another workspace.
+      if (currentUser?.workspaceId) writeWorkspaceData(currentUser.workspaceId, parsed);
       void appDialogs.alert({ title: 'Backup restored', message: 'The saved snapshot was written to this browser. Reloading the workspace now.', tone: 'success' }).then(() => window.location.reload());
     } catch {
       void appDialogs.alert({ title: 'Backup not restored', message: 'Invalid JSON file format. Please upload a valid CODE76 POS backup.', tone: 'danger' });
@@ -358,11 +364,12 @@ export const SettingsPlatform: React.FC = () => {
             { id: 'appearance', label: 'App Appearance Settings', icon: Palette },
             { id: 'font', label: 'Font Text Settings', icon: FileText },
             { id: 'backup', label: 'Data Backup Settings', icon: HardDrive },
-            { id: 'privileges', label: 'App User Privilege Settings', icon: Shield },
+            { id: 'teamAccess', label: 'Team Access & Logins', icon: KeyRound, adminOnly: true },
+            { id: 'privileges', label: 'App User Privilege Settings', icon: Shield, adminOnly: true },
             { id: 'pdfExcel', label: 'PDF & Excel Settings (CSV Import)', icon: FileSpreadsheet },
             { id: 'emailTemplates', label: 'Email Marketing Templates', icon: Mail },
             { id: 'auditLogs', label: 'Audit Logs & Login History', icon: ShieldCheck },
-          ].filter(tab=>canOpenSettings(settings,tab.id as any)&&tab.label.toLowerCase().includes(settingsSearch.toLowerCase())).map((tab) => {
+          ].filter(tab=>canOpenSettings(settings,tab.id as any)&&(!('adminOnly' in tab) || !tab.adminOnly || currentUser?.isAdmin)&&tab.label.toLowerCase().includes(settingsSearch.toLowerCase())).map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
             return (
@@ -1061,6 +1068,10 @@ export const SettingsPlatform: React.FC = () => {
           )}
 
           {/* TAB 8: PRIVILEGES (RBAC) */}
+          {activeTab === 'teamAccess' && (
+            <TeamAccessPanel />
+          )}
+
           {activeTab === 'privileges' && (
             currentUser?.isAdmin
               ? <PrivilegeMatrix formSettings={formSettings} setFormSettings={setFormSettings} savedSettings={settings} currentUser={currentUser} />

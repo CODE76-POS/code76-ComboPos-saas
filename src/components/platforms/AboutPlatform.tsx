@@ -261,6 +261,8 @@ export const AboutPlatform: React.FC = () => {
                     { title: 'Money out', copy: 'Expenses with supplier snapshots, sales invoices and stock-purchase invoices with due dates.' },
                     { title: 'Analytics', copy: 'Filterable operational insights, margin/COGS, payment mix, top items, checkout hours and aging.' },
                     { title: 'Growth tools', copy: 'Private business landing page, review capture and a configurable catalogue-only assistant.' },
+                    { title: 'Separate business workspaces', copy: 'Registering a business creates its own workspace. The person who registers is the administrator; staff logins are attached to company members and load only that business\'s records.' },
+                    { title: 'Team access & recovery', copy: 'Administrators create staff usernames from company members. Three security questions reveal a forgotten username or reset a password using hashed answers stored in this browser.' },
                     { title: 'Controls', copy: 'Role privilege matrix, audit trail, CSV import, JSON backup/restore and per-platform deletion.' },
                     { title: 'In-app dialogs', copy: 'Notices, confirmations, choices and prompts render as widgets — browser pop-up blocking cannot hide them.' },
                   ].map((card) => (
@@ -291,7 +293,7 @@ export const AboutPlatform: React.FC = () => {
               <div className="grid gap-3 sm:grid-cols-2">
                 {[
                   { title: 'A workflow you can inspect', copy: 'Use clearly marked demo records or enter test records of your own. Prices, amounts and plan restrictions remain visible.' },
-                  { title: 'Your records, clearly bounded', copy: 'Business records live in this browser. This is not a server-backed, production multi-tenant deployment or a bank/payment processor.' },
+                  { title: 'Your records, clearly bounded', copy: 'Each business has its own workspace in this browser and switching businesses swaps the entire dataset. This is still not a server-backed, production multi-tenant deployment or a bank/payment processor.' },
                   { title: 'Assistance without false promises', copy: 'The assistant explains supplied data and contacts. It does not reserve stock, guarantee results or perform team services automatically.' },
                   { title: 'Support you can reach', copy: 'Use Contact support or the email/social links below. Direct server mail needs administrator SMTP configuration; drafts are not sent until you send them.' },
                 ].map((card) => (
@@ -328,7 +330,7 @@ export const AboutPlatform: React.FC = () => {
           {activeTab === 'terms' && (
             <section className="space-y-4 text-sm leading-relaxed text-slate-400">
               <h2 className="text-xl font-bold text-slate-100">Safe-use guidelines</h2>
-              <p>Use synthetic or non-sensitive test data in this preview. Current roles and plans are demonstration controls, not production tenant isolation. Do not enter real passwords, private customer/payroll records, card data or access tokens.</p>
+              <p>Use synthetic or non-sensitive test data in this preview. Workspaces are separated inside this browser, but roles, plans and accounts remain demonstration controls rather than server-enforced tenant security. Do not enter real passwords, private customer/payroll records, card data or access tokens. Anyone using the same browser profile could inspect local storage.</p>
               <p>Recorded sales, debt collections and salary entries are bookkeeping only. No funds are transferred. Review figures and source documents independently before financial use.</p>
               <p>Demo loading replaces the business records in this browser only after administrator confirmation. Create permitted backups before replacing or deleting records. Uploaded/captured customer pictures are not watermarked by the creator credit.</p>
               <p>Receipt “send” actions open a draft in your own mail, WhatsApp or SMS app. A prepared draft, download, local message log, service brief or displayed email address is not evidence that a message or service was delivered.</p>
