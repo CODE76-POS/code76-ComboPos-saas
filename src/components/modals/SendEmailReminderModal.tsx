@@ -9,7 +9,7 @@ interface SendEmailReminderModalProps {
 }
 
 export const SendEmailReminderModal: React.FC<SendEmailReminderModalProps> = ({ sale, onClose }) => {
-  const { company, settings, logAuditAction } = usePOS();
+  const { company, settings, logAuditAction, hasFeature } = usePOS();
 
   const [subject, setSubject] = useState('');
   const [body, setBody] = useState('');
@@ -42,12 +42,12 @@ export const SendEmailReminderModal: React.FC<SendEmailReminderModalProps> = ({ 
     setSentSuccess(false);
   }, [sale, company, settings]);
 
-  if (!sale) return null;
+  if (!sale || !hasFeature('email')) return null;
 
   const handleSend = () => {
     logAuditAction(
-      'Sent Review Request Email',
-      `Sent polite appreciation & testimonial request to ${sale.customerName} for Sale #${sale.receiptNo}`
+      'Prepared Follow-Up Draft',
+      `Prepared a local appreciation/review draft (not sent) to ${sale.customerName} for Sale #${sale.receiptNo}`
     );
     setSentSuccess(true);
     setTimeout(() => {
@@ -84,7 +84,7 @@ export const SendEmailReminderModal: React.FC<SendEmailReminderModalProps> = ({ 
         {sentSuccess ? (
           <div className="bg-emerald-950/60 border border-emerald-800/60 rounded-xl p-8 text-center my-4">
             <CheckCircle2 className="w-12 h-12 text-emerald-400 mx-auto mb-3" />
-            <h4 className="text-lg font-bold text-emerald-200">Appreciation Email Sent!</h4>
+            <h4 className="text-lg font-bold text-emerald-200">Follow-up draft prepared—not sent</h4>
             <p className="text-sm text-emerald-300/90 mt-1">
               Polite follow-up and review invitation has been dispatched to {sale.customerName}.
             </p>
@@ -141,7 +141,7 @@ export const SendEmailReminderModal: React.FC<SendEmailReminderModalProps> = ({ 
                 className="px-5 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-sm font-semibold shadow-lg shadow-sky-600/30 transition flex items-center gap-2 cursor-pointer"
               >
                 <Send className="w-4 h-4" />
-                Send Appreciation Email
+                Prepare follow-up draft
               </button>
             </div>
           </div>

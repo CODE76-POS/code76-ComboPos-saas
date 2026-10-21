@@ -1,0 +1,115 @@
+### Page
+- Page URL: http://127.0.0.1:3000/#/pos/landing_page_builder
+- Page Title: Business Landing Page | CODE76 POS — Private Workspace
+### Snapshot
+```yaml
+- generic [ref=f5e4]:
+  - banner [ref=f5e779]:
+    - generic [ref=f5e780]:
+      - generic [ref=f5e781]:
+        - button "76 CODE76 POS Enterprise" [ref=f5e782] [cursor=pointer]:
+          - generic [ref=f5e783]: "76"
+          - generic [ref=f5e785]:
+            - generic [ref=f5e786]: CODE76 POS
+            - generic [ref=f5e787]: Enterprise
+        - generic [ref=f5e788]:
+          - button "Switch to High-Contrast Light Mode" [ref=f5e789] [cursor=pointer]
+          - button "Click to view help guide and settings for this platform" [ref=f5e796] [cursor=pointer]
+          - button "DR" [ref=f5e800] [cursor=pointer]
+      - generic [ref=f5e802]:
+        - generic [ref=f5e803]:
+          - button "Desktop View (Full Width)" [ref=f5e804] [cursor=pointer]
+          - button "Laptop View (1024px)" [ref=f5e807] [cursor=pointer]
+          - button "Tablet View (768px)" [ref=f5e810] [cursor=pointer]
+          - button "Phone Mobile View (390px)" [ref=f5e813] [cursor=pointer]
+        - generic [ref=f5e816]:
+          - button "Switch to High-Contrast Light Mode" [ref=f5e817] [cursor=pointer]
+          - button "Demo Data" [ref=f5e824] [cursor=pointer]
+          - generic [ref=f5e830]:
+            - button "Open your private Business Landing Page inside the POS" [ref=f5e831] [cursor=pointer]
+            - button "CODE76 main site — product information and sign-in, separate from your business page" [ref=f5e835] [cursor=pointer]
+    - generic [ref=f5e840]:
+      - button "Sales POS" [ref=f5e841] [cursor=pointer]
+      - button "Sales History" [ref=f5e845] [cursor=pointer]
+      - button "Inventory" [ref=f5e850] [cursor=pointer]
+      - button "Expenses" [ref=f5e855] [cursor=pointer]
+      - button "Invoices" [ref=f5e859] [cursor=pointer]
+      - button "Analytics & P&L" [ref=f5e863] [cursor=pointer]
+      - button "Customers" [ref=f5e866] [cursor=pointer]
+      - button "Vendors" [ref=f5e872] [cursor=pointer]
+      - button "Transporters" [ref=f5e877] [cursor=pointer]
+      - button "Marketing Team" [ref=f5e883] [cursor=pointer]
+      - button "Company Members" [ref=f5e887] [cursor=pointer]
+      - button "My Company" [ref=f5e893] [cursor=pointer]
+      - button "Messaging" [ref=f5e897] [cursor=pointer]
+      - button "Business Landing Page" [active] [ref=f5e900] [cursor=pointer]
+      - button "Settings" [ref=f5e905] [cursor=pointer]
+      - button "Audit & Access Logs" [ref=f5e909] [cursor=pointer]
+      - button "About & Manual" [ref=f5e913] [cursor=pointer]
+  - main [ref=f5e5]:
+    - generic [ref=f5e1016]:
+      - navigation [ref=f5e1017]:
+        - generic [ref=f5e1024]:
+          - generic [ref=f5e1025]: Your Business
+          - generic [ref=f5e1026]: Products & services from our business
+        - generic [ref=f5e1027]:
+          - button "Open private business page link" [ref=f5e1028] [cursor=pointer]
+          - generic [ref=f5e1035]:
+            - button "Business page settings" [ref=f5e1036] [cursor=pointer]
+            - button "Return to POS" [ref=f5e1040] [cursor=pointer]
+      - note [ref=f5e1046]:
+        - strong [ref=f5e1047]: Private Business Landing Page preview.
+        - text: Only signed-in POS users can access this screen. This page is not published to the public website.
+      - generic [ref=f5e1050]:
+        - strong [ref=f5e1051]: This catalog is being prepared.
+        - text: Products and services will appear here when the business adds them to Inventory.
+      - generic [ref=f5e1053]:
+        - generic [ref=f5e1054]: Our products & services
+        - heading "TEST Internal Builder Only" [level=1] [ref=f5e1059]
+        - paragraph [ref=f5e1060]: Explore our products and services. Contact us for availability and more information.
+        - generic [ref=f5e1061]:
+          - generic [ref=f5e1067]:
+            - strong [ref=f5e1068]: "0"
+            - text: Live SKUs Synchronized
+          - strong [ref=f5e1073]: No reviews yet
+          - generic [ref=f5e1078]:
+            - text: "Hours:"
+            - strong [ref=f5e1079]: Contact us for hours
+        - generic [ref=f5e1080]:
+          - link "Browse Featured Items" [ref=f5e1081] [cursor=pointer]:
+            - /url: "#featured"
+          - link "Browse the Catalog" [ref=f5e1086] [cursor=pointer]:
+            - /url: "#matcher"
+      - generic [ref=f5e1091]:
+        - generic [ref=f5e1092]:
+          - generic [ref=f5e1093]:
+            - generic [ref=f5e1094]: From our Inventory
+            - heading "Featured Products & Services" [level=2] [ref=f5e1099]
+          - paragraph [ref=f5e1100]: Products, prices and stock from this business’s Inventory. Contact the business to confirm availability.
+        - status [ref=f5e1101]:
+          - heading "No products or services yet" [level=3] [ref=f5e1106]
+          - paragraph [ref=f5e1107]: This business has not added any catalog items. There are no sample products here.
+          - button "Add your first item in Inventory" [ref=f5e1108] [cursor=pointer]
+      - generic [ref=f5e1110]:
+        - generic [ref=f5e1111]:
+          - generic [ref=f5e1112]: Interactive Commercial Matcher
+          - heading "Find What You’re Looking For" [level=2] [ref=f5e1116]
+          - paragraph [ref=f5e1117]: Browse this business’s categories, or search for a product or service by name, description or SKU.
+        - generic [ref=f5e1118]:
+          - button "All Items" [ref=f5e1120] [cursor=pointer]
+          - textbox "Search catalog SKUs..." [ref=f5e1125]
+      - generic [ref=f5e1128]:
+        - generic [ref=f5e1129]:
+          - heading "Your Business" [level=3] [ref=f5e1134]
+          - paragraph
+          - generic [ref=f5e1135]: "TAX PIN: Not provided"
+        - generic [ref=f5e1136]:
+          - heading "Direct Contacts" [level=4] [ref=f5e1137]
+          - generic [ref=f5e1138]: Phone not provided
+          - generic [ref=f5e1142]: Email not provided
+        - generic [ref=f5e1147]:
+          - heading "Store Hours & Location" [level=4] [ref=f5e1148]
+          - generic [ref=f5e1149]: Location not provided
+          - generic [ref=f5e1154]: Contact us for hours
+      - button "Open Your Business assistant" [ref=f5e1159] [cursor=pointer]
+```

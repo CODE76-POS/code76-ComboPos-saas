@@ -1,0 +1,166 @@
+### Page
+- Page URL: http://127.0.0.1:5173/#/pos/landing_page_builder
+- Page Title: Business Landing Page | CODE76 POS — Private Workspace
+### Snapshot
+```yaml
+- generic [ref=e4]:
+  - banner [ref=e795]:
+    - generic [ref=e796]:
+      - button "76 CODE76 POS Enterprise Product & Service SaaS ERP System" [ref=e798] [cursor=pointer]:
+        - generic [ref=e799]: "76"
+        - generic [ref=e800]:
+          - generic [ref=e801]:
+            - generic [ref=e802]: CODE76 POS
+            - generic [ref=e803]: Enterprise
+          - paragraph [ref=e804]: Product & Service SaaS ERP System
+      - generic [ref=e805]:
+        - generic [ref=e806]:
+          - button "Desktop View (Full Width)" [ref=e807] [cursor=pointer]
+          - button "Laptop View (1024px)" [ref=e810] [cursor=pointer]
+          - button "Tablet View (768px)" [ref=e813] [cursor=pointer]
+          - button "Phone Mobile View (390px)" [ref=e816] [cursor=pointer]
+        - generic [ref=e819]:
+          - button "Demo Data" [ref=e820] [cursor=pointer]
+          - button "Business Page" [ref=e1482] [cursor=pointer]
+          - button "Click to view help guide and settings for this platform" [ref=e826] [cursor=pointer]
+          - button "Active user session and access controls" [ref=e831] [cursor=pointer]:
+            - generic [ref=e832]: DR
+            - generic [ref=e833]:
+              - generic [ref=e834]: Dr. David Kimani
+              - generic [ref=e835]: "Role: CEO"
+    - generic [ref=e836]:
+      - generic [ref=e837]:
+        - generic [ref=e841]: App link
+        - generic [ref=e842]:
+          - generic [ref=e843]:
+            - generic [ref=e844]: App link
+            - textbox "App link" [ref=e845]: http://127.0.0.1:5173/
+            - button "Copy app link" [ref=e846] [cursor=pointer]:
+              - generic [ref=e850]: Copy link
+            - link "Open app link in a new tab" [ref=e851] [cursor=pointer]:
+              - /url: http://127.0.0.1:5173/
+          - status [ref=e856]
+        - button "Current demo plan" [ref=e857]: Max · demo
+      - paragraph [ref=e858]: Open this root link to reach CODE76 sign-in/register. Browser-local records and sessions do not sync between browsers.
+    - generic [ref=e860]:
+      - button "Sales POS" [ref=e861] [cursor=pointer]
+      - button "Sales History" [ref=e865] [cursor=pointer]
+      - button "Inventory" [ref=e870] [cursor=pointer]
+      - button "Expenses" [ref=e1487] [cursor=pointer]
+      - button "Invoices" [ref=e1491] [cursor=pointer]
+      - button "Analytics & P&L" [ref=e1495] [cursor=pointer]
+      - button "Customers" [ref=e1498] [cursor=pointer]
+      - button "Vendors" [ref=e1504] [cursor=pointer]
+      - button "Transporters" [ref=e1509] [cursor=pointer]
+      - button "Marketing Team" [ref=e1515] [cursor=pointer]
+      - button "Company Members" [ref=e1519] [cursor=pointer]
+      - button "My Company" [ref=e1525] [cursor=pointer]
+      - button "Messaging" [ref=e1529] [cursor=pointer]
+      - button "Business Landing Page" [ref=e1532] [cursor=pointer]
+      - button "Settings" [ref=e875] [cursor=pointer]
+      - button "Audit & Access Logs" [ref=e1537] [cursor=pointer]
+      - button "About & Manual" [ref=e879] [cursor=pointer]
+  - main [ref=e5]:
+    - generic [ref=e1577]:
+      - generic [ref=e1578]:
+        - navigation "Business identity and private actions" [ref=e1579]:
+          - generic [ref=e1586]:
+            - generic [ref=e1587]: Your Business
+            - generic [ref=e1588]: Products & services from our business
+          - generic [ref=e1589]:
+            - button "Open private business page link" [ref=e1590] [cursor=pointer]:
+              - generic [ref=e1597]: Private Link
+            - generic [ref=e1598]:
+              - generic [ref=e1599]:
+                - generic [ref=e1600]: DR
+                - generic [ref=e1601]:
+                  - generic [ref=e1602]: Dr. David Kimani
+                  - generic [ref=e1603]: CEO
+              - button "Business page settings" [ref=e1604] [cursor=pointer]
+              - button "Return to POS" [ref=e1608] [cursor=pointer]
+        - navigation "Business page sections" [ref=e1614]:
+          - generic [ref=e1615]:
+            - link "Overview" [ref=e1616] [cursor=pointer]:
+              - /url: "#business-start"
+            - link "Featured" [ref=e1617] [cursor=pointer]:
+              - /url: "#featured"
+            - link "Catalog" [ref=e1618] [cursor=pointer]:
+              - /url: "#matcher"
+            - link "How to choose" [ref=e1619] [cursor=pointer]:
+              - /url: "#buying-guide"
+            - link "Ask the business" [active] [ref=e1620] [cursor=pointer]:
+              - /url: "#assistant"
+            - link "Contact" [ref=e1621] [cursor=pointer]:
+              - /url: "#contact"
+      - note [ref=e1622]:
+        - strong [ref=e1623]: Private Business Landing Page preview.
+        - text: Only signed-in POS users can access this screen. This page is not published to the public website. Its content is managed separately from CODE76 product marketing.
+      - generic [ref=e1626]:
+        - strong [ref=e1627]: This catalog is being prepared.
+        - text: Products and services will appear here when the business adds them to Inventory.
+      - generic [ref=e1629]:
+        - generic [ref=e1630]: Our products & services
+        - heading "Your Business" [level=1] [ref=e1635]
+        - paragraph [ref=e1636]: Explore our products and services. Contact us for availability and more information.
+        - generic [ref=e1637]:
+          - generic [ref=e1643]:
+            - strong [ref=e1644]: "0"
+            - text: catalog entries from Inventory
+          - generic [ref=e1649]:
+            - text: "Hours:"
+            - strong [ref=e1650]: Contact us for hours
+        - generic [ref=e1651]:
+          - link "Explore featured items" [ref=e1652] [cursor=pointer]:
+            - /url: "#featured"
+          - link "Find the right product or service" [ref=e1657] [cursor=pointer]:
+            - /url: "#matcher"
+      - generic [ref=e1663]:
+        - article [ref=e1664]:
+          - heading "1. Find a good fit" [level=2] [ref=e1665]
+          - paragraph [ref=e1666]: Browse the actual catalog, compare descriptions and check the displayed price or service billing unit.
+        - article [ref=e1667]:
+          - heading "2. Confirm the details" [level=2] [ref=e1668]
+          - paragraph [ref=e1669]: Ask about current availability, service scope, timing and any applicable terms before making a decision.
+        - article [ref=e1670]:
+          - heading "3. Choose your next step" [level=2] [ref=e1671]
+          - paragraph [ref=e1672]: Use the business contact details to arrange an order or service. This preview does not take payment, reserve stock or confirm appointments.
+      - generic [ref=e1673]:
+        - generic [ref=e1674]:
+          - generic [ref=e1675]:
+            - generic [ref=e1676]: From our Inventory
+            - heading "Featured Products & Services" [level=2] [ref=e1681]
+          - paragraph [ref=e1682]: Products, prices and stock from this business’s Inventory. Contact the business to confirm availability.
+        - status [ref=e1683]:
+          - heading "No products or services yet" [level=3] [ref=e1688]
+          - paragraph [ref=e1689]: This business has not added any catalog items. There are no sample products here.
+          - button "Add your first item in Inventory" [ref=e1690] [cursor=pointer]
+      - generic [ref=e1692]:
+        - generic [ref=e1693]:
+          - generic [ref=e1694]: Interactive Commercial Matcher
+          - heading "Find What You’re Looking For" [level=2] [ref=e1698]
+          - paragraph [ref=e1699]: Browse this business’s categories, or search for a product or service by name, description or SKU.
+        - generic [ref=e1700]:
+          - button "All Items" [ref=e1702] [cursor=pointer]
+          - textbox "Search catalog SKUs..." [ref=e1707]
+      - generic [ref=e1709]:
+        - generic [ref=e1710]:
+          - heading "A question before you decide?" [level=2] [ref=e1711]
+          - paragraph [ref=e1712]: Ask about this business's actual catalog and contacts. Confirm availability and terms directly; the assistant does not take payment, reserve stock or confirm appointments.
+        - button "Open Your Business assistant" [ref=e1713] [cursor=pointer]:
+          - generic [ref=e1719]:
+            - generic [ref=e1720]: Ask about this business
+            - generic [ref=e1725]: Products, services & contact details
+      - generic [ref=e1728]:
+        - generic [ref=e1729]:
+          - heading "Your Business" [level=3] [ref=e1734]
+          - paragraph
+          - generic [ref=e1735]: "TAX PIN: Not provided"
+        - generic [ref=e1736]:
+          - heading "Direct Contacts" [level=4] [ref=e1737]
+          - generic [ref=e1738]: Phone not provided
+          - generic [ref=e1742]: Email not provided
+        - generic [ref=e1747]:
+          - heading "Store Hours & Location" [level=4] [ref=e1748]
+          - generic [ref=e1749]: Location not provided
+          - generic [ref=e1754]: Contact us for hours
+```

@@ -1,4 +1,15 @@
-import React, { useState } from 'react';
+import { appDialogs } from '../../utils/appDialogs.ts';
+import {DemoTrainingSettings} from '../common/DemoTrainingSettings.tsx';
+import { TeamServicesPanel } from '../common/TeamServicesPanel.tsx';
+import { canOpenSettings, planTier } from '../../utils/plans.ts';
+import { regional, validTimeZone } from '../../utils/regional.ts';
+import { PAYMENT_METHODS } from '../../config/paymentMethods.ts';
+import { RegionalSettingsForm } from '../common/RegionalSettingsForm.tsx';
+import { DemoPlanSettings } from '../common/DemoPlanSettings.tsx';
+import { PlanNotice } from '../common/PlanNotice.tsx';
+import { accessHistoryPermissions, permittedBackup } from '../../utils/accessHistory.ts';
+import { DEFAULT_SERVICE_UNIT, parseServiceUnit } from '../../utils/serviceUnits.ts';
+import React, { useState, useEffect } from 'react';
 import { usePOS } from '../../context/POSContext.tsx';
 import {
   Settings,
@@ -28,15 +39,26 @@ import {
   Building,
   Truck,
   RotateCcw,
+  Database,
+  Sun,
+  Moon,
+  MessageCircle,
 } from 'lucide-react';
 import { ALL_ROLES, AppSettings, UserRole } from '../../types/index.ts';
 import { parseCSV } from '../../utils/exportUtils.ts';
 import { AuditLogPlatform } from './AuditLogPlatform.tsx';
+import { DataDeletionCenter } from '../common/DataDeletionCenter.tsx';
+import { ChatbotSettingsPanel } from '../common/ChatbotSettingsPanel.tsx';
+import { PrivilegeMatrix } from '../common/PrivilegeMatrix.tsx';
+import { RECEIPT_CHANNELS, RECEIPT_FORMATS, DEFAULT_RECEIPT_SEND_TEMPLATE } from '../../config/assistant.ts';
 
 export const SettingsPlatform: React.FC = () => {
   const {
     settings,
+    setCompany,
     setSettings,
+    settingsSection: activeTab,
+    setSettingsSection: setActiveTab,
     currentUser,
     hasPrivilege,
     addProduct,
@@ -44,8 +66,6 @@ export const SettingsPlatform: React.FC = () => {
     addExpense,
     setHoverHelpPlatform,
     logAuditAction,
-    wipeDataToCleanState,
-    wipeSelectedDatabases,
     products,
     sales,
     expenses,
@@ -59,22 +79,13 @@ export const SettingsPlatform: React.FC = () => {
     auditLogs,
   } = usePOS();
 
-  const [activeTab, setActiveTab] = useState<
-    | 'payments'
-    | 'textSizing'
-    | 'landingPage'
-    | 'receipts'
-    | 'appearance'
-    | 'font'
-    | 'backup'
-    | 'privileges'
-    | 'pdfExcel'
-    | 'emailTemplates'
-    | 'auditLogs'
-    | 'dataEraser'
-  >('payments');
+
 
   const [formSettings, setFormSettings] = useState<AppSettings>(settings);
+  useEffect(() => {
+    setFormSettings(previous => ({ ...previous, textSizing: settings.textSizing, appearance: { ...previous.appearance, theme: settings.appearance.theme } }));
+  }, [settings.appearance.theme, settings.textSizing]);
+  const [settingsSearch,setSettingsSearch]=useState('');
   const [saveAlert, setSaveAlert] = useState<string>('');
 
   // CSV Import State in PDF & Excel Settings
@@ -91,8 +102,19 @@ export const SettingsPlatform: React.FC = () => {
   // Backup restore file input
   const [restoreJson, setRestoreJson] = useState<string>('');
 
+
   const handleSave = () => {
-    setSettings(formSettings);
+    if (!canOpenSettings(settings,activeTab)) { setSaveAlert('This settings section is not included in your demo plan.'); return; }
+    if (!validTimeZone(regional(formSettings).timeZone) || !/^[A-Z]{3}$/.test(formSettings.payments.defaultCurrency)) { setSaveAlert('Choose a valid time zone and a three-letter currency code.'); return; }
+    if (!formSettings.payments.acceptedMethods.some(method=>method!=='Credit / Debt')) { setSaveAlert('Enable at least one non-debt payment channel.'); return; }
+    if (activeTab === 'privileges' && !currentUser?.isAdmin) {
+      setSaveAlert('Only an administrator can change role privileges.');
+      return;
+    }
+    // Non-admin appearance/preferences saves must not modify the permission map.
+    const permitted = planTier(settings)==='free' ? { ...settings, payments:formSettings.payments, appearance:formSettings.appearance, font:formSettings.font, textSizing:formSettings.textSizing, receipts:formSettings.receipts, regional:formSettings.regional } : formSettings;
+    setSettings({ ...permitted, planTier:settings.planTier, privileges:currentUser?.isAdmin ? permitted.privileges : settings.privileges });
+    setCompany(previous=>({...previous,currency:formSettings.payments.defaultCurrency}));
     logAuditAction('Updated System Settings', `Saved configuration changes in ${activeTab}`);
     setSaveAlert('Settings saved successfully!');
     setTimeout(() => setSaveAlert(''), 2500);
@@ -184,6 +206,10 @@ export const SettingsPlatform: React.FC = () => {
         return;
       }
 
+      if (targetImportPlatform === 'inventory') {
+        const invalid = records.find(row => row.type?.toLowerCase() === 'service' && (row.serviceUnit || row.serviceunit)?.trim() && !parseServiceUnit(row.serviceUnit || row.serviceunit));
+        if (invalid) throw new Error('Unsupported serviceUnit. Use task, minute, hour, day, week, month, year, session, visit or project.');
+      }
       // Add to database
       let count = 0;
       records.forEach((row) => {
@@ -195,9 +221,10 @@ export const SettingsPlatform: React.FC = () => {
             barcode: row.barcode || `7600${Math.floor(100000 + Math.random() * 900000)}`,
             costPrice: parseFloat(row.costprice) || 0,
             sellingPrice: parseFloat(row.sellingprice) || 0,
-            stock: parseInt(row.stock) || 10,
-            minStockAlert: parseInt(row.minstockalert) || 2,
+            stock: row.type?.toLowerCase() === 'service' ? 0 : parseInt(row.stock) || 10,
+            minStockAlert: row.type?.toLowerCase() === 'service' ? 0 : parseInt(row.minstockalert) || 2,
             type: (row.type?.toLowerCase() === 'service' ? 'service' : 'product') as any,
+            serviceUnit: row.type?.toLowerCase() === 'service' ? parseServiceUnit(row.serviceUnit || row.serviceunit) || DEFAULT_SERVICE_UNIT : undefined,
             description: row.description || '',
             imageUrl: 'https://images.unsplash.com/photo-1556740758-90de374c12ad?w=600&auto=format&fit=crop&q=80',
           });
@@ -259,25 +286,29 @@ export const SettingsPlatform: React.FC = () => {
   const handleDownloadFullBackup = () => {
     const stateStr = localStorage.getItem('code76_pos_state_v1');
     if (!stateStr) return;
-    const blob = new Blob([stateStr], { type: 'application/json' });
+    let allowedState: string;
+    try { allowedState = permittedBackup(stateStr, currentUser, settings); }
+    catch { setSaveAlert('The saved backup could not be read. No file was downloaded.'); return; }
+    const blob = new Blob([allowedState], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
     a.download = `CODE76_POS_BACKUP_${new Date().toISOString().slice(0, 10)}.json`;
     a.click();
-    logAuditAction('Exported Database Backup', 'Created complete JSON state backup');
+    logAuditAction('Exported Database Backup', accessHistoryPermissions(currentUser, settings).canExport ? 'Created JSON backup including authorized access history' : 'Created JSON backup with access history excluded by permissions');
+    setSaveAlert(accessHistoryPermissions(currentUser, settings).canExport ? 'Backup download requested.' : 'Backup download requested. Access history was omitted because export permission is not granted.');
   };
 
   // Backup Restore
   const handleRestoreBackup = () => {
+    if (!currentUser?.isAdmin) { setSaveAlert('Only an administrator can restore a full database snapshot.'); return; }
     try {
       if (!restoreJson.trim()) return;
       JSON.parse(restoreJson);
       localStorage.setItem('code76_pos_state_v1', restoreJson);
-      alert('Backup restored successfully! Reloading application...');
-      window.location.reload();
+      void appDialogs.alert({ title: 'Backup restored', message: 'The saved snapshot was written to this browser. Reloading the workspace now.', tone: 'success' }).then(() => window.location.reload());
     } catch {
-      alert('Invalid JSON file format. Please upload a valid CODE76 POS backup.');
+      void appDialogs.alert({ title: 'Backup not restored', message: 'Invalid JSON file format. Please upload a valid CODE76 POS backup.', tone: 'danger' });
     }
   };
 
@@ -312,20 +343,26 @@ export const SettingsPlatform: React.FC = () => {
       {/* Main Settings Tabs */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Navigation Sidebar */}
-        <div className="lg:col-span-3 space-y-1">
+        <div className="lg:col-span-3 space-y-1"><input aria-label="Find settings" placeholder="Find a setting…" value={settingsSearch} onChange={event=>setSettingsSearch(event.target.value)} className="mb-2 w-full rounded-xl border border-slate-700 bg-slate-900 px-3 py-2 text-sm"/>
           {[
+            { id: 'plans', label: 'Demo Plan Settings', icon: Shield },
+            { id: 'demoData', label: 'Demo Data & Training', icon: Database },
+            { id: 'teamServices', label: 'CODE76 Team Services', icon: Users },
             { id: 'payments', label: 'Payment Settings', icon: CreditCard },
+            { id: 'regional', label: 'Currency, Date & Time', icon: Globe },
+            { id: 'dataEraser', label: 'Delete Platform Data', icon: Trash2 },
+            { id: 'chatbot', label: 'Chatbot & Assistant Settings', icon: MessageCircle },
             { id: 'textSizing', label: 'Text Sizing Settings', icon: Type },
-            { id: 'landingPage', label: 'Landing Page Settings', icon: Globe },
+            { id: 'landingPage', label: 'Business Landing Page Settings', icon: Globe },
             { id: 'receipts', label: 'Receipts Settings', icon: Receipt },
-            { id: 'appearance', label: 'Color / Appearance Settings', icon: Palette },
+            { id: 'appearance', label: 'App Appearance Settings', icon: Palette },
             { id: 'font', label: 'Font Text Settings', icon: FileText },
             { id: 'backup', label: 'Data Backup Settings', icon: HardDrive },
             { id: 'privileges', label: 'App User Privilege Settings', icon: Shield },
             { id: 'pdfExcel', label: 'PDF & Excel Settings (CSV Import)', icon: FileSpreadsheet },
             { id: 'emailTemplates', label: 'Email Marketing Templates', icon: Mail },
             { id: 'auditLogs', label: 'Audit Logs & Login History', icon: ShieldCheck },
-          ].map((tab) => {
+          ].filter(tab=>canOpenSettings(settings,tab.id as any)&&tab.label.toLowerCase().includes(settingsSearch.toLowerCase())).map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
             return (
@@ -347,6 +384,7 @@ export const SettingsPlatform: React.FC = () => {
 
         {/* Tab Panel */}
         <div className="lg:col-span-9 bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl">
+          {canOpenSettings(settings,activeTab) ? <>
           {/* TAB 1: PAYMENTS */}
           {activeTab === 'payments' && (
             <div className="space-y-5">
@@ -360,7 +398,7 @@ export const SettingsPlatform: React.FC = () => {
                   Accepted Payment Methods
                 </label>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs">
-                  {['Cash', 'M-Pesa', 'Credit Card', 'Bank Transfer', 'Debit Card', 'Credit / Debt', 'Crypto'].map(
+                  {PAYMENT_METHODS.filter(method=>method!=='Card'&&method!=='Bank Wire').map(
                     (m) => (
                       <label
                         key={m}
@@ -424,7 +462,7 @@ export const SettingsPlatform: React.FC = () => {
                 <input
                   id="debtSalesAllow"
                   type="checkbox"
-                  checked={formSettings.payments.allowDebtSales}
+                  disabled={planTier(settings)==='free'} checked={formSettings.payments.allowDebtSales}
                   onChange={(e) =>
                     setFormSettings({
                       ...formSettings,
@@ -484,7 +522,8 @@ export const SettingsPlatform: React.FC = () => {
           {activeTab === 'landingPage' && (
             <div className="space-y-4">
               <div>
-                <h3 className="text-base font-bold text-slate-100">Landing Page & Chatbot Settings</h3>
+                <h3 className="text-base font-bold text-slate-100">Business Landing Page & Chatbot Settings</h3>
+                <p className="text-xs text-slate-400 mt-2">These settings affect only your private Business Landing Page inside the POS. They never change the CODE76 main site or its sign-in page, and do not publish a public storefront.</p>
                 <p className="text-xs text-slate-400">
                   Configure hero headlines, AI sales assistant, slideshow speed, and referral reward text.
                 </p>
@@ -494,6 +533,7 @@ export const SettingsPlatform: React.FC = () => {
                 <label className="block text-xs font-semibold text-slate-400 mb-1">Hero Main Headline</label>
                 <input
                   type="text"
+                  aria-label="Business page headline"
                   value={formSettings.landingPage.heroTitle}
                   onChange={(e) =>
                     setFormSettings({
@@ -509,6 +549,7 @@ export const SettingsPlatform: React.FC = () => {
                 <label className="block text-xs font-semibold text-slate-400 mb-1">Hero Subtitle</label>
                 <textarea
                   rows={2}
+                  aria-label="Business page subtitle"
                   value={formSettings.landingPage.heroSubtitle}
                   onChange={(e) =>
                     setFormSettings({
@@ -569,6 +610,7 @@ export const SettingsPlatform: React.FC = () => {
                 </label>
                 <input
                   type="text"
+                  aria-label="Business page referral offer"
                   value={formSettings.landingPage.referralBonusText}
                   onChange={(e) =>
                     setFormSettings({
@@ -701,6 +743,99 @@ export const SettingsPlatform: React.FC = () => {
                   <span>Print Tax / VAT PIN on header</span>
                 </label>
               </div>
+
+              <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4">
+                <h4 className="text-sm font-bold text-slate-100">Sending & delivery after a sale</h4>
+                <p className="mt-1 text-[11px] leading-relaxed text-slate-400">The cashier is offered the receipt right after checkout. Nothing is emailed or messaged automatically by CODE76 — the chosen channel opens a pre-filled draft on this device.</p>
+                <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                  <label className="flex items-start gap-2 rounded-xl border border-slate-800 p-2.5 text-xs text-slate-300">
+                    <input type="checkbox" checked={formSettings.receipts.autoOpenAfterSale !== false} onChange={(event) => setFormSettings({ ...formSettings, receipts: { ...formSettings.receipts, autoOpenAfterSale: event.target.checked } })} className="mt-0.5 rounded text-teal-500" />
+                    <span><strong className="block text-slate-100">Open the receipt preview after checkout</strong>The cashier can print, download or send it immediately.</span>
+                  </label>
+                  <label className="flex items-start gap-2 rounded-xl border border-slate-800 p-2.5 text-xs text-slate-300">
+                    <input type="checkbox" checked={formSettings.receipts.promptAfterSale !== false} onChange={(event) => setFormSettings({ ...formSettings, receipts: { ...formSettings.receipts, promptAfterSale: event.target.checked } })} className="mt-0.5 rounded text-teal-500" />
+                    <span><strong className="block text-slate-100">Ask “Send receipt now?”</strong>Shows an in-app choice to send, download or skip. Never a browser popup.</span>
+                  </label>
+                </div>
+
+                <p className="mt-4 text-xs font-semibold text-slate-400">Download formats offered</p>
+                <div className="mt-1 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                  {RECEIPT_FORMATS.map((format) => {
+                    const enabled = (formSettings.receipts.enabledFormats || RECEIPT_FORMATS.map((entry) => entry.id)).includes(format.id);
+                    return (
+                      <label key={format.id} className="flex items-start gap-2 rounded-xl border border-slate-800 p-2.5 text-[11px] text-slate-300">
+                        <input
+                          type="checkbox"
+                          checked={enabled || format.id === 'pdf'}
+                          disabled={format.id === 'pdf'}
+                          onChange={(event) => {
+                            const current = formSettings.receipts.enabledFormats || RECEIPT_FORMATS.map((entry) => entry.id);
+                            const next = event.target.checked ? [...current, format.id] : current.filter((entry) => entry !== format.id);
+                            const unique = next.filter((entry, index, all) => all.indexOf(entry) === index);
+                            const ordered = RECEIPT_FORMATS.map((entry) => entry.id).filter((entry) => unique.includes(entry));
+                            setFormSettings({ ...formSettings, receipts: { ...formSettings.receipts, enabledFormats: ordered.includes('pdf') ? ordered : [...ordered, 'pdf'] } });
+                          }}
+                          className="mt-0.5 rounded text-teal-500"
+                        />
+                        <span><strong className="block text-slate-100">{format.label}{format.id === 'pdf' ? ' (always on)' : ''}</strong>{format.description}</span>
+                      </label>
+                    );
+                  })}
+                </div>
+
+                <p className="mt-4 text-xs font-semibold text-slate-400">Send channels</p>
+                <div className="mt-1 grid gap-2 sm:grid-cols-2">
+                  {RECEIPT_CHANNELS.map((channel) => {
+                    const enabled = (formSettings.receipts.enabledChannels || RECEIPT_CHANNELS.map((entry) => entry.id)).includes(channel.id);
+                    return (
+                      <label key={channel.id} className="flex items-start gap-2 rounded-xl border border-slate-800 p-2.5 text-[11px] text-slate-300">
+                        <input
+                          type="checkbox"
+                          checked={enabled}
+                          onChange={(event) => {
+                            const current = formSettings.receipts.enabledChannels || RECEIPT_CHANNELS.map((entry) => entry.id);
+                            const next = event.target.checked ? [...current, channel.id] : current.filter((entry) => entry !== channel.id);
+                            setFormSettings({ ...formSettings, receipts: { ...formSettings.receipts, enabledChannels: next } });
+                          }}
+                          className="mt-0.5 rounded text-teal-500"
+                        />
+                        <span><strong className="block text-slate-100">{channel.label}</strong>{channel.description}</span>
+                      </label>
+                    );
+                  })}
+                </div>
+
+                <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                  <label className="text-xs font-semibold text-slate-400">Default channel
+                    <select
+                      value={formSettings.receipts.defaultChannel || 'email'}
+                      onChange={(event) => setFormSettings({ ...formSettings, receipts: { ...formSettings.receipts, defaultChannel: event.target.value as any } })}
+                      className="mt-1 w-full rounded-xl border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"
+                    >
+                      {RECEIPT_CHANNELS.map((channel) => <option key={channel.id} value={channel.id}>{channel.label}</option>)}
+                    </select>
+                  </label>
+                  <label className="text-xs font-semibold text-slate-400">Payment details on the receipt (optional)
+                    <input
+                      value={formSettings.receipts.paymentInstructions || ''}
+                      onChange={(event) => setFormSettings({ ...formSettings, receipts: { ...formSettings.receipts, paymentInstructions: event.target.value } })}
+                      placeholder="Till / paybill / bank details"
+                      className="mt-1 w-full rounded-xl border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"
+                    />
+                  </label>
+                </div>
+
+                <label className="mt-3 block text-xs font-semibold text-slate-400">Message used when sending a receipt
+                  <textarea
+                    rows={2}
+                    value={formSettings.receipts.sendMessageTemplate || DEFAULT_RECEIPT_SEND_TEMPLATE}
+                    onChange={(event) => setFormSettings({ ...formSettings, receipts: { ...formSettings.receipts, sendMessageTemplate: event.target.value } })}
+                    className="mt-1 w-full rounded-xl border border-slate-700 bg-slate-900 p-3 text-xs text-slate-100"
+                  />
+                  <span className="mt-1 block text-[10px] font-normal leading-relaxed text-slate-500">Tokens: {'{customer} {company} {receipt} {total} {currency} {date}'}. A receipt sent this way is a message/draft, not a server email or payment confirmation.</span>
+                </label>
+                <button type="button" onClick={() => setFormSettings({ ...formSettings, receipts: { ...formSettings.receipts, sendMessageTemplate: DEFAULT_RECEIPT_SEND_TEMPLATE } })} className="mt-2 rounded-lg border border-slate-700 px-2.5 py-1 text-[11px] font-bold text-slate-300 hover:bg-slate-800">Restore default message</button>
+              </div>
             </div>
           )}
 
@@ -708,11 +843,24 @@ export const SettingsPlatform: React.FC = () => {
           {activeTab === 'appearance' && (
             <div className="space-y-5">
               <div>
-                <h3 className="text-base font-bold text-slate-100">Color, Theme & Layout Appearance</h3>
+                <h3 className="text-base font-bold text-slate-100">App Appearance</h3>
                 <p className="text-xs text-slate-400">
                   Cart position on Left vs Right, product grid display toggle, and color accents.
                 </p>
               </div>
+
+              <fieldset className="rounded-2xl border border-slate-800 p-4">
+                <legend className="px-2 text-sm font-bold text-teal-400">Light / dark theme</legend>
+                <div className="grid grid-cols-2 gap-3">
+                  {(['light', 'dark'] as const).map(mode => <button key={mode} type="button" aria-label={`${mode === 'light' ? 'Light' : 'Dark'} theme`} aria-pressed={formSettings.appearance.theme === mode}
+                    onClick={() => setFormSettings({ ...formSettings, appearance: { ...formSettings.appearance, theme: mode } })}
+                    className={`rounded-xl border p-4 text-left text-sm ${formSettings.appearance.theme === mode ? 'border-teal-500 ring-2 ring-teal-500/30' : 'border-slate-700'}`}>
+                    <span className="flex items-center gap-2 font-bold">{mode === 'light' ? <Sun size={19} /> : <Moon size={19} />}{mode === 'light' ? 'Light' : 'Dark'}</span>
+                    <span data-preview-theme={mode} className="appearance-theme-sample mt-3 block rounded-lg border px-3 py-4 text-xs">Sales · Inventory · Reports</span>
+                  </button>)}
+                </div>
+                <p className="mt-3 text-xs text-slate-400">Choose a theme, then Save All Settings Changes. This affects the POS workspace, not the CODE76 website or the private business-page design.</p>
+              </fieldset>
 
               {/* Cart Position Selection: LEFT vs RIGHT */}
               <div>
@@ -829,7 +977,7 @@ export const SettingsPlatform: React.FC = () => {
             <div className="space-y-4">
               <div>
                 <h3 className="text-base font-bold text-slate-100">Font Typography Settings</h3>
-                <p className="text-xs text-slate-400">Configure global font typeface for the entire POS and landing page.</p>
+                <p className="text-xs text-slate-400">Configure the POS workspace typeface. CODE76 main-site styling is maintained separately.</p>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -891,6 +1039,7 @@ export const SettingsPlatform: React.FC = () => {
               {/* Restore */}
               <div className="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-3">
                 <h4 className="text-sm font-bold text-slate-100">Restore System From Backup JSON</h4>
+                {!currentUser?.isAdmin && <p className="text-xs text-amber-300">Only an administrator can restore a database snapshot, because it can replace role privileges and history.</p>}
                 <textarea
                   rows={4}
                   value={restoreJson}
@@ -901,6 +1050,7 @@ export const SettingsPlatform: React.FC = () => {
                 <button
                   type="button"
                   onClick={handleRestoreBackup}
+                  disabled={!currentUser?.isAdmin} title="Full database restores require administrator access"
                   className="px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-semibold flex items-center gap-2 cursor-pointer"
                 >
                   <Upload className="w-4 h-4" />
@@ -912,157 +1062,15 @@ export const SettingsPlatform: React.FC = () => {
 
           {/* TAB 8: PRIVILEGES (RBAC) */}
           {activeTab === 'privileges' && (
-            <div className="space-y-4">
-              <div>
-                <h3 className="text-base font-bold text-slate-100">App User Privilege Settings (RBAC)</h3>
-                <p className="text-xs text-slate-400">
-                  Role-based access matrix for CEO, Manager, Developer, Cashier, Marketer, Transporter, etc.
-                </p>
-              </div>
-
-              <div className="overflow-x-auto max-h-96 border border-slate-800 rounded-2xl">
-                <table className="w-full text-left text-xs">
-                  <thead className="bg-slate-950 text-[10px] uppercase font-bold text-slate-400 border-b border-slate-800">
-                    <tr>
-                      <th className="py-2.5 px-3">Role</th>
-                      <th className="py-2.5 px-2 text-center">Sell</th>
-                      <th className="py-2.5 px-2 text-center">View Stock</th>
-                      <th className="py-2.5 px-2 text-center">Edit Stock</th>
-                      <th className="py-2.5 px-2 text-center">Expenses</th>
-                      <th className="py-2.5 px-2 text-center">Analytics</th>
-                      <th className="py-2.5 px-2 text-center">Manage People</th>
-                      <th className="py-2.5 px-2 text-center">Import CSV</th>
-                      <th className="py-2.5 px-2 text-center">Audit Logs</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-800 text-slate-300">
-                    {ALL_ROLES.map((role) => {
-                      const priv = formSettings.privileges[role] || formSettings.privileges.Other;
-                      return (
-                        <tr key={role} className="hover:bg-slate-800/40">
-                          <td className="py-2 px-3 font-semibold text-slate-200">{role}</td>
-                          <td className="py-2 px-2 text-center">
-                            <input
-                              type="checkbox"
-                              checked={priv.canSell}
-                              onChange={(e) => {
-                                const next = { ...priv, canSell: e.target.checked };
-                                setFormSettings({
-                                  ...formSettings,
-                                  privileges: { ...formSettings.privileges, [role]: next },
-                                });
-                              }}
-                              className="rounded text-teal-500"
-                            />
-                          </td>
-                          <td className="py-2 px-2 text-center">
-                            <input
-                              type="checkbox"
-                              checked={priv.canViewInventory}
-                              onChange={(e) => {
-                                const next = { ...priv, canViewInventory: e.target.checked };
-                                setFormSettings({
-                                  ...formSettings,
-                                  privileges: { ...formSettings.privileges, [role]: next },
-                                });
-                              }}
-                              className="rounded text-teal-500"
-                            />
-                          </td>
-                          <td className="py-2 px-2 text-center">
-                            <input
-                              type="checkbox"
-                              checked={priv.canEditInventory}
-                              onChange={(e) => {
-                                const next = { ...priv, canEditInventory: e.target.checked };
-                                setFormSettings({
-                                  ...formSettings,
-                                  privileges: { ...formSettings.privileges, [role]: next },
-                                });
-                              }}
-                              className="rounded text-teal-500"
-                            />
-                          </td>
-                          <td className="py-2 px-2 text-center">
-                            <input
-                              type="checkbox"
-                              checked={priv.canViewExpenses}
-                              onChange={(e) => {
-                                const next = { ...priv, canViewExpenses: e.target.checked };
-                                setFormSettings({
-                                  ...formSettings,
-                                  privileges: { ...formSettings.privileges, [role]: next },
-                                });
-                              }}
-                              className="rounded text-teal-500"
-                            />
-                          </td>
-                          <td className="py-2 px-2 text-center">
-                            <input
-                              type="checkbox"
-                              checked={priv.canViewAnalytics}
-                              onChange={(e) => {
-                                const next = { ...priv, canViewAnalytics: e.target.checked };
-                                setFormSettings({
-                                  ...formSettings,
-                                  privileges: { ...formSettings.privileges, [role]: next },
-                                });
-                              }}
-                              className="rounded text-teal-500"
-                            />
-                          </td>
-                          <td className="py-2 px-2 text-center">
-                            <input
-                              type="checkbox"
-                              checked={priv.canManagePeople}
-                              onChange={(e) => {
-                                const next = { ...priv, canManagePeople: e.target.checked };
-                                setFormSettings({
-                                  ...formSettings,
-                                  privileges: { ...formSettings.privileges, [role]: next },
-                                });
-                              }}
-                              className="rounded text-teal-500"
-                            />
-                          </td>
-                          <td className="py-2 px-2 text-center">
-                            <input
-                              type="checkbox"
-                              checked={priv.canImportCsv}
-                              onChange={(e) => {
-                                const next = { ...priv, canImportCsv: e.target.checked };
-                                setFormSettings({
-                                  ...formSettings,
-                                  privileges: { ...formSettings.privileges, [role]: next },
-                                });
-                              }}
-                              className="rounded text-teal-500"
-                            />
-                          </td>
-                          <td className="py-2 px-2 text-center">
-                            <input
-                              type="checkbox"
-                              checked={priv.canViewAuditLogs}
-                              onChange={(e) => {
-                                const next = { ...priv, canViewAuditLogs: e.target.checked };
-                                setFormSettings({
-                                  ...formSettings,
-                                  privileges: { ...formSettings.privileges, [role]: next },
-                                });
-                              }}
-                              className="rounded text-teal-500"
-                            />
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            </div>
+            currentUser?.isAdmin
+              ? <PrivilegeMatrix formSettings={formSettings} setFormSettings={setFormSettings} savedSettings={settings} currentUser={currentUser} />
+              : <div role="alert" className="rounded-xl border border-amber-700 bg-amber-950/30 p-5 text-sm text-amber-200">Only an administrator can change role privileges. Only an administrator can change these controls. Ask for the Audit Logs, Export Reports privilege or receipt access when needed.</div>
           )}
 
-          {/* TAB 9: PDF & EXCEL SETTINGS (CSV IMPORT WITH ADMIN AUTH & COLUMN ALIGNMENT SHOWCASE) */}
+          {activeTab === 'chatbot' && (
+            <ChatbotSettingsPanel formSettings={formSettings} setFormSettings={setFormSettings} savedSettings={settings} canManage={!!currentUser?.isAdmin || hasPrivilege('canManageChatbot')} />
+          )}
+
           {activeTab === 'pdfExcel' && (
             <div className="space-y-5">
               <div>
@@ -1293,6 +1301,11 @@ export const SettingsPlatform: React.FC = () => {
             </div>
           )}
 
+          {activeTab === 'plans' && <DemoPlanSettings />}
+          {activeTab === 'demoData' && <DemoTrainingSettings />}
+          {activeTab === 'teamServices' && <TeamServicesPanel />}
+          {activeTab === 'regional' && <RegionalSettingsForm settings={formSettings} onChange={setFormSettings} />}
+          {activeTab === 'dataEraser' && <DataDeletionCenter />}
           {/* Global Save Button at bottom of each tab */}
           <div className="mt-6 pt-4 border-t border-slate-800 flex justify-end">
             <button
@@ -1303,6 +1316,7 @@ export const SettingsPlatform: React.FC = () => {
               Save All Settings Changes
             </button>
           </div>
+          </> : <PlanNotice feature="This settings section" />}
         </div>
       </div>
     </div>

@@ -1,0 +1,91 @@
+### Page
+- Page URL: http://127.0.0.1:3000/?view=pos
+- Page Title: CODE76 POS — Workspace
+### Snapshot
+```yaml
+- generic [ref=f2e4]:
+  - banner [ref=f2e789]:
+    - generic [ref=f2e790]:
+      - button "76 CODE76 POS Enterprise Product & Service SaaS ERP System" [ref=f2e792] [cursor=pointer]:
+        - generic [ref=f2e793]: "76"
+        - generic [ref=f2e794]:
+          - generic [ref=f2e795]:
+            - generic [ref=f2e796]: CODE76 POS
+            - generic [ref=f2e797]: Enterprise
+          - paragraph [ref=f2e798]: Product & Service SaaS ERP System
+      - generic [ref=f2e799]:
+        - generic [ref=f2e800]:
+          - button "Desktop View (Full Width)" [ref=f2e801] [cursor=pointer]
+          - button "Laptop View (1024px)" [ref=f2e804] [cursor=pointer]
+          - button "Tablet View (768px)" [ref=f2e807] [cursor=pointer]
+          - button "Phone Mobile View (390px)" [ref=f2e810] [cursor=pointer]
+        - generic [ref=f2e813]:
+          - button "Dark" [ref=f2e814] [cursor=pointer]
+          - button "Demo Data" [ref=f2e818] [cursor=pointer]
+          - generic [ref=f2e824]:
+            - button "Storefront" [ref=f2e825] [cursor=pointer]
+            - button "CODE76 Site" [ref=f2e830] [cursor=pointer]
+          - button "Click to view help guide and settings for this platform" [ref=f2e835] [cursor=pointer]
+          - generic [ref=f2e839]:
+            - 'button "TE TEST Guided Setup Owner Role: CEO" [ref=f2e840] [cursor=pointer]':
+              - generic [ref=f2e841]: TE
+              - generic [ref=f2e842]:
+                - generic [ref=f2e843]: TEST Guided Setup Owner
+                - generic [ref=f2e844]: "Role: CEO"
+            - button "Sign out and return to landing page" [ref=f2e845] [cursor=pointer]
+    - generic [ref=f2e850]:
+      - button "Sales POS" [ref=f2e851] [cursor=pointer]
+      - button "Sales History" [ref=f2e855] [cursor=pointer]
+      - button "Inventory" [ref=f2e860] [cursor=pointer]
+      - button "Expenses" [ref=f2e865] [cursor=pointer]
+      - button "Invoices" [ref=f2e869] [cursor=pointer]
+      - button "Analytics & P&L" [ref=f2e873] [cursor=pointer]
+      - button "Customers" [ref=f2e876] [cursor=pointer]
+      - button "Vendors" [ref=f2e882] [cursor=pointer]
+      - button "Transporters" [ref=f2e887] [cursor=pointer]
+      - button "Marketing Team" [ref=f2e893] [cursor=pointer]
+      - button "Company Members" [ref=f2e897] [cursor=pointer]
+      - button "My Company" [ref=f2e903] [cursor=pointer]
+      - button "Messaging" [ref=f2e907] [cursor=pointer]
+      - button "Business Landing Page" [ref=f2e910] [cursor=pointer]
+      - button "Settings" [ref=f2e915] [cursor=pointer]
+      - button "Audit & Access Logs" [ref=f2e919] [cursor=pointer]
+      - button "About & Manual" [active] [ref=f2e923] [cursor=pointer]
+  - main [ref=f2e5]:
+    - generic [ref=f2e1405]:
+      - generic [ref=f2e1406]:
+        - generic [ref=f2e1407]:
+          - heading "About CODE76 POS & Manual" [level=1] [ref=f2e1408]
+          - paragraph [ref=f2e1409]: System documentation for every section, verified commercial license key, audit activity tracking, and terms of service.
+        - generic [ref=f2e1410]:
+          - button "Export Audit PDF" [ref=f2e1411] [cursor=pointer]
+          - button "Email PDF & CSV Audit Trail" [ref=f2e1416] [cursor=pointer]
+      - generic [ref=f2e1421]:
+        - generic [ref=f2e1422]:
+          - button "User Manual (All Sections)" [ref=f2e1423] [cursor=pointer]
+          - button "About CODE76 POS" [ref=f2e1427] [cursor=pointer]
+          - button "License & Product Key" [ref=f2e1431] [cursor=pointer]
+          - button "User Activity & Audit Logs" [ref=f2e1436] [cursor=pointer]
+          - button "Terms & Conditions" [ref=f2e1441] [cursor=pointer]
+        - generic [ref=f2e1447]:
+          - generic [ref=f2e1448]:
+            - generic [ref=f2e1449]:
+              - heading "Complete Application User Manual" [level=3] [ref=f2e1450]
+              - paragraph [ref=f2e1451]: Exhaustive operational guides for every platform section.
+            - textbox "Search manual guides..." [ref=f2e1456]
+          - generic [ref=f2e1457]:
+            - 'button "Getting started: guided setup & the two landing pages" [ref=f2e1459] [cursor=pointer]'
+            - generic [ref=f2e1465]:
+              - 'button "Section 1: Point of Sale & Checkout Operations" [ref=f2e1466] [cursor=pointer]'
+              - generic [ref=f2e1472]: "• Autocomplete Search: Start typing SKU, name, or scan barcode. The autocomplete dropdown displays the product photo, live price, available stock count, and an instant \"+ Add 1\" button. • One payment: Fills one Cash payment with the full total. Add extra payment methods to split the amount; use the trash icon to delete an added payment row. • Multi-Payment Split: Click \"+ Add Method\" in the cart to split customer bill across Cash, M-Pesa, Card, Bank Wire, and Credit/Debt simultaneously. • Extra Charges: Select charge reason (Tax, Transportation, Packaging, Delivery, Service Fee) and enter custom amount. It itemizes automatically. • Discounts: Apply percentage or dollar discounts per line item, or apply a cart-wide promotional discount to the entire subtotal. • Referral Tagging: Use the \"Referred By\" combo-box to credit customers, marketers, or staff (e.g. \"Peter Nick (Customer)\"). • Testimonial Prompt: Completing a checkout immediately opens the Customer Testimonial prompt for landing page social proof."
+            - 'button "Section 2: Sales History & Debt Reconciliation" [ref=f2e1474] [cursor=pointer]'
+            - 'button "Section 3: Inventory Control & Marketing Dispatch" [ref=f2e1481] [cursor=pointer]'
+            - 'button "Section 4: Operational Expense Auditing" [ref=f2e1488] [cursor=pointer]'
+            - 'button "Section 5: Invoicing & Accounts Receivable" [ref=f2e1495] [cursor=pointer]'
+            - 'button "Section 6: Analytics, P&L & Landing Page Infographics" [ref=f2e1502] [cursor=pointer]'
+            - 'button "Section 7: Directory Management & Mandatory Fields" [ref=f2e1509] [cursor=pointer]'
+            - 'button "Section 8: Company Members & Dual-Role Logic" [ref=f2e1516] [cursor=pointer]'
+            - 'button "Section 9: Your Business Landing Page & catalog assistant" [ref=f2e1523] [cursor=pointer]'
+            - 'button "Section 10: PDF & Excel Settings (Admin Data Pipeline)" [ref=f2e1530] [cursor=pointer]'
+            - 'button "Section 11: Universal Platform & UI Action Icons Guide" [ref=f2e1537] [cursor=pointer]'
+```

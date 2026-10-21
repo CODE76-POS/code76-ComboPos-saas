@@ -1,0 +1,104 @@
+### Page
+- Page URL: http://127.0.0.1:5173/#/pos/inventory
+- Page Title: CODE76 POS — Private Workspace
+### Snapshot
+```yaml
+- generic [ref=e4]:
+  - banner [ref=e655]:
+    - generic [ref=e656]:
+      - button "76 CODE76 POS Enterprise Product & Service SaaS ERP System" [ref=e658] [cursor=pointer]:
+        - generic [ref=e659]: "76"
+        - generic [ref=e660]:
+          - generic [ref=e661]:
+            - generic [ref=e662]: CODE76 POS
+            - generic [ref=e663]: Enterprise
+          - paragraph [ref=e664]: Product & Service SaaS ERP System
+      - generic [ref=e665]:
+        - generic [ref=e666]:
+          - button "Desktop View (Full Width)" [ref=e667] [cursor=pointer]
+          - button "Laptop View (1024px)" [ref=e670] [cursor=pointer]
+          - button "Tablet View (768px)" [ref=e673] [cursor=pointer]
+          - button "Phone Mobile View (390px)" [ref=e676] [cursor=pointer]
+        - generic [ref=e679]:
+          - button "Demo Data" [ref=e680] [cursor=pointer]
+          - button "Business Page" [ref=e687] [cursor=pointer]
+          - button "Click to view help guide and settings for this platform" [ref=e692] [cursor=pointer]
+          - button "Active user session and access controls" [ref=e697] [cursor=pointer]:
+            - generic [ref=e698]: DR
+            - generic [ref=e699]:
+              - generic [ref=e700]: Dr. David Kimani
+              - generic [ref=e701]: "Role: CEO"
+    - generic [ref=e702]:
+      - generic [ref=e703]:
+        - generic [ref=e707]: App link
+        - generic [ref=e708]:
+          - generic [ref=e709]:
+            - generic [ref=e710]: App link
+            - textbox "App link" [ref=e711]: http://127.0.0.1:5173/
+            - button "Copy app link" [ref=e712] [cursor=pointer]:
+              - generic [ref=e716]: Copied!
+            - link "Open app link in a new tab" [ref=e717] [cursor=pointer]:
+              - /url: http://127.0.0.1:5173/
+          - status [ref=e722]: Link copied to clipboard.
+      - paragraph [ref=e723]: Open this root link to reach CODE76 sign-in/register. Browser-local records and sessions do not sync between browsers.
+    - generic [ref=e725]:
+      - button "Sales POS" [ref=e726] [cursor=pointer]
+      - button "Sales History" [ref=e730] [cursor=pointer]
+      - button "Inventory" [active] [ref=e735] [cursor=pointer]
+      - button "Expenses" [ref=e740] [cursor=pointer]
+      - button "Invoices" [ref=e744] [cursor=pointer]
+      - button "Analytics & P&L" [ref=e748] [cursor=pointer]
+      - button "Customers" [ref=e751] [cursor=pointer]
+      - button "Vendors" [ref=e757] [cursor=pointer]
+      - button "Transporters" [ref=e762] [cursor=pointer]
+      - button "Marketing Team" [ref=e768] [cursor=pointer]
+      - button "Company Members" [ref=e772] [cursor=pointer]
+      - button "My Company" [ref=e778] [cursor=pointer]
+      - button "Messaging" [ref=e782] [cursor=pointer]
+      - button "Business Landing Page" [ref=e785] [cursor=pointer]
+      - button "Settings" [ref=e790] [cursor=pointer]
+      - button "Audit & Access Logs" [ref=e794] [cursor=pointer]
+      - button "About & Manual" [ref=e798] [cursor=pointer]
+  - main [ref=e5]:
+    - generic [ref=e1109]:
+      - generic [ref=e1110]:
+        - generic [ref=e1111]:
+          - generic [ref=e1112]:
+            - heading "Products & Commercial Services Inventory" [level=1] [ref=e1113]
+            - button "Click for platform guidance & settings" [ref=e1114] [cursor=pointer]
+          - paragraph [ref=e1118]: Categorized catalog entries with smart autosuggestions, loss margin warnings, promotional countdowns, and multi-channel synchronization.
+        - generic [ref=e1119]:
+          - generic [ref=e1120]:
+            - generic [ref=e1124]: "Next Auto-ID:"
+            - textbox "Next Auto-ID:" [ref=e1125]: ITEM-2026-5999
+          - button "Export CSV" [ref=e1126] [cursor=pointer]
+          - button "Email Ledger (.txt & .pdf)" [ref=e1131] [cursor=pointer]
+          - button "Add New Item" [ref=e1136] [cursor=pointer]
+      - generic [ref=e1138]:
+        - generic [ref=e1139]:
+          - textbox "Search by ID, Item Name, Nickname, SKU, or Barcode..." [ref=e1144]
+          - generic [ref=e1145]:
+            - button "All Items" [ref=e1146] [cursor=pointer]
+            - button "📦 Products Only" [ref=e1147] [cursor=pointer]
+            - button "🛠️ Services Only" [ref=e1148] [cursor=pointer]
+        - generic [ref=e1149]:
+          - generic [ref=e1150]: "Category:"
+          - button "All" [ref=e1151] [cursor=pointer]
+      - table [ref=e1154]:
+        - rowgroup [ref=e1155]:
+          - row [ref=e1156]:
+            - columnheader "Actions (Start)" [ref=e1157]
+            - columnheader "Item Details" [ref=e1158]
+            - columnheader "Item ID & Codes" [ref=e1159]
+            - columnheader "Taxonomy & Age" [ref=e1160]
+            - columnheader "Type" [ref=e1161]
+            - columnheader "Cost (Buy)" [ref=e1162]
+            - columnheader "Selling Price" [ref=e1163]
+            - columnheader "Profit / Loss" [ref=e1164]
+            - columnheader "Quantity / Billing Unit" [ref=e1165]
+            - columnheader "Marketing Campaign" [ref=e1166]
+            - columnheader "Actions (End)" [ref=e1167]
+        - rowgroup [ref=e1168]:
+          - row [ref=e1169]:
+            - cell "No items found matching filter criteria." [ref=e1170]
+```

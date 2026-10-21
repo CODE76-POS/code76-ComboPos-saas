@@ -1,0 +1,1050 @@
+TAP version 13
+# Subtest: free entitlement: selling
+ok 1 - free entitlement: selling
+  ---
+  duration_ms: 0.682909
+  ...
+# Subtest: free entitlement: receipts
+ok 2 - free entitlement: receipts
+  ---
+  duration_ms: 0.099116
+  ...
+# Subtest: free entitlement: sales_history
+ok 3 - free entitlement: sales_history
+  ---
+  duration_ms: 0.071888
+  ...
+# Subtest: free entitlement: inventory
+ok 4 - free entitlement: inventory
+  ---
+  duration_ms: 0.059253
+  ...
+# Subtest: free entitlement: appearance
+ok 5 - free entitlement: appearance
+  ---
+  duration_ms: 0.116395
+  ...
+# Subtest: free entitlement: payments
+ok 6 - free entitlement: payments
+  ---
+  duration_ms: 0.078887
+  ...
+# Subtest: free entitlement: regional
+ok 7 - free entitlement: regional
+  ---
+  duration_ms: 0.055771
+  ...
+# Subtest: free entitlement: delete_data
+ok 8 - free entitlement: delete_data
+  ---
+  duration_ms: 0.053646
+  ...
+# Subtest: free entitlement: about
+ok 9 - free entitlement: about
+  ---
+  duration_ms: 0.071807
+  ...
+# Subtest: free entitlement: debts
+ok 10 - free entitlement: debts
+  ---
+  duration_ms: 0.121357
+  ...
+# Subtest: free entitlement: expenses
+ok 11 - free entitlement: expenses
+  ---
+  duration_ms: 0.063673
+  ...
+# Subtest: free entitlement: invoices
+ok 12 - free entitlement: invoices
+  ---
+  duration_ms: 0.05674
+  ...
+# Subtest: free entitlement: analytics
+ok 13 - free entitlement: analytics
+  ---
+  duration_ms: 0.130773
+  ...
+# Subtest: free entitlement: directory
+ok 14 - free entitlement: directory
+  ---
+  duration_ms: 0.098698
+  ...
+# Subtest: free entitlement: company_profile
+ok 15 - free entitlement: company_profile
+  ---
+  duration_ms: 0.063557
+  ...
+# Subtest: free entitlement: payroll
+ok 16 - free entitlement: payroll
+  ---
+  duration_ms: 0.061341
+  ...
+# Subtest: free entitlement: audit
+ok 17 - free entitlement: audit
+  ---
+  duration_ms: 0.090405
+  ...
+# Subtest: free entitlement: data_export
+ok 18 - free entitlement: data_export
+  ---
+  duration_ms: 0.137959
+  ...
+# Subtest: free entitlement: inventory_export
+ok 19 - free entitlement: inventory_export
+  ---
+  duration_ms: 0.074381
+  ...
+# Subtest: free entitlement: backup
+ok 20 - free entitlement: backup
+  ---
+  duration_ms: 0.054126
+  ...
+# Subtest: free entitlement: imports
+ok 21 - free entitlement: imports
+  ---
+  duration_ms: 0.082599
+  ...
+# Subtest: free entitlement: privileges
+ok 22 - free entitlement: privileges
+  ---
+  duration_ms: 0.048846
+  ...
+# Subtest: free entitlement: inventory_marketing
+ok 23 - free entitlement: inventory_marketing
+  ---
+  duration_ms: 0.069218
+  ...
+# Subtest: free entitlement: business_landing
+ok 24 - free entitlement: business_landing
+  ---
+  duration_ms: 0.059233
+  ...
+# Subtest: free entitlement: chatbot
+ok 25 - free entitlement: chatbot
+  ---
+  duration_ms: 0.0438
+  ...
+# Subtest: free entitlement: messaging
+ok 26 - free entitlement: messaging
+  ---
+  duration_ms: 0.042333
+  ...
+# Subtest: free entitlement: email
+ok 27 - free entitlement: email
+  ---
+  duration_ms: 0.042669
+  ...
+# Subtest: free entitlement: referrals
+ok 28 - free entitlement: referrals
+  ---
+  duration_ms: 0.04192
+  ...
+# Subtest: free entitlement: team_services
+ok 29 - free entitlement: team_services
+  ---
+  duration_ms: 0.042986
+  ...
+# Subtest: starter entitlement: selling
+ok 30 - starter entitlement: selling
+  ---
+  duration_ms: 0.054434
+  ...
+# Subtest: starter entitlement: receipts
+ok 31 - starter entitlement: receipts
+  ---
+  duration_ms: 0.043641
+  ...
+# Subtest: starter entitlement: sales_history
+ok 32 - starter entitlement: sales_history
+  ---
+  duration_ms: 0.055305
+  ...
+# Subtest: starter entitlement: inventory
+ok 33 - starter entitlement: inventory
+  ---
+  duration_ms: 0.089258
+  ...
+# Subtest: starter entitlement: appearance
+ok 34 - starter entitlement: appearance
+  ---
+  duration_ms: 0.071203
+  ...
+# Subtest: starter entitlement: payments
+ok 35 - starter entitlement: payments
+  ---
+  duration_ms: 0.043544
+  ...
+# Subtest: starter entitlement: regional
+ok 36 - starter entitlement: regional
+  ---
+  duration_ms: 1.413045
+  ...
+# Subtest: starter entitlement: delete_data
+ok 37 - starter entitlement: delete_data
+  ---
+  duration_ms: 0.086215
+  ...
+# Subtest: starter entitlement: about
+ok 38 - starter entitlement: about
+  ---
+  duration_ms: 0.048711
+  ...
+# Subtest: starter entitlement: debts
+ok 39 - starter entitlement: debts
+  ---
+  duration_ms: 0.04164
+  ...
+# Subtest: starter entitlement: expenses
+ok 40 - starter entitlement: expenses
+  ---
+  duration_ms: 0.058754
+  ...
+# Subtest: starter entitlement: invoices
+ok 41 - starter entitlement: invoices
+  ---
+  duration_ms: 0.039463
+  ...
+# Subtest: starter entitlement: analytics
+ok 42 - starter entitlement: analytics
+  ---
+  duration_ms: 0.0393
+  ...
+# Subtest: starter entitlement: directory
+ok 43 - starter entitlement: directory
+  ---
+  duration_ms: 0.041123
+  ...
+# Subtest: starter entitlement: company_profile
+ok 44 - starter entitlement: company_profile
+  ---
+  duration_ms: 0.040465
+  ...
+# Subtest: starter entitlement: payroll
+ok 45 - starter entitlement: payroll
+  ---
+  duration_ms: 0.037209
+  ...
+# Subtest: starter entitlement: audit
+ok 46 - starter entitlement: audit
+  ---
+  duration_ms: 0.049639
+  ...
+# Subtest: starter entitlement: data_export
+ok 47 - starter entitlement: data_export
+  ---
+  duration_ms: 0.03958
+  ...
+# Subtest: starter entitlement: inventory_export
+ok 48 - starter entitlement: inventory_export
+  ---
+  duration_ms: 0.038328
+  ...
+# Subtest: starter entitlement: backup
+ok 49 - starter entitlement: backup
+  ---
+  duration_ms: 0.037571
+  ...
+# Subtest: starter entitlement: imports
+ok 50 - starter entitlement: imports
+  ---
+  duration_ms: 0.037491
+  ...
+# Subtest: starter entitlement: privileges
+ok 51 - starter entitlement: privileges
+  ---
+  duration_ms: 0.036805
+  ...
+# Subtest: starter entitlement: inventory_marketing
+ok 52 - starter entitlement: inventory_marketing
+  ---
+  duration_ms: 0.036603
+  ...
+# Subtest: starter entitlement: business_landing
+ok 53 - starter entitlement: business_landing
+  ---
+  duration_ms: 0.03593
+  ...
+# Subtest: starter entitlement: chatbot
+ok 54 - starter entitlement: chatbot
+  ---
+  duration_ms: 0.056257
+  ...
+# Subtest: starter entitlement: messaging
+ok 55 - starter entitlement: messaging
+  ---
+  duration_ms: 0.049483
+  ...
+# Subtest: starter entitlement: email
+ok 56 - starter entitlement: email
+  ---
+  duration_ms: 0.041933
+  ...
+# Subtest: starter entitlement: referrals
+ok 57 - starter entitlement: referrals
+  ---
+  duration_ms: 0.046026
+  ...
+# Subtest: starter entitlement: team_services
+ok 58 - starter entitlement: team_services
+  ---
+  duration_ms: 0.038432
+  ...
+# Subtest: pro entitlement: selling
+ok 59 - pro entitlement: selling
+  ---
+  duration_ms: 0.038727
+  ...
+# Subtest: pro entitlement: receipts
+ok 60 - pro entitlement: receipts
+  ---
+  duration_ms: 0.037666
+  ...
+# Subtest: pro entitlement: sales_history
+ok 61 - pro entitlement: sales_history
+  ---
+  duration_ms: 0.045871
+  ...
+# Subtest: pro entitlement: inventory
+ok 62 - pro entitlement: inventory
+  ---
+  duration_ms: 0.055499
+  ...
+# Subtest: pro entitlement: appearance
+ok 63 - pro entitlement: appearance
+  ---
+  duration_ms: 0.053579
+  ...
+# Subtest: pro entitlement: payments
+ok 64 - pro entitlement: payments
+  ---
+  duration_ms: 0.077485
+  ...
+# Subtest: pro entitlement: regional
+ok 65 - pro entitlement: regional
+  ---
+  duration_ms: 0.037703
+  ...
+# Subtest: pro entitlement: delete_data
+ok 66 - pro entitlement: delete_data
+  ---
+  duration_ms: 0.039581
+  ...
+# Subtest: pro entitlement: about
+ok 67 - pro entitlement: about
+  ---
+  duration_ms: 0.038346
+  ...
+# Subtest: pro entitlement: debts
+ok 68 - pro entitlement: debts
+  ---
+  duration_ms: 0.036115
+  ...
+# Subtest: pro entitlement: expenses
+ok 69 - pro entitlement: expenses
+  ---
+  duration_ms: 0.038712
+  ...
+# Subtest: pro entitlement: invoices
+ok 70 - pro entitlement: invoices
+  ---
+  duration_ms: 0.035591
+  ...
+# Subtest: pro entitlement: analytics
+ok 71 - pro entitlement: analytics
+  ---
+  duration_ms: 0.062019
+  ...
+# Subtest: pro entitlement: directory
+ok 72 - pro entitlement: directory
+  ---
+  duration_ms: 0.047383
+  ...
+# Subtest: pro entitlement: company_profile
+ok 73 - pro entitlement: company_profile
+  ---
+  duration_ms: 0.039697
+  ...
+# Subtest: pro entitlement: payroll
+ok 74 - pro entitlement: payroll
+  ---
+  duration_ms: 0.048565
+  ...
+# Subtest: pro entitlement: audit
+ok 75 - pro entitlement: audit
+  ---
+  duration_ms: 0.038581
+  ...
+# Subtest: pro entitlement: data_export
+ok 76 - pro entitlement: data_export
+  ---
+  duration_ms: 0.068548
+  ...
+# Subtest: pro entitlement: inventory_export
+ok 77 - pro entitlement: inventory_export
+  ---
+  duration_ms: 0.036282
+  ...
+# Subtest: pro entitlement: backup
+ok 78 - pro entitlement: backup
+  ---
+  duration_ms: 0.032839
+  ...
+# Subtest: pro entitlement: imports
+ok 79 - pro entitlement: imports
+  ---
+  duration_ms: 0.034705
+  ...
+# Subtest: pro entitlement: privileges
+ok 80 - pro entitlement: privileges
+  ---
+  duration_ms: 0.035022
+  ...
+# Subtest: pro entitlement: inventory_marketing
+ok 81 - pro entitlement: inventory_marketing
+  ---
+  duration_ms: 0.033384
+  ...
+# Subtest: pro entitlement: business_landing
+ok 82 - pro entitlement: business_landing
+  ---
+  duration_ms: 0.031975
+  ...
+# Subtest: pro entitlement: chatbot
+ok 83 - pro entitlement: chatbot
+  ---
+  duration_ms: 0.047339
+  ...
+# Subtest: pro entitlement: messaging
+ok 84 - pro entitlement: messaging
+  ---
+  duration_ms: 0.068602
+  ...
+# Subtest: pro entitlement: email
+ok 85 - pro entitlement: email
+  ---
+  duration_ms: 0.036965
+  ...
+# Subtest: pro entitlement: referrals
+ok 86 - pro entitlement: referrals
+  ---
+  duration_ms: 0.048078
+  ...
+# Subtest: pro entitlement: team_services
+ok 87 - pro entitlement: team_services
+  ---
+  duration_ms: 0.077329
+  ...
+# Subtest: max entitlement: selling
+ok 88 - max entitlement: selling
+  ---
+  duration_ms: 0.072294
+  ...
+# Subtest: max entitlement: receipts
+ok 89 - max entitlement: receipts
+  ---
+  duration_ms: 0.04256
+  ...
+# Subtest: max entitlement: sales_history
+ok 90 - max entitlement: sales_history
+  ---
+  duration_ms: 0.038792
+  ...
+# Subtest: max entitlement: inventory
+ok 91 - max entitlement: inventory
+  ---
+  duration_ms: 0.048643
+  ...
+# Subtest: max entitlement: appearance
+ok 92 - max entitlement: appearance
+  ---
+  duration_ms: 0.039209
+  ...
+# Subtest: max entitlement: payments
+ok 93 - max entitlement: payments
+  ---
+  duration_ms: 0.040189
+  ...
+# Subtest: max entitlement: regional
+ok 94 - max entitlement: regional
+  ---
+  duration_ms: 0.038222
+  ...
+# Subtest: max entitlement: delete_data
+ok 95 - max entitlement: delete_data
+  ---
+  duration_ms: 0.034984
+  ...
+# Subtest: max entitlement: about
+ok 96 - max entitlement: about
+  ---
+  duration_ms: 0.035794
+  ...
+# Subtest: max entitlement: debts
+ok 97 - max entitlement: debts
+  ---
+  duration_ms: 0.036286
+  ...
+# Subtest: max entitlement: expenses
+ok 98 - max entitlement: expenses
+  ---
+  duration_ms: 0.034297
+  ...
+# Subtest: max entitlement: invoices
+ok 99 - max entitlement: invoices
+  ---
+  duration_ms: 0.033119
+  ...
+# Subtest: max entitlement: analytics
+ok 100 - max entitlement: analytics
+  ---
+  duration_ms: 0.034587
+  ...
+# Subtest: max entitlement: directory
+ok 101 - max entitlement: directory
+  ---
+  duration_ms: 0.036897
+  ...
+# Subtest: max entitlement: company_profile
+ok 102 - max entitlement: company_profile
+  ---
+  duration_ms: 0.03419
+  ...
+# Subtest: max entitlement: payroll
+ok 103 - max entitlement: payroll
+  ---
+  duration_ms: 0.034774
+  ...
+# Subtest: max entitlement: audit
+ok 104 - max entitlement: audit
+  ---
+  duration_ms: 0.034308
+  ...
+# Subtest: max entitlement: data_export
+ok 105 - max entitlement: data_export
+  ---
+  duration_ms: 0.034108
+  ...
+# Subtest: max entitlement: inventory_export
+ok 106 - max entitlement: inventory_export
+  ---
+  duration_ms: 0.049031
+  ...
+# Subtest: max entitlement: backup
+ok 107 - max entitlement: backup
+  ---
+  duration_ms: 0.036753
+  ...
+# Subtest: max entitlement: imports
+ok 108 - max entitlement: imports
+  ---
+  duration_ms: 0.044229
+  ...
+# Subtest: max entitlement: privileges
+ok 109 - max entitlement: privileges
+  ---
+  duration_ms: 0.036915
+  ...
+# Subtest: max entitlement: inventory_marketing
+ok 110 - max entitlement: inventory_marketing
+  ---
+  duration_ms: 0.036857
+  ...
+# Subtest: max entitlement: business_landing
+ok 111 - max entitlement: business_landing
+  ---
+  duration_ms: 0.04577
+  ...
+# Subtest: max entitlement: chatbot
+ok 112 - max entitlement: chatbot
+  ---
+  duration_ms: 0.040016
+  ...
+# Subtest: max entitlement: messaging
+ok 113 - max entitlement: messaging
+  ---
+  duration_ms: 0.043909
+  ...
+# Subtest: max entitlement: email
+ok 114 - max entitlement: email
+  ---
+  duration_ms: 0.042425
+  ...
+# Subtest: max entitlement: referrals
+ok 115 - max entitlement: referrals
+  ---
+  duration_ms: 0.038541
+  ...
+# Subtest: max entitlement: team_services
+ok 116 - max entitlement: team_services
+  ---
+  duration_ms: 0.040602
+  ...
+# Subtest: lifetime entitlement: selling
+ok 117 - lifetime entitlement: selling
+  ---
+  duration_ms: 0.087533
+  ...
+# Subtest: lifetime entitlement: receipts
+ok 118 - lifetime entitlement: receipts
+  ---
+  duration_ms: 0.056738
+  ...
+# Subtest: lifetime entitlement: sales_history
+ok 119 - lifetime entitlement: sales_history
+  ---
+  duration_ms: 0.061708
+  ...
+# Subtest: lifetime entitlement: inventory
+ok 120 - lifetime entitlement: inventory
+  ---
+  duration_ms: 0.105617
+  ...
+# Subtest: lifetime entitlement: appearance
+ok 121 - lifetime entitlement: appearance
+  ---
+  duration_ms: 0.063036
+  ...
+# Subtest: lifetime entitlement: payments
+ok 122 - lifetime entitlement: payments
+  ---
+  duration_ms: 0.076822
+  ...
+# Subtest: lifetime entitlement: regional
+ok 123 - lifetime entitlement: regional
+  ---
+  duration_ms: 0.066203
+  ...
+# Subtest: lifetime entitlement: delete_data
+ok 124 - lifetime entitlement: delete_data
+  ---
+  duration_ms: 0.074655
+  ...
+# Subtest: lifetime entitlement: about
+ok 125 - lifetime entitlement: about
+  ---
+  duration_ms: 0.058361
+  ...
+# Subtest: lifetime entitlement: debts
+ok 126 - lifetime entitlement: debts
+  ---
+  duration_ms: 0.04713
+  ...
+# Subtest: lifetime entitlement: expenses
+ok 127 - lifetime entitlement: expenses
+  ---
+  duration_ms: 0.048319
+  ...
+# Subtest: lifetime entitlement: invoices
+ok 128 - lifetime entitlement: invoices
+  ---
+  duration_ms: 0.03946
+  ...
+# Subtest: lifetime entitlement: analytics
+ok 129 - lifetime entitlement: analytics
+  ---
+  duration_ms: 0.039932
+  ...
+# Subtest: lifetime entitlement: directory
+ok 130 - lifetime entitlement: directory
+  ---
+  duration_ms: 0.042556
+  ...
+# Subtest: lifetime entitlement: company_profile
+ok 131 - lifetime entitlement: company_profile
+  ---
+  duration_ms: 0.039091
+  ...
+# Subtest: lifetime entitlement: payroll
+ok 132 - lifetime entitlement: payroll
+  ---
+  duration_ms: 0.040954
+  ...
+# Subtest: lifetime entitlement: audit
+ok 133 - lifetime entitlement: audit
+  ---
+  duration_ms: 0.040849
+  ...
+# Subtest: lifetime entitlement: data_export
+ok 134 - lifetime entitlement: data_export
+  ---
+  duration_ms: 0.039168
+  ...
+# Subtest: lifetime entitlement: inventory_export
+ok 135 - lifetime entitlement: inventory_export
+  ---
+  duration_ms: 0.039434
+  ...
+# Subtest: lifetime entitlement: backup
+ok 136 - lifetime entitlement: backup
+  ---
+  duration_ms: 0.040073
+  ...
+# Subtest: lifetime entitlement: imports
+ok 137 - lifetime entitlement: imports
+  ---
+  duration_ms: 0.040308
+  ...
+# Subtest: lifetime entitlement: privileges
+ok 138 - lifetime entitlement: privileges
+  ---
+  duration_ms: 0.055414
+  ...
+# Subtest: lifetime entitlement: inventory_marketing
+ok 139 - lifetime entitlement: inventory_marketing
+  ---
+  duration_ms: 0.04531
+  ...
+# Subtest: lifetime entitlement: business_landing
+ok 140 - lifetime entitlement: business_landing
+  ---
+  duration_ms: 0.051649
+  ...
+# Subtest: lifetime entitlement: chatbot
+ok 141 - lifetime entitlement: chatbot
+  ---
+  duration_ms: 0.04466
+  ...
+# Subtest: lifetime entitlement: messaging
+ok 142 - lifetime entitlement: messaging
+  ---
+  duration_ms: 0.040692
+  ...
+# Subtest: lifetime entitlement: email
+ok 143 - lifetime entitlement: email
+  ---
+  duration_ms: 0.050589
+  ...
+# Subtest: lifetime entitlement: referrals
+ok 144 - lifetime entitlement: referrals
+  ---
+  duration_ms: 0.100634
+  ...
+# Subtest: lifetime entitlement: team_services
+ok 145 - lifetime entitlement: team_services
+  ---
+  duration_ms: 0.059823
+  ...
+# Subtest: unknown feature strings fail closed even on Lifetime
+ok 146 - unknown feature strings fail closed even on Lifetime # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.047615
+  ...
+# Subtest: new workspaces default to Free while older saved settings retain Pro access
+ok 147 - new workspaces default to Free while older saved settings retain Pro access # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.059601
+  ...
+# Subtest: downgrade does not delete or rewrite records
+ok 148 - downgrade does not delete or rewrite records # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.064808
+  ...
+# Subtest: Free platform navigation only exposes licensed basic modules
+ok 149 - Free platform navigation only exposes licensed basic modules # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.042743
+  ...
+# Subtest: Free has currency/date/appearance/payment/delete settings but no imports, backup or email
+ok 150 - Free has currency/date/appearance/payment/delete settings but no imports, backup or email # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.039032
+  ...
+# Subtest: Starter retains companies, payroll, messaging and promotions with four explicit exclusions
+ok 151 - Starter retains companies, payroll, messaging and promotions with four explicit exclusions # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.074862
+  ...
+# Subtest: context-level paid actions reject Free as well as hiding its menu
+ok 152 - context-level paid actions reject Free as well as hiding its menu # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.041734
+  ...
+# Subtest: only an admin can select a valid demo tier; save preferences cannot revert it
+ok 153 - only an admin can select a valid demo tier; save preferences cannot revert it # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.052068
+  ...
+# Subtest: Free admin does not bypass licensed audit access
+ok 154 - Free admin does not bypass licensed audit access # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.063328
+  ...
+# Subtest: optional neutral avatar is a local illustrated placeholder
+ok 155 - optional neutral avatar is a local illustrated placeholder # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.070053
+  ...
+# Subtest: optional masculine avatar is a local illustrated placeholder
+ok 156 - optional masculine avatar is a local illustrated placeholder # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.03906
+  ...
+# Subtest: optional feminine avatar is a local illustrated placeholder
+ok 157 - optional feminine avatar is a local illustrated placeholder # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.038076
+  ...
+# Subtest: unspecified avatar is neutral and never infers sex/orientation from names
+ok 158 - unspecified avatar is neutral and never infers sex/orientation from names # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.040021
+  ...
+# Subtest: supplied photos override placeholders and organisations get a company image
+ok 159 - supplied photos override placeholders and organisations get a company image
+  ---
+  duration_ms: 0.228289
+  ...
+# Subtest: company name is distinct from personal first/second names
+ok 160 - company name is distinct from personal first/second names
+  ---
+  duration_ms: 0.080931
+  ...
+# Subtest: one staff identity is visible in members, transporters and marketing without duplicate IDs
+ok 161 - one staff identity is visible in members, transporters and marketing without duplicate IDs
+  ---
+  duration_ms: 0.769006
+  ...
+# Subtest: editing any linked staff projection updates master and other views
+ok 162 - editing any linked staff projection updates master and other views # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.05518
+  ...
+# Subtest: removing a staff role removes its derived row, not the source member
+ok 163 - removing a staff role removes its derived row, not the source member # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.06781
+  ...
+# Subtest: legacy trans-sync/mkt-sync IDs reconcile to the original member on edit
+ok 164 - legacy trans-sync/mkt-sync IDs reconcile to the original member on edit # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.042734
+  ...
+# Subtest: company functions project the same organisation into all selected business directories
+ok 165 - company functions project the same organisation into all selected business directories
+  ---
+  duration_ms: 0.228144
+  ...
+# Subtest: removing a company function removes that derived directory membership
+ok 166 - removing a company function removes that derived directory membership
+  ---
+  duration_ms: 0.237087
+  ...
+# Subtest: utilities can exist only in related companies and still be a selectable payee
+ok 167 - utilities can exist only in related companies and still be a selectable payee # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.048868
+  ...
+# Subtest: company branches require an existing parent and reject ancestor cycles
+ok 168 - company branches require an existing parent and reject ancestor cycles
+  ---
+  duration_ms: 0.473757
+  ...
+# Subtest: company transaction snapshots keep original details after contact edits
+ok 169 - company transaction snapshots keep original details after contact edits
+  ---
+  duration_ms: 0.262857
+  ...
+# Subtest: branch snapshots include parent identity
+ok 170 - branch snapshots include parent identity
+  ---
+  duration_ms: 0.107772
+  ...
+# Subtest: deleting a linked directory identity does not mutate financial snapshots
+ok 171 - deleting a linked directory identity does not mutate financial snapshots
+  ---
+  duration_ms: 0.174316
+  ...
+# Subtest: external drivers are not automatically treated as employees without explicit selection
+ok 172 - external drivers are not automatically treated as employees without explicit selection # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.129932
+  ...
+# Subtest: shift preset Full day · weekdays keeps disjoint working/off days
+ok 173 - shift preset Full day · weekdays keeps disjoint working/off days # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.103187
+  ...
+# Subtest: shift preset Half day · morning to noon keeps disjoint working/off days
+ok 174 - shift preset Half day · morning to noon keeps disjoint working/off days # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.049413
+  ...
+# Subtest: shift preset Half day · noon to evening keeps disjoint working/off days
+ok 175 - shift preset Half day · noon to evening keeps disjoint working/off days # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.037251
+  ...
+# Subtest: shift preset Night shift · overnight keeps disjoint working/off days
+ok 176 - shift preset Night shift · overnight keeps disjoint working/off days # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.040146
+  ...
+# Subtest: shift preset Weekends only keeps disjoint working/off days
+ok 177 - shift preset Weekends only keeps disjoint working/off days # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.05599
+  ...
+# Subtest: shift preset Holidays only keeps disjoint working/off days
+ok 178 - shift preset Holidays only keeps disjoint working/off days # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.034766
+  ...
+# Subtest: shift preset Every day keeps disjoint working/off days
+ok 179 - shift preset Every day keeps disjoint working/off days # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.041232
+  ...
+# Subtest: half-day and overnight boundaries are explicit
+ok 180 - half-day and overnight boundaries are explicit # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.034236
+  ...
+# Subtest: holiday-only schedules do not fabricate holiday dates or salary payments
+ok 181 - holiday-only schedules do not fabricate holiday dates or salary payments # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.063434
+  ...
+# Subtest: off-day selection is complementary and duplicate-safe
+ok 182 - off-day selection is complementary and duplicate-safe # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.04682
+  ...
+# Subtest: recording salary without the expense checkbox creates no expense
+ok 183 - recording salary without the expense checkbox creates no expense # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.039153
+  ...
+# Subtest: explicit salary-expense choice creates one deterministically linked expense
+ok 184 - explicit salary-expense choice creates one deterministically linked expense # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.037459
+  ...
+# Subtest: agreed rate does not replace the actual paid amount
+ok 185 - agreed rate does not replace the actual paid amount # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.036295
+  ...
+# Subtest: invalid paid amount 0 is rejected before posting
+ok 186 - invalid paid amount 0 is rejected before posting # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.03395
+  ...
+# Subtest: invalid paid amount -1 is rejected before posting
+ok 187 - invalid paid amount -1 is rejected before posting # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.035415
+  ...
+# Subtest: invalid paid amount NaN is rejected before posting
+ok 188 - invalid paid amount NaN is rejected before posting # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.032942
+  ...
+# Subtest: invalid paid amount Infinity is rejected before posting
+ok 189 - invalid paid amount Infinity is rejected before posting # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.039086
+  ...
+# Subtest: invalid salary dates and companies are rejected
+ok 190 - invalid salary dates and companies are rejected # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.059893
+  ...
+# Subtest: context prevents double-click salary/expense duplication and checks expense privilege first
+ok 191 - context prevents double-click salary/expense duplication and checks expense privilege first # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.044755
+  ...
+# Subtest: non-HR backup does not expose salary payments or agreed rates
+ok 192 - non-HR backup does not expose salary payments or agreed rates # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.0383
+  ...
+# Subtest: selected time zone formats instants without changing the stored ISO value
+ok 193 - selected time zone formats instants without changing the stored ISO value # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.037375
+  ...
+# Subtest: date-only documents do not move to yesterday in another time zone
+ok 194 - date-only documents do not move to yesterday in another time zone # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.036753
+  ...
+# Subtest: all three date formats and 12-hour time are supported
+ok 195 - all three date formats and 12-hour time are supported # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.034085
+  ...
+# Subtest: business date inputs use the selected timezone rather than an unconditional UTC day
+ok 196 - business date inputs use the selected timezone rather than an unconditional UTC day # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.033248
+  ...
+# Subtest: bad zones fail validation and holiday lists are explicit/deduplicated
+ok 197 - bad zones fail validation and holiday lists are explicit/deduplicated # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.032258
+  ...
+# Subtest: more payment channels are available but bookkeeping is not live integration
+ok 198 - more payment channels are available but bookkeeping is not live integration # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.033538
+  ...
+# Subtest: camera refuses blank or unready video frames
+ok 199 - camera refuses blank or unready video frames # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.071519
+  ...
+# Subtest: camera capture scales large frames, keeps text orientation and emits actual JPEG
+ok 200 - camera capture scales large frames, keeps text orientation and emits actual JPEG # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.048599
+  ...
+# Subtest: camera failures explain permission/device/busy conditions and have a device-file fallback
+ok 201 - camera failures explain permission/device/busy conditions and have a device-file fallback # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.035694
+  ...
+# Subtest: camera stop releases every track
+ok 202 - camera stop releases every track # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.039214
+  ...
+# Subtest: shared camera starts after DOM commit and cancels late streams on retry/unmount
+ok 203 - shared camera starts after DOM commit and cancels late streams on retry/unmount # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.03376
+  ...
+# Subtest: every camera implementation routes through the one shared control
+ok 204 - every camera implementation routes through the one shared control # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.035081
+  ...
+# Subtest: new supplier/company fields cannot execute HTML in PDF print reports
+ok 205 - new supplier/company fields cannot execute HTML in PDF print reports
+  ---
+  duration_ms: 0.215584
+  ...
+# Subtest: expense and purchase invoice PDFs retain the selected company snapshot details
+ok 206 - expense and purchase invoice PDFs retain the selected company snapshot details
+  ---
+  duration_ms: 0.350703
+  ...
+# Subtest: invoice totals come from actual stock lines and paid status, not a hidden template
+ok 207 - invoice totals come from actual stock lines and paid status, not a hidden template # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.058177
+  ...
+# Subtest: non-HR/non-finance backups cannot reveal salary payments through linked expense rows
+ok 208 - non-HR/non-finance backups cannot reveal salary payments through linked expense rows # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.03945
+  ...
+1..208
+# tests 208
+# suites 0
+# pass 156
+# fail 0
+# cancelled 0
+# skipped 52
+# todo 0
+# duration_ms 315.037307

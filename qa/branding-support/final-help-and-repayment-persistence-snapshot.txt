@@ -1,0 +1,483 @@
+### Page
+- Page URL: http://127.0.0.1:5173/#/pos/invoices
+- Page Title: CODE76 POS — Private Workspace
+### Snapshot
+```yaml
+- generic [ref=f1e4]:
+  - banner [ref=f1e693]:
+    - generic [ref=f1e694]:
+      - button "CODE76 POS logo CODE76 POS Enterprise Product & Service SaaS ERP System" [ref=f1e696] [cursor=pointer]:
+        - img "CODE76 POS logo" [ref=f1e698]
+        - generic [ref=f1e699]:
+          - generic [ref=f1e700]:
+            - generic [ref=f1e701]: CODE76 POS
+            - generic [ref=f1e702]: Enterprise
+          - paragraph [ref=f1e703]: Product & Service SaaS ERP System
+      - generic [ref=f1e704]:
+        - generic [ref=f1e705]:
+          - button "Desktop View (Full Width)" [ref=f1e706] [cursor=pointer]
+          - button "Laptop View (1024px)" [ref=f1e709] [cursor=pointer]
+          - button "Tablet View (768px)" [ref=f1e712] [cursor=pointer]
+          - button "Phone Mobile View (390px)" [ref=f1e715] [cursor=pointer]
+        - generic [ref=f1e718]:
+          - button "Demo Data" [ref=f1e719] [cursor=pointer]
+          - button "Business Page" [ref=f1e726] [cursor=pointer]
+          - button "Click to view help guide and settings for this platform" [ref=f1e731] [cursor=pointer]
+          - button "Active user session and access controls" [ref=f1e736] [cursor=pointer]:
+            - generic [ref=f1e737]: DR
+            - generic [ref=f1e738]:
+              - generic [ref=f1e739]: Dr. David Kimani
+              - generic [ref=f1e740]: "Role: CEO"
+    - generic [ref=f1e741]:
+      - generic [ref=f1e742]:
+        - generic [ref=f1e746]: App link
+        - generic [ref=f1e747]:
+          - generic [ref=f1e748]:
+            - generic [ref=f1e749]: App link
+            - textbox "App link" [ref=f1e750]: http://127.0.0.1:5173/
+            - button "Copy app link" [ref=f1e751] [cursor=pointer]:
+              - generic [ref=f1e755]: Copy link
+            - link "Open app link in a new tab" [ref=f1e756] [cursor=pointer]:
+              - /url: http://127.0.0.1:5173/
+          - status [ref=f1e761]
+        - button "Current demo plan" [ref=f1e762]: Max · demo
+      - paragraph [ref=f1e763]: Open this root link to reach CODE76 sign-in/register. Browser-local records and sessions do not sync between browsers.
+    - note [ref=f1e764]: DEMO DATA · Fictional records, contacts, reviews and bookkeeping amounts—not real business activity.
+    - generic [ref=f1e766]:
+      - button "Sales POS" [ref=f1e767] [cursor=pointer]
+      - button "Sales History" [ref=f1e771] [cursor=pointer]
+      - button "Inventory" [ref=f1e776] [cursor=pointer]
+      - button "Expenses" [ref=f1e781] [cursor=pointer]
+      - button "Invoices" [active] [ref=f1e785] [cursor=pointer]
+      - button "Analytics & P&L" [ref=f1e789] [cursor=pointer]
+      - button "Customers" [ref=f1e792] [cursor=pointer]
+      - button "Vendors" [ref=f1e798] [cursor=pointer]
+      - button "Transporters" [ref=f1e803] [cursor=pointer]
+      - button "Marketing Team" [ref=f1e809] [cursor=pointer]
+      - button "Company Members" [ref=f1e813] [cursor=pointer]
+      - button "My Company" [ref=f1e819] [cursor=pointer]
+      - button "Messaging" [ref=f1e823] [cursor=pointer]
+      - button "Business Landing Page" [ref=f1e826] [cursor=pointer]
+      - button "Settings" [ref=f1e831] [cursor=pointer]
+      - button "Audit & Access Logs" [ref=f1e835] [cursor=pointer]
+      - button "About & Manual" [ref=f1e839] [cursor=pointer]
+  - main [ref=f1e5]:
+    - generic [ref=f1e3665]:
+      - paragraph [ref=f1e3666]: "Operating currency: USD. Currency changes do not convert existing amounts."
+      - generic [ref=f1e3667]:
+        - generic [ref=f1e3668]:
+          - generic [ref=f1e3669]:
+            - heading "Invoices Platform" [level=1] [ref=f1e3670]
+            - button "Click for platform guidance & settings" [ref=f1e3671] [cursor=pointer]
+          - paragraph [ref=f1e3675]: Billing management for both customer Sales Invoices and vendor Stock Purchase Invoices.
+        - generic [ref=f1e3676]:
+          - button "CSV Export" [ref=f1e3677] [cursor=pointer]
+          - button "PDF Ledger" [ref=f1e3681] [cursor=pointer]
+          - button "Email Invoices (.txt & .pdf)" [ref=f1e3685] [cursor=pointer]
+          - button "Create Invoice" [ref=f1e3690] [cursor=pointer]
+      - generic [ref=f1e3692]:
+        - 'textbox "Search invoice #, customer, or vendor..." [ref=f1e3697]'
+        - generic [ref=f1e3698]:
+          - button "All Invoices" [ref=f1e3699] [cursor=pointer]
+          - button "Sales Invoices (Customers)" [ref=f1e3700] [cursor=pointer]
+          - button "Stock Purchases (Vendors)" [ref=f1e3701] [cursor=pointer]
+      - table [ref=f1e3704]:
+        - rowgroup [ref=f1e3705]:
+          - row [ref=f1e3706]:
+            - columnheader "Actions (Start)" [ref=f1e3707]
+            - 'columnheader "Invoice #" [ref=f1e3708]'
+            - columnheader "Classification" [ref=f1e3709]
+            - columnheader "Billed Party" [ref=f1e3710]
+            - columnheader "Issue Date" [ref=f1e3711]
+            - columnheader "Due Date" [ref=f1e3712]
+            - columnheader "Subtotal" [ref=f1e3713]
+            - columnheader "Total" [ref=f1e3714]
+            - columnheader "Amount Paid" [ref=f1e3715]
+            - columnheader "Status" [ref=f1e3716]
+            - columnheader "Actions (End)" [ref=f1e3717]
+        - rowgroup [ref=f1e3718]:
+          - row [ref=f1e3719]:
+            - cell [ref=f1e3720]:
+              - generic [ref=f1e3721]:
+                - button "View Invoice Details" [ref=f1e3722] [cursor=pointer]
+                - button "Print / Export Invoice PDF" [ref=f1e3726] [cursor=pointer]
+                - button "Email invoice (.txt & .pdf) to client, vendor, or staff" [ref=f1e3730] [cursor=pointer]
+                - button "Delete Invoice" [ref=f1e3734] [cursor=pointer]
+            - cell "DEMO-INV-1" [ref=f1e3738]
+            - cell "Sales Receivable" [ref=f1e3739]
+            - cell "DEMO Business Customer(Customer)" [ref=f1e3740]:
+              - text: DEMO Business Customer
+              - generic [ref=f1e3741]: (Customer)
+            - cell "20/10/2026" [ref=f1e3742]
+            - cell "20/10/2026" [ref=f1e3743]
+            - cell "USD 50.00" [ref=f1e3744]
+            - cell "USD 50.00" [ref=f1e3745]
+            - cell "USD 50.00" [ref=f1e3746]
+            - cell "paid" [ref=f1e3747]
+            - cell [ref=f1e3748]:
+              - generic [ref=f1e3749]:
+                - button "View Invoice Details" [ref=f1e3750] [cursor=pointer]
+                - button "Print / Export Invoice PDF" [ref=f1e3754] [cursor=pointer]
+                - button "Email invoice (.txt & .pdf) to client, vendor, or staff" [ref=f1e3758] [cursor=pointer]
+                - button "Delete Invoice" [ref=f1e3762] [cursor=pointer]
+          - row [ref=f1e3766]:
+            - cell [ref=f1e3767]:
+              - generic [ref=f1e3768]:
+                - button "View Invoice Details" [ref=f1e3769] [cursor=pointer]
+                - button "Print / Export Invoice PDF" [ref=f1e3773] [cursor=pointer]
+                - button "Email invoice (.txt & .pdf) to client, vendor, or staff" [ref=f1e3777] [cursor=pointer]
+                - button "Delete Invoice" [ref=f1e3781] [cursor=pointer]
+            - cell "DEMO-INV-2" [ref=f1e3785]
+            - cell "Sales Receivable" [ref=f1e3786]
+            - cell "DEMO Customer 14 Sample(Customer)" [ref=f1e3787]:
+              - text: DEMO Customer 14 Sample
+              - generic [ref=f1e3788]: (Customer)
+            - cell "19/10/2026" [ref=f1e3789]
+            - cell "26/10/2026" [ref=f1e3790]
+            - cell "USD 216.00" [ref=f1e3791]
+            - cell "USD 216.00" [ref=f1e3792]
+            - cell "USD 216.00" [ref=f1e3793]
+            - cell "paid" [ref=f1e3794]
+            - cell [ref=f1e3795]:
+              - generic [ref=f1e3796]:
+                - button "View Invoice Details" [ref=f1e3797] [cursor=pointer]
+                - button "Print / Export Invoice PDF" [ref=f1e3801] [cursor=pointer]
+                - button "Email invoice (.txt & .pdf) to client, vendor, or staff" [ref=f1e3805] [cursor=pointer]
+                - button "Delete Invoice" [ref=f1e3809] [cursor=pointer]
+          - row [ref=f1e3813]:
+            - cell [ref=f1e3814]:
+              - generic [ref=f1e3815]:
+                - button "View Invoice Details" [ref=f1e3816] [cursor=pointer]
+                - button "Print / Export Invoice PDF" [ref=f1e3820] [cursor=pointer]
+                - button "Email invoice (.txt & .pdf) to client, vendor, or staff" [ref=f1e3824] [cursor=pointer]
+                - button "Delete Invoice" [ref=f1e3828] [cursor=pointer]
+            - cell "DEMO-INV-7" [ref=f1e3832]
+            - cell "Sales Receivable" [ref=f1e3833]
+            - cell "DEMO Customer 09 Sample(Customer)" [ref=f1e3834]:
+              - text: DEMO Customer 09 Sample
+              - generic [ref=f1e3835]: (Customer)
+            - cell "14/10/2026" [ref=f1e3836]
+            - cell "14/10/2026" [ref=f1e3837]
+            - cell "USD 5.00" [ref=f1e3838]
+            - cell "USD 5.00" [ref=f1e3839]
+            - cell "USD 5.00" [ref=f1e3840]
+            - cell "paid" [ref=f1e3841]
+            - cell [ref=f1e3842]:
+              - generic [ref=f1e3843]:
+                - button "View Invoice Details" [ref=f1e3844] [cursor=pointer]
+                - button "Print / Export Invoice PDF" [ref=f1e3848] [cursor=pointer]
+                - button "Email invoice (.txt & .pdf) to client, vendor, or staff" [ref=f1e3852] [cursor=pointer]
+                - button "Delete Invoice" [ref=f1e3856] [cursor=pointer]
+          - row [ref=f1e3860]:
+            - cell [ref=f1e3861]:
+              - generic [ref=f1e3862]:
+                - button "View Invoice Details" [ref=f1e3863] [cursor=pointer]
+                - button "Print / Export Invoice PDF" [ref=f1e3867] [cursor=pointer]
+                - button "Email invoice (.txt & .pdf) to client, vendor, or staff" [ref=f1e3871] [cursor=pointer]
+                - button "Delete Invoice" [ref=f1e3875] [cursor=pointer]
+            - cell "DEMO-INV-8" [ref=f1e3879]
+            - cell "Sales Receivable" [ref=f1e3880]
+            - cell "DEMO Customer 08 Sample(Customer)" [ref=f1e3881]:
+              - text: DEMO Customer 08 Sample
+              - generic [ref=f1e3882]: (Customer)
+            - cell "13/10/2026" [ref=f1e3883]
+            - cell "20/10/2026" [ref=f1e3884]
+            - cell "USD 40.00" [ref=f1e3885]
+            - cell "USD 40.00" [ref=f1e3886]
+            - cell "USD 20.00" [ref=f1e3887]
+            - cell "pending" [ref=f1e3888]
+            - cell [ref=f1e3889]:
+              - generic [ref=f1e3890]:
+                - button "View Invoice Details" [ref=f1e3891] [cursor=pointer]
+                - button "Print / Export Invoice PDF" [ref=f1e3895] [cursor=pointer]
+                - button "Email invoice (.txt & .pdf) to client, vendor, or staff" [ref=f1e3899] [cursor=pointer]
+                - button "Delete Invoice" [ref=f1e3903] [cursor=pointer]
+          - row [ref=f1e3907]:
+            - cell [ref=f1e3908]:
+              - generic [ref=f1e3909]:
+                - button "View Invoice Details" [ref=f1e3910] [cursor=pointer]
+                - button "Print / Export Invoice PDF" [ref=f1e3914] [cursor=pointer]
+                - button "Email invoice (.txt & .pdf) to client, vendor, or staff" [ref=f1e3918] [cursor=pointer]
+                - button "Delete Invoice" [ref=f1e3922] [cursor=pointer]
+            - cell "DEMO-INV-13" [ref=f1e3926]
+            - cell "Sales Receivable" [ref=f1e3927]
+            - cell "DEMO Customer 03 Sample(Customer)" [ref=f1e3928]:
+              - text: DEMO Customer 03 Sample
+              - generic [ref=f1e3929]: (Customer)
+            - cell "08/10/2026" [ref=f1e3930]
+            - cell "08/10/2026" [ref=f1e3931]
+            - cell "USD 2.50" [ref=f1e3932]
+            - cell "USD 2.50" [ref=f1e3933]
+            - cell "USD 2.50" [ref=f1e3934]
+            - cell "paid" [ref=f1e3935]
+            - cell [ref=f1e3936]:
+              - generic [ref=f1e3937]:
+                - button "View Invoice Details" [ref=f1e3938] [cursor=pointer]
+                - button "Print / Export Invoice PDF" [ref=f1e3942] [cursor=pointer]
+                - button "Email invoice (.txt & .pdf) to client, vendor, or staff" [ref=f1e3946] [cursor=pointer]
+                - button "Delete Invoice" [ref=f1e3950] [cursor=pointer]
+          - row [ref=f1e3954]:
+            - cell [ref=f1e3955]:
+              - generic [ref=f1e3956]:
+                - button "View Invoice Details" [ref=f1e3957] [cursor=pointer]
+                - button "Print / Export Invoice PDF" [ref=f1e3961] [cursor=pointer]
+                - button "Email invoice (.txt & .pdf) to client, vendor, or staff" [ref=f1e3965] [cursor=pointer]
+                - button "Delete Invoice" [ref=f1e3969] [cursor=pointer]
+            - cell "DEMO-INV-14" [ref=f1e3973]
+            - cell "Sales Receivable" [ref=f1e3974]
+            - cell "DEMO Customer 02 Sample(Customer)" [ref=f1e3975]:
+              - text: DEMO Customer 02 Sample
+              - generic [ref=f1e3976]: (Customer)
+            - cell "07/10/2026" [ref=f1e3977]
+            - cell "14/10/2026" [ref=f1e3978]
+            - cell "USD 22.00" [ref=f1e3979]
+            - cell "USD 22.00" [ref=f1e3980]
+            - cell "USD 11.00" [ref=f1e3981]
+            - cell "overdue" [ref=f1e3982]
+            - cell [ref=f1e3983]:
+              - generic [ref=f1e3984]:
+                - button "View Invoice Details" [ref=f1e3985] [cursor=pointer]
+                - button "Print / Export Invoice PDF" [ref=f1e3989] [cursor=pointer]
+                - button "Email invoice (.txt & .pdf) to client, vendor, or staff" [ref=f1e3993] [cursor=pointer]
+                - button "Delete Invoice" [ref=f1e3997] [cursor=pointer]
+          - row [ref=f1e4001]:
+            - cell [ref=f1e4002]:
+              - generic [ref=f1e4003]:
+                - button "View Invoice Details" [ref=f1e4004] [cursor=pointer]
+                - button "Print / Export Invoice PDF" [ref=f1e4008] [cursor=pointer]
+                - button "Email invoice (.txt & .pdf) to client, vendor, or staff" [ref=f1e4012] [cursor=pointer]
+                - button "Delete Invoice" [ref=f1e4016] [cursor=pointer]
+            - cell "DEMO-INV-19" [ref=f1e4020]
+            - cell "Sales Receivable" [ref=f1e4021]
+            - cell "DEMO Customer 12 Sample(Customer)" [ref=f1e4022]:
+              - text: DEMO Customer 12 Sample
+              - generic [ref=f1e4023]: (Customer)
+            - cell "20/10/2026" [ref=f1e4024]
+            - cell "20/10/2026" [ref=f1e4025]
+            - cell "USD 4.00" [ref=f1e4026]
+            - cell "USD 4.00" [ref=f1e4027]
+            - cell "USD 4.00" [ref=f1e4028]
+            - cell "paid" [ref=f1e4029]
+            - cell [ref=f1e4030]:
+              - generic [ref=f1e4031]:
+                - button "View Invoice Details" [ref=f1e4032] [cursor=pointer]
+                - button "Print / Export Invoice PDF" [ref=f1e4036] [cursor=pointer]
+                - button "Email invoice (.txt & .pdf) to client, vendor, or staff" [ref=f1e4040] [cursor=pointer]
+                - button "Delete Invoice" [ref=f1e4044] [cursor=pointer]
+          - row [ref=f1e4048]:
+            - cell [ref=f1e4049]:
+              - generic [ref=f1e4050]:
+                - button "View Invoice Details" [ref=f1e4051] [cursor=pointer]
+                - button "Print / Export Invoice PDF" [ref=f1e4055] [cursor=pointer]
+                - button "Email invoice (.txt & .pdf) to client, vendor, or staff" [ref=f1e4059] [cursor=pointer]
+                - button "Delete Invoice" [ref=f1e4063] [cursor=pointer]
+            - cell "DEMO-INV-20" [ref=f1e4067]
+            - cell "Sales Receivable" [ref=f1e4068]
+            - cell "DEMO Customer 11 Sample(Customer)" [ref=f1e4069]:
+              - text: DEMO Customer 11 Sample
+              - generic [ref=f1e4070]: (Customer)
+            - cell "19/10/2026" [ref=f1e4071]
+            - cell "26/10/2026" [ref=f1e4072]
+            - cell "USD 216.00" [ref=f1e4073]
+            - cell "USD 216.00" [ref=f1e4074]
+            - cell "USD 108.00" [ref=f1e4075]
+            - cell "pending" [ref=f1e4076]
+            - cell [ref=f1e4077]:
+              - generic [ref=f1e4078]:
+                - button "View Invoice Details" [ref=f1e4079] [cursor=pointer]
+                - button "Print / Export Invoice PDF" [ref=f1e4083] [cursor=pointer]
+                - button "Email invoice (.txt & .pdf) to client, vendor, or staff" [ref=f1e4087] [cursor=pointer]
+                - button "Delete Invoice" [ref=f1e4091] [cursor=pointer]
+          - row [ref=f1e4095]:
+            - cell [ref=f1e4096]:
+              - generic [ref=f1e4097]:
+                - button "View Invoice Details" [ref=f1e4098] [cursor=pointer]
+                - button "Print / Export Invoice PDF" [ref=f1e4102] [cursor=pointer]
+                - button "Email invoice (.txt & .pdf) to client, vendor, or staff" [ref=f1e4106] [cursor=pointer]
+                - button "Delete Invoice" [ref=f1e4110] [cursor=pointer]
+            - cell "DEMO-INV-25" [ref=f1e4114]
+            - cell "Sales Receivable" [ref=f1e4115]
+            - cell "DEMO Customer 06 Sample(Customer)" [ref=f1e4116]:
+              - text: DEMO Customer 06 Sample
+              - generic [ref=f1e4117]: (Customer)
+            - cell "14/10/2026" [ref=f1e4118]
+            - cell "14/10/2026" [ref=f1e4119]
+            - cell "USD 5.00" [ref=f1e4120]
+            - cell "USD 5.00" [ref=f1e4121]
+            - cell "USD 5.00" [ref=f1e4122]
+            - cell "paid" [ref=f1e4123]
+            - cell [ref=f1e4124]:
+              - generic [ref=f1e4125]:
+                - button "View Invoice Details" [ref=f1e4126] [cursor=pointer]
+                - button "Print / Export Invoice PDF" [ref=f1e4130] [cursor=pointer]
+                - button "Email invoice (.txt & .pdf) to client, vendor, or staff" [ref=f1e4134] [cursor=pointer]
+                - button "Delete Invoice" [ref=f1e4138] [cursor=pointer]
+          - row [ref=f1e4142]:
+            - cell [ref=f1e4143]:
+              - generic [ref=f1e4144]:
+                - button "View Invoice Details" [ref=f1e4145] [cursor=pointer]
+                - button "Print / Export Invoice PDF" [ref=f1e4149] [cursor=pointer]
+                - button "Email invoice (.txt & .pdf) to client, vendor, or staff" [ref=f1e4153] [cursor=pointer]
+                - button "Delete Invoice" [ref=f1e4157] [cursor=pointer]
+            - cell "DEMO-INV-26" [ref=f1e4161]
+            - cell "Sales Receivable" [ref=f1e4162]
+            - cell "DEMO Customer 05 Sample(Customer)" [ref=f1e4163]:
+              - text: DEMO Customer 05 Sample
+              - generic [ref=f1e4164]: (Customer)
+            - cell "13/10/2026" [ref=f1e4165]
+            - cell "20/10/2026" [ref=f1e4166]
+            - cell "USD 130.00" [ref=f1e4167]
+            - cell "USD 130.00" [ref=f1e4168]
+            - cell "USD 65.00" [ref=f1e4169]
+            - cell "pending" [ref=f1e4170]
+            - cell [ref=f1e4171]:
+              - generic [ref=f1e4172]:
+                - button "View Invoice Details" [ref=f1e4173] [cursor=pointer]
+                - button "Print / Export Invoice PDF" [ref=f1e4177] [cursor=pointer]
+                - button "Email invoice (.txt & .pdf) to client, vendor, or staff" [ref=f1e4181] [cursor=pointer]
+                - button "Delete Invoice" [ref=f1e4185] [cursor=pointer]
+          - row [ref=f1e4189]:
+            - cell [ref=f1e4190]:
+              - generic [ref=f1e4191]:
+                - button "View Invoice Details" [ref=f1e4192] [cursor=pointer]
+                - button "Print / Export Invoice PDF" [ref=f1e4196] [cursor=pointer]
+                - button "Email invoice (.txt & .pdf) to client, vendor, or staff" [ref=f1e4200] [cursor=pointer]
+                - button "Delete Invoice" [ref=f1e4204] [cursor=pointer]
+            - cell "DEMO-INV-31" [ref=f1e4208]
+            - cell "Sales Receivable" [ref=f1e4209]
+            - cell "DEMO Business Customer(Customer)" [ref=f1e4210]:
+              - text: DEMO Business Customer
+              - generic [ref=f1e4211]: (Customer)
+            - cell "08/10/2026" [ref=f1e4212]
+            - cell "08/10/2026" [ref=f1e4213]
+            - cell "USD 140.00" [ref=f1e4214]
+            - cell "USD 140.00" [ref=f1e4215]
+            - cell "USD 140.00" [ref=f1e4216]
+            - cell "paid" [ref=f1e4217]
+            - cell [ref=f1e4218]:
+              - generic [ref=f1e4219]:
+                - button "View Invoice Details" [ref=f1e4220] [cursor=pointer]
+                - button "Print / Export Invoice PDF" [ref=f1e4224] [cursor=pointer]
+                - button "Email invoice (.txt & .pdf) to client, vendor, or staff" [ref=f1e4228] [cursor=pointer]
+                - button "Delete Invoice" [ref=f1e4232] [cursor=pointer]
+          - row [ref=f1e4236]:
+            - cell [ref=f1e4237]:
+              - generic [ref=f1e4238]:
+                - button "View Invoice Details" [ref=f1e4239] [cursor=pointer]
+                - button "Print / Export Invoice PDF" [ref=f1e4243] [cursor=pointer]
+                - button "Email invoice (.txt & .pdf) to client, vendor, or staff" [ref=f1e4247] [cursor=pointer]
+                - button "Delete Invoice" [ref=f1e4251] [cursor=pointer]
+            - cell "DEMO-INV-32" [ref=f1e4255]
+            - cell "Sales Receivable" [ref=f1e4256]
+            - cell "DEMO Customer 14 Sample(Customer)" [ref=f1e4257]:
+              - text: DEMO Customer 14 Sample
+              - generic [ref=f1e4258]: (Customer)
+            - cell "07/10/2026" [ref=f1e4259]
+            - cell "14/10/2026" [ref=f1e4260]
+            - cell "USD 22.00" [ref=f1e4261]
+            - cell "USD 22.00" [ref=f1e4262]
+            - cell "USD 11.00" [ref=f1e4263]
+            - cell "overdue" [ref=f1e4264]
+            - cell [ref=f1e4265]:
+              - generic [ref=f1e4266]:
+                - button "View Invoice Details" [ref=f1e4267] [cursor=pointer]
+                - button "Print / Export Invoice PDF" [ref=f1e4271] [cursor=pointer]
+                - button "Email invoice (.txt & .pdf) to client, vendor, or staff" [ref=f1e4275] [cursor=pointer]
+                - button "Delete Invoice" [ref=f1e4279] [cursor=pointer]
+          - row [ref=f1e4283]:
+            - cell [ref=f1e4284]:
+              - generic [ref=f1e4285]:
+                - button "View Invoice Details" [ref=f1e4286] [cursor=pointer]
+                - button "Print / Export Invoice PDF" [ref=f1e4290] [cursor=pointer]
+                - button "Email invoice (.txt & .pdf) to client, vendor, or staff" [ref=f1e4294] [cursor=pointer]
+                - button "Delete Invoice" [ref=f1e4298] [cursor=pointer]
+            - cell "DEMO-STOCK-1" [ref=f1e4302]
+            - cell "Stock Purchase" [ref=f1e4303]
+            - cell "DEMO Supplies West Branch(Vendor)" [ref=f1e4304]:
+              - text: DEMO Supplies West Branch
+              - generic [ref=f1e4305]: (Vendor)
+            - cell "15/10/2026" [ref=f1e4306]
+            - cell "22/10/2026" [ref=f1e4307]
+            - cell "USD 40.00" [ref=f1e4308]
+            - cell "USD 40.00" [ref=f1e4309]
+            - cell "USD 40.00" [ref=f1e4310]
+            - cell "paid" [ref=f1e4311]
+            - cell [ref=f1e4312]:
+              - generic [ref=f1e4313]:
+                - button "View Invoice Details" [ref=f1e4314] [cursor=pointer]
+                - button "Print / Export Invoice PDF" [ref=f1e4318] [cursor=pointer]
+                - button "Email invoice (.txt & .pdf) to client, vendor, or staff" [ref=f1e4322] [cursor=pointer]
+                - button "Delete Invoice" [ref=f1e4326] [cursor=pointer]
+          - row [ref=f1e4330]:
+            - cell [ref=f1e4331]:
+              - generic [ref=f1e4332]:
+                - button "View Invoice Details" [ref=f1e4333] [cursor=pointer]
+                - button "Print / Export Invoice PDF" [ref=f1e4337] [cursor=pointer]
+                - button "Email invoice (.txt & .pdf) to client, vendor, or staff" [ref=f1e4341] [cursor=pointer]
+                - button "Delete Invoice" [ref=f1e4345] [cursor=pointer]
+            - cell "DEMO-STOCK-2" [ref=f1e4349]
+            - cell "Stock Purchase" [ref=f1e4350]
+            - cell "DEMO Supplies West Branch(Vendor)" [ref=f1e4351]:
+              - text: DEMO Supplies West Branch
+              - generic [ref=f1e4352]: (Vendor)
+            - cell "14/10/2026" [ref=f1e4353]
+            - cell "21/10/2026" [ref=f1e4354]
+            - cell "USD 20.00" [ref=f1e4355]
+            - cell "USD 20.00" [ref=f1e4356]
+            - cell "USD 0.00" [ref=f1e4357]
+            - cell "pending" [ref=f1e4358]
+            - cell [ref=f1e4359]:
+              - generic [ref=f1e4360]:
+                - button "View Invoice Details" [ref=f1e4361] [cursor=pointer]
+                - button "Print / Export Invoice PDF" [ref=f1e4365] [cursor=pointer]
+                - button "Email invoice (.txt & .pdf) to client, vendor, or staff" [ref=f1e4369] [cursor=pointer]
+                - button "Delete Invoice" [ref=f1e4373] [cursor=pointer]
+          - row [ref=f1e4377]:
+            - cell [ref=f1e4378]:
+              - generic [ref=f1e4379]:
+                - button "View Invoice Details" [ref=f1e4380] [cursor=pointer]
+                - button "Print / Export Invoice PDF" [ref=f1e4384] [cursor=pointer]
+                - button "Email invoice (.txt & .pdf) to client, vendor, or staff" [ref=f1e4388] [cursor=pointer]
+                - button "Delete Invoice" [ref=f1e4392] [cursor=pointer]
+            - cell "DEMO-STOCK-3" [ref=f1e4396]
+            - cell "Stock Purchase" [ref=f1e4397]
+            - cell "DEMO Supplies West Branch(Vendor)" [ref=f1e4398]:
+              - text: DEMO Supplies West Branch
+              - generic [ref=f1e4399]: (Vendor)
+            - cell "13/10/2026" [ref=f1e4400]
+            - cell "20/10/2026" [ref=f1e4401]
+            - cell "USD 50.00" [ref=f1e4402]
+            - cell "USD 50.00" [ref=f1e4403]
+            - cell "USD 50.00" [ref=f1e4404]
+            - cell "paid" [ref=f1e4405]
+            - cell [ref=f1e4406]:
+              - generic [ref=f1e4407]:
+                - button "View Invoice Details" [ref=f1e4408] [cursor=pointer]
+                - button "Print / Export Invoice PDF" [ref=f1e4412] [cursor=pointer]
+                - button "Email invoice (.txt & .pdf) to client, vendor, or staff" [ref=f1e4416] [cursor=pointer]
+                - button "Delete Invoice" [ref=f1e4420] [cursor=pointer]
+          - row [ref=f1e4424]:
+            - cell [ref=f1e4425]:
+              - generic [ref=f1e4426]:
+                - button "View Invoice Details" [ref=f1e4427] [cursor=pointer]
+                - button "Print / Export Invoice PDF" [ref=f1e4431] [cursor=pointer]
+                - button "Email invoice (.txt & .pdf) to client, vendor, or staff" [ref=f1e4435] [cursor=pointer]
+                - button "Delete Invoice" [ref=f1e4439] [cursor=pointer]
+            - cell "DEMO-STOCK-4" [ref=f1e4443]
+            - cell "Stock Purchase" [ref=f1e4444]
+            - cell "DEMO Supplies West Branch(Vendor)" [ref=f1e4445]:
+              - text: DEMO Supplies West Branch
+              - generic [ref=f1e4446]: (Vendor)
+            - cell "12/10/2026" [ref=f1e4447]
+            - cell "19/10/2026" [ref=f1e4448]
+            - cell "USD 15.00" [ref=f1e4449]
+            - cell "USD 15.00" [ref=f1e4450]
+            - cell "USD 0.00" [ref=f1e4451]
+            - cell "pending" [ref=f1e4452]
+            - cell [ref=f1e4453]:
+              - generic [ref=f1e4454]:
+                - button "View Invoice Details" [ref=f1e4455] [cursor=pointer]
+                - button "Print / Export Invoice PDF" [ref=f1e4459] [cursor=pointer]
+                - button "Email invoice (.txt & .pdf) to client, vendor, or staff" [ref=f1e4463] [cursor=pointer]
+                - button "Delete Invoice" [ref=f1e4467] [cursor=pointer]
+```

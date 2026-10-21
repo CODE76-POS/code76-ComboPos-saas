@@ -64,6 +64,24 @@ export type PlatformId =
   | 'audit_logs'
   | 'about';
 
+export type AvatarStyle = 'neutral' | 'masculine' | 'feminine';
+export type DirectoryCategory = 'customer' | 'vendor' | 'transporter' | 'marketer' | 'company_member' | 'related_company';
+export type CompanyFunction = 'vendor' | 'transporter' | 'marketer';
+export type PayBasis = 'month' | 'week' | 'day' | 'hour' | 'task' | 'delivery' | 'session' | 'project';
+export type PlanTier = 'free' | 'starter' | 'pro' | 'max' | 'lifetime';
+export interface TeamServiceBrief {
+  id:string; serviceId:string; businessName:string; website:string; goal:string;
+  scope:string; contact:string; authorized:boolean; createdAt:string;
+  createdBy:string; status:'local_draft';
+}
+export type TeamServiceBriefDraft=Omit<TeamServiceBrief,'id'|'createdAt'|'createdBy'|'status'>;
+export interface RegionalSettings {
+  timeZone: string;
+  dateFormat: 'DD/MM/YYYY' | 'MM/DD/YYYY' | 'YYYY-MM-DD';
+  timeFormat: '12h' | '24h';
+  holidayDates: string[];
+}
+
 export interface PersonRecord {
   id: string;
   firstName: string;
@@ -78,7 +96,24 @@ export interface PersonRecord {
   country: string;
   photoUrl: string;
   photoConsentForLanding: boolean;
-  category: 'customer' | 'vendor' | 'transporter' | 'marketer' | 'company_member';
+  category: DirectoryCategory;
+  entityType?: 'person' | 'company' | 'branch';
+  avatarStyle?: AvatarStyle;
+  organisationName?: string;
+  companyType?: string;
+  companyFunctions?: CompanyFunction[];
+  parentCompanyId?: string;
+  regNumber?: string;
+  taxPin?: string;
+  sourceCategory?: DirectoryCategory;
+  companyMember?: boolean;
+  customerCompany?: boolean;
+  shiftPreset?: string;
+  shiftStart?: string;
+  shiftEnd?: string;
+  offDays?: string[];
+  salaryRate?: number;
+  salaryBasis?: PayBasis;
   roles?: [UserRole, UserRole]; // Exactly 2 roles for company members
   workingDays?: string[]; // e.g. ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
   workingHours?: string; // e.g. '08:00 AM - 05:00 PM'
@@ -89,6 +124,8 @@ export interface PersonRecord {
   isTopReferrer?: boolean;
 }
 
+export type ServiceBillingUnit = 'task' | 'minute' | 'hour' | 'day' | 'week' | 'month' | 'year' | 'session' | 'visit' | 'project';
+
 export interface ProductItem {
   id: string;
   sku: string;
@@ -97,7 +134,8 @@ export interface ProductItem {
   name2?: string; // Item Name 2 / Nickname
   category: string; // Main Category / Main Niche
   subCategory?: string; // Sub-Category / Sub-Niche
-  type: 'product' | 'service'; // THIS IS A PRODUCT vs THIS IS A SERVICE
+  type: 'product' | 'service'; // Product stock or a billable service
+  serviceUnit?: ServiceBillingUnit; // Service rate basis; never a stock quantity
   ageRestriction?: string; // Age restriction (e.g. 'All Ages', '13+', '18+', '21+')
   costPrice: number;
   sellingPrice: number;
@@ -124,8 +162,24 @@ export interface CartItem {
   total: number;
 }
 
+export type PaymentMethod = 'Cash' | 'M-Pesa' | 'Airtel Money' | 'T-Kash' | 'Credit Card' | 'Bank Transfer' | 'Debit Card' | 'Credit / Debt' | 'Cheque' | 'PayPal' | 'Gift Card' | 'Voucher' | 'Crypto' | 'Other' | 'Card' | 'Bank Wire';
+export interface PartySnapshot {
+  id: string; name: string; entityType: string; companyType: string;
+  parentCompanyName?: string; address: string; location: string; country: string;
+  tel: string; whatsapp: string; email: string; regNumber: string; taxPin: string;
+}
+export interface SalaryPayment {
+  id: string; memberId: string; memberName: string; amount: number; currency: string;
+  basis: PayBasis; paidOn: string; paidFor: string; method: string; reference: string;
+  recordedAt: string; recordedBy: string; expenseId?: string;
+}
+export interface SalaryPaymentDraft {
+  id: string; memberId: string; amount: number; basis: PayBasis; paidOn: string;
+  paidFor: string; method: string; reference: string; recordExpense: boolean;
+}
+
 export interface PaymentSplit {
-  method: 'Cash' | 'M-Pesa' | 'Credit Card' | 'Bank Transfer' | 'Debit Card' | 'Credit / Debt' | 'Crypto' | 'Other';
+  method: PaymentMethod;
   amount: number;
   referenceNo?: string;
 }
@@ -157,6 +211,8 @@ export interface SaleTransaction {
   amountPaid: number;
   debtAmount: number;
   debtSettledDate?: string;
+  debtDueDate?: string;
+  debtPayments?: import('../utils/debt.ts').DebtPaymentRecord[];
   referredBy?: {
     id: string;
     name: string;
@@ -179,6 +235,9 @@ export interface ExpenseItem {
   paymentMethod: string;
   description: string;
   receiptUrl?: string;
+  relatedCompanyId?: string;
+  partySnapshot?: PartySnapshot;
+  salaryPaymentId?: string;
 }
 
 export interface InvoiceItem {
@@ -188,6 +247,8 @@ export interface InvoiceItem {
   saleId?: string;
   partyName: string;
   partyType: 'Customer' | 'Vendor';
+  relatedCompanyId?: string;
+  partySnapshot?: PartySnapshot;
   date: string;
   dueDate: string;
   items: { description: string; quantity: number; unitPrice: number; total: number }[];
@@ -200,6 +261,8 @@ export interface InvoiceItem {
 }
 
 export interface CustomerReview {
+  isDemo?: boolean;
+  avatarStyle?: AvatarStyle;
   id: string;
   customerName: string;
   customerPhotoUrl?: string;
@@ -242,6 +305,7 @@ export interface CompanyData {
   currency: string;
   operatingHours: string;
   isConfiguredByMerchant?: boolean;
+  isDemo?: boolean;
 }
 
 export interface FinancialHealth {
@@ -288,7 +352,50 @@ export interface EmailTemplate {
   body: string;
 }
 
+export type SettingsSection = 'payments' | 'textSizing' | 'landingPage' | 'receipts' | 'appearance' | 'font' | 'backup' | 'privileges' | 'pdfExcel' | 'emailTemplates' | 'auditLogs' | 'dataEraser' | 'regional' | 'plans' | 'teamServices' | 'demoData' | 'chatbot';
+
+/** Output formats a receipt can be exported to without a print dialog. */
+export type ReceiptFormat = 'pdf' | 'txt' | 'csv' | 'json' | 'html';
+export type ReceiptChannel = 'email' | 'whatsapp' | 'sms' | 'copy';
+
+/** One recorded attempt to hand a receipt to a customer. Local bookkeeping only. */
+export interface ReceiptDispatch {
+  id: string;
+  saleId: string;
+  receiptNo: string;
+  channel: ReceiptChannel;
+  recipient: string;
+  format: ReceiptFormat;
+  sentAt: string;
+  sentBy: string;
+  /** `opened` = an OS/share link or mail client was opened; no server delivery is claimed. */
+  status: 'opened' | 'copied';
+  note?: string;
+}
+
+/** Merchant chatbot / assistant configuration for the private business page. */
+export interface ChatbotSettings {
+  enabled: boolean;
+  assistantName: string;
+  greeting: string;
+  /** Short description of how the assistant should speak. */
+  tone: 'friendly' | 'professional' | 'concise';
+  quickPrompts: string[];
+  /** Shown when the assistant cannot answer from the catalogue. */
+  fallbackMessage: string;
+  handoffContact: string;
+  showPrices: boolean;
+  showStock: boolean;
+  collectLeads: boolean;
+  offlineNotice: string;
+  /** Public CODE76-site assistant is controlled by CODE76, not the merchant. */
+  code76SurfaceEnabled?: boolean;
+}
+
 export interface AppSettings {
+  /** Demo entitlements only, not a verified paid subscription. */
+  planTier?: PlanTier;
+  regional?: RegionalSettings;
   payments: {
     acceptedMethods: string[];
     defaultCurrency: string;
@@ -296,7 +403,9 @@ export interface AppSettings {
     allowDebtSales: boolean;
   };
   textSizing: 'compact' | 'normal' | 'large' | 'xlarge';
+  /** Merchant Business Landing Page ONLY. CODE76 public-site content lives in config/code76Site.ts. */
   landingPage: {
+    contentVersion?: number;
     heroTitle: string;
     heroSubtitle: string;
     featuredCount: number;
@@ -318,6 +427,19 @@ export interface AppSettings {
     returnPolicy: string;
     showBarcode: boolean;
     showTaxPin: boolean;
+    /** Ask the cashier to send/download the receipt right after checkout. */
+    promptAfterSale?: boolean;
+    /** Formats offered in the receipt download menu. PDF is always available. */
+    enabledFormats?: ReceiptFormat[];
+    /** Channels offered in the receipt send panel. */
+    enabledChannels?: ReceiptChannel[];
+    defaultChannel?: ReceiptChannel;
+    /** Message used when sharing a receipt link/text. Tokens: {customer} {company} {receipt} {total} {currency} {date}. */
+    sendMessageTemplate?: string;
+    /** Automatically open the receipt preview after a completed sale. */
+    autoOpenAfterSale?: boolean;
+    /** Show the merchant's bank/till details on the receipt. */
+    paymentInstructions?: string;
   };
   appearance: {
     theme: 'light' | 'dark';
@@ -344,8 +466,17 @@ export interface AppSettings {
     canImportCsv: boolean;
     canViewAuditLogs: boolean;
     canModifySettings: boolean;
+    /** Optional newer controls; legacy saved settings fall back to a documented default. */
+    canSettleDebt?: boolean;
+    canSendReceipts?: boolean;
+    canEditLandingPage?: boolean;
+    canManageChatbot?: boolean;
+    canDeleteData?: boolean;
+    canManageSchedules?: boolean;
   }>;
   emailTemplates: EmailTemplate[];
+  /** Merchant business-page assistant. Never used by the CODE76 public site. */
+  chatbot?: ChatbotSettings;
 }
 
 export interface AuthUser {

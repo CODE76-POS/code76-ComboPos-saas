@@ -6,3 +6,8 @@ coverage/
 *.log
 .env*
 !.env.example
+
+# Local browser-tool artifacts and Python bytecode
+.playwright-cli/
+__pycache__/
+*.pyc

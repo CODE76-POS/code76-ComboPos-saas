@@ -1,3 +1,6 @@
+import {calendarDate} from '../../utils/regional.ts';
+import { acceptedPaymentMethods } from '../../config/paymentMethods.ts';
+import { serviceUnitLabel } from '../../utils/serviceUnits.ts';
 import React, { useState, useMemo } from 'react';
 import { usePOS } from '../../context/POSContext.tsx';
 import {
@@ -22,7 +25,9 @@ import {
   X,
   CheckCircle2,
 } from 'lucide-react';
-import { CartItem, ExtraCharge, PaymentSplit, ProductItem } from '../../types/index.ts';
+import { CartItem, ExtraCharge, PaymentSplit, ProductItem, ReceiptChannel } from '../../types/index.ts';
+import { appDialogs } from '../../utils/appDialogs.ts';
+import { RECEIPT_CHANNELS } from '../../config/assistant.ts';
 import { calculateCartTotals, calculatePaymentsAndDebt } from '../../utils/calculations.ts';
 
 export const SalesPlatform: React.FC = () => {
@@ -34,14 +39,26 @@ export const SalesPlatform: React.FC = () => {
     addSale,
     createSalesInvoiceFromCart,
     setReceiptModalSale,
+    setReceiptModalIntent,
     setReviewModalSale,
     setHoverHelpPlatform,
     settings,
+    company,
+    hasFeature,
+    currentUser,
   } = usePOS();
+  const currency = company.currency || 'USD';
 
+  const availableMethods = acceptedPaymentMethods(settings.payments.acceptedMethods, hasFeature('debts') && settings.payments.allowDebtSales);
+  const [checkoutError,setCheckoutError] = useState('');
+  const [debtDueDate,setDebtDueDate]=useState('');
   // Cart state
   const [cart, setCart] = useState<CartItem[]>([]);
   const [selectedCustomerId, setSelectedCustomerId] = useState<string>('');
+  // Optional receipt delivery chosen before the sale is completed.
+  const [receiptDelivery, setReceiptDelivery] = useState(false);
+  const [receiptChannel, setReceiptChannel] = useState<ReceiptChannel>('email');
+  const [receiptRecipient, setReceiptRecipient] = useState('');
   const [invoiceModalOpen, setInvoiceModalOpen] = useState(false);
   const [invoiceDueDate, setInvoiceDueDate] = useState<string>(() =>
     new Date(Date.now() + 14 * 86400000).toISOString().split('T')[0]
@@ -239,7 +256,7 @@ export const SalesPlatform: React.FC = () => {
   const addPaymentMethod = () => {
     const currentPaid = payments.reduce((acc, p) => acc + p.amount, 0);
     const remainder = Math.max(0, totals.netTotal - currentPaid);
-    setPayments((prev) => [...prev, { method: 'M-Pesa', amount: remainder }]);
+    setPayments((prev) => [...prev, { method: availableMethods.find(m=>m!=='Cash') || availableMethods[0] || 'Cash', amount: remainder }]);
   };
 
   const updatePaymentRow = (index: number, field: keyof PaymentSplit, val: any) => {
@@ -253,13 +270,16 @@ export const SalesPlatform: React.FC = () => {
   };
 
   const autoFillFullPayment = () => {
-    setPayments([{ method: 'Cash', amount: totals.netTotal }]);
+    setPayments([{ method: availableMethods.includes('Cash')?'Cash':availableMethods[0] || 'Cash', amount: totals.netTotal }]);
   };
 
   // Complete Checkout
   const handleCompleteSale = () => {
     if (cart.length === 0) return;
+    if (!hasFeature('debts') && paymentAnalysis.remainingDebt > 0) { setCheckoutError('The Free plan requires full payment. Debt creation and handling need a paid demo plan.'); return; }
 
+    if(debtDueDate && !/^\d{4}-\d{2}-\d{2}$/.test(debtDueDate)){setCheckoutError('Choose a valid optional debt due date.');return;}
+    setCheckoutError('');
     const currentCustomer = customers.find((c) => c.id === selectedCustomerId);
     const customerName = currentCustomer
       ? `${currentCustomer.firstName} ${currentCustomer.secondName}`
@@ -268,9 +288,9 @@ export const SalesPlatform: React.FC = () => {
     const completed = addSale({
       customerId: selectedCustomerId || 'walk-in',
       customerName,
-      customerContact: currentCustomer?.tel1 || '',
-      cashierId: 'cashier-01',
-      cashierName: 'Peter Nick (Cashier)',
+      customerContact: receiptRecipient.trim() || currentCustomer?.tel1 || currentCustomer?.email1 || '',
+      cashierId: currentUser?.id || 'cashier',
+      cashierName: currentUser?.name || 'Cashier',
       items: cart,
       subtotal: totals.subtotal,
       overallDiscountType,
@@ -281,27 +301,52 @@ export const SalesPlatform: React.FC = () => {
       payments,
       amountPaid: paymentAnalysis.totalPaid,
       debtAmount: paymentAnalysis.remainingDebt,
+      debtDueDate:paymentAnalysis.remainingDebt>0?debtDueDate||undefined:undefined,
       referredBy: selectedReferrer ? selectedReferrer : undefined,
-      status: paymentAnalysis.remainingDebt > 0 ? 'debt_pending' : 'completed',
+      status: paymentAnalysis.remainingDebt > 0 ? paymentAnalysis.totalPaid>0?'debt_partial':'debt_pending' : 'completed',
       hasReview: false,
     });
 
-    // Open receipt modal
-    setReceiptModalSale(completed);
+    // Receipt hand-off. The cashier decides; nothing is sent automatically.
+    const wantSend = receiptDelivery;
+    if (wantSend) {
+      setReceiptModalIntent('send');
+      setReceiptModalSale(completed);
+    } else if (settings.receipts.promptAfterSale !== false) {
+      setTimeout(async () => {
+        const choice = await appDialogs.choice({
+          title: 'Sale complete — share the receipt?',
+          message: `${completed.receiptNo} · ${currency} ${completed.netTotal.toFixed(2)}`,
+          detail: 'Choose how to hand the receipt to the customer. Nothing is emailed or messaged automatically, and no browser popup is used.',
+          tone: 'success',
+          actions: [
+            { id: 'send', label: 'Send the receipt', description: 'Email, WhatsApp or SMS draft, or copy the text.', tone: 'primary' },
+            { id: 'download', label: 'Download a copy', description: 'PDF, TXT, CSV, JSON or HTML generated in this browser.', tone: 'neutral' },
+            { id: 'view', label: 'View / print the receipt', description: 'Open the receipt preview.', tone: 'neutral' },
+          ],
+          cancelLabel: 'Not now',
+        });
+        if (!choice) return;
+        setReceiptModalIntent(choice === 'download' ? 'download' : choice === 'send' ? 'send' : 'preview');
+        setReceiptModalSale(completed);
+      }, 250);
+    } else if (settings.receipts.autoOpenAfterSale !== false) {
+      setReceiptModalIntent('preview');
+      setReceiptModalSale(completed);
+    }
 
     // Prompt for review capture if customer exists
-    setTimeout(() => {
-      setReviewModalSale(completed);
-    }, 1200);
+    if (hasFeature('business_landing')) setTimeout(() => { setReviewModalSale(completed); }, 1400);
 
     // Reset cart
-    clearCart();
+    clearCart();setDebtDueDate('');setReceiptDelivery(false);
   };
 
   const isCartOnLeft = settings.appearance.cartPosition === 'left';
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-6">
+      {checkoutError && <p role="alert" className="mb-4 rounded-xl border border-amber-700 p-3 text-sm text-amber-300">{checkoutError}</p>}
       {/* Platform Header with Help Trigger */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
@@ -339,6 +384,7 @@ export const SalesPlatform: React.FC = () => {
             </select>
           </div>
 
+          {hasFeature('referrals') && (<>
           {/* Sales Referred By combo-box */}
           <div className="flex items-center gap-1.5 bg-slate-900 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-slate-200">
             <Sparkles className="w-3.5 h-3.5 text-amber-400" />
@@ -357,7 +403,8 @@ export const SalesPlatform: React.FC = () => {
                 </option>
               ))}
             </select>
-          </div>
+          </div>          </>)}
+
         </div>
       </div>
 
@@ -442,19 +489,19 @@ export const SalesPlatform: React.FC = () => {
                             {p.isOnPromo ? (
                               <div>
                                 <span className="line-through text-slate-500 text-[10px] block">
-                                  ${p.sellingPrice.toFixed(2)}
+                                  {currency} {p.sellingPrice.toFixed(2)}
                                 </span>
                                 <span className="text-xs font-black text-amber-400 font-mono">
-                                  ${(p.promoDiscountPrice || p.sellingPrice).toFixed(2)}
+                                  {currency} {(p.promoDiscountPrice || p.sellingPrice).toFixed(2)}
                                 </span>
                               </div>
                             ) : (
                               <div className="text-xs font-extrabold text-emerald-400">
-                                ${p.sellingPrice.toFixed(2)}
+                                {currency} {p.sellingPrice.toFixed(2)}
                               </div>
                             )}
                             <div className="text-[10px] text-slate-400">
-                              {p.type === 'service' ? 'Service' : `${p.stock} in stock`}
+                              {p.type === 'service' ? serviceUnitLabel(p) : `${p.stock} in stock`}
                             </div>
                           </div>
 
@@ -528,7 +575,7 @@ export const SalesPlatform: React.FC = () => {
                         {p.name}
                       </div>
                       <div className="text-[10px] text-slate-400 mt-0.5">
-                        {p.category} | {p.type === 'service' ? 'Service' : `Stock: ${p.stock}`}
+                        {p.category} | {p.type === 'service' ? serviceUnitLabel(p) : `Stock: ${p.stock}`}
                       </div>
                     </div>
 
@@ -537,15 +584,15 @@ export const SalesPlatform: React.FC = () => {
                         {p.isOnPromo ? (
                           <div>
                             <span className="line-through text-slate-500 text-[10px] block">
-                              ${p.sellingPrice.toFixed(2)}
+                              {currency} {p.sellingPrice.toFixed(2)}
                             </span>
                             <span className="text-sm font-black text-amber-400 font-mono">
-                              ${(p.promoDiscountPrice || p.sellingPrice).toFixed(2)}
+                              {currency} {(p.promoDiscountPrice || p.sellingPrice).toFixed(2)}
                             </span>
                           </div>
                         ) : (
                           <span className="text-sm font-black text-emerald-400 font-mono">
-                            ${p.sellingPrice.toFixed(2)}
+                            {currency} {p.sellingPrice.toFixed(2)}
                           </span>
                         )}
                       </div>
@@ -603,12 +650,12 @@ export const SalesPlatform: React.FC = () => {
                       <div>
                         <div className="text-xs font-bold text-slate-100">{item.product.name}</div>
                         <div className="text-[10px] text-slate-400">
-                          ${item.unitPrice.toFixed(2)} each
+                          {currency} {item.unitPrice.toFixed(2)} each
                         </div>
                       </div>
                       <div className="text-right">
                         <div className="text-xs font-bold text-emerald-400">
-                          ${item.total.toFixed(2)}
+                          {currency} {item.total.toFixed(2)}
                         </div>
                         <button
                           onClick={() => removeFromCart(item.product.id)}
@@ -619,12 +666,14 @@ export const SalesPlatform: React.FC = () => {
                       </div>
                     </div>
 
+                    {item.product.type === 'service' && <p className="mt-1 text-[10px] text-purple-300">Rate: {serviceUnitLabel(item.product).toLowerCase()} · quantity counts billable units</p>}
                     {/* Qty & Item Discount Controls */}
                     <div className="flex items-center justify-between gap-2 text-xs">
                       {/* Qty controls */}
                       <div className="flex items-center bg-slate-950 rounded-lg border border-slate-800 p-0.5">
                         <button
                           onClick={() => updateCartItemQty(item.product.id, -1)}
+                          aria-label={`Decrease quantity for ${item.product.name}`}
                           className="w-6 h-6 flex items-center justify-center text-slate-400 hover:text-white cursor-pointer"
                         >
                           <Minus className="w-3 h-3" />
@@ -634,6 +683,7 @@ export const SalesPlatform: React.FC = () => {
                         </span>
                         <button
                           onClick={() => updateCartItemQty(item.product.id, 1)}
+                          aria-label={`Increase quantity for ${item.product.name}`}
                           className="w-6 h-6 flex items-center justify-center text-slate-400 hover:text-white cursor-pointer"
                         >
                           <Plus className="w-3 h-3" />
@@ -777,7 +827,7 @@ export const SalesPlatform: React.FC = () => {
             <div className="border-t border-slate-800 pt-3 my-2 space-y-1.5 text-xs">
               <div className="flex justify-between text-slate-400">
                 <span>Subtotal:</span>
-                <span>${totals.subtotal.toFixed(2)}</span>
+                <span>{currency} {totals.subtotal.toFixed(2)}</span>
               </div>
               {totals.totalDiscount > 0 && (
                 <div className="flex justify-between text-emerald-400">
@@ -799,7 +849,7 @@ export const SalesPlatform: React.FC = () => {
               )}
               <div className="flex justify-between text-base font-black text-slate-100 border-t border-slate-800 pt-2">
                 <span>Net Total:</span>
-                <span className="text-emerald-400">${totals.netTotal.toFixed(2)}</span>
+                <span className="text-emerald-400">{currency} {totals.netTotal.toFixed(2)}</span>
               </div>
             </div>
 
@@ -814,13 +864,13 @@ export const SalesPlatform: React.FC = () => {
                   <button
                     onClick={autoFillFullPayment}
                     className="px-2.5 py-1 rounded-full bg-slate-800/90 hover:bg-slate-700 text-slate-300 text-[11px] font-semibold border border-slate-700 transition cursor-pointer shadow-xs"
-                    title="Automatically fill total balance into payment method"
+                    title="Replace split payments with one Cash payment for the full total"
                   >
-                    Exact Pay
+                    One payment
                   </button>
                   <button
                     onClick={addPaymentMethod}
-                    className="px-3 py-1 rounded-full bg-teal-500/25 hover:bg-teal-500/40 text-teal-200 border-2 border-teal-400/80 shadow-[0_0_15px_rgba(20,184,166,0.4)] hover:shadow-[0_0_20px_rgba(20,184,166,0.6)] text-[11px] font-black flex items-center gap-1.5 transition-all duration-200 cursor-pointer active:scale-95 animate-pulse hover:animate-none"
+                    className="payment-add-button px-3 py-1 rounded-full bg-teal-500/25 hover:bg-teal-500/40 text-teal-200 border-2 border-teal-400/80 shadow-[0_0_15px_rgba(20,184,166,0.4)] hover:shadow-[0_0_20px_rgba(20,184,166,0.6)] text-[11px] font-black flex items-center gap-1.5 transition-all duration-200 cursor-pointer active:scale-95 animate-pulse hover:animate-none"
                     title="Add another split payment method (Cash, M-Pesa, Card, Wire, Credit)"
                   >
                     <Plus className="w-3.5 h-3.5 text-teal-300" />
@@ -832,16 +882,12 @@ export const SalesPlatform: React.FC = () => {
               {payments.map((p, idx) => (
                 <div key={idx} className="flex items-center gap-1.5 text-xs">
                   <select
+                    aria-label={`Payment ${idx + 1} method`}
                     value={p.method}
                     onChange={(e) => updatePaymentRow(idx, 'method', e.target.value)}
                     className="w-28 bg-slate-950 border border-slate-800 rounded-lg px-2 py-1 text-slate-200"
                   >
-                    <option value="Cash">Cash</option>
-                    <option value="M-Pesa">M-Pesa</option>
-                    <option value="Credit Card">Card</option>
-                    <option value="Bank Transfer">Bank Wire</option>
-                    <option value="Debit Card">Debit Card</option>
-                    <option value="Credit / Debt">Credit / Debt</option>
+                    {availableMethods.map(method=><option key={method}>{method}</option>)}
                   </select>
 
                   <div className="relative flex-1">
@@ -849,6 +895,7 @@ export const SalesPlatform: React.FC = () => {
                       type="number"
                       step="0.01"
                       min="0"
+                      aria-label={`Payment ${idx + 1} amount`}
                       value={p.amount || ''}
                       placeholder="0.00"
                       onChange={(e) =>
@@ -862,9 +909,11 @@ export const SalesPlatform: React.FC = () => {
                   {payments.length > 1 && (
                     <button
                       onClick={() => removePaymentRow(idx)}
-                      className="text-rose-400 hover:text-rose-300 p-1"
+                      aria-label={`Delete payment ${idx + 1} (${p.method})`}
+                      title={`Delete this ${p.method} payment`}
+                      className="text-rose-400 hover:text-rose-300 p-2 rounded-lg hover:bg-rose-500/10 cursor-pointer"
                     >
-                      ×
+                      <Trash2 className="w-4 h-4" aria-hidden="true" />
                     </button>
                   )}
                 </div>
@@ -874,27 +923,59 @@ export const SalesPlatform: React.FC = () => {
               <div className="flex justify-between items-center text-xs pt-1">
                 <span className="text-slate-400">Total Tendered:</span>
                 <span className="font-bold text-slate-200">
-                  ${paymentAnalysis.totalPaid.toFixed(2)}
+                  {currency} {paymentAnalysis.totalPaid.toFixed(2)}
                 </span>
               </div>
 
               {paymentAnalysis.remainingDebt > 0 && (
                 <div className="flex justify-between items-center text-xs text-rose-400 font-bold bg-rose-950/40 p-1.5 rounded border border-rose-900/40">
                   <span>Pending Debt (Customer Balance):</span>
-                  <span>${paymentAnalysis.remainingDebt.toFixed(2)}</span>
+                  <span>{currency} {paymentAnalysis.remainingDebt.toFixed(2)}</span>
                 </div>
               )}
 
               {paymentAnalysis.changeDue > 0 && (
                 <div className="flex justify-between items-center text-xs text-sky-400 font-bold bg-sky-950/40 p-1.5 rounded border border-sky-900/40">
                   <span>Change Due to Customer:</span>
-                  <span>${paymentAnalysis.changeDue.toFixed(2)}</span>
+                  <span>{currency} {paymentAnalysis.changeDue.toFixed(2)}</span>
+                </div>
+              )}
+            </div>
+
+            {/* Receipt delivery chosen during checkout */}
+            <div className="mt-4 rounded-xl border border-slate-800 bg-slate-950/60 p-3">
+              <label className="flex items-start gap-2 text-xs text-slate-300">
+                <input type="checkbox" checked={receiptDelivery} onChange={(event) => setReceiptDelivery(event.target.checked)} className="mt-0.5 rounded text-teal-500" />
+                <span>
+                  <strong className="block text-slate-100">Send the receipt when this sale completes</strong>
+                  <span className="text-[10px] text-slate-500">Opens a pre-filled draft after payment. Nothing is sent automatically by CODE76.</span>
+                </span>
+              </label>
+              {receiptDelivery && (
+                <div className="mt-2 grid gap-2 sm:grid-cols-2">
+                  <select
+                    aria-label="Receipt delivery channel"
+                    value={receiptChannel}
+                    onChange={(event) => setReceiptChannel(event.target.value as ReceiptChannel)}
+                    className="rounded-lg border border-slate-700 bg-slate-900 px-2 py-2 text-xs text-slate-100"
+                  >
+                    {RECEIPT_CHANNELS.map((entry) => <option key={entry.id} value={entry.id}>{entry.label}</option>)}
+                  </select>
+                  <input
+                    aria-label="Receipt recipient"
+                    value={receiptRecipient}
+                    onChange={(event) => setReceiptRecipient(event.target.value)}
+                    placeholder={receiptChannel === 'email' ? 'Customer email' : 'Customer phone'}
+                    className="rounded-lg border border-slate-700 bg-slate-900 px-2 py-2 text-xs text-slate-100"
+                  />
+                  <p className="text-[10px] text-slate-500 sm:col-span-2">The customer record’s phone is used when this field is left empty.</p>
                 </div>
               )}
             </div>
 
             {/* Complete Checkout Buttons */}
             <div className="space-y-2 mt-4">
+              {hasFeature('debts')&&paymentAnalysis.remainingDebt>0&&<label className="mb-3 block text-xs text-slate-400">Optional credit due date<input aria-label="Credit sale due date" type="date" className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2" value={debtDueDate} onChange={event=>setDebtDueDate(event.target.value)}/><span className="mt-1 block text-[10px]">No date is assumed. This records terms only; it sends no reminder.</span></label>}
               <button
                 onClick={handleCompleteSale}
                 disabled={cart.length === 0}
@@ -905,10 +986,10 @@ export const SalesPlatform: React.FC = () => {
                 }`}
               >
                 <CheckCircle className="w-4 h-4" />
-                Complete Sale & Print Receipt (${totals.netTotal.toFixed(2)})
+                Complete Sale ({currency} {totals.netTotal.toFixed(2)})
               </button>
 
-              <button
+              {hasFeature('invoices') && (<button
                 onClick={() => setInvoiceModalOpen(true)}
                 disabled={cart.length === 0}
                 className={`w-full py-2.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition cursor-pointer border ${
@@ -920,7 +1001,7 @@ export const SalesPlatform: React.FC = () => {
               >
                 <FileText className="w-4 h-4 text-indigo-400" />
                 <span>Convert to Sales Invoice (B2B Quick Invoice)</span>
-              </button>
+              </button>)}
             </div>
           </div>
         </div>
@@ -998,7 +1079,7 @@ export const SalesPlatform: React.FC = () => {
                   <div>
                     <span className="text-slate-400 block text-[11px]">Invoice Total Net</span>
                     <span className="text-lg font-black text-indigo-300 font-mono">
-                      ${totals.netTotal.toFixed(2)}
+                      {currency} {totals.netTotal.toFixed(2)}
                     </span>
                   </div>
                   <div className="text-right">

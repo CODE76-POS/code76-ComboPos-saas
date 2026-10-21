@@ -1,0 +1,7 @@
+Title,Category,Amount,Date,VendorName,PaymentMethod,Description
+"QA ONLY - test expense","Rent","12.34","2026-10-20","QA fixture vendor","Bank Transfer",""
+"HQ Showroom & Office Rent","Rent","1450","2026-10-01","Silicon Towers Realty","Bank Transfer","Monthly office and customer hardware testing lab rent."
+"Gigabit Fiber Internet & Cloud Hosting","Utilities","220","2026-10-03","FiberConnect Africa","Credit Card","High-speed broadband and dedicated cloud server nodes."
+"Staff Payroll & Tech Allowances","Salaries","2800","2026-10-05","CODE76 Payroll Account","Bank Transfer","Monthly compensation for developers, marketers, and cashiers."
+"Fleet Fuel & Inter-Store Delivery Runs","Logistics","195","2026-10-08","Swift Express Logistics","M-Pesa","Delivery dispatch fuel for urgent hardware client setups."
+"Online Google & Social Lead Ad Campaign","Marketing","350","2026-10-12","Google Ads / Meta","Credit Card","Targeted PPC ads driving qualified retail business owners to landing page."

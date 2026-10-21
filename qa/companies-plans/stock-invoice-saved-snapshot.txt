@@ -1,0 +1,121 @@
+### Page
+- Page URL: http://127.0.0.1:5173/#/pos/invoices
+- Page Title: CODE76 POS — Private Workspace
+### Snapshot
+```yaml
+- generic [ref=f1e4]:
+  - banner [ref=f1e681]:
+    - generic [ref=f1e682]:
+      - button "76 CODE76 POS Enterprise Product & Service SaaS ERP System" [ref=f1e684] [cursor=pointer]:
+        - generic [ref=f1e685]: "76"
+        - generic [ref=f1e686]:
+          - generic [ref=f1e687]:
+            - generic [ref=f1e688]: CODE76 POS
+            - generic [ref=f1e689]: Enterprise
+          - paragraph [ref=f1e690]: Product & Service SaaS ERP System
+      - generic [ref=f1e691]:
+        - generic [ref=f1e692]:
+          - button "Desktop View (Full Width)" [ref=f1e693] [cursor=pointer]
+          - button "Laptop View (1024px)" [ref=f1e696] [cursor=pointer]
+          - button "Tablet View (768px)" [ref=f1e699] [cursor=pointer]
+          - button "Phone Mobile View (390px)" [ref=f1e702] [cursor=pointer]
+        - generic [ref=f1e705]:
+          - button "Demo Data" [ref=f1e706] [cursor=pointer]
+          - button "Business Page" [ref=f1e713] [cursor=pointer]
+          - button "Click to view help guide and settings for this platform" [ref=f1e718] [cursor=pointer]
+          - button "Active user session and access controls" [ref=f1e723] [cursor=pointer]:
+            - generic [ref=f1e724]: DR
+            - generic [ref=f1e725]:
+              - generic [ref=f1e726]: Dr. David Kimani
+              - generic [ref=f1e727]: "Role: CEO"
+    - generic [ref=f1e728]:
+      - generic [ref=f1e729]:
+        - generic [ref=f1e733]: App link
+        - generic [ref=f1e734]:
+          - generic [ref=f1e735]:
+            - generic [ref=f1e736]: App link
+            - textbox "App link" [ref=f1e737]: http://127.0.0.1:5173/
+            - button "Copy app link" [ref=f1e738] [cursor=pointer]:
+              - generic [ref=f1e742]: Copy link
+            - link "Open app link in a new tab" [ref=f1e743] [cursor=pointer]:
+              - /url: http://127.0.0.1:5173/
+          - status [ref=f1e748]
+        - button "Current demo plan" [ref=f1e749]: Pro · demo
+      - paragraph [ref=f1e750]: Open this root link to reach CODE76 sign-in/register. Browser-local records and sessions do not sync between browsers.
+    - generic [ref=f1e752]:
+      - button "Sales POS" [ref=f1e753] [cursor=pointer]
+      - button "Sales History" [ref=f1e757] [cursor=pointer]
+      - button "Inventory" [ref=f1e762] [cursor=pointer]
+      - button "Expenses" [ref=f1e767] [cursor=pointer]
+      - button "Invoices" [ref=f1e771] [cursor=pointer]
+      - button "Analytics & P&L" [ref=f1e775] [cursor=pointer]
+      - button "Customers" [ref=f1e778] [cursor=pointer]
+      - button "Vendors" [ref=f1e784] [cursor=pointer]
+      - button "Transporters" [ref=f1e789] [cursor=pointer]
+      - button "Marketing Team" [ref=f1e795] [cursor=pointer]
+      - button "Company Members" [ref=f1e799] [cursor=pointer]
+      - button "My Company" [ref=f1e805] [cursor=pointer]
+      - button "Messaging" [ref=f1e809] [cursor=pointer]
+      - button "Business Landing Page" [ref=f1e812] [cursor=pointer]
+      - button "Settings" [ref=f1e817] [cursor=pointer]
+      - button "Audit & Access Logs" [ref=f1e821] [cursor=pointer]
+      - button "About & Manual" [ref=f1e825] [cursor=pointer]
+  - main [ref=f1e5]:
+    - generic [ref=f1e828]:
+      - generic [ref=f1e829]:
+        - generic [ref=f1e830]:
+          - generic [ref=f1e831]:
+            - heading "Invoices Platform" [level=1] [ref=f1e832]
+            - button "Click for platform guidance & settings" [ref=f1e833] [cursor=pointer]
+          - paragraph [ref=f1e837]: Billing management for both customer Sales Invoices and vendor Stock Purchase Invoices.
+        - generic [ref=f1e838]:
+          - button "CSV Export" [ref=f1e839] [cursor=pointer]
+          - button "PDF Ledger" [ref=f1e843] [cursor=pointer]
+          - button "Email Invoices (.txt & .pdf)" [ref=f1e847] [cursor=pointer]
+          - button "Create Invoice" [ref=f1e852] [cursor=pointer]
+      - generic [ref=f1e854]:
+        - 'textbox "Search invoice #, customer, or vendor..." [ref=f1e859]'
+        - generic [ref=f1e860]:
+          - button "All Invoices" [ref=f1e861] [cursor=pointer]
+          - button "Sales Invoices (Customers)" [ref=f1e862] [cursor=pointer]
+          - button "Stock Purchases (Vendors)" [ref=f1e863] [cursor=pointer]
+      - table [ref=f1e866]:
+        - rowgroup [ref=f1e867]:
+          - row [ref=f1e868]:
+            - columnheader "Actions (Start)" [ref=f1e869]
+            - 'columnheader "Invoice #" [ref=f1e870]'
+            - columnheader "Classification" [ref=f1e871]
+            - columnheader "Billed Party" [ref=f1e872]
+            - columnheader "Issue Date" [ref=f1e873]
+            - columnheader "Due Date" [ref=f1e874]
+            - columnheader "Subtotal" [ref=f1e875]
+            - columnheader "Total ($)" [ref=f1e876]
+            - columnheader "Amount Paid" [ref=f1e877]
+            - columnheader "Status" [ref=f1e878]
+            - columnheader "Actions (End)" [ref=f1e879]
+        - rowgroup [ref=f1e880]:
+          - row [ref=f1e940]:
+            - cell [ref=f1e941]:
+              - generic [ref=f1e942]:
+                - button "View Invoice Details" [ref=f1e943] [cursor=pointer]
+                - button "Print / Export Invoice PDF" [ref=f1e947] [cursor=pointer]
+                - button "Email invoice (.txt & .pdf) to client, vendor, or staff" [ref=f1e951] [cursor=pointer]
+                - button "Delete Invoice" [ref=f1e955] [cursor=pointer]
+            - cell "TEST-STOCK-001" [ref=f1e959]
+            - cell "Stock Purchase" [ref=f1e960]
+            - cell "TEST East Branch(Vendor)" [ref=f1e961]:
+              - text: TEST East Branch
+              - generic [ref=f1e962]: (Vendor)
+            - cell "20/10/2026" [ref=f1e963]
+            - cell "03/11/2026" [ref=f1e964]
+            - cell "KES 60.00" [ref=f1e965]
+            - cell "KES 60.00" [ref=f1e966]
+            - cell "KES 0.00" [ref=f1e967]
+            - cell "pending" [ref=f1e968]
+            - cell [ref=f1e969]:
+              - generic [ref=f1e970]:
+                - button "View Invoice Details" [ref=f1e971] [cursor=pointer]
+                - button "Print / Export Invoice PDF" [ref=f1e975] [cursor=pointer]
+                - button "Email invoice (.txt & .pdf) to client, vendor, or staff" [ref=f1e979] [cursor=pointer]
+                - button "Delete Invoice" [ref=f1e983] [cursor=pointer]
+```

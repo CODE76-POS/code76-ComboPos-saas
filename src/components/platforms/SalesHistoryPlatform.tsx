@@ -1,3 +1,11 @@
+import { appDialogs } from '../../utils/appDialogs.ts';
+import { downloadBlob } from '../../utils/receiptFiles.ts';
+import { buildCustomerStatement, receivablesSummary, debtAgingBucket, DEBT_AGING_BUCKETS, type DebtAgingBucket } from '../../utils/debt.ts';
+import { copyText } from '../../utils/receiptFiles.ts';
+import { serializeCsvRows } from '../../utils/csv.ts';
+import { withExportCredit } from '../../config/code76Brand.ts';
+import { calendarDate } from '../../utils/regional.ts';
+import { useRegionalFormat } from '../../hooks/useRegionalFormat.ts';
 import React, { useState } from 'react';
 import { usePOS } from '../../context/POSContext.tsx';
 import {
@@ -16,6 +24,13 @@ import {
   ArrowUpDown,
   Download,
   ShoppingBag,
+  Send,
+  Wallet,
+  AlertTriangle,
+  FileDown,
+  Copy,
+  MessageCircle,
+  BellRing,
 } from 'lucide-react';
 import { SaleTransaction } from '../../types/index.ts';
 import { DebtPaymentModal } from '../modals/DebtPaymentModal.tsx';
@@ -24,8 +39,9 @@ import { printPDFReport } from '../../utils/exportUtils.ts';
 import { EmailExportModal } from '../modals/EmailExportModal.tsx';
 
 export const SalesHistoryPlatform: React.FC = () => {
-  const { sales, setSales, company, setReceiptModalSale, setReviewModalSale, setHoverHelpPlatform, logAuditAction } =
-    usePOS();
+  const regionalFormat = useRegionalFormat();
+  const { sales, setSales, company, setReceiptModalSale, setReceiptModalIntent, setReviewModalSale, setHoverHelpPlatform, logAuditAction, hasFeature, hasPrivilege, settings } = usePOS();
+  const currency = company.currency || 'USD';
 
   const [selectedSaleDetail, setSelectedSaleDetail] = useState<SaleTransaction | null>(null);
   const [debtModalSale, setDebtModalSale] = useState<SaleTransaction | null>(null);
@@ -48,18 +64,26 @@ export const SalesHistoryPlatform: React.FC = () => {
   ];
 
   const handleOpenBulkEmail = () => {
+    if (!hasFeature('email')) return;
     setSelectedSaleForUniversalEmail(null);
     setUniversalEmailModalOpen(true);
   };
 
   const handleOpenRowEmail = (sale: SaleTransaction) => {
+    if (!hasFeature('email')) return;
     setSelectedSaleForUniversalEmail(sale);
     setUniversalEmailModalOpen(true);
   };
 
   const [searchQuery, setSearchQuery] = useState('');
   const [categoryFilter, setCategoryFilter] = useState<'all' | 'normal_sale' | 'sales_invoice'>('all');
-  const [statusFilter, setStatusFilter] = useState<'all' | 'completed' | 'debt_pending' | 'debt_partial'>('all');
+  const [statusFilter, setStatusFilter] = useState<'all' | 'completed' | 'debt_pending' | 'debt_partial' | 'outstanding' | 'overdue'>('all');
+  const [agingFilter, setAgingFilter] = useState<DebtAgingBucket | 'all'>('all');
+  const [statementCustomer, setStatementCustomer] = useState('');
+  const today = calendarDate(new Date(), settings);
+  const receivables = receivablesSummary(sales, today);
+  const canSettleDebt = hasPrivilege('canSettleDebt');
+  const canShareReceipt = hasPrivilege('canSendReceipts');
 
   const filteredSales = sales.filter((s) => {
     const matchesCategory =
@@ -67,7 +91,8 @@ export const SalesHistoryPlatform: React.FC = () => {
       (categoryFilter === 'sales_invoice' && s.saleType === 'sales_invoice') ||
       (categoryFilter === 'normal_sale' && s.saleType !== 'sales_invoice');
 
-    const matchesStatus = statusFilter === 'all' || s.status === statusFilter;
+    const matchesStatus=statusFilter==='all'||(statusFilter==='outstanding'?s.debtAmount>0:statusFilter==='overdue'?s.debtAmount>0&&!!s.debtDueDate&&s.debtDueDate<today:s.status===statusFilter);
+    const matchesAging = agingFilter === 'all' || debtAgingBucket(s, today) === agingFilter;
     const q = searchQuery.toLowerCase().trim();
     const matchesQuery =
       !q ||
@@ -82,13 +107,29 @@ export const SalesHistoryPlatform: React.FC = () => {
       (q === 'normal' && s.saleType !== 'sales_invoice') ||
       (q === 'normal sale' && s.saleType !== 'sales_invoice');
 
-    return matchesCategory && matchesStatus && matchesQuery;
+    return matchesCategory && matchesStatus && matchesAging && matchesQuery;
   });
 
-  const handleDeleteSale = (sale: SaleTransaction) => {
-    if (confirm(`Are you sure you want to delete transaction ${sale.receiptNo}?`)) {
+  const handleDeleteSale = async (sale: SaleTransaction) => {
+    if(!hasFeature('debts')&&sale.debtAmount>0){
+      await appDialogs.alert({ title: 'Plan limitation', message: 'Debt changes are not included in this plan. The record is retained.', tone: 'warning' });
+      return;
+    }
+    if(sale.debtPayments?.length){
+      await appDialogs.alert({ title: 'Repayment history protected', message: 'This sale has repayment history. Retain the original financial record and review corrections with your administrator.', tone: 'warning' });
+      return;
+    }
+    const confirmed = await appDialogs.confirm({
+      title: 'Delete this transaction?',
+      message: `Delete transaction ${sale.receiptNo}?`,
+      detail: 'The receipt and its payment breakdown will be removed from Sales History. Stock is not restored automatically.',
+      confirmLabel: 'Delete transaction',
+      destructive: true,
+    });
+    if (confirmed) {
       setSales((prev) => prev.filter((s) => s.id !== sale.id));
       logAuditAction('Deleted Sale Transaction', `Removed sale #${sale.receiptNo} from system records`);
+      appDialogs.toast(`Transaction ${sale.receiptNo} deleted.`, 'success');
     }
   };
 
@@ -123,6 +164,7 @@ export const SalesHistoryPlatform: React.FC = () => {
   };
 
   const handleExportFullHistoryPDF = () => {
+    if (!hasFeature('data_export')) return;
     printPDFReport(
       'Complete Sales History Ledger',
       company,
@@ -141,7 +183,7 @@ export const SalesHistoryPlatform: React.FC = () => {
       filteredSales.map((s) => ({
         receiptNo: s.receiptNo,
         saleCategory: s.saleType === 'sales_invoice' ? 'Sales Invoice' : 'Normal Sale',
-        date: new Date(s.timestamp).toLocaleDateString(),
+        date: regionalFormat.date(s.timestamp),
         customer: s.customerName,
         cashier: s.cashierName,
         referrer: s.referredBy?.role || 'Direct',
@@ -174,23 +216,156 @@ export const SalesHistoryPlatform: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-2">
-          <button
+          {hasFeature('data_export') && (<button
             onClick={handleExportFullHistoryPDF}
             className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-teal-300 border border-slate-700 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
           >
             <Download className="w-4 h-4" />
             Export History PDF
-          </button>
-          <button
+          </button>)}
+          {hasFeature('email') && (<button
             onClick={handleOpenBulkEmail}
             className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-teal-300 border border-slate-700 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
           >
             <Mail className="w-4 h-4 text-teal-400" />
             Email Ledger
-          </button>
+          </button>)}
         </div>
       </div>
 
+      <div className="grid sm:grid-cols-3 gap-3 mb-5"><div className="rounded-xl border border-slate-800 bg-slate-900 p-4"><p className="text-xs text-slate-400">Recorded sales (not cash receipts)</p><strong className="mt-2 block text-xl">{currency} {sales.reduce((sum,sale)=>sum+sale.netTotal,0).toFixed(2)}</strong></div><div className="rounded-xl border border-slate-800 bg-slate-900 p-4"><p className="text-xs text-slate-400">Amount applied to sales</p><strong className="mt-2 block text-xl">{currency} {sales.reduce((sum,sale)=>sum+Math.min(sale.netTotal,sale.amountPaid),0).toFixed(2)}</strong></div><div className="rounded-xl border border-amber-900 bg-slate-900 p-4"><p className="text-xs text-slate-400">Recorded outstanding balance</p><strong className="mt-2 block text-xl text-amber-300">{currency} {sales.reduce((sum,sale)=>sum+sale.debtAmount,0).toFixed(2)}</strong></div></div>
+
+      {/* RECEIVABLES & AGING */}
+      <section className="mb-6 rounded-2xl border border-slate-800 bg-slate-900 p-4">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <h2 className="flex items-center gap-2 text-sm font-black text-slate-100"><Wallet className="h-4 w-4 text-amber-400" />Receivables & debt aging</h2>
+            <p className="mt-1 text-[11px] text-slate-400">Aging uses each sale’s recorded due date and today’s company-calendar date ({today}). Balances update when a repayment is recorded.</p>
+          </div>
+          <span className="rounded-full border border-amber-800 bg-amber-950/30 px-2.5 py-1 text-[10px] font-bold text-amber-200">
+            {receivables.count} open · {receivables.overdueCount} overdue
+          </span>
+        </div>
+
+        <div className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="rounded-xl border border-slate-800 bg-slate-950 p-3">
+            <p className="text-[10px] uppercase font-bold text-slate-500">Outstanding</p>
+            <p className="mt-1 text-lg font-black text-amber-300">{currency} {receivables.outstanding.toFixed(2)}</p>
+            <p className="text-[10px] text-slate-500">Average {currency} {receivables.averageBalance.toFixed(2)}</p>
+          </div>
+          <div className="rounded-xl border border-rose-900 bg-rose-950/20 p-3">
+            <p className="text-[10px] uppercase font-bold text-rose-400">Overdue</p>
+            <p className="mt-1 text-lg font-black text-rose-300">{currency} {receivables.overdueAmount.toFixed(2)}</p>
+            <p className="text-[10px] text-rose-400/80">{receivables.overdueCount} receipt(s) past due</p>
+          </div>
+          <div className="rounded-xl border border-sky-900 bg-sky-950/20 p-3">
+            <p className="text-[10px] uppercase font-bold text-sky-400">Due within 7 days</p>
+            <p className="mt-1 text-lg font-black text-sky-300">{currency} {receivables.dueSoonAmount.toFixed(2)}</p>
+            <p className="text-[10px] text-sky-400/80">Plan a reminder, not an automatic message.</p>
+          </div>
+          <div className="rounded-xl border border-slate-800 bg-slate-950 p-3">
+            <p className="text-[10px] uppercase font-bold text-slate-500">No due date</p>
+            <p className="mt-1 text-lg font-black text-slate-200">{currency} {receivables.noDueDateAmount.toFixed(2)}</p>
+            <p className="text-[10px] text-slate-500">Record terms when the credit is agreed.</p>
+          </div>
+        </div>
+
+        <div className="mt-3 flex flex-wrap gap-1.5">
+          <button type="button" onClick={() => setAgingFilter('all')} className={`rounded-lg px-2.5 py-1 text-[11px] font-bold ${agingFilter === 'all' ? 'bg-slate-700 text-slate-100' : 'bg-slate-950 text-slate-400 hover:text-slate-200'}`}>All aging</button>
+          {DEBT_AGING_BUCKETS.map((entry) => {
+            const bucket = receivables.buckets[entry.id];
+            return (
+              <button
+                key={entry.id}
+                type="button"
+                title={entry.description}
+                onClick={() => setAgingFilter(entry.id)}
+                className={`rounded-lg px-2.5 py-1 text-[11px] font-bold ${agingFilter === entry.id ? 'bg-amber-600 text-white' : 'bg-slate-950 text-slate-400 hover:text-slate-200'}`}
+              >
+                {entry.label} · {bucket.count} · {currency} {bucket.amount.toFixed(0)}
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="mt-3 grid gap-2 lg:grid-cols-2">
+          <div className="rounded-xl border border-slate-800 bg-slate-950 p-3">
+            <p className="text-[10px] uppercase font-bold text-slate-500">Customers with a balance</p>
+            <ul className="mt-1 space-y-1 text-[11px] text-slate-300">
+              {receivables.customers.slice(0, 5).map((customer) => (
+                <li key={customer.name} className="flex items-center justify-between gap-2">
+                  <span className="truncate">{customer.name} <span className="text-slate-500">({customer.count})</span></span>
+                  <span className="shrink-0 font-bold text-amber-300">{currency} {customer.amount.toFixed(2)}</span>
+                </li>
+              ))}
+              {!receivables.customers.length && <li className="text-slate-500">No outstanding customer balances.</li>}
+            </ul>
+          </div>
+          <div className="rounded-xl border border-slate-800 bg-slate-950 p-3">
+            <p className="text-[10px] uppercase font-bold text-slate-500">Customer statement</p>
+            <div className="mt-1 flex flex-wrap gap-2">
+              <select
+                aria-label="Statement customer"
+                value={statementCustomer}
+                onChange={(event) => setStatementCustomer(event.target.value)}
+                className="min-w-[140px] flex-1 rounded-lg border border-slate-700 bg-slate-900 px-2 py-1.5 text-[11px] text-slate-100"
+              >
+                <option value="">Choose a customer…</option>
+                {receivables.customers.map((customer) => <option key={customer.name} value={customer.name}>{customer.name}</option>)}
+              </select>
+              <button
+                type="button"
+                disabled={!statementCustomer}
+                onClick={async () => {
+                  const rows = sales.filter((sale) => (sale.customerName || 'Walk-in Customer') === statementCustomer && sale.debtAmount > 0);
+                  const text = buildCustomerStatement({
+                    customerName: statementCustomer,
+                    sales: rows,
+                    companyName: company.name,
+                    currency,
+                    issuedAt: regionalFormat.dateTime(new Date()),
+                    credit: 'Website created by CODE76 · code76pos@gmail.com',
+                  });
+                  const csvRows = rows.map((sale) => ({ receipt: sale.receiptNo, issued: sale.timestamp, due: sale.debtDueDate || '', total: sale.netTotal.toFixed(2), paid: sale.amountPaid.toFixed(2), balance: sale.debtAmount.toFixed(2), currency }));
+                  const ok = await appDialogs.choice({
+                    title: `Statement for ${statementCustomer}`,
+                    message: `${rows.length} open receipt(s) · ${currency} ${rows.reduce((sum, sale) => sum + sale.debtAmount, 0).toFixed(2)} outstanding`,
+                    detail: 'Download or copy the statement. It is a list of local records, not a bank statement or payment demand.',
+                    actions: [
+                      { id: 'txt', label: 'Download TXT', description: 'Plain text statement.', tone: 'primary' },
+                      { id: 'csv', label: 'Download CSV', description: 'Open receipts for a spreadsheet.', tone: 'neutral' },
+                      { id: 'copy', label: 'Copy statement text', description: 'Paste into a message or email draft.', tone: 'neutral' },
+                    ],
+                  });
+                  if (!ok) return;
+                  if (ok === 'txt') downloadBlob(new Blob([text], { type: 'text/plain;charset=utf-8' }), `statement-${statementCustomer.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}.txt`);
+                  else if (ok === 'csv') downloadBlob(new Blob([['receipt,issued,due,total,paid,balance,currency', ...csvRows.map((row) => [row.receipt, row.issued, row.due, row.total, row.paid, row.balance, row.currency].join(','))].join('\r\n')], { type: 'text/csv;charset=utf-8' }), `statement-${statementCustomer.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}.csv`);
+                  else { const copied = await copyText(text); await appDialogs.alert({ title: copied ? 'Statement copied' : 'Clipboard blocked', message: copied ? 'Paste it into the channel you use with the customer.' : 'Allow clipboard access or download the TXT statement instead.', tone: copied ? 'success' : 'warning' }); }
+                  logAuditAction('Customer statement prepared', `Prepared a ${rows.length}-receipt statement for ${statementCustomer}. No message was sent automatically.`);
+                }}
+                className="rounded-lg bg-slate-800 px-2.5 py-1.5 text-[11px] font-bold text-slate-200 hover:bg-slate-700 disabled:opacity-40"
+              >
+                <FileDown className="mr-1 inline h-3.5 w-3.5" />Statement
+              </button>
+              <button
+                type="button"
+                disabled={!statementCustomer}
+                onClick={async () => {
+                  const rows = sales.filter((sale) => (sale.customerName || 'Walk-in Customer') === statementCustomer && sale.debtAmount > 0);
+                  const message = `Hello ${statementCustomer}, a reminder from ${company.name}: ${rows.length} receipt(s) show ${currency} ${rows.reduce((sum, sale) => sum + sale.debtAmount, 0).toFixed(2)} outstanding. Please contact us to confirm the balance. (Prepared locally — not sent automatically.)`;
+                  const copied = await copyText(message);
+                  logAuditAction('Debt reminder prepared', `Prepared a reminder draft for ${statementCustomer}; nothing was sent.`);
+                  await appDialogs.alert({ title: copied ? 'Reminder draft copied' : 'Clipboard blocked', message: copied ? 'Paste it into WhatsApp, SMS or email. Review the balance with the customer before sending.' : 'Allow clipboard access to copy the reminder draft.', tone: copied ? 'success' : 'warning' });
+                }}
+                className="rounded-lg border border-slate-700 px-2.5 py-1.5 text-[11px] font-bold text-slate-300 hover:bg-slate-800 disabled:opacity-40"
+              >
+                <BellRing className="mr-1 inline h-3.5 w-3.5" />Reminder
+              </button>
+            </div>
+            <p className="mt-1 text-[10px] leading-relaxed text-slate-500">Nothing is sent automatically. Review the balance and consent before contacting a customer.</p>
+          </div>
+        </div>
+      </section>
       {/* Filter and Search Bar */}
       <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 mb-6 flex flex-col lg:flex-row gap-3 justify-between items-center">
         <div className="relative w-full lg:w-72 shrink-0">
@@ -232,7 +407,9 @@ export const SalesHistoryPlatform: React.FC = () => {
         <div className="flex items-center gap-1.5 overflow-x-auto w-full lg:w-auto">
           {(
             [
-              { id: 'all', label: 'All Status' },
+              { id: 'all', label: 'All statuses' },
+              { id: 'outstanding', label: 'All outstanding' },
+              { id: 'overdue', label: 'Past due date' },
               { id: 'completed', label: 'Paid / Completed' },
               { id: 'debt_pending', label: 'Pending Debt' },
               { id: 'debt_partial', label: 'Partial Debt' },
@@ -337,7 +514,7 @@ export const SalesHistoryPlatform: React.FC = () => {
                     </td>
 
                     <td className="py-2.5 px-3 text-slate-400 whitespace-nowrap">
-                      {new Date(sale.timestamp).toLocaleDateString()} {new Date(sale.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      {regionalFormat.date(sale.timestamp)} {new Date(sale.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </td>
 
                     <td className="py-2.5 px-3 font-semibold text-slate-200">
@@ -353,17 +530,17 @@ export const SalesHistoryPlatform: React.FC = () => {
                     </td>
 
                     <td className="py-2.5 px-3 text-right font-bold text-slate-100">
-                      ${sale.netTotal.toFixed(2)}
+                      {currency} {sale.netTotal.toFixed(2)}
                     </td>
 
                     <td className="py-2.5 px-3 text-right text-emerald-400 font-semibold">
-                      ${sale.amountPaid.toFixed(2)}
+                      {currency} {sale.amountPaid.toFixed(2)}
                     </td>
 
                     <td className="py-2.5 px-3 text-right">
                       {sale.debtAmount > 0 ? (
                         <span className="text-rose-400 font-bold bg-rose-950/40 px-1.5 py-0.5 rounded border border-rose-900/40">
-                          ${sale.debtAmount.toFixed(2)}
+                          {currency} {sale.debtAmount.toFixed(2)}
                         </span>
                       ) : (
                         <span className="text-slate-500">$0.00</span>
@@ -393,7 +570,7 @@ export const SalesHistoryPlatform: React.FC = () => {
                     {/* Follow-up actions: Debt, Review, Appreciation Email */}
                     <td className="py-2.5 px-3 text-center">
                       <div className="flex items-center justify-center gap-1">
-                        {sale.debtAmount > 0 && (
+                        {hasFeature('debts') && sale.debtAmount > 0 && canSettleDebt && (
                           <button
                             onClick={() => setDebtModalSale(sale)}
                             title="Collect Debt Payment"
@@ -404,21 +581,21 @@ export const SalesHistoryPlatform: React.FC = () => {
                           </button>
                         )}
 
-                        <button
+                        {hasFeature('business_landing') && (<button
                           onClick={() => setReviewModalSale(sale)}
                           title="Capture Customer Review / Testimonial"
                           className="p-1 rounded-md bg-amber-500/20 hover:bg-amber-500/40 text-amber-300 border border-amber-500/30 cursor-pointer"
                         >
                           <Star className={`w-3.5 h-3.5 ${sale.hasReview ? 'fill-amber-400 text-amber-400' : ''}`} />
-                        </button>
+                        </button>)}
 
-                        <button
+                        {hasFeature('email') && (<button
                           onClick={() => setEmailModalSale(sale)}
                           title="Send Polite Appreciation & Review Request Email"
                           className="p-1 rounded-md bg-sky-500/20 hover:bg-sky-500/40 text-sky-300 border border-sky-500/30 cursor-pointer"
                         >
                           <Mail className="w-3.5 h-3.5" />
-                        </button>
+                        </button>)}
                       </div>
                     </td>
 
@@ -426,7 +603,14 @@ export const SalesHistoryPlatform: React.FC = () => {
                     <td className="py-2.5 px-3">
                       <div className="flex items-center justify-center gap-1.5">
                         <button
-                          onClick={() => setReceiptModalSale(sale)}
+                          onClick={() => { setReceiptModalIntent('send'); setReceiptModalSale(sale); }}
+                          title={canShareReceipt ? 'Send receipt (email / WhatsApp / SMS)' : 'Receipt sharing needs the Send receipts privilege'}
+                          className={`p-1 rounded bg-slate-800 hover:bg-slate-700 transition cursor-pointer ${canShareReceipt ? 'text-sky-400 hover:text-sky-300' : 'text-slate-600'}`}
+                        >
+                          <Send className="w-3.5 h-3.5" />
+                        </button>
+                        <button
+                          onClick={() => { setReceiptModalIntent('preview'); setReceiptModalSale(sale); }}
                           title="Print Thermal Receipt"
                           className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-emerald-400 hover:text-emerald-300 transition cursor-pointer"
                         >
@@ -439,13 +623,13 @@ export const SalesHistoryPlatform: React.FC = () => {
                         >
                           <Download className="w-3.5 h-3.5" />
                         </button>
-                        <button
+                        {hasFeature('email') && (<button
                           onClick={() => handleOpenRowEmail(sale)}
                           title="Email sale transaction (.txt & .pdf) to customer/marketer/staff/transporter"
                           className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-teal-300 hover:text-teal-200 transition cursor-pointer"
                         >
                           <Mail className="w-3.5 h-3.5" />
-                        </button>
+                        </button>)}
                         <button
                           onClick={() => handleDeleteSale(sale)}
                           title="Delete Transaction"
@@ -490,7 +674,7 @@ export const SalesHistoryPlatform: React.FC = () => {
                       {item.discountValue > 0 && ` (Disc: -${item.discountValue}${item.discountType === 'percentage' ? '%' : '$'})`}
                     </div>
                   </div>
-                  <div className="font-bold text-emerald-400">${item.total.toFixed(2)}</div>
+                  <div className="font-bold text-emerald-400">{currency} {item.total.toFixed(2)}</div>
                 </div>
               ))}
             </div>
@@ -498,7 +682,7 @@ export const SalesHistoryPlatform: React.FC = () => {
             <div className="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-1 text-xs">
               <div className="flex justify-between text-slate-400">
                 <span>Subtotal:</span>
-                <span>${selectedSaleDetail.subtotal.toFixed(2)}</span>
+                <span>{currency} {selectedSaleDetail.subtotal.toFixed(2)}</span>
               </div>
               {selectedSaleDetail.overallDiscountValue > 0 && (
                 <div className="flex justify-between text-emerald-400">
@@ -517,10 +701,11 @@ export const SalesHistoryPlatform: React.FC = () => {
               ))}
               <div className="flex justify-between font-bold text-slate-100 border-t border-slate-800 pt-1">
                 <span>Net Total:</span>
-                <span className="text-emerald-400">${selectedSaleDetail.netTotal.toFixed(2)}</span>
+                <span className="text-emerald-400">{currency} {selectedSaleDetail.netTotal.toFixed(2)}</span>
               </div>
             </div>
 
+            {!!selectedSaleDetail.debtPayments?.length&&<section className="mt-4 rounded-xl border border-teal-900 p-3"><h4 className="font-bold text-sm">Recorded repayments</h4>{selectedSaleDetail.debtPayments.map(payment=><p key={payment.id} className="mt-2 text-xs text-slate-400">{regionalFormat.dateTime(payment.timestamp)} · {currency} {payment.amount.toFixed(2)} · {payment.method} · {payment.reference||'No reference'} · Balance after: {currency} {payment.balanceAfter.toFixed(2)}</p>)}</section>}
             <div className="flex justify-end gap-2 mt-4">
               <button
                 onClick={() => {
@@ -581,7 +766,7 @@ export const SalesHistoryPlatform: React.FC = () => {
             ? {
                 receiptNo: selectedSaleForUniversalEmail.receiptNo,
                 saleCategory: selectedSaleForUniversalEmail.saleType === 'sales_invoice' ? 'Sales Invoice' : 'Normal Sale',
-                date: new Date(selectedSaleForUniversalEmail.timestamp).toLocaleString(),
+                date: regionalFormat.dateTime(selectedSaleForUniversalEmail.timestamp),
                 customer: selectedSaleForUniversalEmail.customerName,
                 cashier: selectedSaleForUniversalEmail.cashierName,
                 netTotal: `$${selectedSaleForUniversalEmail.netTotal.toFixed(2)}`,
@@ -592,7 +777,7 @@ export const SalesHistoryPlatform: React.FC = () => {
             : filteredSales.map((s) => ({
                 receiptNo: s.receiptNo,
                 saleCategory: s.saleType === 'sales_invoice' ? 'Sales Invoice' : 'Normal Sale',
-                date: new Date(s.timestamp).toLocaleDateString(),
+                date: regionalFormat.date(s.timestamp),
                 customer: s.customerName,
                 cashier: s.cashierName,
                 netTotal: s.netTotal.toFixed(2),

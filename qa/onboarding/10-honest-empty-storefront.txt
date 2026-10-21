@@ -1,0 +1,89 @@
+### Page
+- Page URL: http://127.0.0.1:3000/?view=storefront
+- Page Title: Business storefront | CODE76 POS
+### Snapshot
+```yaml
+- main [ref=f3e5]:
+  - generic [ref=f3e1600]:
+    - navigation [ref=f3e1601]:
+      - generic [ref=f3e1608]:
+        - generic [ref=f3e1609]: TEST Skip Shop
+        - generic [ref=f3e1610]: Products & services from our business
+      - generic [ref=f3e1611]:
+        - link "Featured Items" [ref=f3e1612] [cursor=pointer]:
+          - /url: "#featured"
+        - link "Browse Catalog" [ref=f3e1613] [cursor=pointer]:
+          - /url: "#matcher"
+        - link "Product Catalog" [ref=f3e1614] [cursor=pointer]:
+          - /url: "#matcher"
+        - link "Customer Reviews" [ref=f3e1615] [cursor=pointer]:
+          - /url: "#reviews"
+        - link "Contact Store" [ref=f3e1616] [cursor=pointer]:
+          - /url: "#contact"
+      - generic [ref=f3e1617]:
+        - button "Open business page preview link" [ref=f3e1618] [cursor=pointer]:
+          - generic [ref=f3e1625]: Share Store
+        - generic [ref=f3e1626]:
+          - generic [ref=f3e1627]:
+            - generic [ref=f3e1628]: DR
+            - generic [ref=f3e1629]:
+              - generic [ref=f3e1630]: Dr. David Kimani
+              - generic [ref=f3e1631]: CEO
+          - button "Business page settings" [ref=f3e1632] [cursor=pointer]
+          - button "Return to POS" [ref=f3e1636] [cursor=pointer]
+    - generic [ref=f3e1644]:
+      - strong [ref=f3e1645]: This catalog is being prepared.
+      - text: Products and services will appear here when the business adds them to Inventory.
+    - generic [ref=f3e1647]:
+      - generic [ref=f3e1648]: Our products & services
+      - heading "TEST Skip Shop" [level=1] [ref=f3e1653]
+      - paragraph [ref=f3e1654]: Explore our products and services. Contact us for availability and more information.
+      - generic [ref=f3e1655]:
+        - generic [ref=f3e1661]:
+          - strong [ref=f3e1662]: "0"
+          - text: Live SKUs Synchronized
+        - strong [ref=f3e1667]: No reviews yet
+        - generic [ref=f3e1672]:
+          - text: "Hours:"
+          - strong [ref=f3e1673]: Contact us for hours
+      - generic [ref=f3e1674]:
+        - link "Browse Featured Items" [ref=f3e1675] [cursor=pointer]:
+          - /url: "#featured"
+        - link "Browse the Catalog" [ref=f3e1680] [cursor=pointer]:
+          - /url: "#matcher"
+    - generic [ref=f3e1685]:
+      - generic [ref=f3e1686]:
+        - generic [ref=f3e1687]:
+          - generic [ref=f3e1688]: From our Inventory
+          - heading "Featured Products & Services" [level=2] [ref=f3e1693]
+        - paragraph [ref=f3e1694]: Products, prices and stock from this business’s Inventory. Contact the business to confirm availability.
+      - status [ref=f3e1695]:
+        - heading "No products or services yet" [level=3] [ref=f3e1700]
+        - paragraph [ref=f3e1701]: This business has not added any catalog items. There are no sample products here.
+        - button "Add your first item in Inventory" [ref=f3e1702] [cursor=pointer]
+    - generic [ref=f3e1704]:
+      - generic [ref=f3e1705]:
+        - generic [ref=f3e1706]: Interactive Commercial Matcher
+        - heading "Find What You’re Looking For" [level=2] [ref=f3e1710]
+        - paragraph [ref=f3e1711]: Browse this business’s categories, or search for a product or service by name, description or SKU.
+      - generic [ref=f3e1712]:
+        - button "All Items" [ref=f3e1714] [cursor=pointer]
+        - textbox "Search catalog SKUs..." [ref=f3e1719]
+    - generic [ref=f3e1722]:
+      - generic [ref=f3e1723]:
+        - heading "TEST Skip Shop" [level=3] [ref=f3e1728]
+        - paragraph
+        - generic [ref=f3e1729]: "TAX PIN: Not provided"
+      - generic [ref=f3e1730]:
+        - heading "Direct Contacts" [level=4] [ref=f3e1731]
+        - generic [ref=f3e1732]: Phone not provided
+        - generic [ref=f3e1736]: Email not provided
+      - generic [ref=f3e1741]:
+        - heading "Store Hours & Location" [level=4] [ref=f3e1742]
+        - generic [ref=f3e1743]: Location not provided
+        - generic [ref=f3e1748]: Contact us for hours
+    - button "Open TEST Skip Shop assistant" [ref=f3e1753] [cursor=pointer]:
+      - generic [ref=f3e1759]:
+        - generic [ref=f3e1760]: AI Sales Concierge
+        - generic [ref=f3e1765]: Products, services & contact details
+```

@@ -1,0 +1,380 @@
+[
+  {
+    "name": "New local account opens appearance-first setup",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Theme and text-size choices update the actual POS and persist",
+    "passed": true,
+    "detail": {
+      "theme": "light",
+      "size": "large",
+      "panel": "rgb(255, 255, 255)",
+      "darkPreview": "rgb(17, 27, 46)",
+      "font": "27.6px",
+      "persisted": "large"
+    }
+  },
+  {
+    "name": "Dark visual example remains dark when light theme is selected",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Mobile onboarding fits 390px and keeps actions on-screen",
+    "passed": true,
+    "detail": {
+      "viewport": 390,
+      "document": 390,
+      "dialog": 368,
+      "dialogClient": 368,
+      "content": 368,
+      "contentClient": 368,
+      "footerBottom": 826.109375,
+      "viewportHeight": 844
+    }
+  },
+  {
+    "name": "New company form contains no CODE76 sample contacts or legal identity",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Company saves before optional inventory",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "First starter item is a real saved Inventory record",
+    "passed": true,
+    "detail": {
+      "count": 1,
+      "stock": 8,
+      "name": "TEST Acacia Coffee 250g",
+      "theme": "light",
+      "size": "large"
+    }
+  },
+  {
+    "name": "Closing setup preserves company, preferences and saved first item",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "My Company reopens setup at the deferred inventory step",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Setup stops at three items and supports products and services",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Quick tour provides settings, help, manual and Inventory guidance",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Guide links open the correct Business Landing Page settings tab",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Merchant page headline persists in merchant settings",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "CODE76 main site ignores merchant company, inventory and page headline",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "CODE76 website does not inherit POS theme or text-size settings",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "CODE76 assistant stays product-site branded",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "CODE76 lead capture does not write merchant CRM or metrics",
+    "passed": true,
+    "detail": {
+      "merchantLeads": 0,
+      "publicLeads": 1,
+      "merchantMetric": 0,
+      "publicMetric": 1
+    }
+  },
+  {
+    "name": "Business page uses its own saved heading, company and actual Inventory",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Business route is explicit and independent",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Business assistant starts with merchant context, not CODE76 hardware",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Business lead capture does not write CODE76 product-site leads or metrics",
+    "passed": true,
+    "detail": {
+      "merchantLeads": 1,
+      "publicLeads": 1,
+      "merchantMetric": 1,
+      "publicMetric": 1
+    }
+  },
+  {
+    "name": "Business chat replies from actual prices and stock",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Business page gear opens only its own settings tab",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Return to POS leaves the storefront instead of reopening its builder",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Added split-payment row has an accessible trash icon, not X",
+    "passed": true,
+    "detail": {
+      "exists": true,
+      "svg": true,
+      "text": ""
+    }
+  },
+  {
+    "name": "Trash deletes only the added payment row",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "One payment replaces splits with one full-total Cash amount",
+    "passed": true,
+    "detail": {
+      "amounts": [
+        "250"
+      ],
+      "methods": [
+        "Cash"
+      ],
+      "sales": 0,
+      "stock": 8
+    }
+  },
+  {
+    "name": "Payment-control check made no sale and changed no inventory stock",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Setup keyboard focus wraps backwards to the last action",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Setup keyboard focus wraps forwards to the close control",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Escape closes setup without losing saved items",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Reload retains setup records, preferences, page settings and isolated lead stores",
+    "passed": true,
+    "detail": {
+      "items": 3,
+      "company": "TEST Acacia Market",
+      "size": "large",
+      "theme": "light",
+      "headline": "TEST Merchant storefront heading",
+      "merchantLeads": 1,
+      "publicLeads": 1
+    }
+  },
+  {
+    "name": "Reloaded assistant resumes the saved quick-tour stage",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Tour cards have explicit accessible names and background is inert",
+    "passed": false,
+    "detail": null
+  },
+  {
+    "name": "Tour cards have explicit accessible names and background is inert",
+    "passed": true,
+    "detail": {
+      "note": "Native inert is inspected directly: CLI snapshots include inert background nodes."
+    }
+  },
+  {
+    "name": "Question-mark guide card opens the actual platform help widget",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Manual contains current guided-setup and two-page instructions",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Skipping the entire setup preserves selected preferences and adds no products",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Saving My Company directly prompts first inventory when it is empty",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Skipping all three starter items keeps saved company and genuinely empty inventory",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Manual tour card opens the real manual",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Empty business storefront shows no implicit CODE76 products, reviews or contacts",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Reloading the business URL opens the storefront, not CODE76 sign-in",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Restricted role cannot edit company details through onboarding",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Restricted role cannot add inventory through onboarding",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Restricted-role skip flow does not create items or overwrite company",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Extra-large text remains horizontally contained in the mobile POS",
+    "passed": true,
+    "detail": {
+      "viewport": 390,
+      "document": 390,
+      "size": "xlarge"
+    }
+  },
+  {
+    "name": "Saving theme in Settings updates the same live theme source as onboarding",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Saved Text Sizing Settings changes the actual POS font scale",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Final build keeps CODE76 website independent after reload",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Final build keeps merchant identity and honest empty catalog",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Final independent content snapshot rejects merchant headline changes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Final business page still receives its own headline changes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Final setup preview has visible actions and live normal/dark preferences",
+    "passed": true,
+    "detail": {
+      "top": 0,
+      "footerBottom": 959.203125,
+      "height": 1000,
+      "theme": "dark",
+      "size": "normal"
+    }
+  },
+  {
+    "name": "Feature browser checks finish with zero console errors",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Setup can finish after just one item and opens Inventory directly",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Light-theme payment add control has stable, readable contrast",
+    "passed": false,
+    "detail": {
+      "foreground": "rgb(255, 255, 255)",
+      "background": "rgb(17, 94, 89)",
+      "animation": "none",
+      "opacity": "1",
+      "icon": "rgb(255, 255, 255)"
+    }
+  },
+  {
+    "name": "Light-theme payment add control has stable, readable contrast",
+    "passed": true,
+    "detail": {
+      "foreground": "rgb(255, 255, 255)",
+      "background": "rgb(17, 94, 89)",
+      "animation": "none",
+      "opacity": "1",
+      "contrastRatio": 7.58,
+      "note": "Check WCAG contrast, including the darker hover state, rather than requiring one exact RGB background."
+    }
+  },
+  {
+    "name": "Final-build One payment and trash controls preserve their verified behaviour",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Feature browser checks finish with zero console errors",
+    "passed": true,
+    "detail": null
+  }
+]

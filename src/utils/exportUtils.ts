@@ -1,33 +1,23 @@
+import { CODE76_BRAND, creditHtml, withExportCredit } from '../config/code76Brand.ts';
+import { appDialogs } from './appDialogs.ts';
+import { serializeCsvRows, parseCsvRecords } from './csv.ts';
+import { dateTime } from './regional.ts';
 import { PersonRecord, ProductItem, SaleTransaction, ExpenseItem, InvoiceItem, AuditLog, CompanyData } from '../types/index.ts';
+
+export const escapeReportText = (value: unknown): string => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]!));
 
 /**
  * Escapes and serializes an array of objects to CSV.
  */
 export function exportToCSV<T extends Record<string, any>>(data: T[], filename: string): void {
   if (!data || data.length === 0) {
-    alert('No data available to export.');
+    void appDialogs.alert({ title: 'Nothing to export', message: 'No data is available to export from this platform yet.', tone: 'info' });
     return;
   }
 
-  const headers = Object.keys(data[0]);
-  const csvRows = [headers.join(',')];
-
-  for (const row of data) {
-    const values = headers.map((header) => {
-      let val = row[header];
-      if (val === null || val === undefined) {
-        return '""';
-      }
-      if (typeof val === 'object') {
-        val = JSON.stringify(val);
-      }
-      const stringVal = String(val).replace(/"/g, '""');
-      return `"${stringVal}"`;
-    });
-    csvRows.push(values.join(','));
-  }
-
-  const csvContent = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvRows.join('\n'));
+  const branded=data.map(row=>withExportCredit(row));
+  const headers=[...new Set(branded.flatMap(row=>Object.keys(row)))];
+  const csvContent='data:text/csv;charset=utf-8,'+encodeURIComponent(serializeCsvRows(headers,branded.map(row=>headers.map(header=>row[header]))));
   const link = document.createElement('a');
   link.setAttribute('href', csvContent);
   link.setAttribute('download', `${filename}.csv`);
@@ -40,49 +30,11 @@ export function exportToCSV<T extends Record<string, any>>(data: T[], filename: 
  * Parses CSV text into records.
  */
 export function parseCSV(csvText: string): Record<string, string>[] {
-  const lines = csvText.trim().split(/\r\n|\n/);
-  if (lines.length < 2) return [];
-
-  // Parse header
-  const headers = parseCSVLine(lines[0]);
-  const results: Record<string, string>[] = [];
-
-  for (let i = 1; i < lines.length; i++) {
-    if (!lines[i].trim()) continue;
-    const values = parseCSVLine(lines[i]);
-    const obj: Record<string, string> = {};
-    headers.forEach((header, index) => {
-      obj[header.trim()] = values[index] ? values[index].trim() : '';
-    });
-    results.push(obj);
-  }
-
-  return results;
-}
-
-function parseCSVLine(line: string): string[] {
-  const values: string[] = [];
-  let current = '';
-  let inQuotes = false;
-
-  for (let i = 0; i < line.length; i++) {
-    const char = line[i];
-    if (char === '"') {
-      if (inQuotes && line[i + 1] === '"') {
-        current += '"';
-        i++;
-      } else {
-        inQuotes = !inQuotes;
-      }
-    } else if (char === ',' && !inQuotes) {
-      values.push(current);
-      current = '';
-    } else {
-      current += char;
-    }
-  }
-  values.push(current);
-  return values;
+  // CODE76 attribution travels as metadata columns. Strip them on import so a
+  // brand-added export round-trips to the original records exactly.
+  return parseCsvRecords(csvText).map((record) => Object.fromEntries(
+    Object.entries(record).filter(([key]) => !key.startsWith('_code76')),
+  ));
 }
 
 /**
@@ -97,20 +49,24 @@ export function printPDFReport(
 ): void {
   const printWindow = window.open('', '_blank');
   if (!printWindow) {
-    alert('Please allow popups to generate and print PDF reports.');
+    void appDialogs.alert({
+      title: 'Print window blocked',
+      message: 'The browser blocked the printable report window. Allow pop-ups for this site, or use the in-app receipt downloads (PDF/TXT/CSV/HTML).',
+      tone: 'warning',
+    });
     return;
   }
 
   const metaHtml = metadata
     ? `<div style="display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 20px; padding: 12px; background: #f8fafc; border-radius: 6px;">
-        ${metadata.map((m) => `<div><span style="font-size: 11px; color: #64748b; text-transform: uppercase;">${m.label}:</span> <strong style="font-size: 13px; color: #0f172a;">${m.value}</strong></div>`).join('')}
+        ${metadata.map((m) => `<div><span style="font-size: 11px; color: #64748b; text-transform: uppercase;">${escapeReportText(m.label)}:</span> <strong style="font-size: 13px; color: #0f172a;">${escapeReportText(m.value)}</strong></div>`).join('')}
        </div>`
     : '';
 
   const tableHeaderHtml = columns
     .map(
       (col) =>
-        `<th style="border-bottom: 2px solid #cbd5e1; padding: 10px 12px; text-align: left; font-size: 12px; font-weight: 600; color: #334155; text-transform: uppercase;">${col.header}</th>`
+        `<th style="border-bottom: 2px solid #cbd5e1; padding: 10px 12px; text-align: left; font-size: 12px; font-weight: 600; color: #334155; text-transform: uppercase;">${escapeReportText(col.header)}</th>`
     )
     .join('');
 
@@ -124,7 +80,7 @@ export function printPDFReport(
               if (val === null || val === undefined) val = '-';
               if (typeof val === 'boolean') val = val ? 'Yes' : 'No';
               if (Array.isArray(val)) val = val.join(', ');
-              return `<td style="border-bottom: 1px solid #e2e8f0; padding: 10px 12px; font-size: 12px; color: #1e293b;">${val}</td>`;
+              return `<td style="border-bottom: 1px solid #e2e8f0; padding: 10px 12px; font-size: 12px; color: #1e293b;">${escapeReportText(val)}</td>`;
             })
             .join('')}
         </tr>`
@@ -135,7 +91,7 @@ export function printPDFReport(
     <!DOCTYPE html>
     <html>
       <head>
-        <title>${title} - ${company.name}</title>
+        <title>${escapeReportText(title)} - ${escapeReportText(company.name)}</title>
         <style>
           @page { size: A4; margin: 15mm; }
           body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: #0f172a; margin: 0; padding: 20px; }
@@ -163,15 +119,16 @@ export function printPDFReport(
         </div>
         <div class="header">
           <div class="company-info">
-            <h1>${company.name}</h1>
-            <p>${company.slogan || 'Business Solutions & Point of Sale'}</p>
-            <p>${company.address}, ${company.location}, ${company.country}</p>
-            <p>Tel: ${company.tel1} | Email: ${company.email}</p>
-            ${company.taxPin ? `<p>Tax/VAT PIN: <strong>${company.taxPin}</strong></p>` : ''}
+            <h1>${escapeReportText(company.name)}</h1>
+            <p>${escapeReportText(company.slogan || 'Business Solutions & Point of Sale')}</p>
+            <p>${escapeReportText(company.address)}, ${escapeReportText(company.location)}, ${escapeReportText(company.country)}</p>
+            <p>Tel: ${escapeReportText(company.tel1)} | Email: ${escapeReportText(company.email)}</p>
+            ${company.isDemo ? `<p><strong>DEMO DATA — fictional records, not an actual payment or endorsement.</strong></p>` : ''}
+            ${company.taxPin ? `<p>Tax/VAT PIN: <strong>${escapeReportText(company.taxPin)}</strong></p>` : ''}
           </div>
           <div class="report-meta">
-            <h2>${title}</h2>
-            <p>Generated: ${new Date().toLocaleString()}</p>
+            <h2>${escapeReportText(title)}</h2>
+            <p>Generated: ${escapeReportText(dateTime(new Date()))}</p>
             <p>System: CODE76 POS Enterprise</p>
             <p>Total Records: ${data.length}</p>
           </div>
@@ -185,10 +142,11 @@ export function printPDFReport(
         </table>
 
         <div class="footer">
-          <span>CODE76 POS - Official System Generated Document</span>
+          <span>Generated from the current workspace records</span>
           <span>Authorized Signature / Stamp: ______________________</span>
-          <span>Page 1 of 1</span>
+
         </div>
+        ${creditHtml()}
       </body>
     </html>
   `;

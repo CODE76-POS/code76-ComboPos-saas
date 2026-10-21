@@ -1,0 +1,32 @@
+[
+  {
+    "name": "development preview host /",
+    "passed": true,
+    "status": 200,
+    "content_type": "text/html; charset=utf-8"
+  },
+  {
+    "name": "development preview host /index.html",
+    "passed": true,
+    "status": 200,
+    "content_type": "text/html; charset=utf-8"
+  },
+  {
+    "name": "development preview host /pos/landing_page_builder",
+    "passed": true,
+    "status": 200,
+    "content_type": "text/html; charset=utf-8"
+  },
+  {
+    "name": "development preview host /src/main.tsx",
+    "passed": true,
+    "status": 200,
+    "content_type": "text/javascript"
+  },
+  {
+    "name": "development preview host /favicon.ico",
+    "passed": true,
+    "status": 200,
+    "content_type": "image/x-icon"
+  }
+]

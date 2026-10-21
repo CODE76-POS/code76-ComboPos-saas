@@ -1,0 +1,1094 @@
+### Page
+- Page URL: http://127.0.0.1:5173/#/pos/sales_history
+- Page Title: CODE76 POS — Private Workspace
+### Snapshot
+```yaml
+- generic [ref=e4]:
+  - banner [ref=e693]:
+    - generic [ref=e694]:
+      - button "CODE76 POS logo CODE76 POS Enterprise Product & Service SaaS ERP System" [ref=e696] [cursor=pointer]:
+        - img "CODE76 POS logo" [ref=e698]
+        - generic [ref=e699]:
+          - generic [ref=e700]:
+            - generic [ref=e701]: CODE76 POS
+            - generic [ref=e702]: Enterprise
+          - paragraph [ref=e703]: Product & Service SaaS ERP System
+      - generic [ref=e704]:
+        - generic [ref=e705]:
+          - button "Desktop View (Full Width)" [ref=e706] [cursor=pointer]
+          - button "Laptop View (1024px)" [ref=e709] [cursor=pointer]
+          - button "Tablet View (768px)" [ref=e712] [cursor=pointer]
+          - button "Phone Mobile View (390px)" [ref=e715] [cursor=pointer]
+        - generic [ref=e718]:
+          - button "Demo Data" [ref=e719] [cursor=pointer]
+          - button "Business Page" [ref=e1469] [cursor=pointer]
+          - button "Click to view help guide and settings for this platform" [ref=e725] [cursor=pointer]
+          - button "Active user session and access controls" [ref=e730] [cursor=pointer]:
+            - generic [ref=e731]: DR
+            - generic [ref=e732]:
+              - generic [ref=e733]: Dr. David Kimani
+              - generic [ref=e734]: "Role: CEO"
+    - generic [ref=e735]:
+      - generic [ref=e736]:
+        - generic [ref=e740]: App link
+        - generic [ref=e741]:
+          - generic [ref=e742]:
+            - generic [ref=e743]: App link
+            - textbox "App link" [ref=e744]: http://127.0.0.1:5173/
+            - button "Copy app link" [ref=e745] [cursor=pointer]:
+              - generic [ref=e749]: Copy link
+            - link "Open app link in a new tab" [ref=e750] [cursor=pointer]:
+              - /url: http://127.0.0.1:5173/
+          - status [ref=e755]
+        - button "Current demo plan" [ref=e756]: Max · demo
+      - paragraph [ref=e757]: Open this root link to reach CODE76 sign-in/register. Browser-local records and sessions do not sync between browsers.
+    - note [ref=e1609]: DEMO DATA · Fictional records, contacts, reviews and bookkeeping amounts—not real business activity.
+    - generic [ref=e759]:
+      - button "Sales POS" [ref=e760] [cursor=pointer]
+      - button "Sales History" [active] [ref=e764] [cursor=pointer]
+      - button "Inventory" [ref=e769] [cursor=pointer]
+      - button "Expenses" [ref=e1474] [cursor=pointer]
+      - button "Invoices" [ref=e1478] [cursor=pointer]
+      - button "Analytics & P&L" [ref=e1482] [cursor=pointer]
+      - button "Customers" [ref=e1485] [cursor=pointer]
+      - button "Vendors" [ref=e1491] [cursor=pointer]
+      - button "Transporters" [ref=e1496] [cursor=pointer]
+      - button "Marketing Team" [ref=e1502] [cursor=pointer]
+      - button "Company Members" [ref=e1506] [cursor=pointer]
+      - button "My Company" [ref=e1512] [cursor=pointer]
+      - button "Messaging" [ref=e1516] [cursor=pointer]
+      - button "Business Landing Page" [ref=e1519] [cursor=pointer]
+      - button "Settings" [ref=e774] [cursor=pointer]
+      - button "Audit & Access Logs" [ref=e1524] [cursor=pointer]
+      - button "About & Manual" [ref=e778] [cursor=pointer]
+  - main [ref=e5]:
+    - generic [ref=e1610]:
+      - generic [ref=e1611]:
+        - generic [ref=e1612]:
+          - generic [ref=e1613]:
+            - heading "Sales History & Debt Platform" [level=1] [ref=e1614]
+            - button "Click for platform guidance & settings" [ref=e1615] [cursor=pointer]
+          - paragraph [ref=e1619]: Audit past transactions, view products sold, collect debt balances, capture customer testimonials, and send polite appreciation emails.
+        - generic [ref=e1620]:
+          - button "Export History PDF" [ref=e1621] [cursor=pointer]
+          - button "Email Ledger" [ref=e1625] [cursor=pointer]
+      - generic [ref=e1629]:
+        - generic [ref=e1630]:
+          - paragraph [ref=e1631]: Recorded sales (not cash receipts)
+          - strong [ref=e1632]: USD 2502.50
+        - generic [ref=e1633]:
+          - paragraph [ref=e1634]: Amount applied to sales
+          - strong [ref=e1635]: USD 1659.50
+        - generic [ref=e1636]:
+          - paragraph [ref=e1637]: Recorded outstanding balance
+          - strong [ref=e1638]: USD 843.00
+      - generic [ref=e1639]:
+        - 'textbox "Search receipt #, customer, cashier, invoice..." [ref=e1644]'
+        - generic [ref=e1645]:
+          - generic [ref=e1646]: "Category:"
+          - button "All Types" [ref=e1647] [cursor=pointer]
+          - button "Normal Sales" [ref=e1648] [cursor=pointer]
+          - button "Sales Invoices" [ref=e1649] [cursor=pointer]
+        - generic [ref=e1650]:
+          - button "All statuses" [ref=e1651] [cursor=pointer]
+          - button "All outstanding" [ref=e1652] [cursor=pointer]
+          - button "Past due date" [ref=e1653] [cursor=pointer]
+          - button "Paid / Completed" [ref=e1654] [cursor=pointer]
+          - button "Pending Debt" [ref=e1655] [cursor=pointer]
+          - button "Partial Debt" [ref=e1656] [cursor=pointer]
+      - table [ref=e1659]:
+        - rowgroup [ref=e1660]:
+          - row [ref=e1661]:
+            - columnheader "Actions (Start)" [ref=e1662]
+            - 'columnheader "Receipt / Inv #" [ref=e1663]'
+            - columnheader "Category / Type" [ref=e1664]
+            - columnheader "Date / Time" [ref=e1665]
+            - columnheader "Customer" [ref=e1666]
+            - columnheader "Cashier" [ref=e1667]
+            - columnheader "Referred By" [ref=e1668]
+            - columnheader "Net Total" [ref=e1669]
+            - columnheader "Paid" [ref=e1670]
+            - columnheader "Debt" [ref=e1671]
+            - columnheader "Status" [ref=e1672]
+            - columnheader "Follow-ups" [ref=e1673]
+            - columnheader "Actions (End)" [ref=e1674]
+        - rowgroup [ref=e1675]:
+          - row [ref=e1676]:
+            - cell [ref=e1677]:
+              - generic [ref=e1678]:
+                - button "View Sold Items Breakdown" [ref=e1679] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e1683] [cursor=pointer]
+                - button "Delete Transaction" [ref=e1687] [cursor=pointer]
+            - cell "DEMO-REC-1001 Invoice B2B" [ref=e1691]:
+              - generic [ref=e1692]: DEMO-REC-1001
+              - generic [ref=e1693]: Invoice B2B
+            - cell "Sales Invoice" [ref=e1694]
+            - cell "20/10/2026 08:14 PM" [ref=e1699]
+            - cell "DEMO Business Customer" [ref=e1700]
+            - cell "DEMO Alex Sample" [ref=e1701]
+            - cell "Direct Sale" [ref=e1702]
+            - cell "USD 50.00" [ref=e1703]
+            - cell "USD 50.00" [ref=e1704]
+            - cell "$0.00" [ref=e1705]
+            - cell "Paid (Invoice)" [ref=e1706]
+            - cell [ref=e1707]:
+              - generic [ref=e1708]:
+                - button "Capture Customer Review / Testimonial" [ref=e1709] [cursor=pointer]
+                - button "Send Polite Appreciation & Review Request Email" [ref=e1712] [cursor=pointer]
+            - cell [ref=e1716]:
+              - generic [ref=e1717]:
+                - button "Print Thermal Receipt" [ref=e1718] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e1723] [cursor=pointer]
+                - button "Email sale transaction (.txt & .pdf) to customer/marketer/staff/transporter" [ref=e1727] [cursor=pointer]
+                - button "Delete Transaction" [ref=e1731] [cursor=pointer]
+          - row [ref=e1735]:
+            - cell [ref=e1736]:
+              - generic [ref=e1737]:
+                - button "View Sold Items Breakdown" [ref=e1738] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e1742] [cursor=pointer]
+                - button "Delete Transaction" [ref=e1746] [cursor=pointer]
+            - cell "DEMO-REC-1002 Invoice B2B" [ref=e1750]:
+              - generic [ref=e1751]: DEMO-REC-1002
+              - generic [ref=e1752]: Invoice B2B
+            - cell "Sales Invoice" [ref=e1753]
+            - cell "19/10/2026 08:14 PM" [ref=e1758]
+            - cell "DEMO Customer 14 Sample" [ref=e1759]
+            - cell "DEMO Alex Sample" [ref=e1760]
+            - cell "Direct Sale" [ref=e1761]
+            - cell "USD 216.00" [ref=e1762]
+            - cell "USD 108.00" [ref=e1763]
+            - cell "USD 108.00" [ref=e1764]
+            - cell "Debt (Partial)" [ref=e1766]
+            - cell [ref=e1767]:
+              - generic [ref=e1768]:
+                - button "Pay Debt" [ref=e1769] [cursor=pointer]
+                - button "Capture Customer Review / Testimonial" [ref=e1772] [cursor=pointer]
+                - button "Send Polite Appreciation & Review Request Email" [ref=e1775] [cursor=pointer]
+            - cell [ref=e1779]:
+              - generic [ref=e1780]:
+                - button "Print Thermal Receipt" [ref=e1781] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e1786] [cursor=pointer]
+                - button "Email sale transaction (.txt & .pdf) to customer/marketer/staff/transporter" [ref=e1790] [cursor=pointer]
+                - button "Delete Transaction" [ref=e1794] [cursor=pointer]
+          - row [ref=e1798]:
+            - cell [ref=e1799]:
+              - generic [ref=e1800]:
+                - button "View Sold Items Breakdown" [ref=e1801] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e1805] [cursor=pointer]
+                - button "Delete Transaction" [ref=e1809] [cursor=pointer]
+            - cell "DEMO-REC-1003" [ref=e1813]
+            - cell "Normal Sale" [ref=e1815]
+            - cell "18/10/2026 08:14 PM" [ref=e1820]
+            - cell "DEMO Customer 13 Sample" [ref=e1821]
+            - cell "DEMO Alex Sample" [ref=e1822]
+            - cell "Direct Sale" [ref=e1823]
+            - cell "USD 36.00" [ref=e1824]
+            - cell "USD 0.00" [ref=e1825]
+            - cell "USD 36.00" [ref=e1826]
+            - cell "debt pending" [ref=e1828]
+            - cell [ref=e1829]:
+              - generic [ref=e1830]:
+                - button "Pay Debt" [ref=e1831] [cursor=pointer]
+                - button "Capture Customer Review / Testimonial" [ref=e1834] [cursor=pointer]
+                - button "Send Polite Appreciation & Review Request Email" [ref=e1837] [cursor=pointer]
+            - cell [ref=e1841]:
+              - generic [ref=e1842]:
+                - button "Print Thermal Receipt" [ref=e1843] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e1848] [cursor=pointer]
+                - button "Email sale transaction (.txt & .pdf) to customer/marketer/staff/transporter" [ref=e1852] [cursor=pointer]
+                - button "Delete Transaction" [ref=e1856] [cursor=pointer]
+          - row [ref=e1860]:
+            - cell [ref=e1861]:
+              - generic [ref=e1862]:
+                - button "View Sold Items Breakdown" [ref=e1863] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e1867] [cursor=pointer]
+                - button "Delete Transaction" [ref=e1871] [cursor=pointer]
+            - cell "DEMO-REC-1004" [ref=e1875]
+            - cell "Normal Sale" [ref=e1877]
+            - cell "17/10/2026 08:14 PM" [ref=e1882]
+            - cell "DEMO Customer 12 Sample" [ref=e1883]
+            - cell "DEMO Alex Sample" [ref=e1884]
+            - cell "Direct Sale" [ref=e1885]
+            - cell "USD 7.00" [ref=e1886]
+            - cell "USD 7.00" [ref=e1887]
+            - cell "$0.00" [ref=e1888]
+            - cell "completed" [ref=e1889]
+            - cell [ref=e1890]:
+              - generic [ref=e1891]:
+                - button "Capture Customer Review / Testimonial" [ref=e1892] [cursor=pointer]
+                - button "Send Polite Appreciation & Review Request Email" [ref=e1895] [cursor=pointer]
+            - cell [ref=e1899]:
+              - generic [ref=e1900]:
+                - button "Print Thermal Receipt" [ref=e1901] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e1906] [cursor=pointer]
+                - button "Email sale transaction (.txt & .pdf) to customer/marketer/staff/transporter" [ref=e1910] [cursor=pointer]
+                - button "Delete Transaction" [ref=e1914] [cursor=pointer]
+          - row [ref=e1918]:
+            - cell [ref=e1919]:
+              - generic [ref=e1920]:
+                - button "View Sold Items Breakdown" [ref=e1921] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e1925] [cursor=pointer]
+                - button "Delete Transaction" [ref=e1929] [cursor=pointer]
+            - cell "DEMO-REC-1005" [ref=e1933]
+            - cell "Normal Sale" [ref=e1935]
+            - cell "16/10/2026 08:14 PM" [ref=e1940]
+            - cell "DEMO Customer 11 Sample" [ref=e1941]
+            - cell "DEMO Alex Sample" [ref=e1942]
+            - cell "Direct Sale" [ref=e1943]
+            - cell "USD 36.00" [ref=e1944]
+            - cell "USD 27.00" [ref=e1945]
+            - cell "USD 9.00" [ref=e1946]
+            - cell "debt partial" [ref=e1948]
+            - cell [ref=e1949]:
+              - generic [ref=e1950]:
+                - button "Pay Debt" [ref=e1951] [cursor=pointer]
+                - button "Capture Customer Review / Testimonial" [ref=e1954] [cursor=pointer]
+                - button "Send Polite Appreciation & Review Request Email" [ref=e1957] [cursor=pointer]
+            - cell [ref=e1961]:
+              - generic [ref=e1962]:
+                - button "Print Thermal Receipt" [ref=e1963] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e1968] [cursor=pointer]
+                - button "Email sale transaction (.txt & .pdf) to customer/marketer/staff/transporter" [ref=e1972] [cursor=pointer]
+                - button "Delete Transaction" [ref=e1976] [cursor=pointer]
+          - row [ref=e1980]:
+            - cell [ref=e1981]:
+              - generic [ref=e1982]:
+                - button "View Sold Items Breakdown" [ref=e1983] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e1987] [cursor=pointer]
+                - button "Delete Transaction" [ref=e1991] [cursor=pointer]
+            - cell "DEMO-REC-1006" [ref=e1995]
+            - cell "Normal Sale" [ref=e1997]
+            - cell "15/10/2026 08:14 PM" [ref=e2002]
+            - cell "DEMO Customer 10 Sample" [ref=e2003]
+            - cell "DEMO Alex Sample" [ref=e2004]
+            - cell "Direct Sale" [ref=e2005]
+            - cell "USD 375.00" [ref=e2006]
+            - cell "USD 375.00" [ref=e2007]
+            - cell "$0.00" [ref=e2008]
+            - cell "completed" [ref=e2009]
+            - cell [ref=e2010]:
+              - generic [ref=e2011]:
+                - button "Capture Customer Review / Testimonial" [ref=e2012] [cursor=pointer]
+                - button "Send Polite Appreciation & Review Request Email" [ref=e2015] [cursor=pointer]
+            - cell [ref=e2019]:
+              - generic [ref=e2020]:
+                - button "Print Thermal Receipt" [ref=e2021] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e2026] [cursor=pointer]
+                - button "Email sale transaction (.txt & .pdf) to customer/marketer/staff/transporter" [ref=e2030] [cursor=pointer]
+                - button "Delete Transaction" [ref=e2034] [cursor=pointer]
+          - row [ref=e2038]:
+            - cell [ref=e2039]:
+              - generic [ref=e2040]:
+                - button "View Sold Items Breakdown" [ref=e2041] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e2045] [cursor=pointer]
+                - button "Delete Transaction" [ref=e2049] [cursor=pointer]
+            - cell "DEMO-REC-1007 Invoice B2B" [ref=e2053]:
+              - generic [ref=e2054]: DEMO-REC-1007
+              - generic [ref=e2055]: Invoice B2B
+            - cell "Sales Invoice" [ref=e2056]
+            - cell "14/10/2026 08:14 PM" [ref=e2061]
+            - cell "DEMO Customer 09 Sample" [ref=e2062]
+            - cell "DEMO Alex Sample" [ref=e2063]
+            - cell "Direct Sale" [ref=e2064]
+            - cell "USD 5.00" [ref=e2065]
+            - cell "USD 5.00" [ref=e2066]
+            - cell "$0.00" [ref=e2067]
+            - cell "Paid (Invoice)" [ref=e2068]
+            - cell [ref=e2069]:
+              - generic [ref=e2070]:
+                - button "Capture Customer Review / Testimonial" [ref=e2071] [cursor=pointer]
+                - button "Send Polite Appreciation & Review Request Email" [ref=e2074] [cursor=pointer]
+            - cell [ref=e2078]:
+              - generic [ref=e2079]:
+                - button "Print Thermal Receipt" [ref=e2080] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e2085] [cursor=pointer]
+                - button "Email sale transaction (.txt & .pdf) to customer/marketer/staff/transporter" [ref=e2089] [cursor=pointer]
+                - button "Delete Transaction" [ref=e2093] [cursor=pointer]
+          - row [ref=e2097]:
+            - cell [ref=e2098]:
+              - generic [ref=e2099]:
+                - button "View Sold Items Breakdown" [ref=e2100] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e2104] [cursor=pointer]
+                - button "Delete Transaction" [ref=e2108] [cursor=pointer]
+            - cell "DEMO-REC-1008 Invoice B2B" [ref=e2112]:
+              - generic [ref=e2113]: DEMO-REC-1008
+              - generic [ref=e2114]: Invoice B2B
+            - cell "Sales Invoice" [ref=e2115]
+            - cell "13/10/2026 08:14 PM" [ref=e2120]
+            - cell "DEMO Customer 08 Sample" [ref=e2121]
+            - cell "DEMO Alex Sample" [ref=e2122]
+            - cell "Direct Sale" [ref=e2123]
+            - cell "USD 40.00" [ref=e2124]
+            - cell "USD 20.00" [ref=e2125]
+            - cell "USD 20.00" [ref=e2126]
+            - cell "Debt (Partial)" [ref=e2128]
+            - cell [ref=e2129]:
+              - generic [ref=e2130]:
+                - button "Pay Debt" [ref=e2131] [cursor=pointer]
+                - button "Capture Customer Review / Testimonial" [ref=e2134] [cursor=pointer]
+                - button "Send Polite Appreciation & Review Request Email" [ref=e2137] [cursor=pointer]
+            - cell [ref=e2141]:
+              - generic [ref=e2142]:
+                - button "Print Thermal Receipt" [ref=e2143] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e2148] [cursor=pointer]
+                - button "Email sale transaction (.txt & .pdf) to customer/marketer/staff/transporter" [ref=e2152] [cursor=pointer]
+                - button "Delete Transaction" [ref=e2156] [cursor=pointer]
+          - row [ref=e2160]:
+            - cell [ref=e2161]:
+              - generic [ref=e2162]:
+                - button "View Sold Items Breakdown" [ref=e2163] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e2167] [cursor=pointer]
+                - button "Delete Transaction" [ref=e2171] [cursor=pointer]
+            - cell "DEMO-REC-1009" [ref=e2175]
+            - cell "Normal Sale" [ref=e2177]
+            - cell "12/10/2026 08:14 PM" [ref=e2182]
+            - cell "DEMO Customer 07 Sample" [ref=e2183]
+            - cell "DEMO Alex Sample" [ref=e2184]
+            - cell "Direct Sale" [ref=e2185]
+            - cell "USD 30.00" [ref=e2186]
+            - cell "USD 0.00" [ref=e2187]
+            - cell "USD 30.00" [ref=e2188]
+            - cell "debt pending" [ref=e2190]
+            - cell [ref=e2191]:
+              - generic [ref=e2192]:
+                - button "Pay Debt" [ref=e2193] [cursor=pointer]
+                - button "Capture Customer Review / Testimonial" [ref=e2196] [cursor=pointer]
+                - button "Send Polite Appreciation & Review Request Email" [ref=e2199] [cursor=pointer]
+            - cell [ref=e2203]:
+              - generic [ref=e2204]:
+                - button "Print Thermal Receipt" [ref=e2205] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e2210] [cursor=pointer]
+                - button "Email sale transaction (.txt & .pdf) to customer/marketer/staff/transporter" [ref=e2214] [cursor=pointer]
+                - button "Delete Transaction" [ref=e2218] [cursor=pointer]
+          - row [ref=e2222]:
+            - cell [ref=e2223]:
+              - generic [ref=e2224]:
+                - button "View Sold Items Breakdown" [ref=e2225] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e2229] [cursor=pointer]
+                - button "Delete Transaction" [ref=e2233] [cursor=pointer]
+            - cell "DEMO-REC-1010" [ref=e2237]
+            - cell "Normal Sale" [ref=e2239]
+            - cell "11/10/2026 08:14 PM" [ref=e2244]
+            - cell "DEMO Customer 06 Sample" [ref=e2245]
+            - cell "DEMO Alex Sample" [ref=e2246]
+            - cell "Direct Sale" [ref=e2247]
+            - cell "USD 3.00" [ref=e2248]
+            - cell "USD 3.00" [ref=e2249]
+            - cell "$0.00" [ref=e2250]
+            - cell "completed" [ref=e2251]
+            - cell [ref=e2252]:
+              - generic [ref=e2253]:
+                - button "Capture Customer Review / Testimonial" [ref=e2254] [cursor=pointer]
+                - button "Send Polite Appreciation & Review Request Email" [ref=e2257] [cursor=pointer]
+            - cell [ref=e2261]:
+              - generic [ref=e2262]:
+                - button "Print Thermal Receipt" [ref=e2263] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e2268] [cursor=pointer]
+                - button "Email sale transaction (.txt & .pdf) to customer/marketer/staff/transporter" [ref=e2272] [cursor=pointer]
+                - button "Delete Transaction" [ref=e2276] [cursor=pointer]
+          - row [ref=e2280]:
+            - cell [ref=e2281]:
+              - generic [ref=e2282]:
+                - button "View Sold Items Breakdown" [ref=e2283] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e2287] [cursor=pointer]
+                - button "Delete Transaction" [ref=e2291] [cursor=pointer]
+            - cell "DEMO-REC-1011" [ref=e2295]
+            - cell "Normal Sale" [ref=e2297]
+            - cell "10/10/2026 08:14 PM" [ref=e2302]
+            - cell "DEMO Customer 05 Sample" [ref=e2303]
+            - cell "DEMO Alex Sample" [ref=e2304]
+            - cell "Direct Sale" [ref=e2305]
+            - cell "USD 160.00" [ref=e2306]
+            - cell "USD 120.00" [ref=e2307]
+            - cell "USD 40.00" [ref=e2308]
+            - cell "debt partial" [ref=e2310]
+            - cell [ref=e2311]:
+              - generic [ref=e2312]:
+                - button "Pay Debt" [ref=e2313] [cursor=pointer]
+                - button "Capture Customer Review / Testimonial" [ref=e2316] [cursor=pointer]
+                - button "Send Polite Appreciation & Review Request Email" [ref=e2319] [cursor=pointer]
+            - cell [ref=e2323]:
+              - generic [ref=e2324]:
+                - button "Print Thermal Receipt" [ref=e2325] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e2330] [cursor=pointer]
+                - button "Email sale transaction (.txt & .pdf) to customer/marketer/staff/transporter" [ref=e2334] [cursor=pointer]
+                - button "Delete Transaction" [ref=e2338] [cursor=pointer]
+          - row [ref=e2342]:
+            - cell [ref=e2343]:
+              - generic [ref=e2344]:
+                - button "View Sold Items Breakdown" [ref=e2345] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e2349] [cursor=pointer]
+                - button "Delete Transaction" [ref=e2353] [cursor=pointer]
+            - cell "DEMO-REC-1012" [ref=e2357]
+            - cell "Normal Sale" [ref=e2359]
+            - cell "09/10/2026 08:14 PM" [ref=e2364]
+            - cell "DEMO Customer 04 Sample" [ref=e2365]
+            - cell "DEMO Alex Sample" [ref=e2366]
+            - cell "Direct Sale" [ref=e2367]
+            - cell "USD 18.00" [ref=e2368]
+            - cell "USD 18.00" [ref=e2369]
+            - cell "$0.00" [ref=e2370]
+            - cell "completed" [ref=e2371]
+            - cell [ref=e2372]:
+              - generic [ref=e2373]:
+                - button "Capture Customer Review / Testimonial" [ref=e2374] [cursor=pointer]
+                - button "Send Polite Appreciation & Review Request Email" [ref=e2377] [cursor=pointer]
+            - cell [ref=e2381]:
+              - generic [ref=e2382]:
+                - button "Print Thermal Receipt" [ref=e2383] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e2388] [cursor=pointer]
+                - button "Email sale transaction (.txt & .pdf) to customer/marketer/staff/transporter" [ref=e2392] [cursor=pointer]
+                - button "Delete Transaction" [ref=e2396] [cursor=pointer]
+          - row [ref=e2400]:
+            - cell [ref=e2401]:
+              - generic [ref=e2402]:
+                - button "View Sold Items Breakdown" [ref=e2403] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e2407] [cursor=pointer]
+                - button "Delete Transaction" [ref=e2411] [cursor=pointer]
+            - cell "DEMO-REC-1013 Invoice B2B" [ref=e2415]:
+              - generic [ref=e2416]: DEMO-REC-1013
+              - generic [ref=e2417]: Invoice B2B
+            - cell "Sales Invoice" [ref=e2418]
+            - cell "08/10/2026 08:14 PM" [ref=e2423]
+            - cell "DEMO Customer 03 Sample" [ref=e2424]
+            - cell "DEMO Alex Sample" [ref=e2425]
+            - cell "Direct Sale" [ref=e2426]
+            - cell "USD 2.50" [ref=e2427]
+            - cell "USD 2.50" [ref=e2428]
+            - cell "$0.00" [ref=e2429]
+            - cell "Paid (Invoice)" [ref=e2430]
+            - cell [ref=e2431]:
+              - generic [ref=e2432]:
+                - button "Capture Customer Review / Testimonial" [ref=e2433] [cursor=pointer]
+                - button "Send Polite Appreciation & Review Request Email" [ref=e2436] [cursor=pointer]
+            - cell [ref=e2440]:
+              - generic [ref=e2441]:
+                - button "Print Thermal Receipt" [ref=e2442] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e2447] [cursor=pointer]
+                - button "Email sale transaction (.txt & .pdf) to customer/marketer/staff/transporter" [ref=e2451] [cursor=pointer]
+                - button "Delete Transaction" [ref=e2455] [cursor=pointer]
+          - row [ref=e2459]:
+            - cell [ref=e2460]:
+              - generic [ref=e2461]:
+                - button "View Sold Items Breakdown" [ref=e2462] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e2466] [cursor=pointer]
+                - button "Delete Transaction" [ref=e2470] [cursor=pointer]
+            - cell "DEMO-REC-1014 Invoice B2B" [ref=e2474]:
+              - generic [ref=e2475]: DEMO-REC-1014
+              - generic [ref=e2476]: Invoice B2B
+            - cell "Sales Invoice" [ref=e2477]
+            - cell "07/10/2026 08:14 PM" [ref=e2482]
+            - cell "DEMO Customer 02 Sample" [ref=e2483]
+            - cell "DEMO Alex Sample" [ref=e2484]
+            - cell "Direct Sale" [ref=e2485]
+            - cell "USD 22.00" [ref=e2486]
+            - cell "USD 11.00" [ref=e2487]
+            - cell "USD 11.00" [ref=e2488]
+            - cell "Debt (Partial)" [ref=e2490]
+            - cell [ref=e2491]:
+              - generic [ref=e2492]:
+                - button "Pay Debt" [ref=e2493] [cursor=pointer]
+                - button "Capture Customer Review / Testimonial" [ref=e2496] [cursor=pointer]
+                - button "Send Polite Appreciation & Review Request Email" [ref=e2499] [cursor=pointer]
+            - cell [ref=e2503]:
+              - generic [ref=e2504]:
+                - button "Print Thermal Receipt" [ref=e2505] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e2510] [cursor=pointer]
+                - button "Email sale transaction (.txt & .pdf) to customer/marketer/staff/transporter" [ref=e2514] [cursor=pointer]
+                - button "Delete Transaction" [ref=e2518] [cursor=pointer]
+          - row [ref=e2522]:
+            - cell [ref=e2523]:
+              - generic [ref=e2524]:
+                - button "View Sold Items Breakdown" [ref=e2525] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e2529] [cursor=pointer]
+                - button "Delete Transaction" [ref=e2533] [cursor=pointer]
+            - cell "DEMO-REC-1015" [ref=e2537]
+            - cell "Normal Sale" [ref=e2539]
+            - cell "06/10/2026 08:14 PM" [ref=e2544]
+            - cell "DEMO Customer 01 Sample" [ref=e2545]
+            - cell "DEMO Alex Sample" [ref=e2546]
+            - cell "Direct Sale" [ref=e2547]
+            - cell "USD 9.00" [ref=e2548]
+            - cell "USD 0.00" [ref=e2549]
+            - cell "USD 9.00" [ref=e2550]
+            - cell "debt pending" [ref=e2552]
+            - cell [ref=e2553]:
+              - generic [ref=e2554]:
+                - button "Pay Debt" [ref=e2555] [cursor=pointer]
+                - button "Capture Customer Review / Testimonial" [ref=e2558] [cursor=pointer]
+                - button "Send Polite Appreciation & Review Request Email" [ref=e2561] [cursor=pointer]
+            - cell [ref=e2565]:
+              - generic [ref=e2566]:
+                - button "Print Thermal Receipt" [ref=e2567] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e2572] [cursor=pointer]
+                - button "Email sale transaction (.txt & .pdf) to customer/marketer/staff/transporter" [ref=e2576] [cursor=pointer]
+                - button "Delete Transaction" [ref=e2580] [cursor=pointer]
+          - row [ref=e2584]:
+            - cell [ref=e2585]:
+              - generic [ref=e2586]:
+                - button "View Sold Items Breakdown" [ref=e2587] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e2591] [cursor=pointer]
+                - button "Delete Transaction" [ref=e2595] [cursor=pointer]
+            - cell "DEMO-REC-1016" [ref=e2599]
+            - cell "Normal Sale" [ref=e2601]
+            - cell "05/10/2026 08:14 PM" [ref=e2606]
+            - cell "DEMO Business Customer" [ref=e2607]
+            - cell "DEMO Alex Sample" [ref=e2608]
+            - cell "Direct Sale" [ref=e2609]
+            - cell "USD 155.00" [ref=e2610]
+            - cell "USD 155.00" [ref=e2611]
+            - cell "$0.00" [ref=e2612]
+            - cell "completed" [ref=e2613]
+            - cell [ref=e2614]:
+              - generic [ref=e2615]:
+                - button "Capture Customer Review / Testimonial" [ref=e2616] [cursor=pointer]
+                - button "Send Polite Appreciation & Review Request Email" [ref=e2619] [cursor=pointer]
+            - cell [ref=e2623]:
+              - generic [ref=e2624]:
+                - button "Print Thermal Receipt" [ref=e2625] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e2630] [cursor=pointer]
+                - button "Email sale transaction (.txt & .pdf) to customer/marketer/staff/transporter" [ref=e2634] [cursor=pointer]
+                - button "Delete Transaction" [ref=e2638] [cursor=pointer]
+          - row [ref=e2642]:
+            - cell [ref=e2643]:
+              - generic [ref=e2644]:
+                - button "View Sold Items Breakdown" [ref=e2645] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e2649] [cursor=pointer]
+                - button "Delete Transaction" [ref=e2653] [cursor=pointer]
+            - cell "DEMO-REC-1017" [ref=e2657]
+            - cell "Normal Sale" [ref=e2659]
+            - cell "04/10/2026 08:14 PM" [ref=e2664]
+            - cell "DEMO Customer 14 Sample" [ref=e2665]
+            - cell "DEMO Alex Sample" [ref=e2666]
+            - cell "Direct Sale" [ref=e2667]
+            - cell "USD 28.00" [ref=e2668]
+            - cell "USD 21.00" [ref=e2669]
+            - cell "USD 7.00" [ref=e2670]
+            - cell "debt partial" [ref=e2672]
+            - cell [ref=e2673]:
+              - generic [ref=e2674]:
+                - button "Pay Debt" [ref=e2675] [cursor=pointer]
+                - button "Capture Customer Review / Testimonial" [ref=e2678] [cursor=pointer]
+                - button "Send Polite Appreciation & Review Request Email" [ref=e2681] [cursor=pointer]
+            - cell [ref=e2685]:
+              - generic [ref=e2686]:
+                - button "Print Thermal Receipt" [ref=e2687] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e2692] [cursor=pointer]
+                - button "Email sale transaction (.txt & .pdf) to customer/marketer/staff/transporter" [ref=e2696] [cursor=pointer]
+                - button "Delete Transaction" [ref=e2700] [cursor=pointer]
+          - row [ref=e2704]:
+            - cell [ref=e2705]:
+              - generic [ref=e2706]:
+                - button "View Sold Items Breakdown" [ref=e2707] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e2711] [cursor=pointer]
+                - button "Delete Transaction" [ref=e2715] [cursor=pointer]
+            - cell "DEMO-REC-1018" [ref=e2719]
+            - cell "Normal Sale" [ref=e2721]
+            - cell "03/10/2026 08:14 PM" [ref=e2726]
+            - cell "DEMO Customer 13 Sample" [ref=e2727]
+            - cell "DEMO Alex Sample" [ref=e2728]
+            - cell "Direct Sale" [ref=e2729]
+            - cell "USD 9.00" [ref=e2730]
+            - cell "USD 9.00" [ref=e2731]
+            - cell "$0.00" [ref=e2732]
+            - cell "completed" [ref=e2733]
+            - cell [ref=e2734]:
+              - generic [ref=e2735]:
+                - button "Capture Customer Review / Testimonial" [ref=e2736] [cursor=pointer]
+                - button "Send Polite Appreciation & Review Request Email" [ref=e2739] [cursor=pointer]
+            - cell [ref=e2743]:
+              - generic [ref=e2744]:
+                - button "Print Thermal Receipt" [ref=e2745] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e2750] [cursor=pointer]
+                - button "Email sale transaction (.txt & .pdf) to customer/marketer/staff/transporter" [ref=e2754] [cursor=pointer]
+                - button "Delete Transaction" [ref=e2758] [cursor=pointer]
+          - row [ref=e2762]:
+            - cell [ref=e2763]:
+              - generic [ref=e2764]:
+                - button "View Sold Items Breakdown" [ref=e2765] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e2769] [cursor=pointer]
+                - button "Delete Transaction" [ref=e2773] [cursor=pointer]
+            - cell "DEMO-REC-1019 Invoice B2B" [ref=e2777]:
+              - generic [ref=e2778]: DEMO-REC-1019
+              - generic [ref=e2779]: Invoice B2B
+            - cell "Sales Invoice" [ref=e2780]
+            - cell "20/10/2026 05:14 PM" [ref=e2785]
+            - cell "DEMO Customer 12 Sample" [ref=e2786]
+            - cell "DEMO Alex Sample" [ref=e2787]
+            - cell "Direct Sale" [ref=e2788]
+            - cell "USD 4.00" [ref=e2789]
+            - cell "USD 4.00" [ref=e2790]
+            - cell "$0.00" [ref=e2791]
+            - cell "Paid (Invoice)" [ref=e2792]
+            - cell [ref=e2793]:
+              - generic [ref=e2794]:
+                - button "Capture Customer Review / Testimonial" [ref=e2795] [cursor=pointer]
+                - button "Send Polite Appreciation & Review Request Email" [ref=e2798] [cursor=pointer]
+            - cell [ref=e2802]:
+              - generic [ref=e2803]:
+                - button "Print Thermal Receipt" [ref=e2804] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e2809] [cursor=pointer]
+                - button "Email sale transaction (.txt & .pdf) to customer/marketer/staff/transporter" [ref=e2813] [cursor=pointer]
+                - button "Delete Transaction" [ref=e2817] [cursor=pointer]
+          - row [ref=e2821]:
+            - cell [ref=e2822]:
+              - generic [ref=e2823]:
+                - button "View Sold Items Breakdown" [ref=e2824] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e2828] [cursor=pointer]
+                - button "Delete Transaction" [ref=e2832] [cursor=pointer]
+            - cell "DEMO-REC-1020 Invoice B2B" [ref=e2836]:
+              - generic [ref=e2837]: DEMO-REC-1020
+              - generic [ref=e2838]: Invoice B2B
+            - cell "Sales Invoice" [ref=e2839]
+            - cell "19/10/2026 05:14 PM" [ref=e2844]
+            - cell "DEMO Customer 11 Sample" [ref=e2845]
+            - cell "DEMO Alex Sample" [ref=e2846]
+            - cell "Direct Sale" [ref=e2847]
+            - cell "USD 216.00" [ref=e2848]
+            - cell "USD 108.00" [ref=e2849]
+            - cell "USD 108.00" [ref=e2850]
+            - cell "Debt (Partial)" [ref=e2852]
+            - cell [ref=e2853]:
+              - generic [ref=e2854]:
+                - button "Pay Debt" [ref=e2855] [cursor=pointer]
+                - button "Capture Customer Review / Testimonial" [ref=e2858] [cursor=pointer]
+                - button "Send Polite Appreciation & Review Request Email" [ref=e2861] [cursor=pointer]
+            - cell [ref=e2865]:
+              - generic [ref=e2866]:
+                - button "Print Thermal Receipt" [ref=e2867] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e2872] [cursor=pointer]
+                - button "Email sale transaction (.txt & .pdf) to customer/marketer/staff/transporter" [ref=e2876] [cursor=pointer]
+                - button "Delete Transaction" [ref=e2880] [cursor=pointer]
+          - row [ref=e2884]:
+            - cell [ref=e2885]:
+              - generic [ref=e2886]:
+                - button "View Sold Items Breakdown" [ref=e2887] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e2891] [cursor=pointer]
+                - button "Delete Transaction" [ref=e2895] [cursor=pointer]
+            - cell "DEMO-REC-1021" [ref=e2899]
+            - cell "Normal Sale" [ref=e2901]
+            - cell "18/10/2026 05:14 PM" [ref=e2906]
+            - cell "DEMO Customer 10 Sample" [ref=e2907]
+            - cell "DEMO Alex Sample" [ref=e2908]
+            - cell "Direct Sale" [ref=e2909]
+            - cell "USD 330.00" [ref=e2910]
+            - cell "USD 0.00" [ref=e2911]
+            - cell "USD 330.00" [ref=e2912]
+            - cell "debt pending" [ref=e2914]
+            - cell [ref=e2915]:
+              - generic [ref=e2916]:
+                - button "Pay Debt" [ref=e2917] [cursor=pointer]
+                - button "Capture Customer Review / Testimonial" [ref=e2920] [cursor=pointer]
+                - button "Send Polite Appreciation & Review Request Email" [ref=e2923] [cursor=pointer]
+            - cell [ref=e2927]:
+              - generic [ref=e2928]:
+                - button "Print Thermal Receipt" [ref=e2929] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e2934] [cursor=pointer]
+                - button "Email sale transaction (.txt & .pdf) to customer/marketer/staff/transporter" [ref=e2938] [cursor=pointer]
+                - button "Delete Transaction" [ref=e2942] [cursor=pointer]
+          - row [ref=e2946]:
+            - cell [ref=e2947]:
+              - generic [ref=e2948]:
+                - button "View Sold Items Breakdown" [ref=e2949] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e2953] [cursor=pointer]
+                - button "Delete Transaction" [ref=e2957] [cursor=pointer]
+            - cell "DEMO-REC-1022" [ref=e2961]
+            - cell "Normal Sale" [ref=e2963]
+            - cell "17/10/2026 05:14 PM" [ref=e2968]
+            - cell "DEMO Customer 09 Sample" [ref=e2969]
+            - cell "DEMO Alex Sample" [ref=e2970]
+            - cell "Direct Sale" [ref=e2971]
+            - cell "USD 7.00" [ref=e2972]
+            - cell "USD 7.00" [ref=e2973]
+            - cell "$0.00" [ref=e2974]
+            - cell "completed" [ref=e2975]
+            - cell [ref=e2976]:
+              - generic [ref=e2977]:
+                - button "Capture Customer Review / Testimonial" [ref=e2978] [cursor=pointer]
+                - button "Send Polite Appreciation & Review Request Email" [ref=e2981] [cursor=pointer]
+            - cell [ref=e2985]:
+              - generic [ref=e2986]:
+                - button "Print Thermal Receipt" [ref=e2987] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e2992] [cursor=pointer]
+                - button "Email sale transaction (.txt & .pdf) to customer/marketer/staff/transporter" [ref=e2996] [cursor=pointer]
+                - button "Delete Transaction" [ref=e3000] [cursor=pointer]
+          - row [ref=e3004]:
+            - cell [ref=e3005]:
+              - generic [ref=e3006]:
+                - button "View Sold Items Breakdown" [ref=e3007] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e3011] [cursor=pointer]
+                - button "Delete Transaction" [ref=e3015] [cursor=pointer]
+            - cell "DEMO-REC-1023" [ref=e3019]
+            - cell "Normal Sale" [ref=e3021]
+            - cell "16/10/2026 05:14 PM" [ref=e3026]
+            - cell "DEMO Customer 08 Sample" [ref=e3027]
+            - cell "DEMO Alex Sample" [ref=e3028]
+            - cell "Direct Sale" [ref=e3029]
+            - cell "USD 36.00" [ref=e3030]
+            - cell "USD 27.00" [ref=e3031]
+            - cell "USD 9.00" [ref=e3032]
+            - cell "debt partial" [ref=e3034]
+            - cell [ref=e3035]:
+              - generic [ref=e3036]:
+                - button "Pay Debt" [ref=e3037] [cursor=pointer]
+                - button "Capture Customer Review / Testimonial" [ref=e3040] [cursor=pointer]
+                - button "Send Polite Appreciation & Review Request Email" [ref=e3043] [cursor=pointer]
+            - cell [ref=e3047]:
+              - generic [ref=e3048]:
+                - button "Print Thermal Receipt" [ref=e3049] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e3054] [cursor=pointer]
+                - button "Email sale transaction (.txt & .pdf) to customer/marketer/staff/transporter" [ref=e3058] [cursor=pointer]
+                - button "Delete Transaction" [ref=e3062] [cursor=pointer]
+          - row [ref=e3066]:
+            - cell [ref=e3067]:
+              - generic [ref=e3068]:
+                - button "View Sold Items Breakdown" [ref=e3069] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e3073] [cursor=pointer]
+                - button "Delete Transaction" [ref=e3077] [cursor=pointer]
+            - cell "DEMO-REC-1024" [ref=e3081]
+            - cell "Normal Sale" [ref=e3083]
+            - cell "15/10/2026 05:14 PM" [ref=e3088]
+            - cell "DEMO Customer 07 Sample" [ref=e3089]
+            - cell "DEMO Alex Sample" [ref=e3090]
+            - cell "Direct Sale" [ref=e3091]
+            - cell "USD 18.00" [ref=e3092]
+            - cell "USD 18.00" [ref=e3093]
+            - cell "$0.00" [ref=e3094]
+            - cell "completed" [ref=e3095]
+            - cell [ref=e3096]:
+              - generic [ref=e3097]:
+                - button "Capture Customer Review / Testimonial" [ref=e3098] [cursor=pointer]
+                - button "Send Polite Appreciation & Review Request Email" [ref=e3101] [cursor=pointer]
+            - cell [ref=e3105]:
+              - generic [ref=e3106]:
+                - button "Print Thermal Receipt" [ref=e3107] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e3112] [cursor=pointer]
+                - button "Email sale transaction (.txt & .pdf) to customer/marketer/staff/transporter" [ref=e3116] [cursor=pointer]
+                - button "Delete Transaction" [ref=e3120] [cursor=pointer]
+          - row [ref=e3124]:
+            - cell [ref=e3125]:
+              - generic [ref=e3126]:
+                - button "View Sold Items Breakdown" [ref=e3127] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e3131] [cursor=pointer]
+                - button "Delete Transaction" [ref=e3135] [cursor=pointer]
+            - cell "DEMO-REC-1025 Invoice B2B" [ref=e3139]:
+              - generic [ref=e3140]: DEMO-REC-1025
+              - generic [ref=e3141]: Invoice B2B
+            - cell "Sales Invoice" [ref=e3142]
+            - cell "14/10/2026 05:14 PM" [ref=e3147]
+            - cell "DEMO Customer 06 Sample" [ref=e3148]
+            - cell "DEMO Alex Sample" [ref=e3149]
+            - cell "Direct Sale" [ref=e3150]
+            - cell "USD 5.00" [ref=e3151]
+            - cell "USD 5.00" [ref=e3152]
+            - cell "$0.00" [ref=e3153]
+            - cell "Paid (Invoice)" [ref=e3154]
+            - cell [ref=e3155]:
+              - generic [ref=e3156]:
+                - button "Capture Customer Review / Testimonial" [ref=e3157] [cursor=pointer]
+                - button "Send Polite Appreciation & Review Request Email" [ref=e3160] [cursor=pointer]
+            - cell [ref=e3164]:
+              - generic [ref=e3165]:
+                - button "Print Thermal Receipt" [ref=e3166] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e3171] [cursor=pointer]
+                - button "Email sale transaction (.txt & .pdf) to customer/marketer/staff/transporter" [ref=e3175] [cursor=pointer]
+                - button "Delete Transaction" [ref=e3179] [cursor=pointer]
+          - row [ref=e3183]:
+            - cell [ref=e3184]:
+              - generic [ref=e3185]:
+                - button "View Sold Items Breakdown" [ref=e3186] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e3190] [cursor=pointer]
+                - button "Delete Transaction" [ref=e3194] [cursor=pointer]
+            - cell "DEMO-REC-1026 Invoice B2B" [ref=e3198]:
+              - generic [ref=e3199]: DEMO-REC-1026
+              - generic [ref=e3200]: Invoice B2B
+            - cell "Sales Invoice" [ref=e3201]
+            - cell "13/10/2026 05:14 PM" [ref=e3206]
+            - cell "DEMO Customer 05 Sample" [ref=e3207]
+            - cell "DEMO Alex Sample" [ref=e3208]
+            - cell "Direct Sale" [ref=e3209]
+            - cell "USD 130.00" [ref=e3210]
+            - cell "USD 65.00" [ref=e3211]
+            - cell "USD 65.00" [ref=e3212]
+            - cell "Debt (Partial)" [ref=e3214]
+            - cell [ref=e3215]:
+              - generic [ref=e3216]:
+                - button "Pay Debt" [ref=e3217] [cursor=pointer]
+                - button "Capture Customer Review / Testimonial" [ref=e3220] [cursor=pointer]
+                - button "Send Polite Appreciation & Review Request Email" [ref=e3223] [cursor=pointer]
+            - cell [ref=e3227]:
+              - generic [ref=e3228]:
+                - button "Print Thermal Receipt" [ref=e3229] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e3234] [cursor=pointer]
+                - button "Email sale transaction (.txt & .pdf) to customer/marketer/staff/transporter" [ref=e3238] [cursor=pointer]
+                - button "Delete Transaction" [ref=e3242] [cursor=pointer]
+          - row [ref=e3246]:
+            - cell [ref=e3247]:
+              - generic [ref=e3248]:
+                - button "View Sold Items Breakdown" [ref=e3249] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e3253] [cursor=pointer]
+                - button "Delete Transaction" [ref=e3257] [cursor=pointer]
+            - cell "DEMO-REC-1027" [ref=e3261]
+            - cell "Normal Sale" [ref=e3263]
+            - cell "12/10/2026 05:14 PM" [ref=e3268]
+            - cell "DEMO Customer 04 Sample" [ref=e3269]
+            - cell "DEMO Alex Sample" [ref=e3270]
+            - cell "Direct Sale" [ref=e3271]
+            - cell "USD 30.00" [ref=e3272]
+            - cell "USD 0.00" [ref=e3273]
+            - cell "USD 30.00" [ref=e3274]
+            - cell "debt pending" [ref=e3276]
+            - cell [ref=e3277]:
+              - generic [ref=e3278]:
+                - button "Pay Debt" [ref=e3279] [cursor=pointer]
+                - button "Capture Customer Review / Testimonial" [ref=e3282] [cursor=pointer]
+                - button "Send Polite Appreciation & Review Request Email" [ref=e3285] [cursor=pointer]
+            - cell [ref=e3289]:
+              - generic [ref=e3290]:
+                - button "Print Thermal Receipt" [ref=e3291] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e3296] [cursor=pointer]
+                - button "Email sale transaction (.txt & .pdf) to customer/marketer/staff/transporter" [ref=e3300] [cursor=pointer]
+                - button "Delete Transaction" [ref=e3304] [cursor=pointer]
+          - row [ref=e3308]:
+            - cell [ref=e3309]:
+              - generic [ref=e3310]:
+                - button "View Sold Items Breakdown" [ref=e3311] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e3315] [cursor=pointer]
+                - button "Delete Transaction" [ref=e3319] [cursor=pointer]
+            - cell "DEMO-REC-1028" [ref=e3323]
+            - cell "Normal Sale" [ref=e3325]
+            - cell "11/10/2026 05:14 PM" [ref=e3330]
+            - cell "DEMO Customer 03 Sample" [ref=e3331]
+            - cell "DEMO Alex Sample" [ref=e3332]
+            - cell "Direct Sale" [ref=e3333]
+            - cell "USD 3.00" [ref=e3334]
+            - cell "USD 3.00" [ref=e3335]
+            - cell "$0.00" [ref=e3336]
+            - cell "completed" [ref=e3337]
+            - cell [ref=e3338]:
+              - generic [ref=e3339]:
+                - button "Capture Customer Review / Testimonial" [ref=e3340] [cursor=pointer]
+                - button "Send Polite Appreciation & Review Request Email" [ref=e3343] [cursor=pointer]
+            - cell [ref=e3347]:
+              - generic [ref=e3348]:
+                - button "Print Thermal Receipt" [ref=e3349] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e3354] [cursor=pointer]
+                - button "Email sale transaction (.txt & .pdf) to customer/marketer/staff/transporter" [ref=e3358] [cursor=pointer]
+                - button "Delete Transaction" [ref=e3362] [cursor=pointer]
+          - row [ref=e3366]:
+            - cell [ref=e3367]:
+              - generic [ref=e3368]:
+                - button "View Sold Items Breakdown" [ref=e3369] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e3373] [cursor=pointer]
+                - button "Delete Transaction" [ref=e3377] [cursor=pointer]
+            - cell "DEMO-REC-1029" [ref=e3381]
+            - cell "Normal Sale" [ref=e3383]
+            - cell "10/10/2026 05:14 PM" [ref=e3388]
+            - cell "DEMO Customer 02 Sample" [ref=e3389]
+            - cell "DEMO Alex Sample" [ref=e3390]
+            - cell "Direct Sale" [ref=e3391]
+            - cell "USD 16.00" [ref=e3392]
+            - cell "USD 12.00" [ref=e3393]
+            - cell "USD 4.00" [ref=e3394]
+            - cell "debt partial" [ref=e3396]
+            - cell [ref=e3397]:
+              - generic [ref=e3398]:
+                - button "Pay Debt" [ref=e3399] [cursor=pointer]
+                - button "Capture Customer Review / Testimonial" [ref=e3402] [cursor=pointer]
+                - button "Send Polite Appreciation & Review Request Email" [ref=e3405] [cursor=pointer]
+            - cell [ref=e3409]:
+              - generic [ref=e3410]:
+                - button "Print Thermal Receipt" [ref=e3411] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e3416] [cursor=pointer]
+                - button "Email sale transaction (.txt & .pdf) to customer/marketer/staff/transporter" [ref=e3420] [cursor=pointer]
+                - button "Delete Transaction" [ref=e3424] [cursor=pointer]
+          - row [ref=e3428]:
+            - cell [ref=e3429]:
+              - generic [ref=e3430]:
+                - button "View Sold Items Breakdown" [ref=e3431] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e3435] [cursor=pointer]
+                - button "Delete Transaction" [ref=e3439] [cursor=pointer]
+            - cell "DEMO-REC-1030" [ref=e3443]
+            - cell "Normal Sale" [ref=e3445]
+            - cell "09/10/2026 05:14 PM" [ref=e3450]
+            - cell "DEMO Customer 01 Sample" [ref=e3451]
+            - cell "DEMO Alex Sample" [ref=e3452]
+            - cell "Direct Sale" [ref=e3453]
+            - cell "USD 18.00" [ref=e3454]
+            - cell "USD 18.00" [ref=e3455]
+            - cell "$0.00" [ref=e3456]
+            - cell "completed" [ref=e3457]
+            - cell [ref=e3458]:
+              - generic [ref=e3459]:
+                - button "Capture Customer Review / Testimonial" [ref=e3460] [cursor=pointer]
+                - button "Send Polite Appreciation & Review Request Email" [ref=e3463] [cursor=pointer]
+            - cell [ref=e3467]:
+              - generic [ref=e3468]:
+                - button "Print Thermal Receipt" [ref=e3469] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e3474] [cursor=pointer]
+                - button "Email sale transaction (.txt & .pdf) to customer/marketer/staff/transporter" [ref=e3478] [cursor=pointer]
+                - button "Delete Transaction" [ref=e3482] [cursor=pointer]
+          - row [ref=e3486]:
+            - cell [ref=e3487]:
+              - generic [ref=e3488]:
+                - button "View Sold Items Breakdown" [ref=e3489] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e3493] [cursor=pointer]
+                - button "Delete Transaction" [ref=e3497] [cursor=pointer]
+            - cell "DEMO-REC-1031 Invoice B2B" [ref=e3501]:
+              - generic [ref=e3502]: DEMO-REC-1031
+              - generic [ref=e3503]: Invoice B2B
+            - cell "Sales Invoice" [ref=e3504]
+            - cell "08/10/2026 05:14 PM" [ref=e3509]
+            - cell "DEMO Business Customer" [ref=e3510]
+            - cell "DEMO Alex Sample" [ref=e3511]
+            - cell "Direct Sale" [ref=e3512]
+            - cell "USD 140.00" [ref=e3513]
+            - cell "USD 140.00" [ref=e3514]
+            - cell "$0.00" [ref=e3515]
+            - cell "Paid (Invoice)" [ref=e3516]
+            - cell [ref=e3517]:
+              - generic [ref=e3518]:
+                - button "Capture Customer Review / Testimonial" [ref=e3519] [cursor=pointer]
+                - button "Send Polite Appreciation & Review Request Email" [ref=e3522] [cursor=pointer]
+            - cell [ref=e3526]:
+              - generic [ref=e3527]:
+                - button "Print Thermal Receipt" [ref=e3528] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e3533] [cursor=pointer]
+                - button "Email sale transaction (.txt & .pdf) to customer/marketer/staff/transporter" [ref=e3537] [cursor=pointer]
+                - button "Delete Transaction" [ref=e3541] [cursor=pointer]
+          - row [ref=e3545]:
+            - cell [ref=e3546]:
+              - generic [ref=e3547]:
+                - button "View Sold Items Breakdown" [ref=e3548] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e3552] [cursor=pointer]
+                - button "Delete Transaction" [ref=e3556] [cursor=pointer]
+            - cell "DEMO-REC-1032 Invoice B2B" [ref=e3560]:
+              - generic [ref=e3561]: DEMO-REC-1032
+              - generic [ref=e3562]: Invoice B2B
+            - cell "Sales Invoice" [ref=e3563]
+            - cell "07/10/2026 05:14 PM" [ref=e3568]
+            - cell "DEMO Customer 14 Sample" [ref=e3569]
+            - cell "DEMO Alex Sample" [ref=e3570]
+            - cell "Direct Sale" [ref=e3571]
+            - cell "USD 22.00" [ref=e3572]
+            - cell "USD 11.00" [ref=e3573]
+            - cell "USD 11.00" [ref=e3574]
+            - cell "Debt (Partial)" [ref=e3576]
+            - cell [ref=e3577]:
+              - generic [ref=e3578]:
+                - button "Pay Debt" [ref=e3579] [cursor=pointer]
+                - button "Capture Customer Review / Testimonial" [ref=e3582] [cursor=pointer]
+                - button "Send Polite Appreciation & Review Request Email" [ref=e3585] [cursor=pointer]
+            - cell [ref=e3589]:
+              - generic [ref=e3590]:
+                - button "Print Thermal Receipt" [ref=e3591] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e3596] [cursor=pointer]
+                - button "Email sale transaction (.txt & .pdf) to customer/marketer/staff/transporter" [ref=e3600] [cursor=pointer]
+                - button "Delete Transaction" [ref=e3604] [cursor=pointer]
+          - row [ref=e3608]:
+            - cell [ref=e3609]:
+              - generic [ref=e3610]:
+                - button "View Sold Items Breakdown" [ref=e3611] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e3615] [cursor=pointer]
+                - button "Delete Transaction" [ref=e3619] [cursor=pointer]
+            - cell "DEMO-REC-1033" [ref=e3623]
+            - cell "Normal Sale" [ref=e3625]
+            - cell "06/10/2026 05:14 PM" [ref=e3630]
+            - cell "DEMO Customer 13 Sample" [ref=e3631]
+            - cell "DEMO Alex Sample" [ref=e3632]
+            - cell "Direct Sale" [ref=e3633]
+            - cell "USD 9.00" [ref=e3634]
+            - cell "USD 0.00" [ref=e3635]
+            - cell "USD 9.00" [ref=e3636]
+            - cell "debt pending" [ref=e3638]
+            - cell [ref=e3639]:
+              - generic [ref=e3640]:
+                - button "Pay Debt" [ref=e3641] [cursor=pointer]
+                - button "Capture Customer Review / Testimonial" [ref=e3644] [cursor=pointer]
+                - button "Send Polite Appreciation & Review Request Email" [ref=e3647] [cursor=pointer]
+            - cell [ref=e3651]:
+              - generic [ref=e3652]:
+                - button "Print Thermal Receipt" [ref=e3653] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e3658] [cursor=pointer]
+                - button "Email sale transaction (.txt & .pdf) to customer/marketer/staff/transporter" [ref=e3662] [cursor=pointer]
+                - button "Delete Transaction" [ref=e3666] [cursor=pointer]
+          - row [ref=e3670]:
+            - cell [ref=e3671]:
+              - generic [ref=e3672]:
+                - button "View Sold Items Breakdown" [ref=e3673] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e3677] [cursor=pointer]
+                - button "Delete Transaction" [ref=e3681] [cursor=pointer]
+            - cell "DEMO-REC-1034" [ref=e3685]
+            - cell "Normal Sale" [ref=e3687]
+            - cell "05/10/2026 05:14 PM" [ref=e3692]
+            - cell "DEMO Customer 12 Sample" [ref=e3693]
+            - cell "DEMO Alex Sample" [ref=e3694]
+            - cell "Direct Sale" [ref=e3695]
+            - cell "USD 4.00" [ref=e3696]
+            - cell "USD 4.00" [ref=e3697]
+            - cell "$0.00" [ref=e3698]
+            - cell "completed" [ref=e3699]
+            - cell [ref=e3700]:
+              - generic [ref=e3701]:
+                - button "Capture Customer Review / Testimonial" [ref=e3702] [cursor=pointer]
+                - button "Send Polite Appreciation & Review Request Email" [ref=e3705] [cursor=pointer]
+            - cell [ref=e3709]:
+              - generic [ref=e3710]:
+                - button "Print Thermal Receipt" [ref=e3711] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e3716] [cursor=pointer]
+                - button "Email sale transaction (.txt & .pdf) to customer/marketer/staff/transporter" [ref=e3720] [cursor=pointer]
+                - button "Delete Transaction" [ref=e3724] [cursor=pointer]
+          - row [ref=e3728]:
+            - cell [ref=e3729]:
+              - generic [ref=e3730]:
+                - button "View Sold Items Breakdown" [ref=e3731] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e3735] [cursor=pointer]
+                - button "Delete Transaction" [ref=e3739] [cursor=pointer]
+            - cell "DEMO-REC-1035" [ref=e3743]
+            - cell "Normal Sale" [ref=e3745]
+            - cell "04/10/2026 05:14 PM" [ref=e3750]
+            - cell "DEMO Customer 11 Sample" [ref=e3751]
+            - cell "DEMO Alex Sample" [ref=e3752]
+            - cell "Direct Sale" [ref=e3753]
+            - cell "USD 28.00" [ref=e3754]
+            - cell "USD 21.00" [ref=e3755]
+            - cell "USD 7.00" [ref=e3756]
+            - cell "debt partial" [ref=e3758]
+            - cell [ref=e3759]:
+              - generic [ref=e3760]:
+                - button "Pay Debt" [ref=e3761] [cursor=pointer]
+                - button "Capture Customer Review / Testimonial" [ref=e3764] [cursor=pointer]
+                - button "Send Polite Appreciation & Review Request Email" [ref=e3767] [cursor=pointer]
+            - cell [ref=e3771]:
+              - generic [ref=e3772]:
+                - button "Print Thermal Receipt" [ref=e3773] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e3778] [cursor=pointer]
+                - button "Email sale transaction (.txt & .pdf) to customer/marketer/staff/transporter" [ref=e3782] [cursor=pointer]
+                - button "Delete Transaction" [ref=e3786] [cursor=pointer]
+          - row [ref=e3790]:
+            - cell [ref=e3791]:
+              - generic [ref=e3792]:
+                - button "View Sold Items Breakdown" [ref=e3793] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e3797] [cursor=pointer]
+                - button "Delete Transaction" [ref=e3801] [cursor=pointer]
+            - cell "DEMO-REC-1036" [ref=e3805]
+            - cell "Normal Sale" [ref=e3807]
+            - cell "03/10/2026 05:14 PM" [ref=e3812]
+            - cell "DEMO Customer 10 Sample" [ref=e3813]
+            - cell "DEMO Alex Sample" [ref=e3814]
+            - cell "Direct Sale" [ref=e3815]
+            - cell "USD 285.00" [ref=e3816]
+            - cell "USD 285.00" [ref=e3817]
+            - cell "$0.00" [ref=e3818]
+            - cell "completed" [ref=e3819]
+            - cell [ref=e3820]:
+              - generic [ref=e3821]:
+                - button "Capture Customer Review / Testimonial" [ref=e3822] [cursor=pointer]
+                - button "Send Polite Appreciation & Review Request Email" [ref=e3825] [cursor=pointer]
+            - cell [ref=e3829]:
+              - generic [ref=e3830]:
+                - button "Print Thermal Receipt" [ref=e3831] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e3836] [cursor=pointer]
+                - button "Email sale transaction (.txt & .pdf) to customer/marketer/staff/transporter" [ref=e3840] [cursor=pointer]
+                - button "Delete Transaction" [ref=e3844] [cursor=pointer]
+```

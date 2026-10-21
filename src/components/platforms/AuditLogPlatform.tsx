@@ -1,4 +1,7 @@
-import React, { useState, useMemo } from 'react';
+import { useRegionalFormat } from '../../hooks/useRegionalFormat.ts';
+import { accessHistoryPermissions, assertAccessHistoryExport, accessHistoryCsv, accessHistoryText, downloadReport } from '../../utils/accessHistory.ts';
+import { accessHistoryPdf } from '../../utils/accessHistoryPdf.ts';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { usePOS } from '../../context/POSContext.tsx';
 import {
   ShieldCheck,
@@ -25,37 +28,28 @@ import {
   Laptop,
 } from 'lucide-react';
 import { AuditLog } from '../../types/index.ts';
-import { exportToCSV, printPDFReport } from '../../utils/exportUtils.ts';
 import { EmailExportModal } from '../modals/EmailExportModal.tsx';
 
 export const AuditLogPlatform: React.FC = () => {
-  const { auditLogs, currentUser, setHoverHelpPlatform, logAuditAction, company } = usePOS();
+  const regionalFormat = useRegionalFormat();
+  const { auditLogs, currentUser, setHoverHelpPlatform, logAuditAction, company, settings, hasFeature } = usePOS();
 
-  // Admin authentication gate
-  const [isAdminUnlocked, setIsAdminUnlocked] = useState<boolean>(
-    currentUser?.isAdmin || currentUser?.roles.includes('Developer') || currentUser?.roles.includes('CEO') || false
-  );
-  const [pinInput, setPinInput] = useState<string>('');
-  const [authError, setAuthError] = useState<string>('');
+  const permissions = accessHistoryPermissions(currentUser, settings);
+  const live = useRef({ user: currentUser, settings });
+  live.current = { user: currentUser, settings };
+  const mounted = useRef(true);
+  useEffect(() => { mounted.current = true; return () => { mounted.current = false; }; }, []);
+  const [exportStatus, setExportStatus] = useState('');
+  const [pdfBusy, setPdfBusy] = useState(false);
 
   // Filters & Search
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [selectedActionFilter, setSelectedActionFilter] = useState<string>('all');
   const [dateFilter, setDateFilter] = useState<string>('all');
 
-  const handleUnlock = (e: React.FormEvent) => {
-    e.preventDefault();
-    setAuthError('');
-    if (pinInput === '7676' || pinInput.toLowerCase() === 'admin' || currentUser?.isAdmin) {
-      setIsAdminUnlocked(true);
-      logAuditAction('Admin Access Granted', 'Unlocked secure audit and login history platform');
-    } else {
-      setAuthError('Incorrect master admin credential. Access denied.');
-    }
-  };
-
   // Filtered logs
   const filteredLogs = useMemo(() => {
+    if (!permissions.canView) return [];
     return auditLogs.filter((log) => {
       // Search
       const matchesSearch =
@@ -96,13 +90,12 @@ export const AuditLogPlatform: React.FC = () => {
 
       // Date filter
       if (dateFilter === 'today') {
-        const todayStr = new Date().toISOString().slice(0, 10);
-        return log.timestamp.startsWith(todayStr);
+        return new Date(log.timestamp).toDateString() === new Date().toDateString();
       }
 
       return true;
     });
-  }, [auditLogs, searchTerm, selectedActionFilter, dateFilter]);
+  }, [auditLogs, searchTerm, selectedActionFilter, dateFilter, permissions.canView]);
 
   // Email Modal State
   const [emailModalOpen, setEmailModalOpen] = useState(false);
@@ -120,50 +113,46 @@ export const AuditLogPlatform: React.FC = () => {
   const formattedAuditData = useMemo(() => {
     return filteredLogs.map((log) => ({
       ...log,
-      formattedDate: new Date(log.timestamp).toLocaleString(),
+      formattedDate: regionalFormat.dateTime(log.timestamp),
     }));
   }, [filteredLogs]);
 
-  // Export Audit PDF
-  const handleExportPDF = () => {
-    printPDFReport(
-      'System Security & Access Audit Trail',
-      company,
-      auditColumns,
-      formattedAuditData,
-      [
-        { label: 'Export Date', value: new Date().toLocaleString() },
-        { label: 'Authorized Officer', value: currentUser?.name || 'Security Admin' },
-        { label: 'Total Events', value: `${filteredLogs.length} Events` },
-      ]
-    );
-    logAuditAction('Exported Audit Trail PDF', `Generated official PDF report with ${filteredLogs.length} events`);
+  const reportName = (extension: string) => `CODE76-Access-History-${new Date().toISOString().replace(/[:.]/g, '-')}.${extension}`;
+  const handleExportPDF = async () => {
+    const session = live.current;
+    try {
+      assertAccessHistoryExport(session.user, session.settings);
+      setPdfBusy(true); setExportStatus('Preparing the filtered PDF report…');
+      const bytes = await accessHistoryPdf(filteredLogs, session.user?.name || 'Authorized user');
+      // Do not finish a pending download after logout, navigation or privilege revocation.
+      if (!mounted.current || live.current.user?.id !== session.user?.id) return;
+      assertAccessHistoryExport(live.current.user, live.current.settings);
+      downloadReport(bytes.slice().buffer, 'application/pdf', reportName('pdf'));
+      setExportStatus('PDF download requested. Check your browser downloads.');
+      logAuditAction('Exported Access History PDF', `Downloaded ${filteredLogs.length} filtered records`);
+    } catch (error) { if (mounted.current) setExportStatus(error instanceof Error ? error.message : 'Unable to create the PDF.'); }
+    finally { if (mounted.current) setPdfBusy(false); }
   };
-
-  // Export Audit CSV
-  const handleExportCSV = () => {
-    const rows = filteredLogs.map((log) => {
-      const dateObj = new Date(log.timestamp);
-      return {
-        'Log ID': log.id,
-        'Date & Time': dateObj.toLocaleString(),
-        'User Name': log.userName,
-        'User Role': log.userRole,
-        Action: log.action,
-        'Activity Details': log.details,
-        'Device / IP Address': log.ipOrDevice,
-      };
-    });
-
-    exportToCSV(rows, `CODE76-Audit-Access-History-${new Date().toISOString().slice(0, 10)}`);
+  const handleExportFile = (format: 'csv' | 'txt') => {
+    try {
+      assertAccessHistoryExport(live.current.user, live.current.settings);
+      const content = format === 'csv' ? accessHistoryCsv(filteredLogs) : accessHistoryText(filteredLogs, currentUser?.name || 'Authorized user');
+      downloadReport(content, format === 'csv' ? 'text/csv;charset=utf-8' : 'text/plain;charset=utf-8', reportName(format));
+      setExportStatus(`${format.toUpperCase()} download requested. Check your browser downloads.`);
+      logAuditAction(`Exported Access History ${format.toUpperCase()}`, `Downloaded ${filteredLogs.length} filtered records`);
+    } catch (error) { setExportStatus(error instanceof Error ? error.message : 'Export permission is required.'); }
   };
+  const handleExportCSV = () => handleExportFile('csv');
+  const handleExportTXT = () => handleExportFile('txt');
 
   const handleOpenBulkEmail = () => {
+    if (!permissions.canExport) return;
     setSelectedLogForEmail(null);
     setEmailModalOpen(true);
   };
 
   const handleOpenRowEmail = (log: AuditLog) => {
+    if (!permissions.canExport) return;
     setSelectedLogForEmail(log);
     setEmailModalOpen(true);
   };
@@ -235,24 +224,25 @@ export const AuditLogPlatform: React.FC = () => {
             </button>
           </div>
           <p className="text-xs text-slate-400 mt-1">
-            Tamper-evident activity ledger recording user logins, timestamps, operations performed, logouts, and IP/devices.
+            Browser-local activity records: user sign-ins, operations and sign-outs. Filter the results before downloading a report.
           </p>
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
-          {isAdminUnlocked && (
+          {permissions.canExport && (
             <>
               <button
                 onClick={handleExportPDF}
+                disabled={pdfBusy} aria-label="Download access history PDF"
                 className="px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 text-xs font-semibold flex items-center gap-1.5 shadow-xs transition cursor-pointer"
-                title="Export official printable PDF audit trail"
+                title="Download the filtered access-history PDF file"
               >
                 <FileText className="w-4 h-4 text-rose-400" />
                 <span className="hidden sm:inline">Export PDF</span>
                 <span className="sm:hidden">PDF</span>
               </button>
               <button
-                onClick={handleExportCSV}
+                onClick={handleExportCSV} aria-label="Download access history CSV"
                 className="px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 text-xs font-semibold flex items-center gap-1.5 shadow-xs transition cursor-pointer"
                 title="Export audit CSV spreadsheet"
               >
@@ -260,80 +250,27 @@ export const AuditLogPlatform: React.FC = () => {
                 <span className="hidden sm:inline">Export CSV</span>
                 <span className="sm:hidden">CSV</span>
               </button>
-              <button
+              <button onClick={handleExportTXT} aria-label="Download access history TXT" className="px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 text-xs font-semibold flex items-center gap-1.5"><FileText className="w-4 h-4 text-teal-400" /> TXT</button>
+              {hasFeature('email') && (<button
                 onClick={handleOpenBulkEmail}
                 className="px-3.5 py-2 rounded-xl bg-teal-600/20 hover:bg-teal-600/30 border border-teal-500/40 text-teal-300 text-xs font-bold flex items-center gap-1.5 shadow-xs transition cursor-pointer"
                 title="Email PDF and CSV export audit trail to any company member or admin"
               >
                 <Mail className="w-4 h-4 text-teal-300" />
                 <span>Email Audit Trail (PDF / CSV)</span>
-              </button>
+              </button>)}
             </>
           )}
-          <button
-            onClick={() => setIsAdminUnlocked(!isAdminUnlocked)}
-            className={`px-3 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer ${
-              isAdminUnlocked
-                ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 hover:bg-amber-500/30'
-                : 'bg-teal-600 hover:bg-teal-500 text-white shadow-lg shadow-teal-600/30'
-            }`}
-          >
-            {isAdminUnlocked ? <Lock className="w-3.5 h-3.5" /> : <Unlock className="w-3.5 h-3.5" />}
-            <span>{isAdminUnlocked ? 'Lock Platform' : 'Admin Login Unlock'}</span>
-          </button>
         </div>
       </div>
 
-      {/* ADMIN PERMISSION GATE */}
-      {!isAdminUnlocked ? (
-        <div className="bg-slate-900/90 border border-slate-800 rounded-3xl p-8 sm:p-12 text-center max-w-lg mx-auto shadow-2xl backdrop-blur-md my-8 animate-in fade-in zoom-in-95">
-          <div className="w-16 h-16 rounded-2xl bg-teal-500/20 text-teal-400 border border-teal-500/40 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-teal-500/10">
-            <KeyRound className="w-8 h-8 animate-pulse" />
-          </div>
-
-          <h2 className="text-xl font-black text-slate-100 mb-2">
-            Restricted Admin Audit Gate
-          </h2>
-          <p className="text-xs text-slate-400 leading-relaxed mb-6">
-            User access history, login timestamps, and operational audit trails contain sensitive enterprise security data.
-            Please verify administrator credentials to view this platform.
-          </p>
-
-          <form onSubmit={handleUnlock} className="space-y-4">
-            <div className="text-left">
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">
-                Admin Master PIN or Password
-              </label>
-              <input
-                type="password"
-                required
-                autoFocus
-                placeholder="Enter administrative security PIN..."
-                value={pinInput}
-                onChange={(e) => setPinInput(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-teal-500 font-mono tracking-widest text-center"
-              />
-            </div>
-
-            {authError && (
-              <div className="p-3 bg-rose-950/70 border border-rose-800 rounded-xl text-xs text-rose-300 flex items-center justify-center gap-2">
-                <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0" />
-                <span>{authError}</span>
-              </div>
-            )}
-
-            <button
-              type="submit"
-              className="w-full py-2.5 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs shadow-lg shadow-teal-600/30 transition flex items-center justify-center gap-2 cursor-pointer"
-            >
-              <ShieldCheck className="w-4 h-4" />
-              Verify & Unlock Audit History
-            </button>
-
-            <div className="text-[11px] text-slate-500 pt-2">
-              Security Notice: Master access is restricted to authorized CODE76 system administrators.
-            </div>
-          </form>
+      {exportStatus && <p role="status" className="mb-4 rounded-xl border border-teal-800 bg-teal-950/30 p-3 text-sm text-teal-200">{exportStatus}</p>}
+      {permissions.canView && !permissions.canExport && <p className="mb-4 text-sm text-amber-300">You have read-only history access. PDF, TXT, CSV and email exports also require the Export Reports privilege.</p>}
+      {!permissions.canView ? (
+        <div role="alert" className="max-w-lg mx-auto rounded-2xl border border-amber-800 bg-slate-900 p-7 text-center">
+          <Lock className="w-10 h-10 mx-auto mb-3 text-amber-400" />
+          <h2 className="font-bold text-xl">Access history is restricted</h2>
+          <p className="mt-3 text-sm text-slate-400">An administrator must grant your role Audit Logs access. Downloads additionally require Export Reports. A PIN or a UI unlock button cannot override these permissions.</p>
         </div>
       ) : (
         <div className="space-y-6">
@@ -439,16 +376,8 @@ export const AuditLogPlatform: React.FC = () => {
                   ) : (
                     filteredLogs.map((log) => {
                       const dateObj = new Date(log.timestamp);
-                      const formattedDate = dateObj.toLocaleDateString(undefined, {
-                        month: 'short',
-                        day: 'numeric',
-                        year: 'numeric',
-                      });
-                      const formattedTime = dateObj.toLocaleTimeString(undefined, {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        second: '2-digit',
-                      });
+                      const formattedDate = regionalFormat.date(log.timestamp);
+                      const formattedTime = regionalFormat.time(log.timestamp);
 
                       return (
                         <tr key={log.id} className="hover:bg-slate-800/40 transition">
@@ -489,14 +418,14 @@ export const AuditLogPlatform: React.FC = () => {
                             </div>
                           </td>
                           <td className="py-3 px-4 whitespace-nowrap text-center">
-                            <button
-                              onClick={() => handleOpenRowEmail(log)}
+                            {hasFeature('email') && (<button
+                              onClick={() => handleOpenRowEmail(log)} disabled={!permissions.canExport}
                               title="Email this specific audit record to company member or admin"
                               className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-teal-300 hover:text-teal-200 border border-slate-700 transition cursor-pointer inline-flex items-center gap-1 text-[10px]"
                             >
                               <Mail className="w-3 h-3 text-teal-400" />
                               <span>Email</span>
-                            </button>
+                            </button>)}
                           </td>
                         </tr>
                       );
@@ -512,7 +441,7 @@ export const AuditLogPlatform: React.FC = () => {
               </span>
               <span className="flex items-center gap-1 text-emerald-400">
                 <CheckCircle2 className="w-3.5 h-3.5" />
-                Audit Trail Integrity Verified
+                Browser-local audit records
               </span>
             </div>
           </div>
@@ -520,7 +449,7 @@ export const AuditLogPlatform: React.FC = () => {
       )}
 
       {/* Email Export Modal for Audit Trail */}
-      {emailModalOpen && (
+      {emailModalOpen && permissions.canExport && (
         <EmailExportModal
           isOpen={emailModalOpen}
           onClose={() => setEmailModalOpen(false)}
@@ -536,7 +465,7 @@ export const AuditLogPlatform: React.FC = () => {
               ? `${selectedLogForEmail.action} (${selectedLogForEmail.userName})`
               : undefined
           }
-          availableFormats={['pdf', 'csv']}
+          availableFormats={['pdf', 'csv', 'txt']}
           data={selectedLogForEmail || formattedAuditData}
           columns={auditColumns}
           metadata={[
@@ -545,7 +474,7 @@ export const AuditLogPlatform: React.FC = () => {
               label: 'Event Count',
               value: selectedLogForEmail ? '1 Event' : `${filteredLogs.length} Events`,
             },
-            { label: 'Generated At', value: new Date().toLocaleString() },
+            { label: 'Generated At', value: regionalFormat.dateTime(new Date()) },
           ]}
         />
       )}

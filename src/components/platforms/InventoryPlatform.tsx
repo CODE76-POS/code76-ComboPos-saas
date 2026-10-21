@@ -1,3 +1,5 @@
+import { appDialogs } from '../../utils/appDialogs.ts';
+import { DEFAULT_SERVICE_UNIT, serviceUnitLabel } from '../../utils/serviceUnits.ts';
 import React, { useState } from 'react';
 import { usePOS } from '../../context/POSContext.tsx';
 import {
@@ -48,8 +50,13 @@ export const InventoryPlatform: React.FC = () => {
     setMarketingModalItem,
     setHoverHelpPlatform,
     company,
+    hasFeature,
   } = usePOS();
+  const currency = company.currency || 'USD';
 
+  const canExport = hasFeature('inventory_export') && hasPrivilege('canExportPdf');
+  const canEmail = hasFeature('email') && canExport;
+  const canMarket = hasFeature('inventory_marketing');
   const [searchQuery, setSearchQuery] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('All');
   const [typeFilter, setTypeFilter] = useState<'All' | 'product' | 'service'>('All');
@@ -72,18 +79,20 @@ export const InventoryPlatform: React.FC = () => {
     { header: 'Type', dataKey: 'type' },
     { header: 'SKU', dataKey: 'sku' },
     { header: 'Barcode', dataKey: 'barcode' },
-    { header: 'Cost ($)', dataKey: 'costPrice' },
-    { header: 'Selling ($)', dataKey: 'sellingPrice' },
-    { header: 'Stock Units', dataKey: 'stock' },
+    { header: 'Cost', dataKey: 'costPrice' },
+    { header: 'Selling', dataKey: 'sellingPrice' },
+    { header: 'Quantity / Billing Unit', dataKey: 'quantityBasis' },
     { header: 'Min Alert', dataKey: 'minStockAlert' },
   ];
 
   const handleOpenBulkEmail = () => {
+    if (!canEmail) return;
     setSelectedProductForEmail(null);
     setEmailModalOpen(true);
   };
 
   const handleOpenRowEmail = (prod: ProductItem) => {
+    if (!canEmail) return;
     setSelectedProductForEmail(prod);
     setEmailModalOpen(true);
   };
@@ -179,14 +188,20 @@ export const InventoryPlatform: React.FC = () => {
     setProductModalOpen(false);
   };
 
-  const handleDelete = (p: ProductItem) => {
-    if (confirm(`Are you sure you want to delete ${p.name}?`)) {
-      deleteProduct(p.id);
-    }
+  const handleDelete = async (p: ProductItem) => {
+    const confirmed = await appDialogs.confirm({
+      title: 'Delete this inventory item?',
+      message: `Delete ${p.name}?`,
+      detail: 'Past sales keep their own line-item snapshot. Only the catalogue entry is removed.',
+      confirmLabel: 'Delete item',
+      destructive: true,
+    });
+    if (confirmed) deleteProduct(p.id);
   };
 
   // Export single product specification PDF
   const handleExportSinglePDF = (p: ProductItem) => {
+    if (!canExport) return;
     const margin = calculateProductProfitMargin(p.costPrice, p.sellingPrice);
     printPDFReport(
       `Product Specification Sheet - ${p.name}`,
@@ -209,7 +224,7 @@ export const InventoryPlatform: React.FC = () => {
         { key: 'Standard Retail Selling Price', val: `$${p.sellingPrice.toFixed(2)}` },
         { key: 'Active Promo / Discount', val: p.isOnPromo ? `YES (Code: ${p.promoCode}, Price: $${(p.promoDiscountPrice || p.sellingPrice).toFixed(2)})` : 'No' },
         { key: 'Profit / Margin Status', val: p.type === 'service' ? '100% Service Margin' : margin.statusText },
-        { key: 'Current Stock on Hand', val: p.type === 'service' ? 'Unlimited Service' : `${p.stock} units` },
+        { key: 'Quantity / Billing Unit', val: p.type === 'service' ? serviceUnitLabel(p) : `${p.stock} units` },
         { key: 'Low Stock Alert Threshold', val: `${p.minStockAlert} units` },
         { key: 'Featured on Landing Page', val: p.isFeatured ? 'Yes (Visible to Buyers)' : 'No' },
         { key: 'Description', val: p.description },
@@ -219,6 +234,7 @@ export const InventoryPlatform: React.FC = () => {
 
   // Export Full Inventory Table to CSV
   const handleExportAllCSV = () => {
+    if (!canExport) return;
     const rows = products.map((p) => {
       const margin = calculateProductProfitMargin(p.costPrice, p.sellingPrice);
       return {
@@ -231,15 +247,16 @@ export const InventoryPlatform: React.FC = () => {
         'Age Restriction': p.ageRestriction || 'All Ages',
         'SKU': p.sku,
         'Barcode': p.barcode,
-        'Cost / Buying Price ($)': p.type === 'service' ? 0 : p.costPrice,
-        'Selling Price ($)': p.sellingPrice,
+        'Cost / Buying Price': p.type === 'service' ? 0 : p.costPrice,
+        'Selling Price': p.sellingPrice,
         'On Promo': p.isOnPromo ? 'YES' : 'NO',
         'Promo Code': p.promoCode || 'N/A',
-        'Promo Discount Price ($)': p.isOnPromo ? (p.promoDiscountPrice || p.sellingPrice) : 'N/A',
+        'Promo Discount Price': p.isOnPromo ? (p.promoDiscountPrice || p.sellingPrice) : 'N/A',
         'Promo Expiration': p.promoExpiresAt || 'N/A',
-        'Profit Diff ($)': p.type === 'service' ? p.sellingPrice : margin.diffAmount,
+        'Profit Diff': p.type === 'service' ? p.sellingPrice : margin.diffAmount,
         'Profit Margin (%)': p.type === 'service' ? 100 : margin.marginPercent,
-        'Stock Units': p.type === 'service' ? 'Unlimited' : p.stock,
+        'Stock Units': p.type === 'service' ? serviceUnitLabel(p) : p.stock,
+        serviceUnit: p.type === 'service' ? p.serviceUnit || DEFAULT_SERVICE_UNIT : '',
         'Min Alert Threshold': p.minStockAlert,
         'Landing Page Featured': p.isFeatured ? 'Yes' : 'No',
         'Description': p.description || 'This product is for sale.',
@@ -251,6 +268,7 @@ export const InventoryPlatform: React.FC = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-6">
+      <p className="mb-2 text-[10px] text-slate-400">Operating currency: {currency}. Currency changes do not convert existing amounts.</p>
       {/* Platform Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
@@ -291,23 +309,23 @@ export const InventoryPlatform: React.FC = () => {
             />
           </div>
 
-          <button
+          {canExport && (<button
             onClick={handleExportAllCSV}
             className="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 text-xs font-semibold flex items-center gap-2 shadow-xs transition cursor-pointer"
           >
             <FileSpreadsheet className="w-4 h-4 text-emerald-400" />
             <span className="hidden sm:inline">Export CSV</span>
             <span className="sm:hidden">CSV</span>
-          </button>
+          </button>)}
 
-          <button
+          {canEmail && (<button
             onClick={handleOpenBulkEmail}
             className="px-3.5 py-2 rounded-xl bg-teal-600/20 hover:bg-teal-600/30 border border-teal-500/40 text-teal-300 text-xs font-bold flex items-center gap-1.5 shadow-xs transition cursor-pointer"
             title="Email entire inventory ledger in .txt and .pdf formats to customer, marketer, company member, vendor, or transporter"
           >
             <Mail className="w-4 h-4 text-teal-300" />
             <span>Email Ledger (.txt & .pdf)</span>
-          </button>
+          </button>)}
 
           <button
             onClick={handleOpenCreate}
@@ -388,7 +406,7 @@ export const InventoryPlatform: React.FC = () => {
                 <th className="py-3 px-3 text-right">Cost (Buy)</th>
                 <th className="py-3 px-3 text-right">Selling Price</th>
                 <th className="py-3 px-3 text-center">Profit / Loss</th>
-                <th className="py-3 px-3 text-center">Stock Level</th>
+                <th className="py-3 px-3 text-center">Quantity / Billing Unit</th>
                 <th className="py-3 px-3 text-center">Marketing Campaign</th>
                 {/* END ACTION COLUMN */}
                 <th className="py-3 px-3 text-center w-28 text-teal-400">Actions (End)</th>
@@ -435,20 +453,20 @@ export const InventoryPlatform: React.FC = () => {
                           >
                             <Edit className="w-3.5 h-3.5" />
                           </button>
-                          <button
+                          {canExport && (<button
                             onClick={() => handleExportSinglePDF(item)}
                             title="Export PDF Spec Sheet"
                             className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-teal-400 hover:text-teal-300 transition cursor-pointer"
                           >
                             <Download className="w-3.5 h-3.5" />
-                          </button>
-                          <button
+                          </button>)}
+                          {canEmail && (<button
                             onClick={() => handleOpenRowEmail(item)}
                             title="Email item spec sheet (.txt & .pdf) to customer/marketer/company member/vendor/transporter"
                             className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-teal-300 hover:text-teal-200 transition cursor-pointer"
                           >
                             <Mail className="w-3.5 h-3.5" />
-                          </button>
+                          </button>)}
                           <button
                             onClick={() => handleDelete(item)}
                             title="Delete Item"
@@ -543,15 +561,15 @@ export const InventoryPlatform: React.FC = () => {
                         {item.isOnPromo ? (
                           <div>
                             <span className="line-through text-slate-500 text-[10px] block">
-                              ${item.sellingPrice.toFixed(2)}
+                              {currency} {item.sellingPrice.toFixed(2)}
                             </span>
                             <span className="font-black text-amber-400 text-xs">
-                              ${(item.promoDiscountPrice || item.sellingPrice).toFixed(2)}
+                              {currency} {(item.promoDiscountPrice || item.sellingPrice).toFixed(2)}
                             </span>
                           </div>
                         ) : (
                           <span className="font-black text-emerald-400 text-xs">
-                            ${item.sellingPrice.toFixed(2)}
+                            {currency} {item.sellingPrice.toFixed(2)}
                           </span>
                         )}
                       </td>
@@ -578,7 +596,7 @@ export const InventoryPlatform: React.FC = () => {
                       <td className="py-2.5 px-3 text-center">
                         {item.type === 'service' ? (
                           <span className="text-purple-300 text-[10px] font-semibold">
-                            Unlimited Service
+                            {serviceUnitLabel(item)}
                           </span>
                         ) : (
                           <div className="flex items-center justify-center gap-1.5">
@@ -602,14 +620,14 @@ export const InventoryPlatform: React.FC = () => {
 
                       {/* MARKETING PROMOTION */}
                       <td className="py-2.5 px-3 text-center">
-                        <button
-                          onClick={() => setMarketingModalItem(item)}
+                        {canMarket && hasFeature('email') && (<button
+                          onClick={() => { if(canMarket) setMarketingModalItem(item); }}
                           title="Open Marketing Widget: Dispatch email campaign for this product/discount"
                           className="px-2.5 py-1 rounded-lg bg-violet-600/30 hover:bg-violet-600/50 text-violet-300 border border-violet-500/40 text-[11px] font-bold flex items-center gap-1 mx-auto transition cursor-pointer shadow-xs"
                         >
                           <Megaphone className="w-3.5 h-3.5 text-violet-400" />
                           Promote Item
-                        </button>
+                        </button>)}
                       </td>
 
                       {/* END ACTION COLUMN: Delete, Update/Read, PDF Export */}
@@ -638,20 +656,20 @@ export const InventoryPlatform: React.FC = () => {
                           >
                             <Edit className="w-3.5 h-3.5" />
                           </button>
-                          <button
+                          {canExport && (<button
                             onClick={() => handleExportSinglePDF(item)}
                             title="Export PDF Spec Sheet"
                             className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-teal-400 hover:text-teal-300 transition cursor-pointer"
                           >
                             <Download className="w-3.5 h-3.5" />
-                          </button>
-                          <button
+                          </button>)}
+                          {canEmail && (<button
                             onClick={() => handleOpenRowEmail(item)}
                             title="Email item spec sheet (.txt & .pdf) to customer/marketer/company member/vendor/transporter"
                             className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-teal-300 hover:text-teal-200 transition cursor-pointer"
                           >
                             <Mail className="w-3.5 h-3.5" />
-                          </button>
+                          </button>)}
                           <button
                             onClick={() => handleDelete(item)}
                             title="Delete Item"
@@ -772,7 +790,7 @@ export const InventoryPlatform: React.FC = () => {
           isSingleRow={Boolean(selectedProductForEmail)}
           entityName={selectedProductForEmail?.name}
           availableFormats={['txt', 'pdf']}
-          data={selectedProductForEmail || filtered}
+          data={selectedProductForEmail ? { ...selectedProductForEmail, quantityBasis: selectedProductForEmail.type === 'service' ? serviceUnitLabel(selectedProductForEmail) : selectedProductForEmail.stock } : filtered.map(product => ({ ...product, quantityBasis: product.type === 'service' ? serviceUnitLabel(product) : product.stock }))}
           columns={inventoryExportColumns}
           metadata={[
             { label: 'Category Filter', value: categoryFilter },

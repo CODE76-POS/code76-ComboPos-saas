@@ -1,5 +1,11 @@
+import { code76SiteReply } from '../../utils/code76Offers.ts';
 import React, { useState, useRef, useEffect } from 'react';
 import { usePOS } from '../../context/POSContext.tsx';
+import { useCode76Site } from '../../context/Code76SiteContext.tsx';
+import { CODE76_SITE } from '../../config/code76Site.ts';
+import { catalogChatContext, landingPageData } from '../../utils/landingPages.ts';
+import type { LandingSurface } from '../../utils/landingPages.ts';
+import { businessCatalogReply } from '../../utils/storefrontChat.ts';
 import {
   MessageSquare,
   X,
@@ -20,6 +26,7 @@ import {
   RotateCcw,
 } from 'lucide-react';
 import { ProductItem } from '../../types/index.ts';
+import { DEFAULT_CHATBOT_SETTINGS } from '../../config/assistant.ts';
 
 interface ChatMessage {
   role: 'model' | 'user';
@@ -37,17 +44,39 @@ export interface InquiryLeadData {
 }
 
 interface AIChatbotWidgetProps {
+  surface: LandingSurface;
+  inlineLauncher?: boolean;
   inquiryLead?: InquiryLeadData | null;
   isOpenControlled?: boolean;
   onCloseControlled?: () => void;
 }
 
 export const AIChatbotWidget: React.FC<AIChatbotWidgetProps> = ({
+  surface,
+  inlineLauncher = false,
   inquiryLead,
   isOpenControlled,
   onCloseControlled,
 }) => {
-  const { products, company, reviews, settings, landingMetrics, setLandingMetrics } = usePOS();
+  const pos = usePOS();
+  const site = useCode76Site();
+  const isBusiness = surface === 'business';
+  const { products, company, reviews } = landingPageData(surface, pos);
+  const settings = isBusiness ? pos.settings : { landingPage: CODE76_SITE.landingPage };
+  const setLandingMetrics = isBusiness ? pos.setLandingMetrics : site.setMetrics;
+  const safeContext = catalogChatContext(surface, pos);
+  const assistant = isBusiness ? { ...DEFAULT_CHATBOT_SETTINGS, ...pos.settings.chatbot } : null;
+  const assistantEnabled = !isBusiness || (pos.hasFeature('chatbot') && assistant!.enabled !== false);
+  const replyOptions = { showPrices: assistant?.showPrices !== false, showStock: assistant?.showStock !== false };
+  const recordContact = (email: string) => {
+    const contact = {
+      firstName: 'Website visitor', secondName: '', tel1: '', tel2: '', whatsappNo: '',
+      email1: email, email2: '', address: '', location: '', country: '', photoUrl: '',
+      photoConsentForLanding: false, category: 'customer' as const,
+      notes: `Contact requested through the ${isBusiness ? 'merchant business' : 'CODE76 product'} website assistant.`,
+    };
+    if (isBusiness) pos.addPerson('customer', contact); else site.addSiteLead(contact);
+  };
 
   const [isOpenInternal, setIsOpenInternal] = useState(false);
   const isOpen = isOpenControlled !== undefined ? isOpenControlled : isOpenInternal;
@@ -64,7 +93,9 @@ export const AIChatbotWidget: React.FC<AIChatbotWidgetProps> = ({
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       role: 'model',
-      text: `Hello! 👋 Welcome to **${company.name}**.\n\nI am your AI Concierge & Commercial Advisor. Tell me about your business (e.g. supermarket, restaurant, hardware store, service agency) or what POS terminals and printers you are looking for, and I will recommend the best equipment bundle with live pricing!`,
+      text: isBusiness
+        ? `${assistant?.greeting || DEFAULT_CHATBOT_SETTINGS.greeting}`
+        : code76SiteReply(''),
     },
   ]);
   const [inputText, setInputText] = useState('');
@@ -98,7 +129,9 @@ export const AIChatbotWidget: React.FC<AIChatbotWidgetProps> = ({
 
         const isService = inquiryLead.product.type === 'service';
 
-        const greeting = `Hello **${inquiryLead.name}**! 👋 Welcome! I have recorded your quote request for the **${inquiryLead.product.name}** (${inquiryLead.product.isOnPromo ? `🔥 Promotional Special: $${promoPrice.toFixed(2)}` : `$${promoPrice.toFixed(2)}`}).\n\n` +
+        const greeting = isBusiness
+          ? `Hello ${inquiryLead.name}! Your inquiry about ${inquiryLead.product.name} (${company.currency} ${promoPrice.toFixed(2)}) was recorded in this browser. Please contact ${company.name} to confirm availability, arrange a service or complete an order. This chat has not reserved stock or confirmed an appointment.`
+          : `Hello **${inquiryLead.name}**! 👋 Welcome! I have recorded your quote request for the **${inquiryLead.product.name}** (${inquiryLead.product.isOnPromo ? `🔥 Promotional Special: $${promoPrice.toFixed(2)}` : `$${promoPrice.toFixed(2)}`}).\n\n` +
           (isService
             ? `📅 **Book Priority On-Site Demo**: As this is an enterprise commercial service, would you like our deployment specialist to **book a 20-minute on-site installation appointment** at your location in **${inquiryLead.location || 'your area'}** this week?`
             : `🏢 **Close Order or Visit Showroom**: We have units in stock reserved for you. Would you like to **finalize your order with warranty protection**, or would you prefer to **visit our showroom** at **${company.address || 'CBD Showroom'}, ${company.location}** to test the terminal with live barcode scanning?`) +
@@ -139,19 +172,16 @@ export const AIChatbotWidget: React.FC<AIChatbotWidgetProps> = ({
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          surface,
           messages: [...messages, userMsg],
-          posContext: {
-            company,
-            products,
-            reviews: reviews.filter((r) => r.isApprovedForLanding),
-          },
+          posContext: safeContext,
           visitorNeed: inquiryLead ? `Customer ${inquiryLead.name} inquired about ${inquiryLead.product.name} at location ${inquiryLead.location}` : undefined,
           enableThinking,
         }),
       });
 
       const data = await res.json();
-      const botReply = data.reply || data.fallbackReply || 'I am ready to help you find the perfect POS solution!';
+      const botReply = data.reply || data.fallbackReply || (isBusiness ? `${businessCatalogReply(textToSend, safeContext, replyOptions)}${assistant?.fallbackMessage ? `\n\n${assistant.fallbackMessage}` : ''}` : 'I am ready to help you find the right CODE76 POS solution.');
       setMessages((prev) => [...prev, { role: 'model', text: botReply }]);
     } catch (e) {
       console.error('Chatbot error:', e);
@@ -159,7 +189,7 @@ export const AIChatbotWidget: React.FC<AIChatbotWidgetProps> = ({
         ...prev,
         {
           role: 'model',
-          text: `Thank you for your inquiry! Our flagship **CODE76 Touch Terminal** ($599) and **Thermal Receipt Printer** ($129) are ready for dispatch with full 2-year warranty. Would you like our sales team to contact you with a formal quote or schedule an on-site visit?`,
+          text: isBusiness ? businessCatalogReply(textToSend, safeContext, replyOptions) : code76SiteReply(textToSend),
         },
       ]);
     } finally {
@@ -171,6 +201,7 @@ export const AIChatbotWidget: React.FC<AIChatbotWidgetProps> = ({
     e.preventDefault();
     if (!leadEmail.trim()) return;
 
+    recordContact(leadEmail.trim());
     setLeadCaptured(true);
     setLandingMetrics((prev) => ({
       ...prev,
@@ -181,7 +212,7 @@ export const AIChatbotWidget: React.FC<AIChatbotWidgetProps> = ({
       ...prev,
       {
         role: 'model',
-        text: `Thank you! We have registered your contact (${leadEmail}). An executive commercial quote with special bulk pricing and direct warranty will be delivered within 15 minutes!`,
+        text: `Thank you! Your contact (${leadEmail}) was recorded in this browser. Please contact ${company.name} directly for a confirmed quote; this assistant does not send email or reserve items.`,
       },
     ]);
   };
@@ -200,10 +231,22 @@ export const AIChatbotWidget: React.FC<AIChatbotWidgetProps> = ({
       ...prev,
       {
         role: 'model',
-        text: `🎉 Amazing! We have registered your personal referral for **${referralFriendName}**. When they purchase any POS hardware or service, you will both receive a **$50 credit or 10% cash discount**!`,
+        text: isBusiness ? `Thanks for sharing ${company.name} with ${referralFriendName}. Please contact the business to confirm its referral terms; no reward has been assigned automatically.` : `Thanks for your interest in referring ${referralFriendName} to CODE76. Please contact our team to confirm the current referral offer.`,
       },
     ]);
   };
+
+  if (isBusiness && !assistantEnabled) {
+    return (
+      <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4 text-sm text-slate-300">
+        <p className="flex items-center gap-1.5 font-bold text-slate-100"><Bot className="h-4 w-4 text-teal-400" />{assistant?.assistantName || 'Business assistant'} is offline</p>
+        <p className="mt-1 text-xs leading-relaxed text-slate-400">{assistant?.offlineNotice || DEFAULT_CHATBOT_SETTINGS.offlineNotice}</p>
+        {(assistant?.handoffContact || company.tel1 || company.email) && (
+          <p className="mt-2 text-xs text-teal-300">Contact: {assistant?.handoffContact || company.tel1 || company.email}</p>
+        )}
+      </div>
+    );
+  }
 
   return (
     <>
@@ -211,20 +254,21 @@ export const AIChatbotWidget: React.FC<AIChatbotWidgetProps> = ({
       {!isOpen && (
         <button
           onClick={handleOpen}
-          className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 p-3.5 sm:p-4 rounded-full bg-gradient-to-r from-teal-600 via-emerald-600 to-teal-500 hover:from-teal-500 hover:to-emerald-400 text-white shadow-[0_0_25px_rgba(20,184,166,0.5)] hover:shadow-[0_0_35px_rgba(20,184,166,0.7)] border-2 border-teal-300/40 flex items-center gap-3 transition-all hover:scale-105 cursor-pointer group active:scale-95"
-          title="Open AI Sales Concierge & Product Advisor"
+          className={`${inlineLauncher?'relative inline-flex rounded-xl':'fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 rounded-full'} p-3.5 sm:p-4 bg-teal-700 hover:bg-teal-600 text-white border border-teal-500/40 flex items-center gap-3 transition-colors cursor-pointer group`}
+          aria-label={`Open ${isBusiness ? company.name : 'CODE76'} assistant`}
+          title={isBusiness ? `Ask ${company.name} about its catalog` : 'Open CODE76 product advisor'}
         >
           <div className="relative">
             <Bot className="w-5 h-5 sm:w-6 sm:h-6" />
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-300 absolute -top-1 -right-1 ring-2 ring-emerald-600 animate-ping" />
           </div>
-          <div className="text-left hidden sm:block pr-1">
+          <div className={inlineLauncher?"text-left pr-1":"text-left hidden sm:block pr-1"}>
             <div className="text-xs font-black leading-tight flex items-center gap-1">
-              <span>AI Sales Concierge</span>
+              <span>{isBusiness?'Ask about this business':'Ask CODE76'}</span>
               <Sparkles className="w-3.5 h-3.5 text-emerald-200" />
             </div>
             <div className="text-[10px] text-emerald-100 opacity-95 leading-tight">
-              Interactive pricing & closing deals
+              {isBusiness ? 'Products, services & contact details' : 'CODE76 products & pricing'}
             </div>
           </div>
         </button>
@@ -241,10 +285,10 @@ export const AIChatbotWidget: React.FC<AIChatbotWidgetProps> = ({
               </div>
               <div>
                 <div className="text-xs font-black flex items-center gap-1.5 text-slate-100">
-                  <span>CODE76 Sales Concierge</span>
+                  <span>{isBusiness ? (assistant?.assistantName || `${company.name} assistant`) : 'CODE76 Sales Concierge'}</span>
                   <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block animate-ping" />
                 </div>
-                <div className="text-[10px] text-teal-300 font-medium">Psychological Sales Intelligence</div>
+                <div className="text-[10px] text-teal-300 font-medium">{isBusiness ? `Catalogue questions & contacts · ${assistant?.tone || 'friendly'}` : 'Product, plans & service information'}</div>
               </div>
             </div>
 
@@ -263,6 +307,7 @@ export const AIChatbotWidget: React.FC<AIChatbotWidgetProps> = ({
               </button>
 
               <button
+                aria-label="Close assistant"
                 onClick={handleClose}
                 className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition cursor-pointer"
               >
@@ -314,24 +359,34 @@ export const AIChatbotWidget: React.FC<AIChatbotWidgetProps> = ({
             <div ref={messagesEndRef} />
           </div>
 
-          {/* PSYCHOLOGICAL SALES PERSUASION QUICK ACTION PILLS */}
+          {/* Contextual quick prompts. Merchant-defined prompts come from Chatbot settings. */}
           <div className="p-2 border-t border-slate-800 bg-slate-950/80 flex items-center gap-1.5 overflow-x-auto scrollbar-none shrink-0">
+            {isBusiness && assistant?.quickPrompts?.map((prompt) => (
+              <button
+                key={prompt}
+                onClick={() => handleSend(prompt)}
+                className="px-2.5 py-1 rounded-full bg-teal-950/80 hover:bg-teal-900 text-[10px] text-teal-300 font-semibold whitespace-nowrap cursor-pointer border border-teal-700/60 flex items-center gap-1 shadow-xs"
+              >
+                <Sparkles className="w-3 h-3" />
+                {prompt}
+              </button>
+            ))}
             <button
-              onClick={() => handleSend('I want to book an on-site service appointment or live demo this week.')}
+              onClick={() => handleSend(isBusiness ? 'How can I arrange a service or appointment with your business?' : 'I want to book an on-site service appointment or live demo this week.')}
               className="px-2.5 py-1 rounded-full bg-teal-950/80 hover:bg-teal-900 text-[10px] text-teal-300 font-semibold whitespace-nowrap cursor-pointer border border-teal-700/60 flex items-center gap-1 shadow-xs"
             >
               <Calendar className="w-3 h-3" />
               Book Appointment
             </button>
             <button
-              onClick={() => handleSend('Can I visit your showroom in person to test the touch terminal and receipt printers?')}
+              onClick={() => handleSend(isBusiness ? 'Where is your business, and what are your opening hours?' : 'Can I visit your showroom in person to test the touch terminal and receipt printers?')}
               className="px-2.5 py-1 rounded-full bg-sky-950/80 hover:bg-sky-900 text-[10px] text-sky-300 font-semibold whitespace-nowrap cursor-pointer border border-sky-700/60 flex items-center gap-1 shadow-xs"
             >
               <MapPin className="w-3 h-3" />
-              Visit Showroom
+              {isBusiness ? 'Location & hours' : 'Visit Showroom'}
             </button>
             <button
-              onClick={() => handleSend('What features make this POS item stand out, and can we customize it for our store?')}
+              onClick={() => handleSend(isBusiness ? 'Tell me about your products and services.' : 'What features make this POS item stand out, and can we customize it for our store?')}
               className="px-2.5 py-1 rounded-full bg-amber-950/80 hover:bg-amber-900 text-[10px] text-amber-300 font-semibold whitespace-nowrap cursor-pointer border border-amber-700/60 flex items-center gap-1 shadow-xs"
             >
               <Lightbulb className="w-3 h-3" />
@@ -345,21 +400,23 @@ export const AIChatbotWidget: React.FC<AIChatbotWidgetProps> = ({
               Alternative Options
             </button>
             <button
-              onClick={() => handleSend('How can I refer a colleague, friend, or relative to earn the $50 bonus?')}
+              onClick={() => handleSend(isBusiness ? 'Does your business have a referral offer?' : 'How can I refer a colleague or friend to CODE76?')}
               className="px-2.5 py-1 rounded-full bg-purple-950/80 hover:bg-purple-900 text-[10px] text-purple-300 font-semibold whitespace-nowrap cursor-pointer border border-purple-700/60 flex items-center gap-1 shadow-xs"
             >
               <Gift className="w-3 h-3" />
-              Refer Friend ($50)
+              {isBusiness ? 'Referral details' : 'Refer CODE76'}
             </button>
           </div>
 
           {/* Quick Lead capture box if not yet captured */}
-          {!leadCaptured && (
+          {!leadCaptured && (!isBusiness || assistant?.collectLeads !== false) && (
             <div className="px-3 py-2 bg-slate-950 border-t border-slate-800 shrink-0">
               <form onSubmit={handleLeadSubmit} className="flex gap-1.5">
                 <input
                   type="email"
-                  placeholder="Enter email to get formal PDF quote..."
+                  aria-label="Email for an inquiry"
+                  required
+                  placeholder="Your email for an inquiry..."
                   value={leadEmail}
                   onChange={(e) => setLeadEmail(e.target.value)}
                   className="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1 text-[11px] text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-teal-500"
@@ -375,11 +432,11 @@ export const AIChatbotWidget: React.FC<AIChatbotWidgetProps> = ({
           )}
 
           {/* Referral Incentive Box */}
-          {!referralSubmitted && (
+          {!referralSubmitted && settings.landingPage.referralBonusText.trim() && (
             <div className="px-3 py-1.5 bg-gradient-to-r from-amber-950/70 to-purple-950/70 border-t border-slate-800 text-[11px] flex items-center justify-between shrink-0">
               <div className="flex items-center gap-1 text-amber-300 text-[10px]">
                 <Gift className="w-3.5 h-3.5" />
-                <span className="font-semibold">Refer friend/colleague ($50):</span>
+                <span className="font-semibold">{isBusiness ? 'Refer a friend:' : 'Refer someone to CODE76:'}</span>
               </div>
               <form onSubmit={handleReferralSubmit} className="flex gap-1">
                 <input
@@ -410,13 +467,15 @@ export const AIChatbotWidget: React.FC<AIChatbotWidgetProps> = ({
             >
               <input
                 type="text"
-                placeholder="Ask about POS hardware, appointment, discounts..."
+                aria-label="Message the assistant"
+                placeholder={isBusiness ? 'Ask about products, prices or contact details...' : 'Ask about CODE76 products and services...'}
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
                 className="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-teal-500"
               />
               <button
                 type="submit"
+                aria-label="Send message"
                 disabled={!inputText.trim() || loading}
                 className="p-2 rounded-xl bg-teal-600 hover:bg-teal-500 disabled:opacity-40 text-white transition cursor-pointer shadow-md shadow-teal-600/30 active:scale-95"
               >

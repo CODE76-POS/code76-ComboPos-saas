@@ -1,0 +1,144 @@
+### Page
+- Page URL: http://127.0.0.1:5173/#/pos/sales_history
+- Page Title: CODE76 POS — Private Workspace
+### Snapshot
+```yaml
+- generic [ref=e4]:
+  - banner [ref=e693]:
+    - generic [ref=e694]:
+      - button "CODE76 POS logo CODE76 POS Enterprise Product & Service SaaS ERP System" [ref=e696] [cursor=pointer]:
+        - img "CODE76 POS logo" [ref=e698]
+        - generic [ref=e699]:
+          - generic [ref=e700]:
+            - generic [ref=e701]: CODE76 POS
+            - generic [ref=e702]: Enterprise
+          - paragraph [ref=e703]: Product & Service SaaS ERP System
+      - generic [ref=e704]:
+        - generic [ref=e705]:
+          - button "Desktop View (Full Width)" [ref=e706] [cursor=pointer]
+          - button "Laptop View (1024px)" [ref=e709] [cursor=pointer]
+          - button "Tablet View (768px)" [ref=e712] [cursor=pointer]
+          - button "Phone Mobile View (390px)" [ref=e715] [cursor=pointer]
+        - generic [ref=e718]:
+          - button "Demo Data" [ref=e719] [cursor=pointer]
+          - button "Business Page" [ref=e1469] [cursor=pointer]
+          - button "Click to view help guide and settings for this platform" [ref=e725] [cursor=pointer]
+          - button "Active user session and access controls" [ref=e730] [cursor=pointer]:
+            - generic [ref=e731]: DR
+            - generic [ref=e732]:
+              - generic [ref=e733]: Dr. David Kimani
+              - generic [ref=e734]: "Role: CEO"
+    - generic [ref=e735]:
+      - generic [ref=e736]:
+        - generic [ref=e740]: App link
+        - generic [ref=e741]:
+          - generic [ref=e742]:
+            - generic [ref=e743]: App link
+            - textbox "App link" [ref=e744]: http://127.0.0.1:5173/
+            - button "Copy app link" [ref=e745] [cursor=pointer]:
+              - generic [ref=e749]: Copy link
+            - link "Open app link in a new tab" [ref=e750] [cursor=pointer]:
+              - /url: http://127.0.0.1:5173/
+          - status [ref=e755]
+        - button "Current demo plan" [ref=e756]: Max · demo
+      - paragraph [ref=e757]: Open this root link to reach CODE76 sign-in/register. Browser-local records and sessions do not sync between browsers.
+    - note [ref=e1609]: DEMO DATA · Fictional records, contacts, reviews and bookkeeping amounts—not real business activity.
+    - generic [ref=e759]:
+      - button "Sales POS" [ref=e760] [cursor=pointer]
+      - button "Sales History" [ref=e764] [cursor=pointer]
+      - button "Inventory" [ref=e769] [cursor=pointer]
+      - button "Expenses" [ref=e1474] [cursor=pointer]
+      - button "Invoices" [ref=e1478] [cursor=pointer]
+      - button "Analytics & P&L" [ref=e1482] [cursor=pointer]
+      - button "Customers" [ref=e1485] [cursor=pointer]
+      - button "Vendors" [ref=e1491] [cursor=pointer]
+      - button "Transporters" [ref=e1496] [cursor=pointer]
+      - button "Marketing Team" [ref=e1502] [cursor=pointer]
+      - button "Company Members" [ref=e1506] [cursor=pointer]
+      - button "My Company" [ref=e1512] [cursor=pointer]
+      - button "Messaging" [ref=e1516] [cursor=pointer]
+      - button "Business Landing Page" [ref=e1519] [cursor=pointer]
+      - button "Settings" [ref=e774] [cursor=pointer]
+      - button "Audit & Access Logs" [ref=e1524] [cursor=pointer]
+      - button "About & Manual" [ref=e778] [cursor=pointer]
+  - main [ref=e5]:
+    - generic [ref=e1610]:
+      - generic [ref=e1611]:
+        - generic [ref=e1612]:
+          - generic [ref=e1613]:
+            - heading "Sales History & Debt Platform" [level=1] [ref=e1614]
+            - button "Click for platform guidance & settings" [ref=e1615] [cursor=pointer]
+          - paragraph [ref=e1619]: Audit past transactions, view products sold, collect debt balances, capture customer testimonials, and send polite appreciation emails.
+        - generic [ref=e1620]:
+          - button "Export History PDF" [ref=e1621] [cursor=pointer]
+          - button "Email Ledger" [ref=e1625] [cursor=pointer]
+      - generic [ref=e1629]:
+        - generic [ref=e1630]:
+          - paragraph [ref=e1631]: Recorded sales (not cash receipts)
+          - strong [ref=e1632]: USD 2502.50
+        - generic [ref=e1633]:
+          - paragraph [ref=e1634]: Amount applied to sales
+          - strong [ref=e1635]: USD 1767.50
+        - generic [ref=e1636]:
+          - paragraph [ref=e1637]: Recorded outstanding balance
+          - strong [ref=e1638]: USD 735.00
+      - generic [ref=e1639]:
+        - 'textbox "Search receipt #, customer, cashier, invoice..." [ref=e1644]': DEMO-REC-1002
+        - generic [ref=e1645]:
+          - generic [ref=e1646]: "Category:"
+          - button "All Types" [ref=e1647] [cursor=pointer]
+          - button "Normal Sales" [ref=e1648] [cursor=pointer]
+          - button "Sales Invoices" [ref=e1649] [cursor=pointer]
+        - generic [ref=e1650]:
+          - button "All statuses" [ref=e1651] [cursor=pointer]
+          - button "All outstanding" [ref=e1652] [cursor=pointer]
+          - button "Past due date" [ref=e1653] [cursor=pointer]
+          - button "Paid / Completed" [ref=e1654] [cursor=pointer]
+          - button "Pending Debt" [ref=e1655] [cursor=pointer]
+          - button "Partial Debt" [ref=e1656] [cursor=pointer]
+      - table [ref=e1659]:
+        - rowgroup [ref=e1660]:
+          - row [ref=e1661]:
+            - columnheader "Actions (Start)" [ref=e1662]
+            - 'columnheader "Receipt / Inv #" [ref=e1663]'
+            - columnheader "Category / Type" [ref=e1664]
+            - columnheader "Date / Time" [ref=e1665]
+            - columnheader "Customer" [ref=e1666]
+            - columnheader "Cashier" [ref=e1667]
+            - columnheader "Referred By" [ref=e1668]
+            - columnheader "Net Total" [ref=e1669]
+            - columnheader "Paid" [ref=e1670]
+            - columnheader "Debt" [ref=e1671]
+            - columnheader "Status" [ref=e1672]
+            - columnheader "Follow-ups" [ref=e1673]
+            - columnheader "Actions (End)" [ref=e1674]
+        - rowgroup [ref=e1675]:
+          - row [ref=e3914]:
+            - cell [ref=e1736]:
+              - generic [ref=e1737]:
+                - button "View Sold Items Breakdown" [ref=e1738] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e1742] [cursor=pointer]
+                - button "Delete Transaction" [ref=e1746] [cursor=pointer]
+            - cell "DEMO-REC-1002 Invoice B2B" [ref=e1750]:
+              - generic [ref=e1751]: DEMO-REC-1002
+              - generic [ref=e1752]: Invoice B2B
+            - cell "Sales Invoice" [ref=e1753]
+            - cell "19/10/2026 08:14 PM" [ref=e1758]
+            - cell "DEMO Customer 14 Sample" [ref=e1759]
+            - cell "DEMO Alex Sample" [ref=e1760]
+            - cell "Direct Sale" [ref=e1761]
+            - cell "USD 216.00" [ref=e1762]
+            - cell "USD 216.00" [ref=e3915]
+            - cell "$0.00" [ref=e3916]
+            - cell "Paid (Invoice)" [ref=e3917]
+            - cell [ref=e3918]:
+              - generic [ref=e1768]:
+                - button "Capture Customer Review / Testimonial" [ref=e1772] [cursor=pointer]
+                - button "Send Polite Appreciation & Review Request Email" [ref=e1775] [cursor=pointer]
+            - cell [ref=e1779]:
+              - generic [ref=e1780]:
+                - button "Print Thermal Receipt" [ref=e1781] [cursor=pointer]
+                - button "Export Single PDF Voucher" [ref=e1786] [cursor=pointer]
+                - button "Email sale transaction (.txt & .pdf) to customer/marketer/staff/transporter" [ref=e1790] [cursor=pointer]
+                - button "Delete Transaction" [ref=e1794] [cursor=pointer]
+```

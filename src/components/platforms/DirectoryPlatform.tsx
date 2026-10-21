@@ -1,1082 +1,124 @@
-import React, { useState, useMemo } from 'react';
+import { appDialogs } from '../../utils/appDialogs.ts';
+import React, { useState } from 'react';
 import { usePOS } from '../../context/POSContext.tsx';
-import {
-  Users,
-  Building2,
-  Truck,
-  TrendingUp,
-  Plus,
-  Search,
-  Trash2,
-  Edit,
-  Eye,
-  Download,
-  FileSpreadsheet,
-  Star,
-  ShieldCheck,
-  Phone,
-  Mail,
-  X,
-  HelpCircle,
-  CheckCircle,
-  Clock,
-  Calendar,
-} from 'lucide-react';
-import { ALL_ROLES, PersonRecord, PlatformId, UserRole } from '../../types/index.ts';
+import { Plus, Search, Edit, Trash2, Eye, Download, Mail, X, HelpCircle, Wallet } from 'lucide-react';
+import { ALL_ROLES, type PersonRecord, type PlatformId, type SalaryPaymentDraft, type CompanyFunction } from '../../types/index.ts';
+import { directoryName, directoryPhoto, isOrganisation, COMPANY_TYPES, canonicalDirectoryId } from '../../utils/directory.ts';
+import { SHIFT_PRESETS, PAY_BASES, WEEK_DAYS, applyShiftPreset, setOffDays } from '../../utils/staffing.ts';
+import { regional, dateOnly, calendarDate } from '../../utils/regional.ts';
+import { PAYMENT_METHODS } from '../../config/paymentMethods.ts';
 import { exportToCSV, printPDFReport } from '../../utils/exportUtils.ts';
-import { EmailExportModal } from '../modals/EmailExportModal.tsx';
 import { UniversalPhotoInput } from '../common/UniversalPhotoInput.tsx';
+import { EmailExportModal } from '../modals/EmailExportModal.tsx';
 
-interface DirectoryPlatformProps {
-  category: PersonRecord['category'];
-  title: string;
-  subtitle: string;
-  platformId: PlatformId;
-}
+interface Props { category: PersonRecord['category']; title: string; subtitle: string; platformId: PlatformId }
+const inputClass = 'w-full rounded-xl border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-slate-100';
+const buttonClass = 'inline-flex items-center justify-center gap-2 rounded-xl border border-slate-700 px-3 py-2 text-xs font-semibold hover:bg-slate-800 disabled:opacity-40';
+function Field({ label, children }: { label: string; children: React.ReactNode }) { return <label className="block text-xs font-semibold text-slate-400"><span className="mb-1 block">{label}</span>{children}</label>; }
 
-export const DirectoryPlatform: React.FC<DirectoryPlatformProps> = ({
-  category,
-  title,
-  subtitle,
-  platformId,
-}) => {
-  const {
-    customers,
-    vendors,
-    transporters,
-    marketingTeam,
-    companyMembers,
-    addPerson,
-    updatePerson,
-    deletePerson,
-    company,
-    setHoverHelpPlatform,
-  } = usePOS();
-
-  const [searchQuery, setSearchQuery] = useState('');
-  const [modalOpen, setModalOpen] = useState(false);
-  const [editingPerson, setEditingPerson] = useState<PersonRecord | null>(null);
-  const [viewDetailPerson, setViewDetailPerson] = useState<PersonRecord | null>(null);
-
-  // Email to Party Modal State (.txt and .pdf formats)
-  const [emailModalOpen, setEmailModalOpen] = useState(false);
-  const [selectedPersonForEmail, setSelectedPersonForEmail] = useState<PersonRecord | null>(null);
-
-  const directoryExportColumns = [
-    { header: 'Full Name', dataKey: 'fullName' },
-    { header: 'Category', dataKey: 'category' },
-    { header: 'Primary Tel', dataKey: 'tel1' },
-    { header: 'WhatsApp', dataKey: 'whatsappNo' },
-    { header: 'Email', dataKey: 'email1' },
-    { header: 'Location', dataKey: 'location' },
-    { header: 'Country', dataKey: 'country' },
-    { header: 'Job Roles', dataKey: 'rolesText' },
-  ];
-
-  const handleOpenBulkEmail = () => {
-    setSelectedPersonForEmail(null);
-    setEmailModalOpen(true);
+export const DirectoryPlatform: React.FC<Props> = ({ category, title, subtitle, platformId }) => {
+  const pos = usePOS();
+  const { company, settings, customers, vendors, transporters, marketingTeam, companyMembers, relatedCompanies, salaryPayments, hasFeature, hasPrivilege } = pos;
+  const lists = { customer: customers, vendor: vendors, transporter: transporters, marketer: marketingTeam, company_member: companyMembers, related_company: relatedCompanies };
+  const list = lists[category];
+  const canEdit = hasPrivilege('canManagePeople');
+  const canExport = hasFeature('data_export') && hasPrivilege('canExportPdf');
+  const canEmail = hasFeature('email') && canExport;
+  const [query, setQuery] = useState('');
+  const [editing, setEditing] = useState<PersonRecord | null>(null);
+  const [form, setForm] = useState<PersonRecord | null>(null);
+  const [detail, setDetail] = useState<PersonRecord | null>(null);
+  const [notice, setNotice] = useState('');
+  const [emailOpen, setEmailOpen] = useState(false);
+  const [payMember, setPayMember] = useState<PersonRecord | null>(null);
+  const [payment, setPayment] = useState<SalaryPaymentDraft | null>(null);
+  const filtered = list.filter(p => `${directoryName(p)} ${p.companyType || ''} ${p.tel1} ${p.email1} ${p.location}`.toLowerCase().includes(query.toLowerCase()));
+  const staff = !!form && !isOrganisation(form) && (category === 'company_member' || form.companyMember || form.sourceCategory === 'company_member');
+  const change = <K extends keyof PersonRecord>(key: K, value: PersonRecord[K]) => setForm(old => old ? { ...old, [key]: value } : old);
+  const create = () => {
+    if (!canEdit) return;
+    setNotice(''); setEditing(null);
+    setForm({ id: '', createdAt: '', firstName: '', secondName: '', tel1: '', tel2: '', whatsappNo: '', email1: '', email2: '', address: '', location: '', country: '', photoUrl: '', avatarStyle: 'neutral', photoConsentForLanding: false, category,
+      entityType: category === 'related_company' ? 'company' : 'person', customerCompany: category==='customer', organisationName: '', companyType: 'Other related company', companyFunctions: [], companyMember: category === 'company_member', roles: ['Associate','Other'], ...applyShiftPreset('weekdays'), salaryBasis: 'month', notes: '' });
   };
-
-  const handleOpenRowEmail = (person: PersonRecord) => {
-    setSelectedPersonForEmail(person);
-    setEmailModalOpen(true);
+  const edit = (p: PersonRecord) => { if (!canEdit) return; setNotice(''); setEditing(p); setForm({ ...p, entityType: p.entityType || 'person', avatarStyle: p.avatarStyle || 'neutral', companyFunctions: p.companyFunctions || [], roles: p.roles || ['Associate','Other'], offDays: p.offDays || WEEK_DAYS.filter(day => !(p.workingDays || WEEK_DAYS.slice(0,5)).includes(day)), salaryBasis: p.salaryBasis || 'month' }); };
+  const save = (event: React.FormEvent) => {
+    event.preventDefault(); if (!form || !canEdit) return;
+    try {
+      const payload = { ...form, firstName: isOrganisation(form) ? form.organisationName!.trim() : form.firstName.trim(), secondName: isOrganisation(form) ? '' : form.secondName.trim() };
+      if (editing) pos.updatePerson(category, payload); else pos.addPerson(category, payload);
+      setForm(null); setNotice('Saved. Linked directories were synchronized; historical transactions were not rewritten.');
+    } catch (error) { setNotice(error instanceof Error ? error.message : 'Unable to save.'); }
   };
-
-  // Form State with ALL MANDATORY FIELDS
-  const [formData, setFormData] = useState<Omit<PersonRecord, 'id' | 'createdAt'>>({
-    firstName: '',
-    secondName: '',
-    tel1: '',
-    tel2: '',
-    whatsappNo: '',
-    email1: '',
-    email2: '',
-    address: '',
-    location: '',
-    country: 'Kenya',
-    photoUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80',
-    photoConsentForLanding: true,
-    category,
-    roles: ['Associate', 'Other'],
-    workingDays: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-    workingHours: '08:00 AM - 05:00 PM',
-    notes: '',
-    referralCount: 0,
-    totalReferralVolume: 0,
-    isTopReferrer: false,
-  });
-
-  const getList = (): PersonRecord[] => {
-    switch (category) {
-      case 'customer':
-        return customers;
-      case 'vendor':
-        return vendors;
-      case 'transporter':
-        return transporters;
-      case 'marketer':
-        return marketingTeam;
-      case 'company_member':
-        return companyMembers;
-      default:
-        return [];
-    }
-  };
-
-  const currentList = getList();
-
-  const filtered = currentList.filter((p) => {
-    const q = searchQuery.toLowerCase().trim();
-    if (!q) return true;
-    return (
-      p.firstName.toLowerCase().includes(q) ||
-      p.secondName.toLowerCase().includes(q) ||
-      p.tel1.includes(q) ||
-      p.whatsappNo.includes(q) ||
-      p.email1.toLowerCase().includes(q) ||
-      p.location.toLowerCase().includes(q)
-    );
-  });
-
-  const handleOpenCreate = () => {
-    setEditingPerson(null);
-    setFormData({
-      firstName: '',
-      secondName: '',
-      tel1: '+1 (555) ',
-      tel2: '+1 (555) ',
-      whatsappNo: '+1 (555) ',
-      email1: '',
-      email2: '',
-      address: '',
-      location: '',
-      country: 'Kenya',
-      photoUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80',
-      photoConsentForLanding: true,
-      category,
-      roles: category === 'company_member' ? ['Developer', 'Associate'] : undefined,
-      workingDays: category === 'company_member' ? ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'] : undefined,
-      workingHours: category === 'company_member' ? '08:00 AM - 05:00 PM' : undefined,
-      notes: '',
-      referralCount: 0,
-      totalReferralVolume: 0,
-      isTopReferrer: false,
+  const remove = async (p: PersonRecord) => {
+    if (!canEdit) return;
+    const confirmed = await appDialogs.confirm({
+      title: 'Remove this directory identity?',
+      message: `Remove ${directoryName(p)} from all linked directories?`,
+      detail: 'Existing invoices, expenses and salary-payment history will be retained.',
+      confirmLabel: 'Remove identity',
+      destructive: true,
     });
-    setModalOpen(true);
+    if (!confirmed) return;
+    try { pos.deletePerson(category, p.id); setNotice('Removed the linked directory identity; historical records retained.'); } catch (error) { setNotice(String(error)); }
   };
-
-  const handleOpenEdit = (p: PersonRecord) => {
-    setEditingPerson(p);
-    setFormData({
-      firstName: p.firstName,
-      secondName: p.secondName,
-      tel1: p.tel1,
-      tel2: p.tel2,
-      whatsappNo: p.whatsappNo,
-      email1: p.email1,
-      email2: p.email2,
-      address: p.address,
-      location: p.location,
-      country: p.country,
-      photoUrl: p.photoUrl,
-      photoConsentForLanding: p.photoConsentForLanding,
-      category: p.category,
-      roles: p.roles || ['Associate', 'Other'],
-      workingDays: p.workingDays || ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-      workingHours: p.workingHours || '08:00 AM - 05:00 PM',
-      notes: p.notes || '',
-      referralCount: p.referralCount || 0,
-      totalReferralVolume: p.totalReferralVolume || 0,
-      isTopReferrer: p.isTopReferrer || false,
-    });
-    setModalOpen(true);
+  const exportRows = filtered.map(p => ({ Name: directoryName(p), Entity: p.entityType || 'person', CompanyType: p.companyType || '', ParentCompany: relatedCompanies.find(c => c.id === p.parentCompanyId)?.organisationName || '', Telephone: p.tel1, WhatsApp: p.whatsappNo, Email: p.email1, Address: p.address, Location: p.location, Country: p.country, Roles: p.roles?.join(' / ') || '', WorkingDays: p.workingDays?.join(', ') || '', Hours: p.workingHours || '', OffDays: p.offDays?.join(', ') || '', ...(canEdit ? { AgreedPayRate: p.salaryRate ?? '', PayBasis: p.salaryBasis || '' } : {}) }));
+  const exportCsv = () => { if (canExport) exportToCSV(exportRows, `code76-${category}-directory`); };
+  const exportPdf = (one?: PersonRecord) => {
+    if (!canExport) return;
+    const data = one ? [{ Field: 'Name', Details: directoryName(one) }, ...Object.entries(exportRows.find(row => row.Name === directoryName(one)) || {}).map(([Field, value]) => ({ Field, Details: String(value) }))] : exportRows;
+    const columns = one ? [{header:'Field',dataKey:'Field'},{header:'Details',dataKey:'Details'}] : [{header:'Name',dataKey:'Name'},{header:'Type',dataKey:'Entity'},{header:'Company type',dataKey:'CompanyType'},{header:'Phone',dataKey:'Telephone'},{header:'Email',dataKey:'Email'},{header:'Location',dataKey:'Location'}];
+    printPDFReport(one ? `Profile — ${directoryName(one)}` : title, company, columns, data);
   };
+  const openPay = (p: PersonRecord) => { if (!canEdit || !hasFeature('payroll')) return; setPayMember(p); setNotice(''); setPayment({ id: crypto.randomUUID(), memberId: canonicalDirectoryId(p.id), amount: 0, basis: p.salaryBasis || 'month', paidOn: calendarDate(new Date(),settings), paidFor: '', method: 'Bank Transfer', reference: '', recordExpense: false }); };
+  const recordPay = (event: React.FormEvent) => { event.preventDefault(); if (!payment) return; try { pos.recordSalaryPayment(payment); setPayment(null); setPayMember(null); setNotice('Salary payment recorded. No money was transferred by the app.'); } catch (error) { setNotice(error instanceof Error ? error.message : 'Unable to record payment.'); } };
+  const salaryRows = salaryPayments.filter(p => !payMember || canonicalDirectoryId(p.memberId) === canonicalDirectoryId(payMember.id));
 
-  const handleSave = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!formData.firstName || !formData.secondName) return;
-
-    if (editingPerson) {
-      updatePerson(category, {
-        ...editingPerson,
-        ...formData,
-      });
-    } else {
-      addPerson(category, formData);
-    }
-    setModalOpen(false);
-  };
-
-  const handleDelete = (p: PersonRecord) => {
-    if (confirm(`Are you sure you want to delete ${p.firstName} ${p.secondName}?`)) {
-      deletePerson(category, p.id);
-    }
-  };
-
-  const handleExportCSV = () => {
-    exportToCSV(
-      currentList.map((p) => ({
-        FirstName: p.firstName,
-        SecondName: p.secondName,
-        Tel1: p.tel1,
-        Tel2: p.tel2,
-        WhatsApp: p.whatsappNo,
-        Email1: p.email1,
-        Email2: p.email2,
-        Address: p.address,
-        Location: p.location,
-        Country: p.country,
-        PhotoConsentForLanding: p.photoConsentForLanding,
-        Roles: p.roles ? p.roles.join(' & ') : 'N/A',
-        Referrals: p.referralCount || 0,
-        ReferralVolume: p.totalReferralVolume || 0,
-      })),
-      `code76_${category}_directory`
-    );
-  };
-
-  const handleExportSinglePDF = (p: PersonRecord) => {
-    printPDFReport(
-      `Profile Record - ${p.firstName} ${p.secondName}`,
-      company,
-      [
-        { header: 'Field', dataKey: 'key' },
-        { header: 'Details', dataKey: 'val' },
-      ],
-      [
-        { key: 'Full Name', val: `${p.firstName} ${p.secondName}` },
-        { key: 'Directory Category', val: p.category.toUpperCase() },
-        { key: 'Primary Telephone', val: p.tel1 },
-        { key: 'Secondary Telephone', val: p.tel2 },
-        { key: 'WhatsApp Number', val: p.whatsappNo },
-        { key: 'Official Email 1', val: p.email1 },
-        { key: 'Secondary Email 2', val: p.email2 },
-        { key: 'Physical Address', val: p.address },
-        { key: 'City / Location', val: p.location },
-        { key: 'Country', val: p.country },
-        { key: 'Assigned Job Roles', val: p.roles ? p.roles.join(' / ') : 'Standard Directory' },
-        { key: 'Landing Page Photo Consent', val: p.photoConsentForLanding ? 'Granted' : 'Declined' },
-        { key: 'Referral Count', val: String(p.referralCount || 0) },
-        { key: 'Total Referral Volume', val: `$${(p.totalReferralVolume || 0).toFixed(2)}` },
-        { key: 'Top Referrer Star Status', val: p.isTopReferrer ? 'YES (Top Referrer)' : 'Standard' },
-        { key: 'Notes', val: p.notes || '-' },
-      ]
-    );
-  };
-
-  const handleExportFullDirectoryPDF = () => {
-    printPDFReport(
-      `${title} Full Directory Report`,
-      company,
-      [
-        { header: 'Name', dataKey: 'name' },
-        { header: 'Tel 1', dataKey: 'tel1' },
-        { header: 'WhatsApp', dataKey: 'whatsapp' },
-        { header: 'Email 1', dataKey: 'email' },
-        { header: 'Location', dataKey: 'location' },
-        { header: 'Country', dataKey: 'country' },
-        { header: 'Roles / Referrals', dataKey: 'meta' },
-      ],
-      filtered.map((p) => ({
-        name: `${p.firstName} ${p.secondName}`,
-        tel1: p.tel1,
-        whatsapp: p.whatsappNo,
-        email: p.email1,
-        location: p.location,
-        country: p.country,
-        meta: p.roles ? p.roles.join(' / ') : `Referrals: ${p.referralCount || 0}`,
-      }))
-    );
-  };
-
-  return (
-    <div className="max-w-7xl mx-auto px-4 py-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-        <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-black text-slate-100 tracking-tight">{title}</h1>
-            <button
-              onClick={() => setHoverHelpPlatform(platformId)}
-              title="Click for platform guidance & settings"
-              className="p-1 rounded-lg text-teal-400 hover:text-teal-300 hover:bg-slate-800 transition cursor-pointer"
-            >
-              <HelpCircle className="w-5 h-5" />
-            </button>
-          </div>
-          <p className="text-xs text-slate-400">{subtitle}</p>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-2">
-          <button
-            onClick={handleExportCSV}
-            className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
-          >
-            <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-400" />
-            Excel / CSV Export
-          </button>
-          <button
-            onClick={handleExportFullDirectoryPDF}
-            className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-teal-300 border border-slate-700 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
-          >
-            <Download className="w-3.5 h-3.5" />
-            PDF Export
-          </button>
-          <button
-            onClick={handleOpenBulkEmail}
-            className="px-3 py-2 rounded-xl bg-teal-600/20 hover:bg-teal-600/30 text-teal-300 border border-teal-500/40 text-xs font-bold flex items-center gap-1.5 transition cursor-pointer shadow-xs"
-            title="Email complete directory list in .txt and .pdf format to any selected member or admin"
-          >
-            <Mail className="w-3.5 h-3.5 text-teal-300" />
-            <span>Email Directory (.txt & .pdf)</span>
-          </button>
-          <button
-            onClick={handleOpenCreate}
-            className="px-4 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-semibold flex items-center gap-1.5 shadow-md shadow-teal-600/30 transition cursor-pointer"
-          >
-            <Plus className="w-4 h-4" />
-            Add Entry
-          </button>
-        </div>
-      </div>
-
-      {/* Search */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 mb-6 flex flex-col sm:flex-row gap-3 justify-between items-center">
-        <div className="relative w-full sm:w-80">
-          <Search className="w-4 h-4 absolute left-3 top-3 text-slate-500" />
-          <input
-            type="text"
-            placeholder="Search by name, phone, email, location..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-4 py-2 text-xs text-slate-200 focus:outline-none focus:border-teal-500"
-          />
-        </div>
-
-        <div className="text-xs text-slate-400">
-          Total Records: <span className="font-bold text-slate-200">{filtered.length}</span>
-        </div>
-      </div>
-
-      {/* Directory Table */}
-      {/* Notice: ACTION COLUMN ON BOTH START AND END OF TABLE as explicitly required! */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs min-w-[1050px]">
-            <thead className="bg-slate-950/80 border-b border-slate-800 text-[11px] uppercase font-bold text-slate-400">
-              <tr>
-                {/* START ACTION COLUMN */}
-                <th className="py-3 px-3 text-center w-32 text-teal-400">Actions (Start)</th>
-                <th className="py-3 px-3">Profile & Name</th>
-                <th className="py-3 px-3">Telephone Numbers</th>
-                <th className="py-3 px-3">WhatsApp</th>
-                <th className="py-3 px-3">Email Addresses</th>
-                <th className="py-3 px-3">Address & Location</th>
-                <th className="py-3 px-3">Country</th>
-                {category === 'company_member' && <th className="py-3 px-3">Dual Job Roles</th>}
-                {category === 'company_member' && <th className="py-3 px-3">Working Schedule</th>}
-                {(category === 'customer' || category === 'marketer' || category === 'company_member') && (
-                  <th className="py-3 px-3 text-center">Top Referrer</th>
-                )}
-                <th className="py-3 px-3 text-center">Landing Photo Consent</th>
-                {/* END ACTION COLUMN */}
-                <th className="py-3 px-3 text-center w-32 text-teal-400">Actions (End)</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-800 text-slate-200">
-              {filtered.length === 0 ? (
-                <tr>
-                  <td colSpan={11} className="py-8 text-center text-slate-500">
-                    No directory records found.
-                  </td>
-                </tr>
-              ) : (
-                filtered.map((person) => (
-                  <tr key={person.id} className="hover:bg-slate-800/40 transition">
-                    {/* START ACTION COLUMN: Delete, Update/Read, PDF Export */}
-                    <td className="py-2.5 px-3">
-                      <div className="flex items-center justify-center gap-1.5">
-                        <button
-                          onClick={() => setViewDetailPerson(person)}
-                          title="View Full Profile Details"
-                          className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-sky-400 hover:text-sky-300 transition cursor-pointer"
-                        >
-                          <Eye className="w-3.5 h-3.5" />
-                        </button>
-                        <button
-                          onClick={() => handleOpenEdit(person)}
-                          title="Update Profile"
-                          className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-amber-400 hover:text-amber-300 transition cursor-pointer"
-                        >
-                          <Edit className="w-3.5 h-3.5" />
-                        </button>
-                        <button
-                          onClick={() => handleExportSinglePDF(person)}
-                          title="Export Single PDF Profile"
-                          className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-teal-400 hover:text-teal-300 transition cursor-pointer"
-                        >
-                          <Download className="w-3.5 h-3.5" />
-                        </button>
-                        <button
-                          onClick={() => handleOpenRowEmail(person)}
-                          title="Email profile document (.txt & .pdf) to selected party"
-                          className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-teal-300 hover:text-teal-200 transition cursor-pointer"
-                        >
-                          <Mail className="w-3.5 h-3.5" />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(person)}
-                          title="Delete Profile"
-                          className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-rose-400 hover:text-rose-300 transition cursor-pointer"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
-                      </div>
-                    </td>
-
-                    {/* Profile & Name */}
-                    <td className="py-2.5 px-3">
-                      <div className="flex items-center gap-2.5">
-                        {person.photoUrl ? (
-                          <img
-                            src={person.photoUrl}
-                            alt={person.firstName}
-                            className="w-9 h-9 rounded-full object-cover border border-slate-700 shrink-0"
-                          />
-                        ) : (
-                          <div className="w-9 h-9 rounded-full bg-slate-800 text-slate-300 flex items-center justify-center font-bold text-xs shrink-0">
-                            {person.firstName[0]}
-                            {person.secondName[0]}
-                          </div>
-                        )}
-                        <div>
-                          <div className="font-bold text-slate-100">
-                            {person.firstName} {person.secondName}
-                          </div>
-                          <div className="text-[10px] text-slate-400">{person.category}</div>
-                        </div>
-                      </div>
-                    </td>
-
-                    {/* Tel 1 & Tel 2 */}
-                    <td className="py-2.5 px-3 whitespace-nowrap">
-                      <div className="font-medium text-slate-200">{person.tel1}</div>
-                      {person.tel2 && <div className="text-[10px] text-slate-400">Alt: {person.tel2}</div>}
-                    </td>
-
-                    {/* WhatsApp */}
-                    <td className="py-2.5 px-3 text-emerald-400 font-medium whitespace-nowrap">
-                      {person.whatsappNo}
-                    </td>
-
-                    {/* Email 1 & Email 2 */}
-                    <td className="py-2.5 px-3">
-                      <div className="text-slate-200 truncate max-w-[160px]">{person.email1}</div>
-                      {person.email2 && (
-                        <div className="text-[10px] text-slate-400 truncate max-w-[160px]">
-                          {person.email2}
-                        </div>
-                      )}
-                    </td>
-
-                    {/* Address & Location */}
-                    <td className="py-2.5 px-3">
-                      <div className="font-semibold text-slate-200">{person.location}</div>
-                      <div className="text-[10px] text-slate-400">{person.address}</div>
-                    </td>
-
-                    {/* Country */}
-                    <td className="py-2.5 px-3 text-slate-300">{person.country}</td>
-
-                    {/* Company Member Dual Roles */}
-                    {category === 'company_member' && (
-                      <td className="py-2.5 px-3">
-                        <div className="flex flex-col gap-1">
-                          <span className="px-2 py-0.5 rounded bg-teal-500/20 text-teal-300 font-semibold text-[10px] border border-teal-500/30">
-                            {person.roles?.[0] || 'Associate'}
-                          </span>
-                          <span className="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 font-semibold text-[10px] border border-purple-500/30">
-                            {person.roles?.[1] || 'Other'}
-                          </span>
-                        </div>
-                      </td>
-                    )}
-
-                    {/* Company Member Working Hours & Days */}
-                    {category === 'company_member' && (
-                      <td className="py-2.5 px-3">
-                        <div className="flex items-center gap-1 text-[11px] font-semibold text-slate-200">
-                          <Clock className="w-3 h-3 text-teal-400 shrink-0" />
-                          <span>{person.workingHours || '08:00 AM - 05:00 PM'}</span>
-                        </div>
-                        <div className="flex items-center gap-1 text-[10px] text-teal-300/80 mt-0.5">
-                          <Calendar className="w-3 h-3 text-slate-400 shrink-0" />
-                          <span className="truncate max-w-[140px]">
-                            {person.workingDays && person.workingDays.length > 0
-                              ? person.workingDays.map((d) => d.slice(0, 3)).join(', ')
-                              : 'Mon, Tue, Wed, Thu, Fri'}
-                          </span>
-                        </div>
-                      </td>
-                    )}
-
-                    {/* Top Referrer Stars / Badges */}
-                    {(category === 'customer' || category === 'marketer' || category === 'company_member') && (
-                      <td className="py-2.5 px-3 text-center">
-                        {person.isTopReferrer ? (
-                          <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold text-[10px]">
-                            <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
-                            <span>Top ({person.referralCount || 0})</span>
-                          </div>
-                        ) : (
-                          <span className="text-slate-500 text-[10px]">{person.referralCount || 0} refs</span>
-                        )}
-                      </td>
-                    )}
-
-                    {/* Landing Photo Consent */}
-                    <td className="py-2.5 px-3 text-center">
-                      {person.photoConsentForLanding ? (
-                        <span className="inline-flex items-center gap-1 text-[10px] text-emerald-400 font-bold bg-emerald-950/60 px-2 py-0.5 rounded-full border border-emerald-800/60">
-                          <ShieldCheck className="w-3 h-3" />
-                          Approved
-                        </span>
-                      ) : (
-                        <span className="text-[10px] text-slate-500">Private</span>
-                      )}
-                    </td>
-
-                    {/* END ACTION COLUMN: Delete, Update/Read, PDF Export */}
-                    <td className="py-2.5 px-3">
-                      <div className="flex items-center justify-center gap-1.5">
-                        <button
-                          onClick={() => setViewDetailPerson(person)}
-                          title="View Full Profile Details"
-                          className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-sky-400 hover:text-sky-300 transition cursor-pointer"
-                        >
-                          <Eye className="w-3.5 h-3.5" />
-                        </button>
-                        <button
-                          onClick={() => handleOpenEdit(person)}
-                          title="Update Profile"
-                          className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-amber-400 hover:text-amber-300 transition cursor-pointer"
-                        >
-                          <Edit className="w-3.5 h-3.5" />
-                        </button>
-                        <button
-                          onClick={() => handleExportSinglePDF(person)}
-                          title="Export Single PDF Profile"
-                          className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-teal-400 hover:text-teal-300 transition cursor-pointer"
-                        >
-                          <Download className="w-3.5 h-3.5" />
-                        </button>
-                        <button
-                          onClick={() => handleOpenRowEmail(person)}
-                          title="Email profile document (.txt & .pdf) to selected party"
-                          className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-teal-300 hover:text-teal-200 transition cursor-pointer"
-                        >
-                          <Mail className="w-3.5 h-3.5" />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(person)}
-                          title="Delete Profile"
-                          className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-rose-400 hover:text-rose-300 transition cursor-pointer"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      {/* Add / Edit Person Modal */}
-      {modalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-xs p-4">
-          <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl bg-slate-900 border border-slate-700 shadow-2xl p-6 text-white">
-            <button
-              onClick={() => setModalOpen(false)}
-              className="absolute top-4 right-4 text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800"
-            >
-              <X className="w-5 h-5" />
-            </button>
-
-            <h3 className="text-xl font-bold mb-4">
-              {editingPerson ? `Edit ${title} Record` : `Add New to ${title}`}
-            </h3>
-
-            <form onSubmit={handleSave} className="space-y-4">
-              {/* Names */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-xs font-semibold text-slate-400 mb-1">First Name *</label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.firstName}
-                    onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                    className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-teal-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-slate-400 mb-1">Second Name *</label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.secondName}
-                    onChange={(e) => setFormData({ ...formData, secondName: e.target.value })}
-                    className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-teal-500"
-                  />
-                </div>
-              </div>
-
-              {/* Tel 1, Tel 2, WhatsApp */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div>
-                  <label className="block text-xs font-semibold text-slate-400 mb-1">Tel No 1 *</label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.tel1}
-                    onChange={(e) => setFormData({ ...formData, tel1: e.target.value })}
-                    className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-teal-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-slate-400 mb-1">Tel No 2 *</label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.tel2}
-                    onChange={(e) => setFormData({ ...formData, tel2: e.target.value })}
-                    className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-teal-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-slate-400 mb-1">WhatsApp No *</label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.whatsappNo}
-                    onChange={(e) => setFormData({ ...formData, whatsappNo: e.target.value })}
-                    className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-teal-500"
-                  />
-                </div>
-              </div>
-
-              {/* Email 1 & Email 2 */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-xs font-semibold text-slate-400 mb-1">Email 1 *</label>
-                  <input
-                    type="email"
-                    required
-                    value={formData.email1}
-                    onChange={(e) => setFormData({ ...formData, email1: e.target.value })}
-                    className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-teal-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-slate-400 mb-1">Email 2 *</label>
-                  <input
-                    type="email"
-                    required
-                    value={formData.email2}
-                    onChange={(e) => setFormData({ ...formData, email2: e.target.value })}
-                    className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-teal-500"
-                  />
-                </div>
-              </div>
-
-              {/* Address, Location, Country */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div>
-                  <label className="block text-xs font-semibold text-slate-400 mb-1">Address *</label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.address}
-                    onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                    className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-teal-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-slate-400 mb-1">Location / City *</label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.location}
-                    onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                    className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-teal-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-slate-400 mb-1">Country *</label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.country}
-                    onChange={(e) => setFormData({ ...formData, country: e.target.value })}
-                    className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-teal-500"
-                  />
-                </div>
-              </div>
-
-              {/* Special DUAL ROLES COMBO-BOX FOR COMPANY MEMBERS */}
-              {category === 'company_member' && (
-                <div className="bg-slate-950/70 p-4 rounded-xl border border-slate-800 space-y-3">
-                  <div className="text-xs font-bold uppercase tracking-wider text-teal-400">
-                    Mandatory Dual Job Titles / Roles Selection
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div>
-                      <label className="block text-xs font-semibold text-slate-400 mb-1">Primary Role *</label>
-                      <select
-                        value={formData.roles?.[0] || 'Associate'}
-                        onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            roles: [e.target.value as UserRole, formData.roles?.[1] || 'Other'],
-                          })
-                        }
-                        className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-teal-500"
-                      >
-                        {ALL_ROLES.map((r) => (
-                          <option key={r} value={r}>
-                            {r}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-semibold text-slate-400 mb-1">Secondary Role *</label>
-                      <select
-                        value={formData.roles?.[1] || 'Other'}
-                        onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            roles: [formData.roles?.[0] || 'Associate', e.target.value as UserRole],
-                          })
-                        }
-                        className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-teal-500"
-                      >
-                        {ALL_ROLES.map((r) => (
-                          <option key={r} value={r}>
-                            {r}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
-                  <p className="text-[11px] text-teal-400/80 italic">
-                    Note: If "Transporter/Driver" is selected, this member will automatically sync to the Transporters directory. If "Marketor" is selected, they will sync to Marketing Team!
-                  </p>
-
-                  {/* Working Hours & Working Days */}
-                  <div className="bg-slate-900/90 p-3.5 rounded-2xl border border-slate-700/80 space-y-3 mt-3">
-                    <div className="flex items-center gap-2 text-xs font-bold text-teal-400">
-                      <Clock className="w-4 h-4" />
-                      <span>Company Member Working Schedule & Shift</span>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <div>
-                        <label className="block text-[11px] font-semibold text-slate-300 mb-1">
-                          Working Hours / Shift Time
-                        </label>
-                        <input
-                          type="text"
-                          value={formData.workingHours || '08:00 AM - 05:00 PM'}
-                          onChange={(e) => setFormData({ ...formData, workingHours: e.target.value })}
-                          placeholder="e.g. 08:00 AM - 05:00 PM"
-                          className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-teal-500 font-mono"
-                        />
-                      </div>
-
-                      <div className="flex flex-col justify-end">
-                        <span className="text-[10px] text-slate-400 mb-1">Quick Shift Presets:</span>
-                        <div className="flex flex-wrap gap-1">
-                          {[
-                            { label: '8AM - 5PM', val: '08:00 AM - 05:00 PM' },
-                            { label: '2PM - 10PM', val: '02:00 PM - 10:00 PM' },
-                            { label: 'Night Shift', val: '10:00 PM - 06:00 AM' },
-                            { label: 'Full Day', val: '08:00 AM - 08:00 PM' },
-                          ].map((shift) => (
-                            <button
-                              key={shift.label}
-                              type="button"
-                              onClick={() => setFormData({ ...formData, workingHours: shift.val })}
-                              className="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-[10px] border border-slate-700 transition cursor-pointer"
-                            >
-                              {shift.label}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div>
-                      <div className="flex items-center justify-between mb-1.5">
-                        <label className="block text-[11px] font-semibold text-slate-300">
-                          Active Working Days ({formData.workingDays?.length || 0} days selected)
-                        </label>
-                        <div className="flex items-center gap-1.5 text-[10px]">
-                          <button
-                            type="button"
-                            onClick={() =>
-                              setFormData({
-                                ...formData,
-                                workingDays: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-                              })
-                            }
-                            className="text-teal-400 hover:underline cursor-pointer"
-                          >
-                            Mon-Fri
-                          </button>
-                          <span className="text-slate-600">•</span>
-                          <button
-                            type="button"
-                            onClick={() =>
-                              setFormData({
-                                ...formData,
-                                workingDays: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-                              })
-                            }
-                            className="text-teal-400 hover:underline cursor-pointer"
-                          >
-                            All 7 Days
-                          </button>
-                        </div>
-                      </div>
-
-                      <div className="grid grid-cols-7 gap-1">
-                        {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((day) => {
-                          const isSelected = formData.workingDays?.includes(day);
-                          return (
-                            <button
-                              key={day}
-                              type="button"
-                              onClick={() => {
-                                const currentDays = formData.workingDays || [];
-                                const nextDays = isSelected
-                                  ? currentDays.filter((d) => d !== day)
-                                  : [...currentDays, day];
-                                setFormData({ ...formData, workingDays: nextDays });
-                              }}
-                              className={`py-1.5 px-1 rounded-xl text-[10px] font-bold transition cursor-pointer border text-center ${
-                                isSelected
-                                  ? 'bg-teal-600 border-teal-400 text-white shadow-xs'
-                                  : 'bg-slate-950 border-slate-800 text-slate-400 hover:border-slate-700'
-                              }`}
-                            >
-                              {day.slice(0, 3)}
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Universal Photo Input: Link, Drive, Device Upload, Drag-and-drop, Live Camera */}
-              <div className="bg-slate-900/60 p-3.5 rounded-2xl border border-slate-700/60">
-                <UniversalPhotoInput
-                  label="Profile Photo (Link, Google Drive, Device Upload / Drag, Live Camera Snapshot)"
-                  value={formData.photoUrl}
-                  onChange={(url) => setFormData({ ...formData, photoUrl: url })}
-                  helperText="Attach real profile photo for identification, invoices, and verified landing page reviews."
-                />
-              </div>
-
-              <div className="flex items-start gap-3 bg-slate-800/60 p-3 rounded-xl border border-slate-700/60">
-                <input
-                  id="landingConsent"
-                  type="checkbox"
-                  checked={formData.photoConsentForLanding}
-                  onChange={(e) => setFormData({ ...formData, photoConsentForLanding: e.target.checked })}
-                  className="mt-0.5 rounded text-teal-500 focus:ring-teal-500 w-4 h-4 cursor-pointer"
-                />
-                <label htmlFor="landingConsent" className="text-xs text-slate-300 cursor-pointer">
-                  <span className="font-semibold text-slate-100 block">Landing Page Display Consent</span>
-                  Agrees to showcase photo, verified status, and reviews on the public e-commerce landing page.
-                </label>
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-slate-400 mb-1">Operational Notes</label>
-                <textarea
-                  rows={2}
-                  value={formData.notes}
-                  onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                  className="w-full bg-slate-800 border border-slate-700 rounded-xl p-2.5 text-xs text-slate-100 focus:outline-none focus:border-teal-500"
-                />
-              </div>
-
-              <div className="flex justify-end gap-3 pt-2">
-                <button
-                  type="button"
-                  onClick={() => setModalOpen(false)}
-                  className="px-4 py-2 rounded-xl border border-slate-700 text-slate-300 hover:bg-slate-800 text-sm font-medium"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-5 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-sm font-semibold shadow-md"
-                >
-                  Save Record
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* View Details Modal */}
-      {viewDetailPerson && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-xs p-4">
-          <div className="relative w-full max-w-lg rounded-2xl bg-slate-900 border border-slate-700 shadow-2xl p-6 text-white">
-            <button
-              onClick={() => setViewDetailPerson(null)}
-              className="absolute top-4 right-4 text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800"
-            >
-              <X className="w-5 h-5" />
-            </button>
-
-            <div className="flex items-center gap-3 mb-4">
-              <img
-                src={viewDetailPerson.photoUrl}
-                alt={viewDetailPerson.firstName}
-                className="w-14 h-14 rounded-full object-cover border border-slate-700"
-              />
-              <div>
-                <h3 className="text-xl font-bold">
-                  {viewDetailPerson.firstName} {viewDetailPerson.secondName}
-                </h3>
-                <span className="text-xs uppercase font-semibold text-teal-400">
-                  {viewDetailPerson.category}
-                </span>
-              </div>
-            </div>
-
-            <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2 text-xs">
-              <div className="flex justify-between">
-                <span className="text-slate-400">Telephone 1:</span>
-                <span className="font-semibold text-slate-200">{viewDetailPerson.tel1}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-slate-400">Telephone 2:</span>
-                <span className="font-semibold text-slate-200">{viewDetailPerson.tel2}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-slate-400">WhatsApp:</span>
-                <span className="font-semibold text-emerald-400">{viewDetailPerson.whatsappNo}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-slate-400">Email 1:</span>
-                <span className="font-semibold text-slate-200">{viewDetailPerson.email1}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-slate-400">Email 2:</span>
-                <span className="font-semibold text-slate-200">{viewDetailPerson.email2}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-slate-400">Location:</span>
-                <span className="font-semibold text-slate-200">{viewDetailPerson.location}, {viewDetailPerson.country}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-slate-400">Address:</span>
-                <span className="font-semibold text-slate-200">{viewDetailPerson.address}</span>
-              </div>
-              {viewDetailPerson.roles && (
-                <div className="flex justify-between">
-                  <span className="text-slate-400">Assigned Roles:</span>
-                  <span className="font-semibold text-purple-400">{viewDetailPerson.roles.join(' & ')}</span>
-                </div>
-              )}
-              {viewDetailPerson.category === 'company_member' && (
-                <>
-                  <div className="flex justify-between">
-                    <span className="text-slate-400">Working Hours / Shift:</span>
-                    <span className="font-semibold text-teal-400 font-mono">
-                      {viewDetailPerson.workingHours || '08:00 AM - 05:00 PM'}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-400">Working Days:</span>
-                    <span className="font-semibold text-teal-300">
-                      {viewDetailPerson.workingDays && viewDetailPerson.workingDays.length > 0
-                        ? viewDetailPerson.workingDays.join(', ')
-                        : 'Monday - Friday'}
-                    </span>
-                  </div>
-                </>
-              )}
-              <div className="flex justify-between">
-                <span className="text-slate-400">Referrals Driven:</span>
-                <span className="font-semibold text-amber-400">{viewDetailPerson.referralCount || 0}</span>
-              </div>
-            </div>
-
-            <div className="flex justify-end gap-2 mt-4">
-              <button
-                onClick={() => handleExportSinglePDF(viewDetailPerson)}
-                className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold flex items-center gap-1.5"
-              >
-                <Download className="w-3.5 h-3.5" />
-                Export PDF
-              </button>
-              <button
-                onClick={() => setViewDetailPerson(null)}
-                className="px-4 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-xs font-semibold"
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Email Export Modal for Directory (.txt and .pdf formats) */}
-      {emailModalOpen && (
-        <EmailExportModal
-          isOpen={emailModalOpen}
-          onClose={() => setEmailModalOpen(false)}
-          title={
-            selectedPersonForEmail
-              ? `Profile Spec Sheet: ${selectedPersonForEmail.firstName} ${selectedPersonForEmail.secondName}`
-              : `${title} - Full Directory Ledger`
-          }
-          moduleName={title}
-          isSingleRow={Boolean(selectedPersonForEmail)}
-          entityName={
-            selectedPersonForEmail
-              ? `${selectedPersonForEmail.firstName} ${selectedPersonForEmail.secondName} (${selectedPersonForEmail.category})`
-              : undefined
-          }
-          availableFormats={['txt', 'pdf']}
-          data={selectedPersonForEmail || filtered.map(p => ({
-            ...p,
-            fullName: `${p.firstName} ${p.secondName}`,
-            rolesText: p.roles ? p.roles.join(' & ') : 'N/A',
-          }))}
-          columns={directoryExportColumns}
-          metadata={[
-            { label: 'Category', value: category.toUpperCase() },
-            {
-              label: 'Total Contacts',
-              value: selectedPersonForEmail ? '1 Contact' : `${filtered.length} Contacts`,
-            },
-          ]}
-        />
-      )}
+  return <div className="max-w-7xl mx-auto px-4 py-6">
+    <div className="flex flex-wrap justify-between items-start gap-4 mb-5"><div><h1 className="flex items-center gap-2 text-2xl font-black">{title}<button onClick={() => pos.setHoverHelpPlatform(platformId)} aria-label="Directory guidance"><HelpCircle size={19} className="text-teal-400" /></button></h1><p className="text-xs text-slate-400 mt-1">{subtitle}</p></div>
+      <div className="flex flex-wrap gap-2">{canExport && <><button className={buttonClass} onClick={exportCsv}><Download size={14}/>Export CSV</button><button className={buttonClass} onClick={() => exportPdf()}><Download size={14}/>PDF Directory</button></>}{canEmail && <button className={buttonClass} onClick={() => setEmailOpen(true)}><Mail size={14}/>Email directory</button>}{canEdit && <button className={buttonClass+' bg-teal-700 text-white'} onClick={create}><Plus size={15}/>Add {category === 'related_company' ? 'company / branch' : 'record'}</button>}</div>
     </div>
-  );
+    {notice && <p role="status" className="mb-4 rounded-xl border border-teal-800 p-3 text-sm">{notice}</p>}
+    <label className="mb-4 flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-900 px-3"><Search size={16}/><input aria-label="Search directory" className="min-w-0 flex-1 bg-transparent py-3 text-sm" placeholder="Search name, company type, contact or location" value={query} onChange={event => setQuery(event.target.value)}/></label>
+    {category === 'related_company' && <p className="mb-4 text-xs text-slate-400">Add companies and branches here. Selected vendor, transporter and marketing functions automatically link the same identity into those directories. Electricity, water and other utilities are selectable on expenses and purchase invoices.</p>}
+    <div className="overflow-x-auto rounded-2xl border border-slate-800"><table className="w-full text-left text-xs"><thead className="bg-slate-900"><tr>{['Name / type','Contacts','Location','Roles / schedule','Actions'].map(label => <th className="p-3" key={label}>{label}</th>)}</tr></thead><tbody>
+      {!filtered.length && <tr><td colSpan={5} className="p-10 text-center text-slate-400">No entries yet. Add your actual contacts or companies; no placeholder records are inserted.</td></tr>}
+      {filtered.map(p => <tr key={p.id} className="border-t border-slate-800"><td className="p-3"><div className="flex items-center gap-3"><img src={directoryPhoto(p)} onError={event => { event.currentTarget.onerror=null; event.currentTarget.src=directoryPhoto({...p,photoUrl:''}); }} alt={`${directoryName(p)} ${p.photoUrl ? 'photo' : 'illustrated placeholder'}`} className="w-11 h-11 rounded-xl object-cover"/><div><strong className="block">{directoryName(p)}</strong><span className="text-slate-400">{isOrganisation(p) ? `${p.entityType} · ${p.companyType || 'Related company'}` : 'Person'}</span>{hasFeature('referrals') && p.isTopReferrer && <span className="block text-amber-300">Top referrer</span>}</div></div></td><td className="p-3">{p.tel1 || '—'}<br/>{p.email1 || '—'}</td><td className="p-3">{[p.location,p.country].filter(Boolean).join(', ') || '—'}</td><td className="p-3"><span>{isOrganisation(p) ? p.companyFunctions?.join(' / ') : p.roles?.join(' / ')}</span>{p.workingHours && !isOrganisation(p) && <span className="block text-slate-400">{p.workingHours}</span>}</td><td className="p-3"><div className="flex gap-1"><button className={buttonClass} aria-label={`View ${directoryName(p)}`} onClick={() => setDetail(p)}><Eye size={14}/></button>{canEdit && <><button className={buttonClass} aria-label={`Edit ${directoryName(p)}`} onClick={() => edit(p)}><Edit size={14}/></button><button className={buttonClass} aria-label={`Delete ${directoryName(p)}`} onClick={() => remove(p)}><Trash2 size={14}/></button></>}{canExport && <button className={buttonClass} aria-label={`Export profile PDF for ${directoryName(p)}`} onClick={() => exportPdf(p)}><Download size={14}/></button>}{category === 'company_member' && canEdit && <button className={buttonClass} title="Salary payments and history" aria-label={`Salary payments for ${directoryName(p)}`} onClick={() => openPay(p)}><Wallet size={14}/></button>}</div></td></tr>)}
+    </tbody></table></div>
+
+    {category === 'company_member' && canEdit && <section className="mt-6 rounded-2xl border border-slate-800 p-4"><h2 className="font-bold">Recorded salary payments</h2><p className="text-xs text-slate-400 mt-1">Agreed rates are not payments. Records below are explicit bookkeeping entries, not transfers; historical entries remain if a member is removed.</p><div className="overflow-x-auto mt-3"><table className="w-full text-xs text-left"><thead><tr>{['Member','Paid on','Amount','Basis / period','Channel / reference','Expense'].map(label => <th key={label} className="p-2">{label}</th>)}</tr></thead><tbody>{!salaryPayments.length && <tr><td colSpan={6} className="p-3 text-slate-400">No salary payments recorded.</td></tr>}{salaryPayments.map(p => <tr key={p.id} className="border-t border-slate-800"><td className="p-2">{p.memberName}</td><td className="p-2">{dateOnly(p.paidOn,settings)}</td><td className="p-2">{p.currency} {p.amount.toFixed(2)}</td><td className="p-2">{p.basis} · {p.paidFor}</td><td className="p-2">{p.method} · {p.reference || '—'}</td><td className="p-2">{p.expenseId ? `Linked: ${p.expenseId}` : 'Not posted'}</td></tr>)}</tbody></table></div></section>}
+
+    {form && <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-3"><div role="dialog" aria-modal="true" aria-label="Directory entry" className="relative max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-2xl border border-slate-700 bg-slate-900 p-5 text-slate-100"><button aria-label="Close directory entry" className="absolute right-3 top-3 p-2" onClick={() => setForm(null)}><X size={20}/></button><h2 className="text-xl font-bold mb-4">{editing ? 'Edit' : 'Add'} directory entry</h2>
+      <form onSubmit={save} className="space-y-4">
+        {category !== 'company_member' && <Field label="Entry type"><select aria-label="Entry type" className={inputClass} value={form.entityType || 'person'} onChange={event => { const type = event.target.value as PersonRecord['entityType']; setForm({ ...form, entityType:type, organisationName:type!=='person'&&!form.organisationName?directoryName(form):form.organisationName, companyFunctions: type === 'person' ? [] : form.companyFunctions?.length ? form.companyFunctions : category === 'vendor' ? ['vendor'] : category === 'transporter' ? ['transporter'] : category === 'marketer' ? ['marketer'] : [] }); }}><option value="person">Person</option><option value="company">Company</option><option value="branch">Company branch</option></select></Field>}
+        {isOrganisation(form) ? <div className="grid sm:grid-cols-2 gap-3"><Field label="Company / branch name"><input aria-label="Company / branch name" required className={inputClass} value={form.organisationName || ''} onChange={event => change('organisationName',event.target.value)}/></Field><Field label="Company type"><select aria-label="Company type" className={inputClass} value={form.companyType || 'Other related company'} onChange={event => { const type=event.target.value; const role=type==='Vendor company'?'vendor':type==='Transporting company'?'transporter':type==='Marketing company'?'marketer':undefined; setForm({...form, companyType:type, companyFunctions:role ? [...new Set([...(form.companyFunctions || []),role as CompanyFunction])] : form.companyFunctions}); }}>{COMPANY_TYPES.map(type => <option key={type}>{type}</option>)}</select></Field>
+          {form.entityType === 'branch' && <Field label="Parent company"><select aria-label="Parent company" required className={inputClass} value={form.parentCompanyId || ''} onChange={event => change('parentCompanyId',event.target.value)}><option value="">Select parent company</option>{relatedCompanies.filter(p => canonicalDirectoryId(p.id)!==canonicalDirectoryId(form.id)).map(p => <option key={p.id} value={canonicalDirectoryId(p.id)}>{directoryName(p)}</option>)}</select></Field>}
+          <div className="sm:col-span-2"><p className="text-xs font-semibold text-slate-400 mb-2">Also list this company in</p><div className="flex flex-wrap gap-4">{(['vendor','transporter','marketer'] as CompanyFunction[]).map(role => <label key={role} className="text-sm"><input aria-label={`Company function ${role}`} type="checkbox" checked={form.companyFunctions?.includes(role) || false} onChange={event => change('companyFunctions',event.target.checked ? [...(form.companyFunctions || []),role] : (form.companyFunctions || []).filter(r => r!==role))}/> {role === 'marketer' ? 'Marketing companies' : role === 'transporter' ? 'Transporting companies' : 'Vendors'}</label>)}</div></div>
+          <Field label="Registration number"><input className={inputClass} value={form.regNumber || ''} onChange={event => change('regNumber',event.target.value)}/></Field><Field label="Tax / VAT PIN"><input className={inputClass} value={form.taxPin || ''} onChange={event => change('taxPin',event.target.value)}/></Field>
+        </div> : <div className="grid sm:grid-cols-2 gap-3"><Field label="First name"><input aria-label="First name" className={inputClass} required value={form.firstName} onChange={event => change('firstName',event.target.value)}/></Field><Field label="Second name"><input aria-label="Second name" className={inputClass} value={form.secondName} onChange={event => change('secondName',event.target.value)}/></Field><Field label="Fallback avatar style (optional)"><select aria-label="Fallback avatar style" className={inputClass} value={form.avatarStyle || 'neutral'} onChange={event => change('avatarStyle',event.target.value as PersonRecord['avatarStyle'])}><option value="neutral">Neutral / not specified</option><option value="masculine">Masculine</option><option value="feminine">Feminine</option></select></Field><p className="text-xs text-slate-400 self-center">Only controls an illustrated placeholder when no photo is supplied. It does not record sex, gender or orientation.</p></div>}
+        <div className="grid sm:grid-cols-2 gap-3">{([['tel1','Primary telephone'],['tel2','Secondary telephone'],['whatsappNo','WhatsApp'],['email1','Primary email'],['email2','Secondary email'],['address','Address'],['location','City / location'],['country','Country']] as const).map(([key,label]) => <Field key={key} label={label}><input aria-label={label} className={inputClass} value={form[key]} onChange={event => change(key,event.target.value)} type={key.startsWith('email')?'email':'text'}/></Field>)}</div>
+        {!isOrganisation(form) && category !== 'company_member' && <label className="block text-sm"><input type="checkbox" checked={form.companyMember || false} onChange={event => change('companyMember',event.target.checked)}/> Also an internal company member (not assumed for external drivers/agents)</label>}
+        {staff && <fieldset className="rounded-xl border border-slate-700 p-4 space-y-4"><legend className="px-2 font-bold text-teal-400">Staff roles, shifts and agreed pay</legend>
+          <div className="grid sm:grid-cols-2 gap-3">{[0,1].map(index => <Field key={index} label={`Job role ${index+1}`}><select aria-label={`Job role ${index+1}`} className={inputClass} value={form.roles?.[index] || 'Other'} onChange={event => { const roles=[...(form.roles || ['Other','Other'])] as PersonRecord['roles']; roles![index]=event.target.value as any; change('roles',roles); }}>{ALL_ROLES.map(role => <option key={role}>{role}</option>)}</select></Field>)}</div>
+          <Field label="Quick Shift Presets"><select aria-label="Quick Shift Presets" className={inputClass} value={form.shiftPreset || 'custom'} onChange={event => setForm({...form,...applyShiftPreset(event.target.value)})}><option value="custom" disabled>Custom / existing hours</option>{SHIFT_PRESETS.map(p => <option key={p.id} value={p.id}>{p.label}</option>)}</select></Field>
+          <div className="grid sm:grid-cols-2 gap-3"><Field label="Shift start"><input aria-label="Shift start" type="time" className={inputClass} value={form.shiftStart || ''} onChange={event => setForm({...form,shiftStart:event.target.value,workingHours:`${event.target.value} – ${form.shiftEnd || ''}`,shiftPreset:'custom'})}/></Field><Field label="Shift end"><input aria-label="Shift end" type="time" className={inputClass} value={form.shiftEnd || ''} onChange={event => setForm({...form,shiftEnd:event.target.value,workingHours:`${form.shiftStart || ''} – ${event.target.value}`,shiftPreset:'custom'})}/></Field></div>
+          <p className="text-xs text-slate-400">Times use {regional(settings).timeZone}.{form.shiftStart && form.shiftEnd && form.shiftEnd < form.shiftStart && ' This shift ends on the following day.'}{form.shiftPreset === 'holidays' && ` Holiday-only work uses the ${regional(settings).holidayDates.length} dates configured in Settings → Currency, Date & Time; no holiday calendar is assumed.`}</p>
+          {form.shiftPreset !== 'holidays' && <div><p className="text-xs font-bold mb-2">Working days</p><div className="flex flex-wrap gap-3">{WEEK_DAYS.map(day => <label className="text-xs" key={day}><input aria-label={`Work ${day}`} type="checkbox" checked={form.workingDays?.includes(day) || false} onChange={event => { const days=event.target.checked?[...(form.workingDays || []),day]:(form.workingDays || []).filter(d=>d!==day); setForm({...form,workingDays:days,offDays:WEEK_DAYS.filter(d=>!days.includes(d)),shiftPreset:'custom'}); }}/> {day}</label>)}</div></div>}
+          <div><p className="text-xs font-bold mb-2">Off days</p><div className="flex flex-wrap gap-3">{WEEK_DAYS.map(day => <label className="text-xs" key={day}><input aria-label={`Off ${day}`} type="checkbox" checked={form.offDays?.includes(day) || false} onChange={event => { const days=event.target.checked?[...(form.offDays || []),day]:(form.offDays || []).filter(d=>d!==day); setForm({...form,...(form.shiftPreset==='holidays'?{offDays:days}:setOffDays(days))}); }}/> {day}</label>)}</div></div>
+          <div className="grid sm:grid-cols-2 gap-3"><Field label="Agreed salary / pay rate (not an amount paid)"><input aria-label="Agreed pay rate" type="number" min="0" step="0.01" className={inputClass} value={form.salaryRate ?? ''} onChange={event => change('salaryRate',event.target.value === '' ? undefined : Number(event.target.value))}/></Field><Field label="Agreed pay basis"><select aria-label="Agreed pay basis" className={inputClass} value={form.salaryBasis || 'month'} onChange={event => change('salaryBasis',event.target.value as PersonRecord['salaryBasis'])}>{PAY_BASES.map(p => <option key={p.value} value={p.value}>{p.label}</option>)}</select></Field></div><p className="text-xs text-slate-400">Saving an agreed rate never records a payment or creates an expense.</p>
+        </fieldset>}
+        <UniversalPhotoInput label={isOrganisation(form) ? 'Company logo / branch photo' : 'Person photo'} value={form.photoUrl} onChange={url => change('photoUrl',url)}/><div className="flex items-center gap-3"><img className="w-14 h-14 rounded-xl" src={directoryPhoto(form)} alt="Selected photo or illustrated fallback"/><p className="text-xs text-slate-400">{form.photoUrl?'Supplied photo takes priority.':isOrganisation(form)?'Company placeholder—not a person portrait.':'Illustrated fallback—not a real person photo.'}</p></div>
+        <label className="block text-xs"><input type="checkbox" checked={form.photoConsentForLanding} onChange={event => change('photoConsentForLanding',event.target.checked)}/> Consent to use the supplied photo on the private business-page preview</label>
+        {hasFeature('referrals') && (<div className="grid sm:grid-cols-2 gap-3"><Field label="Referral count"><input type="number" min="0" className={inputClass} value={form.referralCount || 0} onChange={event => change('referralCount',Number(event.target.value))}/></Field><Field label="Referral volume"><input type="number" min="0" step="0.01" className={inputClass} value={form.totalReferralVolume || 0} onChange={event => change('totalReferralVolume',Number(event.target.value))}/></Field></div>)}
+
+        <Field label="Notes"><textarea className={inputClass} value={form.notes || ''} onChange={event => change('notes',event.target.value)}/></Field>
+        {notice && <p role="alert" className="text-sm text-amber-300">{notice}</p>}<div className="sticky bottom-0 bg-slate-900 py-3 flex justify-end gap-3"><button type="button" className={buttonClass} onClick={()=>setForm(null)}>Cancel</button><button className={buttonClass+' bg-teal-700 text-white'} type="submit">Save directory entry</button></div>
+      </form>
+    </div></div>}
+
+    {detail && <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4"><div role="dialog" aria-modal="true" aria-label="Directory profile" className="relative max-h-[90vh] overflow-y-auto w-full max-w-lg rounded-2xl bg-slate-900 border border-slate-700 p-6"><button aria-label="Close profile" className="absolute top-3 right-3 p-2" onClick={()=>setDetail(null)}><X size={20}/></button><img className="w-20 h-20 rounded-2xl mb-4" src={directoryPhoto(detail)} alt="Profile photo or placeholder"/><h2 className="text-xl font-bold">{directoryName(detail)}</h2><p className="text-sm text-slate-400">{isOrganisation(detail)?detail.companyType:'Person'}</p><dl className="mt-4 space-y-2 text-sm">{Object.entries({ Phone:detail.tel1, WhatsApp:detail.whatsappNo, Email:detail.email1, Address:detail.address, Location:detail.location, Country:detail.country, Roles:detail.roles?.join(' / '), Hours:detail.workingHours, 'Working days':detail.workingDays?.join(', '), 'Off days':detail.offDays?.join(', '), ...(canEdit?{'Agreed pay rate':detail.salaryRate === undefined?'Not set':`${company.currency} ${detail.salaryRate} per ${detail.salaryBasis}`} :{}), Notes:detail.notes }).map(([key,value]) => value && <div key={key}><dt className="text-slate-400">{key}</dt><dd>{value}</dd></div>)}</dl></div></div>}
+
+    {payment && payMember && <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4"><div role="dialog" aria-modal="true" aria-label="Record salary payment" className="relative max-h-[92vh] overflow-y-auto w-full max-w-xl rounded-2xl bg-slate-900 border border-slate-700 p-5"><button aria-label="Close salary payment" className="absolute top-3 right-3 p-2" onClick={()=>{setPayment(null);setPayMember(null);}}><X size={20}/></button><h2 className="text-xl font-bold">Record paid salary — {directoryName(payMember)}</h2><p className="mt-2 text-xs text-slate-400">Bookkeeping only; no funds are transferred. Agreed rate: {payMember.salaryRate === undefined?'not set':`${company.currency} ${payMember.salaryRate} per ${payMember.salaryBasis}`}.</p><form className="mt-4 space-y-3" onSubmit={recordPay}><div className="grid sm:grid-cols-2 gap-3"><Field label="Paid amount"><input aria-label="Paid salary amount" className={inputClass} type="number" required min="0.01" step="0.01" value={payment.amount || ''} onChange={event=>setPayment({...payment,amount:Number(event.target.value)})}/></Field><Field label="Paid on"><input aria-label="Salary paid on" className={inputClass} type="date" required value={payment.paidOn} onChange={event=>setPayment({...payment,paidOn:event.target.value})}/></Field><Field label="Payment basis"><select aria-label="Salary payment basis" className={inputClass} value={payment.basis} onChange={event=>setPayment({...payment,basis:event.target.value as SalaryPaymentDraft['basis']})}>{PAY_BASES.map(p=><option key={p.value} value={p.value}>{p.label}</option>)}</select></Field><Field label="Payment channel"><select aria-label="Salary payment channel" className={inputClass} value={payment.method} onChange={event=>setPayment({...payment,method:event.target.value})}>{PAYMENT_METHODS.filter(m=>m!=='Credit / Debt').map(method=><option key={method}>{method}</option>)}</select></Field></div><Field label="Period / tasks / deliveries covered"><input aria-label="Salary period covered" className={inputClass} value={payment.paidFor} onChange={event=>setPayment({...payment,paidFor:event.target.value})}/></Field><Field label="Payment reference"><input aria-label="Salary payment reference" className={inputClass} value={payment.reference} onChange={event=>setPayment({...payment,reference:event.target.value})}/></Field><label className="block text-sm"><input aria-label="Also record this salary payment as an expense" type="checkbox" checked={payment.recordExpense} disabled={!hasPrivilege('canEditExpenses')} onChange={event=>setPayment({...payment,recordExpense:event.target.checked})}/> Also record this exact payment once in Salaries expenses</label><p className="text-xs text-slate-400">Unchecked means no expense is created. This avoids counting an expense twice if you already recorded it.</p>{notice&&<p role="alert" className="text-amber-300 text-sm">{notice}</p>}<button className={buttonClass+' bg-teal-700 text-white'} type="submit">{payment.recordExpense?'Record payment and linked expense':'Record salary payment only'}</button></form><h3 className="font-bold mt-5">Previous recorded payments</h3>{salaryRows.map(p=><p key={p.id} className="text-xs mt-2">{dateOnly(p.paidOn,settings)} · {p.currency} {p.amount.toFixed(2)} · {p.paidFor || p.basis}</p>)}{!salaryRows.length&&<p className="text-xs text-slate-400 mt-2">No payments recorded for this member.</p>}</div></div>}
+    {canEmail && <EmailExportModal isOpen={emailOpen} onClose={()=>setEmailOpen(false)} title={title} moduleName="Directory" isSingleRow={false} availableFormats={['pdf','csv','txt']} data={exportRows} columns={[{header:'Name',dataKey:'Name'},{header:'Phone',dataKey:'Telephone'},{header:'Email',dataKey:'Email'}]}/>}
+  </div>;
 };

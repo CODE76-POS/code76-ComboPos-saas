@@ -1,0 +1,213 @@
+### Page
+- Page URL: http://127.0.0.1:5173/#/pos/landing_page_builder
+- Page Title: Business Landing Page | CODE76 POS — Private Workspace
+### Snapshot
+```yaml
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - banner [ref=e655]:
+      - generic [ref=e656]:
+        - button "76 CODE76 POS Enterprise Product & Service SaaS ERP System" [ref=e658] [cursor=pointer]:
+          - generic [ref=e659]: "76"
+          - generic [ref=e660]:
+            - generic [ref=e661]:
+              - generic [ref=e662]: CODE76 POS
+              - generic [ref=e663]: Enterprise
+            - paragraph [ref=e664]: Product & Service SaaS ERP System
+        - generic [ref=e665]:
+          - generic [ref=e666]:
+            - button "Desktop View (Full Width)" [ref=e667] [cursor=pointer]
+            - button "Laptop View (1024px)" [ref=e670] [cursor=pointer]
+            - button "Tablet View (768px)" [ref=e673] [cursor=pointer]
+            - button "Phone Mobile View (390px)" [ref=e676] [cursor=pointer]
+          - generic [ref=e679]:
+            - button "Demo Data" [ref=e680] [cursor=pointer]
+            - button "Business Page" [ref=e687] [cursor=pointer]
+            - button "Click to view help guide and settings for this platform" [ref=e692] [cursor=pointer]
+            - button "Active user session and access controls" [ref=e697] [cursor=pointer]:
+              - generic [ref=e698]: DR
+              - generic [ref=e699]:
+                - generic [ref=e700]: Dr. David Kimani
+                - generic [ref=e701]: "Role: CEO"
+      - generic [ref=e702]:
+        - generic [ref=e703]:
+          - generic [ref=e707]: App link
+          - generic [ref=e708]:
+            - generic [ref=e709]:
+              - generic [ref=e710]: App link
+              - textbox "App link" [ref=e711]: http://127.0.0.1:5173/
+              - button "Copy app link" [ref=e712] [cursor=pointer]:
+                - generic [ref=e716]: Copy link
+              - link "Open app link in a new tab" [ref=e717] [cursor=pointer]:
+                - /url: http://127.0.0.1:5173/
+            - status [ref=e722]
+        - paragraph [ref=e723]: Open this root link to reach CODE76 sign-in/register. Browser-local records and sessions do not sync between browsers.
+      - generic [ref=e725]:
+        - button "Sales POS" [ref=e726] [cursor=pointer]
+        - button "Sales History" [ref=e730] [cursor=pointer]
+        - button "Inventory" [ref=e735] [cursor=pointer]
+        - button "Expenses" [ref=e740] [cursor=pointer]
+        - button "Invoices" [ref=e744] [cursor=pointer]
+        - button "Analytics & P&L" [ref=e748] [cursor=pointer]
+        - button "Customers" [ref=e751] [cursor=pointer]
+        - button "Vendors" [ref=e757] [cursor=pointer]
+        - button "Transporters" [ref=e762] [cursor=pointer]
+        - button "Marketing Team" [ref=e768] [cursor=pointer]
+        - button "Company Members" [ref=e772] [cursor=pointer]
+        - button "My Company" [ref=e778] [cursor=pointer]
+        - button "Messaging" [ref=e782] [cursor=pointer]
+        - button "Business Landing Page" [ref=e785] [cursor=pointer]
+        - button "Settings" [ref=e790] [cursor=pointer]
+        - button "Audit & Access Logs" [ref=e794] [cursor=pointer]
+        - button "About & Manual" [ref=e798] [cursor=pointer]
+    - main [ref=e5]:
+      - generic [ref=e801]:
+        - navigation [ref=e802]:
+          - generic [ref=e809]:
+            - generic [ref=e810]: Your Business
+            - generic [ref=e811]: Products & services from our business
+          - generic [ref=e812]:
+            - link "Featured Items" [ref=e813] [cursor=pointer]:
+              - /url: "#featured"
+            - link "Browse Catalog" [ref=e814] [cursor=pointer]:
+              - /url: "#matcher"
+            - link "Product Catalog" [ref=e815] [cursor=pointer]:
+              - /url: "#matcher"
+            - link "Contact Store" [ref=e816] [cursor=pointer]:
+              - /url: "#contact"
+          - generic [ref=e817]:
+            - button "Open private business page link" [ref=e818] [cursor=pointer]:
+              - generic [ref=e825]: Private Link
+            - generic [ref=e826]:
+              - generic [ref=e827]:
+                - generic [ref=e828]: DR
+                - generic [ref=e829]:
+                  - generic [ref=e830]: Dr. David Kimani
+                  - generic [ref=e831]: CEO
+              - button "Business page settings" [ref=e832] [cursor=pointer]
+              - button "Return to POS" [ref=e836] [cursor=pointer]
+        - note [ref=e842]:
+          - strong [ref=e843]: Private Business Landing Page preview.
+          - text: Only signed-in POS users can access this screen. This page is not published to the public website.
+        - generic [ref=e846]:
+          - strong [ref=e847]: This catalog is being prepared.
+          - text: Products and services will appear here when the business adds them to Inventory.
+        - generic [ref=e849]:
+          - generic [ref=e850]: Our products & services
+          - heading "Your Business" [level=1] [ref=e855]
+          - paragraph [ref=e856]: Explore our products and services. Contact us for availability and more information.
+          - generic [ref=e857]:
+            - generic [ref=e863]:
+              - strong [ref=e864]: "0"
+              - text: Live SKUs Synchronized
+            - generic [ref=e869]:
+              - text: "Hours:"
+              - strong [ref=e870]: Contact us for hours
+          - generic [ref=e871]:
+            - link "Browse Featured Items" [ref=e872] [cursor=pointer]:
+              - /url: "#featured"
+            - link "Browse the Catalog" [ref=e877] [cursor=pointer]:
+              - /url: "#matcher"
+        - generic [ref=e882]:
+          - generic [ref=e883]:
+            - generic [ref=e884]:
+              - generic [ref=e885]: From our Inventory
+              - heading "Featured Products & Services" [level=2] [ref=e890]
+            - paragraph [ref=e891]: Products, prices and stock from this business’s Inventory. Contact the business to confirm availability.
+          - status [ref=e892]:
+            - heading "No products or services yet" [level=3] [ref=e897]
+            - paragraph [ref=e898]: This business has not added any catalog items. There are no sample products here.
+            - button "Add your first item in Inventory" [ref=e899] [cursor=pointer]
+        - generic [ref=e901]:
+          - generic [ref=e902]:
+            - generic [ref=e903]: Interactive Commercial Matcher
+            - heading "Find What You’re Looking For" [level=2] [ref=e907]
+            - paragraph [ref=e908]: Browse this business’s categories, or search for a product or service by name, description or SKU.
+          - generic [ref=e909]:
+            - button "All Items" [ref=e911] [cursor=pointer]
+            - textbox "Search catalog SKUs..." [ref=e916]
+        - generic [ref=e919]:
+          - generic [ref=e920]:
+            - heading "Your Business" [level=3] [ref=e925]
+            - paragraph
+            - generic [ref=e926]: "TAX PIN: Not provided"
+          - generic [ref=e927]:
+            - heading "Direct Contacts" [level=4] [ref=e928]
+            - generic [ref=e929]: Phone not provided
+            - generic [ref=e933]: Email not provided
+          - generic [ref=e938]:
+            - heading "Store Hours & Location" [level=4] [ref=e939]
+            - generic [ref=e940]: Location not provided
+            - generic [ref=e945]: Contact us for hours
+        - button "Open Your Business assistant" [ref=e950] [cursor=pointer]:
+          - generic [ref=e956]:
+            - generic [ref=e957]: AI Sales Concierge
+            - generic [ref=e962]: Products, services & contact details
+  - dialog [ref=e964]:
+    - banner [ref=e965]:
+      - generic [ref=e966]: "76"
+      - generic [ref=e968]:
+        - text: A good start, your way
+        - paragraph [ref=e969]: CODE76 workspace setup
+      - button "Save progress and close setup" [ref=e970] [cursor=pointer]
+    - list "Setup progress" [ref=e974]:
+      - listitem [ref=e975]:
+        - generic [ref=e976]: "1"
+        - generic [ref=e977]: Your workspace
+      - listitem [ref=e978]:
+        - generic [ref=e979]: "2"
+        - generic [ref=e980]: My Company
+      - listitem [ref=e981]:
+        - generic [ref=e982]: "3"
+        - generic [ref=e983]: First inventory
+      - listitem [ref=e984]:
+        - generic [ref=e985]: "4"
+        - generic [ref=e986]: Find your way
+    - generic [ref=e987]:
+      - generic [ref=e988]:
+        - generic [ref=e989]: Step 1 of 4 · Your workspace
+        - heading "Make yourself comfortable." [active] [level=2] [ref=e990]
+        - paragraph [ref=e991]: Choose a look and text size that feel right. These preferences apply to your POS workspace—not the CODE76 website or your Business Landing Page.
+      - group "Pick your theme" [ref=e992]:
+        - generic [ref=e1000]:
+          - button "Light Bright surfaces, clear contrast" [ref=e1001] [cursor=pointer]:
+            - generic [ref=e1012]:
+              - generic [ref=e1013]: Sales overview
+              - strong [ref=e1014]: 12,450.00
+            - generic [ref=e1032]:
+              - strong [ref=e1033]: Light
+              - generic [ref=e1034]: Bright surfaces, clear contrast
+          - button "Dark Softer on the eyes after hours" [pressed] [ref=e1036] [cursor=pointer]:
+            - generic [ref=e1047]:
+              - generic [ref=e1048]: Sales overview
+              - strong [ref=e1049]: 12,450.00
+            - generic [ref=e1063]:
+              - strong [ref=e1064]: Dark
+              - generic [ref=e1065]: Softer on the eyes after hours
+      - group "Choose a text size" [ref=e1069]:
+        - generic [ref=e1073]:
+          - button "Aa Compact More on your screen" [ref=e1074] [cursor=pointer]:
+            - generic [ref=e1075]: Aa
+            - strong [ref=e1076]: Compact
+            - generic [ref=e1077]: More on your screen
+          - button "Aa Normal A balanced everyday view" [pressed] [ref=e1078] [cursor=pointer]:
+            - generic [ref=e1079]: Aa
+            - strong [ref=e1080]: Normal
+            - generic [ref=e1081]: A balanced everyday view
+          - button "Aa Large Comfortably readable" [ref=e1082] [cursor=pointer]:
+            - generic [ref=e1083]: Aa
+            - strong [ref=e1084]: Large
+            - generic [ref=e1085]: Comfortably readable
+          - button "Aa Extra large More room for every word" [ref=e1086] [cursor=pointer]:
+            - generic [ref=e1087]: Aa
+            - strong [ref=e1088]: Extra large
+            - generic [ref=e1089]: More room for every word
+        - generic [ref=e1095]:
+          - strong [ref=e1096]: Every detail, easy to read.
+          - text: Your products, sales and totals will use this text size.
+    - contentinfo [ref=e1097]:
+      - generic [ref=e1098]:
+        - button "Skip setup for now" [ref=e1099] [cursor=pointer]
+        - button "Continue to My Company" [ref=e1100] [cursor=pointer]
+      - paragraph [ref=e1103]: Change this any time in Settings → App Appearance Settings or Text Sizing.
+```

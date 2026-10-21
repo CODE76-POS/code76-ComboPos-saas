@@ -1,0 +1,23 @@
+PASS: / serves the application shell, not 403
+PASS: / has one absolute public-root canonical without private query/hash
+PASS: /index.html serves the application shell, not 403
+PASS: /index.html has one absolute public-root canonical without private query/hash
+PASS: /?view=storefront serves the application shell, not 403
+PASS: /?view=storefront has one absolute public-root canonical without private query/hash
+PASS: /pos/landing_page_builder serves the application shell, not 403
+PASS: /pos/landing_page_builder has one absolute public-root canonical without private query/hash
+PASS: /landing_page_builder serves the application shell, not 403
+PASS: /landing_page_builder has one absolute public-root canonical without private query/hash
+PASS: HEAD / is 200 with no body
+PASS: server is healthy and no Gemini key is loaded
+PASS: unknown API is JSON 404, never the public HTML fallback
+PASS: missing JS is 404, not HTML disguised as a module
+PASS: own social image is served successfully
+PASS: workspace/local robots disallow indexing
+PASS: sitemap contains only the public product root
+PASS: production-like host gets absolute HTTPS canonical and public index/follow metadata
+PASS: public robots points to the public sitemap and excludes API/legacy workspace paths
+PASS: application accepts workspace-preview host and keeps it noindex
+PASS: proxy-forwarded host/protocol use the correct public preview origin
+
+21/21 HTTP checks passed

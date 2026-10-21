@@ -1,0 +1,198 @@
+### Page
+- Page URL: http://127.0.0.1:5173/#/pos/my_company
+- Page Title: CODE76 POS — Private Workspace
+### Snapshot
+```yaml
+- generic [ref=e4]:
+  - banner [ref=e679]:
+    - generic [ref=e680]:
+      - button "76 CODE76 POS Enterprise Product & Service SaaS ERP System" [ref=e682] [cursor=pointer]:
+        - generic [ref=e683]: "76"
+        - generic [ref=e684]:
+          - generic [ref=e685]:
+            - generic [ref=e686]: CODE76 POS
+            - generic [ref=e687]: Enterprise
+          - paragraph [ref=e688]: Product & Service SaaS ERP System
+      - generic [ref=e689]:
+        - generic [ref=e690]:
+          - button "Desktop View (Full Width)" [ref=e691] [cursor=pointer]
+          - button "Laptop View (1024px)" [ref=e694] [cursor=pointer]
+          - button "Tablet View (768px)" [ref=e697] [cursor=pointer]
+          - button "Phone Mobile View (390px)" [ref=e700] [cursor=pointer]
+        - generic [ref=e703]:
+          - button "Demo Data" [ref=e704] [cursor=pointer]
+          - button "Business Page" [ref=e1405] [cursor=pointer]
+          - button "Click to view help guide and settings for this platform" [ref=e710] [cursor=pointer]
+          - button "Active user session and access controls" [ref=e715] [cursor=pointer]:
+            - generic [ref=e716]: DR
+            - generic [ref=e717]:
+              - generic [ref=e718]: Dr. David Kimani
+              - generic [ref=e719]: "Role: CEO"
+    - generic [ref=e720]:
+      - generic [ref=e721]:
+        - generic [ref=e725]: App link
+        - generic [ref=e726]:
+          - generic [ref=e727]:
+            - generic [ref=e728]: App link
+            - textbox "App link" [ref=e729]: http://127.0.0.1:5173/
+            - button "Copy app link" [ref=e730] [cursor=pointer]:
+              - generic [ref=e734]: Copy link
+            - link "Open app link in a new tab" [ref=e735] [cursor=pointer]:
+              - /url: http://127.0.0.1:5173/
+          - status [ref=e740]
+        - button "Current demo plan" [ref=e741]: Pro · demo
+      - paragraph [ref=e742]: Open this root link to reach CODE76 sign-in/register. Browser-local records and sessions do not sync between browsers.
+    - generic [ref=e744]:
+      - button "Sales POS" [ref=e745] [cursor=pointer]
+      - button "Sales History" [ref=e749] [cursor=pointer]
+      - button "Inventory" [ref=e754] [cursor=pointer]
+      - button "Expenses" [ref=e1410] [cursor=pointer]
+      - button "Invoices" [ref=e1414] [cursor=pointer]
+      - button "Analytics & P&L" [ref=e1418] [cursor=pointer]
+      - button "Customers" [ref=e1421] [cursor=pointer]
+      - button "Vendors" [ref=e1427] [cursor=pointer]
+      - button "Transporters" [ref=e1432] [cursor=pointer]
+      - button "Marketing Team" [ref=e1438] [cursor=pointer]
+      - button "Company Members" [ref=e1442] [cursor=pointer]
+      - button "My Company" [ref=e1448] [cursor=pointer]
+      - button "Messaging" [ref=e1452] [cursor=pointer]
+      - button "Business Landing Page" [ref=e1455] [cursor=pointer]
+      - button "Settings" [ref=e759] [cursor=pointer]
+      - button "Audit & Access Logs" [ref=e1460] [cursor=pointer]
+      - button "About & Manual" [ref=e763] [cursor=pointer]
+  - main [ref=e5]:
+    - generic [ref=e1493]:
+      - generic [ref=e1494]:
+        - generic [ref=e1495]:
+          - generic [ref=e1496]:
+            - heading "My Company Profile" [level=1] [ref=e1497]
+            - button "Click for platform guidance & settings" [ref=e1498] [cursor=pointer]
+          - paragraph [ref=e1502]: Define your business identity, contacts and legal details for your Business Landing Page and receipts. This does not edit the CODE76 main site.
+        - button "Open guided setup" [ref=e1503] [cursor=pointer]
+      - generic [ref=e1507]:
+        - button "My company profile" [ref=e1508]
+        - button "Other Companies & Branches" [ref=e1509]
+      - generic [ref=e1623]:
+        - generic [ref=e1624]:
+          - generic [ref=e1625]:
+            - heading [level=1] [ref=e1626]:
+              - text: Other Companies & Branches
+              - button "Directory guidance" [ref=e1627]
+            - paragraph [ref=e1631]: Utilities, suppliers, transport companies, marketing companies and business branches.
+          - generic [ref=e1632]:
+            - button "Export CSV" [ref=e1633]
+            - button "PDF Directory" [ref=e1637]
+            - button "Email directory" [ref=e1641]
+            - button "Add company / branch" [active] [ref=e1645]
+        - textbox "Search directory" [ref=e1651]:
+          - /placeholder: Search name, company type, contact or location
+        - paragraph [ref=e1652]: Add companies and branches here. Selected vendor, transporter and marketing functions automatically link the same identity into those directories. Electricity, water and other utilities are selectable on expenses and purchase invoices.
+        - table [ref=e1654]:
+          - rowgroup [ref=e1655]:
+            - row [ref=e1656]:
+              - columnheader "Name / type" [ref=e1657]
+              - columnheader "Contacts" [ref=e1658]
+              - columnheader "Location" [ref=e1659]
+              - columnheader "Roles / schedule" [ref=e1660]
+              - columnheader "Actions" [ref=e1661]
+          - rowgroup [ref=e1662]:
+            - row [ref=e1663]:
+              - cell "No entries yet. Add your actual contacts or companies; no placeholder records are inserted." [ref=e1664]
+        - dialog "Directory entry" [ref=e1666]:
+          - button "Close directory entry" [ref=e1667]
+          - heading "Add directory entry" [level=2] [ref=e1671]
+          - generic [ref=e1672]:
+            - generic [ref=e1673]:
+              - generic [ref=e1674]: Entry type
+              - combobox "Entry type" [ref=e1675]:
+                - option "Person"
+                - option "Company" [selected]
+                - option "Company branch"
+            - generic [ref=e1676]:
+              - generic [ref=e1677]:
+                - generic [ref=e1678]: Company / branch name
+                - textbox "Company / branch name" [ref=e1679]
+              - generic [ref=e1680]:
+                - generic [ref=e1681]: Company type
+                - combobox "Company type" [ref=e1682]:
+                  - option "Vendor company"
+                  - option "Transporting company"
+                  - option "Marketing company"
+                  - option "Electricity company"
+                  - option "Water company"
+                  - option "Internet / telecom company"
+                  - option "Landlord / property company"
+                  - option "Other related company" [selected]
+              - generic [ref=e1683]:
+                - paragraph [ref=e1684]: Also list this company in
+                - generic [ref=e1685]:
+                  - generic [ref=e1686]:
+                    - checkbox "Company function vendor" [ref=e1687]
+                    - text: Vendors
+                  - generic [ref=e1688]:
+                    - checkbox "Company function transporter" [ref=e1689]
+                    - text: Transporting companies
+                  - generic [ref=e1690]:
+                    - checkbox "Company function marketer" [ref=e1691]
+                    - text: Marketing companies
+              - generic [ref=e1692]:
+                - generic [ref=e1693]: Registration number
+                - textbox "Registration number" [ref=e1694]
+              - generic [ref=e1695]:
+                - generic [ref=e1696]: Tax / VAT PIN
+                - textbox "Tax / VAT PIN" [ref=e1697]
+            - generic [ref=e1698]:
+              - generic [ref=e1699]:
+                - generic [ref=e1700]: Primary telephone
+                - textbox "Primary telephone" [ref=e1701]
+              - generic [ref=e1702]:
+                - generic [ref=e1703]: Secondary telephone
+                - textbox "Secondary telephone" [ref=e1704]
+              - generic [ref=e1705]:
+                - generic [ref=e1706]: WhatsApp
+                - textbox "WhatsApp" [ref=e1707]
+              - generic [ref=e1708]:
+                - generic [ref=e1709]: Primary email
+                - textbox "Primary email" [ref=e1710]
+              - generic [ref=e1711]:
+                - generic [ref=e1712]: Secondary email
+                - textbox "Secondary email" [ref=e1713]
+              - generic [ref=e1714]:
+                - generic [ref=e1715]: Address
+                - textbox "Address" [ref=e1716]
+              - generic [ref=e1717]:
+                - generic [ref=e1718]: City / location
+                - textbox "City / location" [ref=e1719]
+              - generic [ref=e1720]:
+                - generic [ref=e1721]: Country
+                - textbox "Country" [ref=e1722]
+            - generic [ref=e1723]:
+              - generic [ref=e1724]: Company logo / branch photo
+              - generic [ref=e1726]:
+                - button "Device / Drag" [ref=e1727] [cursor=pointer]
+                - button "Camera" [ref=e1732] [cursor=pointer]
+                - button "Photo Link" [ref=e1737] [cursor=pointer]
+                - button "Google Drive" [ref=e1742] [cursor=pointer]
+              - generic [ref=e1751] [cursor=pointer]:
+                - generic [ref=e1752]: Drag & Drop photo here, or Browse Device
+                - text: Supports JPEG, PNG, WEBP, GIF, SVG (Up to 10MB)
+            - generic [ref=e1753]:
+              - img "Selected photo or illustrated fallback" [ref=e1754]
+              - paragraph [ref=e1755]: Company placeholder—not a person portrait.
+            - generic [ref=e1756]:
+              - checkbox "Consent to use the supplied photo on the private business-page preview" [ref=e1757]
+              - text: Consent to use the supplied photo on the private business-page preview
+            - generic [ref=e1758]:
+              - generic [ref=e1759]:
+                - generic [ref=e1760]: Referral count
+                - spinbutton "Referral count" [ref=e1761]: "0"
+              - generic [ref=e1762]:
+                - generic [ref=e1763]: Referral volume
+                - spinbutton "Referral volume" [ref=e1764]: "0"
+            - generic [ref=e1765]:
+              - generic [ref=e1766]: Notes
+              - textbox "Notes" [ref=e1767]
+            - generic [ref=e1768]:
+              - button "Cancel" [ref=e1769]
+              - button "Save directory entry" [ref=e1770]
+```

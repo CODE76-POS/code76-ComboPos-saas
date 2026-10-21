@@ -1,0 +1,17 @@
+### Result
+{
+  "viewport": 390,
+  "documentWidth": 390,
+  "visibleHeading": "Sales POS Terminal",
+  "overflowingMain": [
+    {
+      "tag": "BUTTON",
+      "width": 72,
+      "text": "Supplies"
+    }
+  ]
+}
+### Ran Playwright code
+```js
+await page.evaluate('() => ({ viewport:innerWidth, documentWidth:document.documentElement.scrollWidth, visibleHeading:document.querySelector(\'h1\')?.textContent, overflowingMain:[...document.querySelectorAll(\'main *\')].filter(e=>{const r=e.getBoundingClientRect();return r.width>0&&r.right>innerWidth+2&&e.scrollWidth===e.clientWidth;}).slice(0,6).map(e=>({tag:e.tagName,width:Math.round(e.getBoundingClientRect().width),text:e.textContent?.slice(0,70)})) })');
+```

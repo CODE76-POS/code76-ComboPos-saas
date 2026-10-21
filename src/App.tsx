@@ -1,4 +1,9 @@
-import React from 'react';
+import { canOpenPlatform } from './utils/plans.ts';
+import { PlanNotice } from './components/common/PlanNotice.tsx';
+import React, { useEffect } from 'react';
+import { resolveAppSurface } from './utils/appRouting.ts';
+import { applyDocumentSeo } from './utils/siteSeo.ts';
+import { Code76SiteProvider } from './context/Code76SiteContext.tsx';
 import { POSProvider, usePOS } from './context/POSContext.tsx';
 import { TopNavBar } from './components/navigation/TopNavBar.tsx';
 import { SalesPlatform } from './components/platforms/SalesPlatform.tsx';
@@ -24,10 +29,16 @@ import { ReceiptModal } from './components/modals/ReceiptModal.tsx';
 import { ReviewCaptureModal } from './components/modals/ReviewCaptureModal.tsx';
 import { LoginModal } from './components/modals/LoginModal.tsx';
 import { CompanyQAOnboardingModal } from './components/modals/CompanyQAOnboardingModal.tsx';
+import { DialogHost } from './components/common/DialogHost.tsx';
 
 const POSContent: React.FC = () => {
-  const { activeView, activePlatform, viewportMode, setViewportMode, settings, theme, currentUser } = usePOS();
+  const { activeView, activePlatform, viewportMode, setViewportMode, settings, theme, currentUser, hasFeature, hasPrivilege } = usePOS();
   const isLight = theme === 'light';
+  const authenticatedWorkspace = !!currentUser && activeView === 'pos';
+  const surface = resolveAppSurface({ view: activeView, platform: activePlatform }, !!currentUser);
+  useEffect(() => {
+    if (authenticatedWorkspace) applyDocumentSeo(document, true, activePlatform === 'landing_page_builder');
+  }, [authenticatedWorkspace, activePlatform]);
 
   // Viewport mode sizing wrapper
   const getViewportClass = () => {
@@ -35,11 +46,11 @@ const POSContent: React.FC = () => {
     const borderClass = isLight ? 'border-slate-300' : 'border-slate-800';
     switch (viewportMode) {
       case 'phone':
-        return `max-w-[390px] mx-auto min-h-screen border-x ${borderClass} shadow-2xl overflow-x-hidden transition-all duration-300 ${bgClass}`;
+        return `max-w-[390px] mx-auto min-h-screen border-x ${borderClass} shadow-2xl overflow-x-clip transition-all duration-300 ${bgClass}`;
       case 'tablet':
-        return `max-w-[768px] mx-auto min-h-screen border-x ${borderClass} shadow-2xl overflow-x-hidden transition-all duration-300 ${bgClass}`;
+        return `max-w-[768px] mx-auto min-h-screen border-x ${borderClass} shadow-2xl overflow-x-clip transition-all duration-300 ${bgClass}`;
       case 'laptop':
-        return `max-w-[1024px] mx-auto min-h-screen border-x ${borderClass} shadow-2xl overflow-x-hidden transition-all duration-300 ${bgClass}`;
+        return `max-w-[1024px] mx-auto min-h-screen border-x ${borderClass} shadow-2xl overflow-x-clip transition-all duration-300 ${bgClass}`;
       default:
         return `w-full min-h-screen transition-all duration-300 ${bgClass}`;
     }
@@ -61,21 +72,11 @@ const POSContent: React.FC = () => {
     }
   };
 
-  // Text scale class
-  const getTextSizingClass = () => {
-    switch (settings.textSizing) {
-      case 'compact':
-        return 'text-xs';
-      case 'large':
-        return 'text-base';
-      case 'xlarge':
-        return 'text-lg';
-      default:
-        return 'text-sm';
-    }
-  };
-
   const renderActivePlatform = () => {
+    if (!canOpenPlatform(settings, activePlatform)) return <PlanNotice feature={activePlatform.replace(/_/g, ' ')} />;
+    const platformPermissions: Partial<Record<typeof activePlatform, Parameters<typeof hasPrivilege>[0]>> = { selling:'canSell', sales_history:'canSell', inventory:'canViewInventory', expenses:'canViewExpenses', invoices:'canViewInvoices', analytics:'canViewAnalytics', company_members:'canManagePeople', landing_page_builder:'canEditLandingPage' };
+    const permission = platformPermissions[activePlatform];
+    if(permission && !hasPrivilege(permission) && !(activePlatform==='sales_history'&&hasPrivilege('canViewInvoices'))) return <div role="alert" className="m-8 rounded-xl border border-amber-800 p-6">Your current role does not have permission to open this platform. Ask your administrator.</div>;
     switch (activePlatform) {
       case 'selling':
         return <SalesPlatform />;
@@ -102,8 +103,8 @@ const POSContent: React.FC = () => {
         return (
           <DirectoryPlatform
             category="vendor"
-            title="Vendors & Hardware Suppliers"
-            subtitle="Hardware importers, thermal paper manufacturers, and wholesale distributor accounts."
+            title="Vendors & Suppliers"
+            subtitle="People, vendor companies and supplier branches, linked to your company directory."
             platformId="vendors"
           />
         );
@@ -112,7 +113,7 @@ const POSContent: React.FC = () => {
           <DirectoryPlatform
             category="transporter"
             title="Transporters & Freight Logistics"
-            subtitle="Delivery fleet and dispatch couriers handling on-site customer deliveries. (Auto-synced from Company Members)."
+            subtitle="External drivers, transport companies and staff with Transporter/Driver roles share linked identities."
             platformId="transporters"
           />
         );
@@ -121,7 +122,7 @@ const POSContent: React.FC = () => {
           <DirectoryPlatform
             category="marketer"
             title="Marketing & Growth Team"
-            subtitle="Sales agents, social media growth specialists, and brand ambassadors. (Auto-synced from Company Members)."
+            subtitle="Individual agents, marketing companies and staff with Marketor roles, without duplicate identities."
             platformId="marketing_team"
           />
         );
@@ -153,10 +154,13 @@ const POSContent: React.FC = () => {
 
   return (
     <div
-      style={getFontStyle()}
-      className={`min-h-screen transition-colors duration-200 ${
-        isLight ? 'bg-slate-100 text-slate-900' : 'bg-slate-950 text-slate-100'
-      } ${getTextSizingClass()}`}
+      data-surface={surface}
+      data-pos-theme={surface === 'pos' ? theme : undefined}
+      data-text-size={surface === 'pos' ? settings.textSizing : undefined}
+      style={surface === 'pos' ? getFontStyle() : { fontFamily: 'Inter, sans-serif' }}
+      className={`min-h-screen transition-colors duration-200 ${surface === 'pos' ? 'pos-workspace' : ''} ${
+        surface === 'pos' && isLight ? 'bg-slate-100 text-slate-900' : 'bg-slate-950 text-slate-100'
+      }`}
     >
       {/* Device Simulation Banner when in non-desktop viewport */}
       {viewportMode !== 'desktop' && (
@@ -188,36 +192,36 @@ const POSContent: React.FC = () => {
 
       <div className={getViewportClass()}>
         {/* Navigation Bar (Protected Internal POS Routes Only) */}
-        {currentUser && activeView === 'pos' && <TopNavBar />}
+        {authenticatedWorkspace && <TopNavBar />}
 
-        {/* Content Body: Public Landing Page vs Business Storefront vs Protected POS Platforms */}
+        {/* All merchant screens, including the builder, share the same authentication guard. */}
         <main className="min-w-0">
-          {activeView === 'storefront' ? (
-            <BusinessStorefrontLandingPage />
-          ) : !currentUser || activeView === 'landing' ? (
-            <LandingPage />
-          ) : (
-            renderActivePlatform()
-          )}
+          {authenticatedWorkspace ? renderActivePlatform() : <LandingPage requiresSignIn={activeView === 'pos'} />}
         </main>
       </div>
 
-      {/* Global Interactive Modals */}
-      <DemoWarningModal />
-      <HoverHelpModal />
-      <MarketingCampaignModal />
-      <ReceiptModal />
-      <ReviewCaptureModal />
-      <LoginModal />
-      <CompanyQAOnboardingModal />
+      {/* Private dialogs must never mount on the public website or after sign-out. */}
+      {authenticatedWorkspace && <>
+        <DemoWarningModal />
+        <HoverHelpModal />
+        {hasFeature('inventory_marketing') && hasFeature('email') && <MarketingCampaignModal />}
+        <ReceiptModal />
+        {hasFeature('business_landing') && <ReviewCaptureModal />}
+        <LoginModal />
+        <CompanyQAOnboardingModal />
+      </>}
+      {/* Every notice, confirmation and prompt renders in-app, never via a browser popup. */}
+      <DialogHost />
     </div>
   );
 };
 
 export default function App() {
   return (
-    <POSProvider>
-      <POSContent />
-    </POSProvider>
+    <Code76SiteProvider>
+      <POSProvider>
+        <POSContent />
+      </POSProvider>
+    </Code76SiteProvider>
   );
 }

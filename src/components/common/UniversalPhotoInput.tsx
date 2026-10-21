@@ -1,3 +1,4 @@
+import { useDeviceCamera } from '../../hooks/useDeviceCamera.ts';
 import React, { useState, useRef, useEffect } from 'react';
 import {
   Camera,
@@ -38,115 +39,46 @@ export const UniversalPhotoInput: React.FC<UniversalPhotoInputProps> = ({
   const [urlInput, setUrlInput] = useState(value || '');
   const [driveInput, setDriveInput] = useState('');
   const [driveError, setDriveError] = useState('');
+  const alive = useRef(true);
+  const fileRun = useRef(0);
+  const changeRef = useRef(onChange); changeRef.current=onChange;
+  useEffect(()=>{alive.current=true;return()=>{alive.current=false;++fileRun.current;};},[]);
 
-  // Camera states
-  const [cameraActive, setCameraActive] = useState(false);
-  const [cameraError, setCameraError] = useState('');
-  const [cameraFacing, setCameraFacing] = useState<'user' | 'environment'>('user');
-
+  const [cameraEnabled,setCameraEnabled] = useState(false);
+  const [cameraAttempt,setCameraAttempt] = useState(0);
+  const [cameraFacing,setCameraFacing] = useState<'user'|'environment'>('user');
+  const [captureError,setCaptureError] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const streamRef = useRef<MediaStream | null>(null);
-
-  // Sync internal state when external value changes
-  useEffect(() => {
-    setUrlInput(value || '');
-  }, [value]);
-
-  // Clean up camera stream on unmount or tab switch
-  useEffect(() => {
-    return () => {
-      stopCamera();
-    };
-  }, []);
-
-  const stopCamera = () => {
-    if (streamRef.current) {
-      streamRef.current.getTracks().forEach((track) => track.stop());
-      streamRef.current = null;
-    }
-    setCameraActive(false);
-  };
-
-  const startCamera = async (facing: 'user' | 'environment' = cameraFacing) => {
-    stopCamera();
-    setCameraError('');
-    try {
-      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        setCameraError('Camera access is not supported on this browser or device.');
-        return;
-      }
-
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: facing, width: { ideal: 1280 }, height: { ideal: 720 } },
-        audio: false,
-      });
-
-      streamRef.current = stream;
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-        videoRef.current.play();
-      }
-      setCameraActive(true);
-    } catch (err: any) {
-      console.error('Camera error:', err);
-      setCameraError(
-        err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError'
-          ? 'Camera permission denied. Please allow camera permissions in your browser.'
-          : `Unable to access camera: ${err.message || 'Unknown device error'}`
-      );
-      setCameraActive(false);
-    }
-  };
-
+  const nativeCameraRef = useRef<HTMLInputElement>(null);
+  const camera = useDeviceCamera(activeTab === 'camera' && cameraEnabled,cameraFacing,cameraAttempt);
+  const cameraActive = camera.phase === 'ready';
+  const videoRef = camera.videoRef;
+  const cameraError = captureError || camera.error;
+  useEffect(() => { setUrlInput(value || ''); },[value]);
+  const stopCamera = () => { camera.stop(); setCameraEnabled(false); };
+  const startCamera = () => { setCaptureError(''); setCameraEnabled(true); setCameraAttempt(value=>value+1); };
   const capturePhoto = () => {
-    if (!videoRef.current) return;
-    const video = videoRef.current;
-    const canvas = document.createElement('canvas');
-    canvas.width = video.videoWidth || 640;
-    canvas.height = video.videoHeight || 480;
-
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    // Flip horizontally if front-facing camera
-    if (cameraFacing === 'user') {
-      ctx.translate(canvas.width, 0);
-      ctx.scale(-1, 1);
-    }
-
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-    const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
-
-    onChange(dataUrl);
-    setUrlInput(dataUrl);
-    stopCamera();
-    setActiveTab('upload');
+    try { const dataUrl=camera.capture(); onChange(dataUrl); setUrlInput(dataUrl); stopCamera(); setActiveTab('upload'); }
+    catch(error) { setCaptureError(error instanceof Error?error.message:'Could not capture a frame.'); }
   };
+  const switchCameraFacing = () => { setCaptureError(''); setCameraFacing(value=>value==='user'?'environment':'user'); setCameraEnabled(true); };
 
-  const switchCameraFacing = () => {
-    const nextFacing = cameraFacing === 'user' ? 'environment' : 'user';
-    setCameraFacing(nextFacing);
-    if (cameraActive) {
-      startCamera(nextFacing);
-    }
-  };
-
-  const handleFile = (file: File) => {
-    if (!file.type.startsWith('image/')) {
-      alert('Please upload an image file (PNG, JPG, WEBP, etc.)');
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const result = e.target?.result as string;
-      if (result) {
-        onChange(result);
-        setUrlInput(result);
-      }
-    };
-    reader.readAsDataURL(file);
+  const handleFile = async (file: File) => {
+    const run=++fileRun.current;
+    if(file.size>10*1024*1024){setCaptureError('Choose an image smaller than 10 MB.');return;}
+    if(!file.type.startsWith('image/')){setCaptureError('Choose an image file (PNG, JPEG, WEBP, etc.).');return;}
+    setCaptureError(''); const objectUrl=URL.createObjectURL(file);
+    try {
+      const image=new Image(); image.src=objectUrl; await image.decode();
+      if(!alive.current || run!==fileRun.current)return;
+      const scale=Math.min(1,1024/Math.max(image.naturalWidth,image.naturalHeight));
+      const canvas=document.createElement('canvas'); canvas.width=Math.max(1,Math.round(image.naturalWidth*scale));canvas.height=Math.max(1,Math.round(image.naturalHeight*scale));
+      const context=canvas.getContext('2d');if(!context)throw new Error('Cannot read this photo.');
+      context.drawImage(image,0,0,canvas.width,canvas.height);
+      const result=canvas.toDataURL(file.type==='image/png'||file.type==='image/svg+xml'?'image/png':'image/jpeg',0.85);
+      changeRef.current(result);setUrlInput(result);
+    }catch{if(alive.current && run===fileRun.current)setCaptureError('The image could not be read. Choose another photo.');}
+    finally{URL.revokeObjectURL(objectUrl);}
   };
 
   // Drag and drop handlers
@@ -312,6 +244,7 @@ export const UniversalPhotoInput: React.FC<UniversalPhotoInputProps> = ({
         className="hidden"
       />
 
+      {captureError && activeTab!=='camera' && <p role="alert" className="text-xs text-amber-300">{captureError}</p>}
       {/* Tab Panels */}
       {activeTab === 'upload' && (
         <div
@@ -341,74 +274,20 @@ export const UniversalPhotoInput: React.FC<UniversalPhotoInputProps> = ({
 
       {activeTab === 'camera' && (
         <div className="bg-slate-950 p-3 rounded-2xl border border-slate-800 space-y-3">
-          {cameraError ? (
-            <div className="p-3 bg-rose-950/60 border border-rose-800 rounded-xl text-rose-300 text-xs flex items-center gap-2">
-              <AlertCircle className="w-4 h-4 shrink-0 text-rose-400" />
-              <span>{cameraError}</span>
-              <button
-                type="button"
-                onClick={() => startCamera()}
-                className="ml-auto px-2.5 py-1 bg-rose-800 hover:bg-rose-700 text-white rounded-lg text-[10px] font-bold cursor-pointer"
-              >
-                Retry
-              </button>
-            </div>
-          ) : (
-            <div className="relative rounded-xl overflow-hidden bg-black aspect-video max-h-56 flex items-center justify-center border border-slate-800">
-              <video
-                ref={videoRef}
-                autoPlay
-                playsInline
-                muted
-                className={`w-full h-full object-cover ${cameraFacing === 'user' ? 'scale-x-[-1]' : ''}`}
-              />
-
-              {!cameraActive && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-900/90 text-slate-400 gap-2 text-xs">
-                  <Camera className="w-6 h-6 animate-pulse text-teal-400" />
-                  <span>Initializing live device camera...</span>
-                </div>
-              )}
-
-              {/* Viewfinder Overlay Lines */}
-              {cameraActive && (
-                <div className="absolute inset-4 pointer-events-none border border-white/20 rounded-lg flex items-center justify-center">
-                  <div className="w-12 h-12 border-2 border-teal-400/60 rounded-full" />
-                </div>
-              )}
-            </div>
-          )}
-
-          {cameraActive && (
-            <div className="flex items-center justify-between gap-2 pt-1">
-              <button
-                type="button"
-                onClick={switchCameraFacing}
-                className="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
-              >
-                <RefreshCw className="w-3.5 h-3.5" />
-                <span>Flip Camera ({cameraFacing === 'user' ? 'Front' : 'Back'})</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={capturePhoto}
-                className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center gap-2 shadow-lg shadow-emerald-600/30 transition cursor-pointer active:scale-95"
-              >
-                <Camera className="w-4 h-4 text-white" />
-                <span>Take Snapshot Photo</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={stopCamera}
-                className="px-2.5 py-1.5 rounded-xl bg-slate-900 hover:bg-rose-950/60 text-slate-400 hover:text-rose-300 border border-slate-800 text-xs transition cursor-pointer"
-                title="Turn off camera"
-              >
-                <VideoOff className="w-3.5 h-3.5" />
-              </button>
-            </div>
-          )}
+          <div className="relative rounded-xl overflow-hidden bg-black aspect-video max-h-64">
+            <video ref={videoRef} aria-label="Live camera preview" data-camera-phase={camera.phase} autoPlay playsInline muted className={`w-full h-full object-contain ${cameraFacing==='user'?'scale-x-[-1]':''}`} />
+            {!cameraActive && <div className="absolute inset-0 flex items-center justify-center p-4 text-center text-xs text-slate-300 bg-slate-900/70" role="status">{camera.phase==='requesting'?'Waiting for camera permission and a live image…':camera.phase==='error'?'Camera is not ready. See the message below.':'Camera is off.'}</div>}
+          </div>
+          {cameraError && <p role="alert" className="rounded-xl border border-amber-800 p-3 text-xs text-amber-300">{cameraError}</p>}
+          <div className="flex flex-wrap gap-2">
+            <button type="button" onClick={startCamera} className="rounded-xl border border-slate-700 px-3 py-2 text-xs">{cameraEnabled?'Retry camera':'Start camera'}</button>
+            <button type="button" onClick={switchCameraFacing} className="rounded-xl border border-slate-700 px-3 py-2 text-xs">Flip Camera ({cameraFacing==='user'?'Front':'Back'})</button>
+            <button type="button" onClick={capturePhoto} disabled={!cameraActive} className="rounded-xl bg-emerald-700 px-4 py-2 text-xs font-bold text-white disabled:opacity-40">Take Snapshot Photo</button>
+            <button type="button" onClick={stopCamera} className="rounded-xl border border-slate-700 px-3 py-2 text-xs" aria-label="Turn off camera">Stop camera</button>
+          </div>
+          <button type="button" onClick={()=>nativeCameraRef.current?.click()} className="text-xs text-teal-300 underline">Use device camera / choose a photo instead</button>
+          <input ref={nativeCameraRef} type="file" accept="image/*" capture={cameraFacing} className="hidden" aria-label="Device camera photo" onChange={event=>{const file=event.target.files?.[0];if(file){handleFile(file);stopCamera();setActiveTab('upload');}}}/>
+          <p className="text-[10px] text-slate-400">Live camera needs HTTPS, browser permission and permission from an embedding host. The app cannot override a host’s camera policy. Captures stay local until you save the entry.</p>
         </div>
       )}
 

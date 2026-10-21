@@ -1,0 +1,45 @@
+{
+  "health": {
+    "status": "ok",
+    "timestamp": "2026-10-20T11:47:22.074Z",
+    "hasApiKey": false,
+    "system": "CODE76 POS Enterprise Server"
+  },
+  "results": [
+    {
+      "name": "merchant catalog",
+      "passed": true,
+      "status": 200,
+      "model": "merchant-catalog-engine",
+      "reply": "Here is the current catalog from TEST Acacia Market:\n\n\u2022 TEST Acacia Coffee \u2014 KES 250.00 (8 in stock)\n\nWhich item interests you? Please confirm availability and terms directly with the business.\nPhone: +254700123456"
+    },
+    {
+      "name": "merchant empty",
+      "passed": true,
+      "status": 200,
+      "model": "merchant-catalog-engine",
+      "reply": "TEST Acacia Market has not added any catalog items yet. Please check back or contact the business for more information.\n\nPhone: +254700123456"
+    },
+    {
+      "name": "merchant no booking promise",
+      "passed": true,
+      "status": 200,
+      "model": "merchant-catalog-engine",
+      "reply": "Please contact TEST Acacia Market to arrange a visit, service or order. This chat does not reserve stock or confirm appointments.\n\nPhone: +254700123456"
+    },
+    {
+      "name": "CODE76 rejects tenant context",
+      "passed": true,
+      "status": 200,
+      "model": "system-grounded-engine",
+      "reply": "Welcome! Our flagship **CODE76 Touch POS Terminal 15.6\"** is currently prioritized with our promotional discount at **$449.25** (normally $599.00), ready for same-day dispatch with 2-year warranty.\n\nTo ensure our team delivers the quote to your exact business setup, what is your shop's location and preferred contact (phone, WhatsApp, or email)? And would you like to see how it pairs with our **UltraSpeed Receipt Printer**?"
+    },
+    {
+      "name": "merchant location",
+      "passed": true,
+      "status": 200,
+      "model": "merchant-catalog-engine",
+      "reply": "TEST Acacia Market\nLocation: TEST Market Road, Nairobi\nPhone: +254700123456"
+    }
+  ]
+}

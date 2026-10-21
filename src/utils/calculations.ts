@@ -100,7 +100,7 @@ export function calculatePaymentsAndDebt(
   changeDue: number;
   isFullyPaid: boolean;
 } {
-  const totalPaid = payments.reduce((acc, curr) => acc + Math.max(0, curr.amount || 0), 0);
+  const totalPaid = payments.reduce((acc,curr)=>acc+(curr.method==='Credit / Debt'?0:Math.max(0,curr.amount||0)),0);
   const diff = netTotal - totalPaid;
 
   const remainingDebt = diff > 0.001 ? Math.round(diff * 100) / 100 : 0;
@@ -147,7 +147,10 @@ export function calculateFinancialHealth(
   for (const s of sales) {
     grossRevenue += s.netTotal;
     for (const item of s.items) {
-      const unitCost = costMap.get(item.product.id) ?? item.product.costPrice ?? 0;
+      // Historical COGS must use the cost recorded on the sale line. Current
+      // replacement cost is only a fallback for legacy lines without one.
+      const recorded = item.product?.costPrice;
+      const unitCost = Number.isFinite(recorded) ? Number(recorded) : (costMap.get(item.product.id) ?? 0);
       cogs += unitCost * item.quantity;
     }
   }

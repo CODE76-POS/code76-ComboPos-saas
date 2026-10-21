@@ -1,6 +1,21 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import { calendarDate } from '../utils/regional.ts';
+import {createDemoWorkspace} from '../data/demoWorkspace.ts';
+import {applyDebtPayment,type DebtPaymentOptions} from '../utils/debt.ts';
+import { TEAM_SERVICES } from '../config/teamServices.ts';
+import { invoiceDraftTotals } from '../utils/invoiceDraft.ts';
+import { hasPlanFeature, planTier, requirePlanFeature, PLAN_TIERS, type Feature } from '../utils/plans.ts';
+import { canonicalDirectoryId, directoryName, snapshotParty, uniqueParties, upsertDirectory, removeDirectory, validateDirectory, type DirectoryCollections } from '../utils/directory.ts';
+import { prepareSalaryPayment } from '../utils/staffing.ts';
+import { serviceUnitLabel } from '../utils/serviceUnits.ts';
+import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import {
   AppSettings,
+  TeamServiceBrief,
+  TeamServiceBriefDraft,
+  PlanTier,
+  SalaryPayment,
+  SalaryPaymentDraft,
+  ReceiptDispatch,
   AuditLog,
   AuthUser,
   CompanyData,
@@ -13,6 +28,7 @@ import {
   ProductItem,
   SaleTransaction,
   UserRole,
+  SettingsSection,
 } from '../types/index.ts';
 import {
   INITIAL_AUDIT_LOGS,
@@ -30,6 +46,13 @@ import {
   INITIAL_TRANSPORTERS,
   INITIAL_VENDORS,
 } from '../data/initialData.ts';
+
+import { mergeAppSettings } from '../utils/businessPageSettings.ts';
+import { EMPTY_BUSINESS_METRICS } from '../config/businessPage.ts';
+import { AppRoute, AppView, parseAppRoute, viewUrl } from '../utils/appRouting.ts';
+import { isCompanyConfigured, readSetupProgress } from '../utils/onboarding.ts';
+import { privilegeValue, type PrivilegeKey } from '../utils/privileges.ts';
+import { DATASET_DEFINITIONS, type DatasetKey } from '../utils/dataDeletion.ts';
 
 interface POSContextType {
   // Data
@@ -53,19 +76,33 @@ interface POSContextType {
   setMarketingTeam: React.Dispatch<React.SetStateAction<PersonRecord[]>>;
   companyMembers: PersonRecord[];
   setCompanyMembers: React.Dispatch<React.SetStateAction<PersonRecord[]>>;
+  teamServiceBriefs: TeamServiceBrief[];
+  saveTeamServiceBrief: (draft:TeamServiceBriefDraft)=>TeamServiceBrief;
+  relatedCompanies: PersonRecord[];
+  salaryPayments: SalaryPayment[];
+  recordSalaryPayment: (draft: SalaryPaymentDraft) => SalaryPayment;
+  setDemoPlan: (tier: PlanTier) => void;
+  hasFeature: (feature: Feature) => boolean;
   reviews: CustomerReview[];
   setReviews: React.Dispatch<React.SetStateAction<CustomerReview[]>>;
+  receiptDispatches: ReceiptDispatch[];
+  /** Records a local receipt hand-off attempt. Never claims server delivery. */
+  recordReceiptDispatch: (draft: Omit<ReceiptDispatch, 'id' | 'sentAt' | 'sentBy'>) => ReceiptDispatch;
+  clearReceiptDispatchLog: () => void;
   auditLogs: AuditLog[];
   landingMetrics: LandingMetrics;
   setLandingMetrics: React.Dispatch<React.SetStateAction<LandingMetrics>>;
   settings: AppSettings;
   setSettings: React.Dispatch<React.SetStateAction<AppSettings>>;
 
+  settingsSection: SettingsSection;
+  setSettingsSection: (section: SettingsSection) => void;
+
   // App & View State
   currentUser: AuthUser | null;
   setCurrentUser: React.Dispatch<React.SetStateAction<AuthUser | null>>;
-  activeView: 'pos' | 'landing' | 'storefront';
-  setActiveView: (view: 'pos' | 'landing' | 'storefront') => void;
+  activeView: AppView;
+  setActiveView: (view: AppView) => void;
   activePlatform: PlatformId;
   setActivePlatform: (p: PlatformId) => void;
   viewportMode: 'desktop' | 'laptop' | 'tablet' | 'phone';
@@ -80,6 +117,9 @@ interface POSContextType {
   setMarketingModalItem: (item: ProductItem | null) => void;
   receiptModalSale: SaleTransaction | null;
   setReceiptModalSale: (sale: SaleTransaction | null) => void;
+  /** Which tab the receipt modal opens on. */
+  receiptModalIntent: 'preview' | 'send' | 'download';
+  setReceiptModalIntent: (intent: 'preview' | 'send' | 'download') => void;
   reviewModalSale: SaleTransaction | null;
   setReviewModalSale: (sale: SaleTransaction | null) => void;
   loginModalOpen: boolean;
@@ -92,11 +132,12 @@ interface POSContextType {
   // Actions
   loadDemoData: () => void;
   wipeDataToCleanState: () => void;
-  wipeSelectedDatabases: (selectedKeys: string[]) => void;
+  /** Deletes only the selected platform datasets and returns their human-readable names. */
+  wipeSelectedDatabases: (selectedKeys: string[]) => string[];
   logAuditAction: (action: string, details: string) => void;
-  hasPrivilege: (permission: keyof AppSettings['privileges'][UserRole]) => boolean;
+  hasPrivilege: (permission: PrivilegeKey) => boolean;
   addSale: (sale: Omit<SaleTransaction, 'id' | 'receiptNo' | 'timestamp'>) => SaleTransaction;
-  settleDebt: (saleId: string, amount: number, method: string) => void;
+  settleDebt: (saleId: string, amount: number, method: string, options?:DebtPaymentOptions) => SaleTransaction;
   addPerson: (category: PersonRecord['category'], person: Omit<PersonRecord, 'id' | 'createdAt'>) => PersonRecord;
   updatePerson: (category: PersonRecord['category'], person: PersonRecord) => void;
   deletePerson: (category: PersonRecord['category'], id: string) => void;
@@ -158,23 +199,67 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [transporters, setTransporters] = useState<PersonRecord[]>(initial?.transporters || []);
   const [marketingTeam, setMarketingTeam] = useState<PersonRecord[]>(initial?.marketingTeam || []);
   const [companyMembers, setCompanyMembers] = useState<PersonRecord[]>(initial?.companyMembers || []);
+  const [teamServiceBriefs,setTeamServiceBriefs]=useState<TeamServiceBrief[]>(initial?.teamServiceBriefs || []);
+  const [relatedCompanies, setRelatedCompanies] = useState<PersonRecord[]>(initial?.relatedCompanies || []);
+  const [salaryPayments, setSalaryPayments] = useState<SalaryPayment[]>(initial?.salaryPayments || []);
   const [reviews, setReviews] = useState<CustomerReview[]>(initial?.reviews || []);
+  const [receiptDispatches, setReceiptDispatches] = useState<ReceiptDispatch[]>(initial?.receiptDispatches || []);
   const [auditLogs, setAuditLogs] = useState<AuditLog[]>(initial?.auditLogs || []);
-  const [landingMetrics, setLandingMetrics] = useState<LandingMetrics>(initial?.landingMetrics || INITIAL_LANDING_METRICS);
-  const [settings, setSettings] = useState<AppSettings>(initial?.settings || INITIAL_SETTINGS);
+  const [landingMetrics, setLandingMetrics] = useState<LandingMetrics>(initial?.landingMetrics || EMPTY_BUSINESS_METRICS);
+  const [settings, setSettings] = useState<AppSettings>(() => mergeAppSettings(INITIAL_SETTINGS, initial?.settings));
+  const directoriesRef = useRef<DirectoryCollections>({ customers, vendors, transporters, marketingTeam, companyMembers, relatedCompanies });
+  directoriesRef.current = { customers, vendors, transporters, marketingTeam, companyMembers, relatedCompanies };
+  const salaryRef = useRef(salaryPayments); salaryRef.current = salaryPayments;
+  const salesRef=useRef(sales);salesRef.current=sales;
+  const hasFeature = (feature: Feature) => hasPlanFeature(planTier(settings), feature);
+  const applyDirectories = (next: DirectoryCollections) => {
+    directoriesRef.current = next;
+    setCustomers(next.customers); setVendors(next.vendors); setTransporters(next.transporters);
+    setMarketingTeam(next.marketingTeam); setCompanyMembers(next.companyMembers); setRelatedCompanies(next.relatedCompanies);
+  };
 
-  // High contrast theme state ('dark' or 'light')
-  const [theme, setTheme] = useState<'dark' | 'light'>(
-    initial?.theme || initial?.settings?.appearance?.theme || 'dark'
-  );
 
-  // Active user: defaults to null on clean load, landing page first
-  const [currentUser, setCurrentUser] = useState<AuthUser | null>(initial?.currentUser || null);
+  // One persisted source of truth for both Settings and the setup assistant.
+  const theme = settings.appearance.theme;
+  const [settingsSection, setSettingsSection] = useState<SettingsSection>('payments');
 
-  const [activeView, setActiveView] = useState<'pos' | 'landing' | 'storefront'>(
-    initial?.activeView || (initial?.currentUser ? 'pos' : 'landing')
-  );
-  const [activePlatform, setActivePlatform] = useState<PlatformId>('selling');
+  // Authentication stays explicit. Saved merchant data is not an authenticated session.
+  const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
+
+  // A small hash router: no hosting rewrite is needed for /#/pos/... links.
+  // The base URL and normal marketing section anchors always select the public site.
+  const [route, setRoute] = useState<AppRoute>(() => parseAppRoute(typeof window === 'undefined' ? '' : window.location.hash));
+  const routeRef = useRef(route);
+  const activeView = route.view;
+  const activePlatform = route.platform;
+  const navigate = useCallback((nextRoute: AppRoute) => {
+    routeRef.current = nextRoute;
+    setRoute(nextRoute);
+    if (typeof window !== 'undefined') {
+      const next = viewUrl(nextRoute.view, window.location.href, nextRoute.platform);
+      if (next !== window.location.href) window.history.pushState({ route: nextRoute }, '', next);
+      window.scrollTo({ top: 0 });
+    }
+  }, []);
+  const setActiveView = useCallback((view: AppView) => {
+    navigate({ view, platform: view === 'pos' ? routeRef.current.platform : 'selling' });
+  }, [navigate]);
+  const setActivePlatform = useCallback((platform: PlatformId) => {
+    navigate({ view: 'pos', platform });
+  }, [navigate]);
+  useEffect(() => {
+    const readRoute = () => {
+      const next = parseAppRoute(window.location.hash);
+      routeRef.current = next;
+      setRoute(next);
+    };
+    window.addEventListener('popstate', readRoute);
+    window.addEventListener('hashchange', readRoute);
+    return () => {
+      window.removeEventListener('popstate', readRoute);
+      window.removeEventListener('hashchange', readRoute);
+    };
+  }, []);
   const [viewportMode, setViewportMode] = useState<'desktop' | 'laptop' | 'tablet' | 'phone'>('desktop');
 
   // Modals
@@ -182,6 +267,7 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [hoverHelpPlatform, setHoverHelpPlatform] = useState<PlatformId | null>(null);
   const [marketingModalItem, setMarketingModalItem] = useState<ProductItem | null>(null);
   const [receiptModalSale, setReceiptModalSale] = useState<SaleTransaction | null>(null);
+  const [receiptModalIntent, setReceiptModalIntent] = useState<'preview' | 'send' | 'download'>('preview');
   const [reviewModalSale, setReviewModalSale] = useState<SaleTransaction | null>(null);
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [hasDismissedCompanyQA, setHasDismissedCompanyQA] = useState<boolean>(() => {
@@ -196,10 +282,8 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // Trigger company Q&A modal if company data is missing or not entered by merchant
   useEffect(() => {
     if (currentUser && activeView === 'pos' && !hasDismissedCompanyQA) {
-      const isMissingCompanyData =
-        !company.isConfiguredByMerchant &&
-        (!company.name || company.name === 'CODE76 ENTERPRISE SOLUTIONS' || !company.address || !company.tel1);
-      if (isMissingCompanyData) {
+      const needsSetup = !isCompanyConfigured(company) || readSetupProgress()?.status === 'in_progress';
+      if (needsSetup) {
         const timer = setTimeout(() => {
           setCompanyQAModalOpen(true);
         }, 700);
@@ -222,7 +306,11 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         transporters,
         marketingTeam,
         companyMembers,
+        relatedCompanies,
+        salaryPayments,
+        teamServiceBriefs,
         reviews,
+        receiptDispatches: receiptDispatches.slice(0, 500),
         auditLogs,
         landingMetrics,
         settings,
@@ -242,7 +330,11 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     transporters,
     marketingTeam,
     companyMembers,
+    relatedCompanies,
+    salaryPayments,
+    teamServiceBriefs,
     reviews,
+    receiptDispatches,
     auditLogs,
     landingMetrics,
     settings,
@@ -263,59 +355,49 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setAuditLogs((prev) => [newLog, ...prev]);
   };
 
-  // Check RBAC privileges
-  const hasPrivilege = (permission: keyof AppSettings['privileges'][UserRole]): boolean => {
+  // Check RBAC privileges. Administrators keep every right; missing newer
+  // controls fall back to their documented legacy permission.
+  const hasPrivilege = (permission: PrivilegeKey): boolean => {
     if (!currentUser) return false;
+    const feature: Partial<Record<PrivilegeKey, Feature>> = {
+      canSell:'selling', canSendReceipts:'receipts', canSettleDebt:'debts',
+      canViewInventory:'inventory', canEditInventory:'inventory', canAdjustStock:'inventory',
+      canViewExpenses:'expenses', canEditExpenses:'expenses', canViewInvoices:'invoices',
+      canViewAnalytics:'analytics', canManagePeople:'directory', canManageSchedules:'payroll',
+      canExportPdf:'data_export', canImportCsv:'imports', canViewAuditLogs:'audit',
+      canModifySettings:'appearance', canEditLandingPage:'business_landing',
+      canManageChatbot:'chatbot', canDeleteData:'delete_data',
+    };
+    if (feature[permission] && !hasFeature(feature[permission]!)) return false;
     if (currentUser.isAdmin) return true;
     const role1 = currentUser.roles[0];
     const role2 = currentUser.roles[1];
-
-    if (permission === 'canAdjustStock') {
-      const p1 = settings.privileges[role1]?.canAdjustStock ?? settings.privileges[role1]?.canEditInventory ?? false;
-      const p2 = role2 ? (settings.privileges[role2]?.canAdjustStock ?? settings.privileges[role2]?.canEditInventory ?? false) : false;
-      return p1 || p2;
-    }
-
-    const priv1 = settings.privileges[role1]?.[permission] ?? false;
-    const priv2 = role2 ? settings.privileges[role2]?.[permission] ?? false : false;
-
-    return priv1 || priv2;
+    return privilegeValue(settings.privileges[role1], permission) || (role2 ? privilegeValue(settings.privileges[role2], permission) : false);
   };
 
-  // Load Demo Data
-  const loadDemoData = () => {
-    setCompany(INITIAL_COMPANY);
-    setProducts(INITIAL_PRODUCTS);
-    setSales(INITIAL_SALES);
-    setExpenses(INITIAL_EXPENSES);
-    setInvoices(INITIAL_INVOICES);
-    setCustomers(INITIAL_CUSTOMERS);
-    setVendors(INITIAL_VENDORS);
-    setTransporters(INITIAL_TRANSPORTERS);
-    setMarketingTeam(INITIAL_MARKETING_TEAM);
-    setCompanyMembers(INITIAL_COMPANY_MEMBERS);
-    setReviews(INITIAL_REVIEWS);
-    setAuditLogs(INITIAL_AUDIT_LOGS);
-    setLandingMetrics(INITIAL_LANDING_METRICS);
-    setSettings(INITIAL_SETTINGS);
-
-    if (!currentUser) {
-      setCurrentUser({
-        id: 'user-demo-admin',
-        email: 'code76pos@gmail.com',
-        name: 'CODE76 Developer Admin',
-        roles: ['Developer', 'Manager'],
-        avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80',
-        isAdmin: true,
-      });
-    }
-
-    logAuditAction('Loaded Demo Data', 'Populated rich system demo data across all platforms.');
+  // Opt-in administrator confirmation occurs in DemoWarningModal.
+  const loadDemoData=()=>{
+    if(!currentUser?.isAdmin)throw new Error('Only an administrator can replace business records with demo data.');
+    const demo=createDemoWorkspace(settings);
+    setCompany(demo.company);setProducts(demo.products);setSales(demo.sales);salesRef.current=demo.sales;
+    setExpenses(demo.expenses);setInvoices(demo.invoices);applyDirectories(demo.directories);
+    setSalaryPayments(demo.salaryPayments);salaryRef.current=demo.salaryPayments;
+    setReviews(demo.reviews);setLandingMetrics(demo.landingMetrics);setTeamServiceBriefs([]);
+    setAuditLogs(previous=>[...demo.auditLogs,...previous]);
+    setSettings(previous=>({...previous,landingPage:{...previous.landingPage,heroTitle:demo.company.name,heroSubtitle:'DEMO ONLY — synthetic inventory, contacts and feedback. No real orders or results are represented.',referralBonusText:'',showPromoCountdown:false},receipts:{...previous.receipts,headerTitle:demo.company.name,footerNotice:'DEMO ONLY — no actual payment or purchase.',returnPolicy:'Training record only; not a real returns or warranty policy.'}}));
+    setHasDismissedCompanyQA(true);setCompanyQAModalOpen(false);setMarketingModalItem(null);setReceiptModalSale(null);setReviewModalSale(null);
+    logAuditAction('Loaded Synthetic Demo Workspace','Administrator-confirmed replacement with fictional training records; tier/preferences retained; no real funds, emails or endorsements created.');
     setDemoWarningOpen(false);
   };
 
   // Clear to blank
   const wipeDataToCleanState = () => {
+    if (!currentUser) throw new Error('Sign in before deleting business data.');
+    if (!currentUser.isAdmin && !hasPrivilege('canDeleteData')) throw new Error('This role cannot delete business data. Ask an administrator.');
+    setCompany(previous=>previous.isDemo?{...previous,isDemo:false,isConfiguredByMerchant:false,name:'',slogan:'',logoUrl:''}:previous);
+    setTeamServiceBriefs([]);
+    setRelatedCompanies([]); setSalaryPayments([]); salaryRef.current = [];
+    directoriesRef.current = { customers: [], vendors: [], transporters: [], marketingTeam: [], companyMembers: [], relatedCompanies: [] };
     setProducts([]);
     setSales([]);
     setExpenses([]);
@@ -326,74 +408,89 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setMarketingTeam([]);
     setCompanyMembers([]);
     setReviews([]);
-    logAuditAction('Wiped System Data', 'Reset all platforms to empty state.');
+    setRelatedCompanies([]);
+    setReceiptDispatches([]);
+    setLandingMetrics(EMPTY_BUSINESS_METRICS);
+    logAuditAction('Wiped System Data', 'Reset all platform records to an empty state. Account, plan, display preferences and audit history were retained.');
     setDemoWarningOpen(false);
   };
 
   // Modular Selective Platform Database Wipe
-  const wipeSelectedDatabases = (selectedKeys: string[]) => {
+  const wipeSelectedDatabases = (selectedKeys: string[]): string[] => {
+    if (!currentUser) throw new Error('Sign in before deleting platform data.');
+    if (!currentUser.isAdmin && !hasPrivilege('canDeleteData')) throw new Error('This role cannot delete platform data. Ask an administrator.');
     if (selectedKeys.includes('all')) {
       wipeDataToCleanState();
-      return;
+      return DATASET_DEFINITIONS.map(definition => definition.label);
     }
+    const requested = new Set(selectedKeys as DatasetKey[]);
     const wipedNames: string[] = [];
-    if (selectedKeys.includes('products')) {
-      setProducts([]);
-      wipedNames.push('Inventory & Products');
+    const wipe = (key: DatasetKey, apply: () => void, name: string) => {
+      if (!requested.has(key)) return;
+      apply();
+      wipedNames.push(name);
+    };
+
+    wipe('products', () => setProducts([]), 'Inventory & services');
+    wipe('sales', () => setSales([]), 'Sales & receipts');
+    wipe('invoices', () => setInvoices([]), 'Invoices');
+    wipe('expenses', () => setExpenses([]), 'Expenses');
+    wipe('customers', () => setCustomers([]), 'Customers');
+    wipe('vendors', () => setVendors([]), 'Vendors & suppliers');
+    wipe('transporters', () => setTransporters([]), 'Transporters');
+    wipe('marketingTeam', () => setMarketingTeam([]), 'Marketing team');
+    wipe('companyMembers', () => setCompanyMembers([]), 'Company members');
+    wipe('relatedCompanies', () => setRelatedCompanies([]), 'Related companies & branches');
+    wipe('salaryPayments', () => { setSalaryPayments([]); salaryRef.current = []; }, 'Salary payments');
+    wipe('reviews', () => setReviews([]), 'Customer reviews');
+    wipe('landingMetrics', () => setLandingMetrics(EMPTY_BUSINESS_METRICS), 'Landing page metrics');
+    wipe('teamServiceBriefs', () => setTeamServiceBriefs([]), 'CODE76 service briefs');
+    wipe('auditLogs', () => setAuditLogs([]), 'Audit & access logs');
+    wipe('settings', () => setSettings(previous => mergeAppSettings(INITIAL_SETTINGS, { planTier: previous.planTier, regional: previous.regional })), 'System settings');
+
+    if (requested.has('customers') || requested.has('vendors') || requested.has('transporters') || requested.has('marketingTeam') || requested.has('companyMembers') || requested.has('relatedCompanies')) {
+      directoriesRef.current = {
+        customers: requested.has('customers') ? [] : directoriesRef.current.customers,
+        vendors: requested.has('vendors') ? [] : directoriesRef.current.vendors,
+        transporters: requested.has('transporters') ? [] : directoriesRef.current.transporters,
+        marketingTeam: requested.has('marketingTeam') ? [] : directoriesRef.current.marketingTeam,
+        companyMembers: requested.has('companyMembers') ? [] : directoriesRef.current.companyMembers,
+        relatedCompanies: requested.has('relatedCompanies') ? [] : directoriesRef.current.relatedCompanies,
+      };
     }
-    if (selectedKeys.includes('sales')) {
-      setSales([]);
-      wipedNames.push('Sales History');
-    }
-    if (selectedKeys.includes('invoices')) {
-      setInvoices([]);
-      wipedNames.push('Invoices');
-    }
-    if (selectedKeys.includes('expenses')) {
-      setExpenses([]);
-      wipedNames.push('Expenses');
-    }
-    if (selectedKeys.includes('customers')) {
-      setCustomers([]);
-      wipedNames.push('Customers Directory');
-    }
-    if (selectedKeys.includes('vendors')) {
-      setVendors([]);
-      wipedNames.push('Vendors');
-    }
-    if (selectedKeys.includes('transporters')) {
-      setTransporters([]);
-      wipedNames.push('Transporters');
-    }
-    if (selectedKeys.includes('marketingTeam')) {
-      setMarketingTeam([]);
-      wipedNames.push('Marketing Team');
-    }
-    if (selectedKeys.includes('companyMembers')) {
-      setCompanyMembers([]);
-      wipedNames.push('Company Members');
-    }
-    if (selectedKeys.includes('reviews')) {
-      setReviews([]);
-      wipedNames.push('Customer Reviews');
-    }
-    if (selectedKeys.includes('auditLogs')) {
-      setAuditLogs([]);
-      wipedNames.push('Audit Logs');
-    }
-    if (selectedKeys.includes('settings')) {
-      setSettings(INITIAL_SETTINGS);
-      wipedNames.push('System Settings');
-    }
+    if (requested.has('companyMembers')) { setSalaryPayments(previous => previous); }
+
     logAuditAction(
       'Selective Platform Wipe',
-      `Selectively wiped ${wipedNames.length} databases: ${wipedNames.join(', ')}`
+      `Selectively deleted ${wipedNames.length} platform database(s): ${wipedNames.join(', ')}. Account, plan and untouched platforms were retained.`
     );
     setDemoWarningOpen(false);
+    return wipedNames;
   };
+
+  // Local receipt hand-off log. Linking to an external mail/WhatsApp client is
+  // recorded as an opened share sheet, never as confirmed server delivery.
+  const recordReceiptDispatch = (draft: Omit<ReceiptDispatch, 'id' | 'sentAt' | 'sentBy'>): ReceiptDispatch => {
+    const record: ReceiptDispatch = {
+      ...draft,
+      id: `receipt-log-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+      sentAt: new Date().toISOString(),
+      sentBy: currentUser?.name || 'Workspace user',
+    };
+    setReceiptDispatches(previous => [record, ...previous].slice(0, 500));
+    logAuditAction(
+      'Receipt shared',
+      `${record.channel} receipt ${record.receiptNo} for ${record.recipient || 'no recipient'} (${record.format.toUpperCase()}). No server delivery is claimed.`
+    );
+    return record;
+  };
+  const clearReceiptDispatchLog = () => setReceiptDispatches([]);
 
   // Add Sale
   const addSale = (saleData: Omit<SaleTransaction, 'id' | 'receiptNo' | 'timestamp'>): SaleTransaction => {
+    requirePlanFeature(settings, 'selling');
+    if(saleData.referredBy&&!hasFeature('referrals'))throw new Error('Referral attribution is not included in this plan.');
+    if (!hasFeature('debts') && (saleData.debtAmount > 0 || saleData.amountPaid + 0.001 < saleData.netTotal || saleData.payments.some(p => p.method === 'Credit / Debt'))) throw new Error('The Free plan requires full payment and cannot create debt.');
     const seq = sales.length + 7601;
     const receiptNo = `REC-${seq}`;
     const newSale: SaleTransaction = {
@@ -457,134 +554,73 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return newSale;
   };
 
-  // Settle Debt
-  const settleDebt = (saleId: string, amount: number, method: string) => {
-    setSales((prev) =>
-      prev.map((sale) => {
-        if (sale.id !== saleId) return sale;
-        const newPaid = sale.amountPaid + amount;
-        const remainingDebt = Math.max(0, sale.netTotal - newPaid);
-        const status = remainingDebt <= 0 ? 'completed' : 'debt_partial';
-        return {
-          ...sale,
-          amountPaid: newPaid,
-          debtAmount: remainingDebt,
-          status,
-          debtSettledDate: remainingDebt <= 0 ? new Date().toISOString() : undefined,
-          payments: [...sale.payments, { method: method as any, amount }],
-        };
-      })
-    );
-    logAuditAction('Debt Settled', `Received debt payment of $${amount} for Sale ID: ${saleId} via ${method}`);
+  // Record an already-received payment, never a new sale or money transfer.
+  const settleDebt=(saleId:string,amount:number,method:string,options:DebtPaymentOptions={}):SaleTransaction=>{
+    requirePlanFeature(settings,'debts');
+    if(!hasPrivilege('canSell')&&!hasPrivilege('canViewInvoices'))throw new Error('Recording debt collections requires Sales or Invoices role permission.');
+    const original=salesRef.current.find(sale=>sale.id===saleId);if(!original)throw new Error('The original sale no longer exists.');
+    const linked=invoices.find(invoice=>invoice.type==='sales'&&(invoice.id===original.invoiceId||invoice.saleId===saleId));
+    if(linked&&(Math.abs(linked.total-original.netTotal)>0.01||Math.abs(linked.amountPaid-original.amountPaid)>0.01))throw new Error('The linked invoice and sale balances disagree. Review the original records before collecting another payment.');
+    const result=applyDebtPayment(original,amount,method,{...options,recordedBy:currentUser?.name||'User'});
+    if(result.duplicate)return result.sale;
+    salesRef.current=salesRef.current.map(sale=>sale.id===saleId?result.sale:sale);setSales(salesRef.current);
+    setInvoices(previous=>previous.map(invoice=>invoice.type==='sales'&&(invoice.id===original.invoiceId||invoice.saleId===saleId)?{...invoice,amountPaid:result.sale.amountPaid,status:result.sale.debtAmount===0?'paid':invoice.dueDate<calendarDate(new Date(),settings)?'overdue':'pending'}:invoice));
+    logAuditAction('Recorded Debt Payment',`Recorded ${result.payment.amount} ${company.currency} for ${original.receiptNo}; remaining ${result.sale.debtAmount}. Bookkeeping only; no transfer initiated.`);
+    return result.sale;
   };
 
-  // Add Person with Auto-Sync for Transporter & Marketer
-  const addPerson = (
-    category: PersonRecord['category'],
-    personData: Omit<PersonRecord, 'id' | 'createdAt'>
-  ): PersonRecord => {
-    const id = `${category.slice(0, 4)}-${Date.now()}`;
-    const newPerson: PersonRecord = {
-      ...personData,
-      id,
-      category,
-      createdAt: new Date().toISOString(),
-      referralCount: personData.referralCount || 0,
-      totalReferralVolume: personData.totalReferralVolume || 0,
-    };
-
-    switch (category) {
-      case 'customer':
-        setCustomers((prev) => [newPerson, ...prev]);
-        break;
-      case 'vendor':
-        setVendors((prev) => [newPerson, ...prev]);
-        break;
-      case 'transporter':
-        setTransporters((prev) => [newPerson, ...prev]);
-        break;
-      case 'marketer':
-        setMarketingTeam((prev) => [newPerson, ...prev]);
-        break;
-      case 'company_member': {
-        setCompanyMembers((prev) => [newPerson, ...prev]);
-
-        // AUTO-SYNC REQUIREMENTS:
-        // "if the user has one of their role Transporter/Driver then as their info is added to company member database
-        // let it be added to the transporter database, do the same for marketor."
-        const roles = newPerson.roles || ['Other', 'Other'];
-        const isTransporter = roles.includes('Transporter/Driver');
-        const isMarketer = roles.includes('Marketor');
-
-        if (isTransporter) {
-          const syncedTransporter: PersonRecord = {
-            ...newPerson,
-            id: `trans-sync-${id}`,
-            category: 'transporter',
-            notes: `Auto-synced from Company Member: ${newPerson.firstName} ${newPerson.secondName}`,
-          };
-          setTransporters((prev) => [syncedTransporter, ...prev]);
-        }
-
-        if (isMarketer) {
-          const syncedMarketer: PersonRecord = {
-            ...newPerson,
-            id: `mkt-sync-${id}`,
-            category: 'marketer',
-            notes: `Auto-synced from Company Member: ${newPerson.firstName} ${newPerson.secondName}`,
-          };
-          setMarketingTeam((prev) => [syncedMarketer, ...prev]);
-        }
-        break;
-      }
-    }
-
-    logAuditAction('Added Person', `Added ${category}: ${newPerson.firstName} ${newPerson.secondName}`);
-    return newPerson;
+  // Stable identities project into selected directories; historical snapshots remain immutable.
+  const addPerson = (category: PersonRecord['category'], personData: Omit<PersonRecord, 'id' | 'createdAt'>): PersonRecord => {
+    requirePlanFeature(settings, 'directory');
+    if (!hasPrivilege('canManagePeople')) throw new Error('Directory changes require Manage People permission.');
+    const person: PersonRecord = { ...personData, id: `party-${crypto.randomUUID()}`, category, sourceCategory: category, createdAt: new Date().toISOString() };
+    validateDirectory(person, directoriesRef.current.relatedCompanies);
+    applyDirectories(upsertDirectory(directoriesRef.current, person));
+    logAuditAction('Added Person', `Added ${category}: ${directoryName(person)}`);
+    return person;
   };
-
   const updatePerson = (category: PersonRecord['category'], person: PersonRecord) => {
-    const updater = (list: PersonRecord[]) => list.map((p) => (p.id === person.id ? person : p));
-    switch (category) {
-      case 'customer':
-        setCustomers(updater);
-        break;
-      case 'vendor':
-        setVendors(updater);
-        break;
-      case 'transporter':
-        setTransporters(updater);
-        break;
-      case 'marketer':
-        setMarketingTeam(updater);
-        break;
-      case 'company_member':
-        setCompanyMembers(updater);
-        break;
-    }
-    logAuditAction('Updated Person', `Updated ${category}: ${person.firstName} ${person.secondName}`);
+    requirePlanFeature(settings, 'directory');
+    if (!hasPrivilege('canManagePeople')) throw new Error('Directory changes require Manage People permission.');
+    validateDirectory(person, directoriesRef.current.relatedCompanies);
+    applyDirectories(upsertDirectory(directoriesRef.current, person));
+    logAuditAction('Updated Person', `Updated linked identity ${canonicalDirectoryId(person.id)}: ${directoryName(person)}`);
   };
-
-  const deletePerson = (category: PersonRecord['category'], id: string) => {
-    const filterer = (list: PersonRecord[]) => list.filter((p) => p.id !== id);
-    switch (category) {
-      case 'customer':
-        setCustomers(filterer);
-        break;
-      case 'vendor':
-        setVendors(filterer);
-        break;
-      case 'transporter':
-        setTransporters(filterer);
-        break;
-      case 'marketer':
-        setMarketingTeam(filterer);
-        break;
-      case 'company_member':
-        setCompanyMembers(filterer);
-        break;
-    }
-    logAuditAction('Deleted Person', `Deleted record ID ${id} from ${category}`);
+  const deletePerson = (_category: PersonRecord['category'], id: string) => {
+    requirePlanFeature(settings, 'directory');
+    if (!hasPrivilege('canManagePeople')) throw new Error('Directory deletion requires Manage People permission.');
+    applyDirectories(removeDirectory(directoriesRef.current, id));
+    logAuditAction('Deleted Person', `Removed linked identity ${canonicalDirectoryId(id)} from directories; historical transactions/payments retained`);
+  };
+  const recordSalaryPayment = (draft: SalaryPaymentDraft): SalaryPayment => {
+    requirePlanFeature(settings, 'payroll');
+    if (!hasPrivilege('canManagePeople')) throw new Error('Salary recording requires Manage People permission.');
+    const previous = salaryRef.current.find(p => p.id === draft.id); if (previous) return previous;
+    const member = directoriesRef.current.companyMembers.find(p => canonicalDirectoryId(p.id) === canonicalDirectoryId(draft.memberId));
+    if (!member) throw new Error('Select an existing individual company member.');
+    if (draft.recordExpense && !hasPrivilege('canEditExpenses')) throw new Error('Posting an expense also requires Edit Expenses permission.');
+    const result = prepareSalaryPayment(draft, member, company.currency || settings.payments.defaultCurrency, currentUser?.name || 'User');
+    salaryRef.current = [result.payment, ...salaryRef.current]; setSalaryPayments(salaryRef.current);
+    if (result.expense) setExpenses(previous => previous.some(e => e.id === result.expense!.id) ? previous : [result.expense!, ...previous]);
+    logAuditAction('Recorded Salary Payment', `Recorded ${result.payment.amount} ${result.payment.currency} for ${result.payment.memberName}${result.expense ? ' with one linked salary expense' : ' without posting an expense'}`);
+    return result.payment;
+  };
+  const saveTeamServiceBrief=(draft:TeamServiceBriefDraft):TeamServiceBrief=>{
+    requirePlanFeature(settings,'team_services');
+    if(!currentUser?.isAdmin&&!hasPrivilege('canModifySettings'))throw new Error('Preparing team briefs requires workspace-administration permission.');
+    if(!TEAM_SERVICES.some(service=>service.id===draft.serviceId)||!draft.businessName.trim()||!draft.goal.trim()||!draft.authorized)throw new Error('Select a service, enter a business/goal and confirm authorization.');
+    if(draft.website){const website=new URL(draft.website);if(!['http:','https:'].includes(website.protocol)||website.username||website.password)throw new Error('Use a normal HTTP(S) business URL without credentials.');}
+    if(draft.businessName.length>160||draft.goal.length>2000||draft.scope.length>2500||draft.contact.length>300)throw new Error('Keep the brief within the displayed field limits.');
+    const brief:TeamServiceBrief={...draft,id:`service-${crypto.randomUUID()}`,createdAt:new Date().toISOString(),createdBy:currentUser?.name||'User',status:'local_draft'};
+    setTeamServiceBriefs(previous=>[brief,...previous]);
+    logAuditAction('Saved Local Team-Service Brief',`Saved ${draft.serviceId} draft only; no team delivery, ads, lead contacts or security testing initiated`);
+    return brief;
+  };
+  const setDemoPlan = (tier: PlanTier) => {
+    if (!currentUser?.isAdmin || !PLAN_TIERS.includes(tier)) throw new Error('Only an administrator can select a valid demo plan.');
+    setSettings(previous => ({ ...previous, planTier: tier }));
+    setMarketingModalItem(null); setReviewModalSale(null);
+    logAuditAction('Changed Demo Plan', `Selected ${tier}; no charge or real subscription created; existing data retained`);
   };
 
   // Products
@@ -611,15 +647,23 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // Expenses
   const addExpense = (expense: Omit<ExpenseItem, 'id'>) => {
+    requirePlanFeature(settings, 'expenses');
+    if (!hasPrivilege('canEditExpenses')) throw new Error('Expense changes require Edit Expenses permission.');
+    const party = expense.relatedCompanyId ? uniqueParties(Object.values(directoriesRef.current)).find(p => canonicalDirectoryId(p.id) === canonicalDirectoryId(expense.relatedCompanyId!)) : undefined;
+    if (expense.relatedCompanyId && !party) throw new Error('The selected company/contact no longer exists. Select it again.');
+    const partySnapshot = party ? snapshotParty(party, directoriesRef.current.relatedCompanies) : undefined;
     const newExp: ExpenseItem = {
       ...expense,
-      id: `exp-${Date.now()}`,
+      partySnapshot, vendorName: partySnapshot?.name || expense.vendorName,
+      id: `exp-${crypto.randomUUID()}`,
     };
     setExpenses((prev) => [newExp, ...prev]);
     logAuditAction('Added Expense', `Logged expense: ${expense.title} - $${expense.amount}`);
   };
 
   const deleteExpense = (id: string) => {
+    requirePlanFeature(settings, 'expenses');
+    if (!hasPrivilege('canEditExpenses')) throw new Error('Expense changes require Edit Expenses permission.');
     const item = expenses.find((e) => e.id === id);
     setExpenses((prev) => prev.filter((e) => e.id !== id));
     logAuditAction('Deleted Expense', `Removed expense: ${item?.title || id}`);
@@ -627,18 +671,9 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // Theme toggle
   const toggleTheme = () => {
-    setTheme((prev) => {
-      const next = prev === 'dark' ? 'light' : 'dark';
-      setSettings((s) => ({
-        ...s,
-        appearance: {
-          ...s.appearance,
-          theme: next,
-        },
-      }));
-      logAuditAction('Theme Toggled', `Switched theme high-contrast mode to ${next.toUpperCase()}`);
-      return next;
-    });
+    const next = theme === 'dark' ? 'light' : 'dark';
+    setSettings(previous => ({ ...previous, appearance: { ...previous.appearance, theme: next } }));
+    logAuditAction('Theme Toggled', `Switched POS theme to ${next.toUpperCase()}`);
   };
 
   // Adjust product stock with audit logging
@@ -673,6 +708,7 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     dueDate: string,
     notes?: string
   ): InvoiceItem => {
+    requirePlanFeature(settings, 'invoices');
     const invoiceNo = `INV-${Date.now().toString().slice(-6)}`;
     const newInvId = `inv-${Date.now()}`;
     const invoice: InvoiceItem = {
@@ -684,7 +720,7 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       date: new Date().toISOString().split('T')[0],
       dueDate: dueDate || new Date(Date.now() + 14 * 86400000).toISOString().split('T')[0],
       items: items.map((i) => ({
-        description: i.product.name,
+        description: i.product.type === 'service' && i.product.serviceUnit ? `${i.product.name} (${serviceUnitLabel(i.product)})` : i.product.name,
         quantity: i.quantity,
         unitPrice: i.unitPrice,
         total: i.total,
@@ -755,6 +791,13 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // Invoices (with automatic stock invoice & sales invoice synchronization)
   const addInvoice = (invoice: Omit<InvoiceItem, 'id'>) => {
+    requirePlanFeature(settings, 'invoices');
+    invoice={...invoice,...invoiceDraftTotals(invoice.items,invoice.tax,invoice.amountPaid)};
+    if(invoices.some(existing=>existing.type===invoice.type && existing.invoiceNo===invoice.invoiceNo && existing.partyName===invoice.partyName)) throw new Error('This invoice number is already recorded for this party.');
+    if(invoice.type==='stock_purchase' && invoice.items.some(item=>!Number.isSafeInteger(item.quantity) || products.some(product=>product.type==='service' && product.name.toLowerCase().trim()===item.description.toLowerCase().trim()))) throw new Error('Stock purchase invoices require whole physical-product quantities; record service purchases as expenses.');
+    const party = invoice.relatedCompanyId ? uniqueParties(Object.values(directoriesRef.current)).find(p => canonicalDirectoryId(p.id) === canonicalDirectoryId(invoice.relatedCompanyId!)) : undefined;
+    if (invoice.relatedCompanyId && !party) throw new Error('The selected company/contact no longer exists. Select it again.');
+    invoice = { ...invoice, partySnapshot: party ? snapshotParty(party, directoriesRef.current.relatedCompanies) : undefined, partyName: party ? directoryName(party) : invoice.partyName };
     const newInvId = `inv-${Date.now()}`;
     const newInv: InvoiceItem = {
       ...invoice,
@@ -785,7 +828,7 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
               category: 'Hardware',
               type: 'product',
               costPrice: item.unitPrice,
-              sellingPrice: item.unitPrice > 0 ? Number((item.unitPrice * 1.35).toFixed(2)) : 50,
+              sellingPrice: item.unitPrice > 0 ? Number((item.unitPrice * 1.35).toFixed(2)) : 0,
               stock: item.quantity,
               minStockAlert: 5,
               description: `Restocked via purchase invoice ${invoice.invoiceNo} from ${invoice.partyName}`,
@@ -893,11 +936,13 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const updateInvoice = (invoice: InvoiceItem) => {
+    requirePlanFeature(settings, 'invoices');
     setInvoices((prev) => prev.map((i) => (i.id === invoice.id ? invoice : i)));
     logAuditAction('Updated Invoice', `Updated invoice ${invoice.invoiceNo}`);
   };
 
   const deleteInvoice = (id: string) => {
+    requirePlanFeature(settings, 'invoices');
     setInvoices((prev) => prev.filter((i) => i.id !== id));
     logAuditAction('Deleted Invoice', `Removed invoice record ID: ${id}`);
   };
@@ -1038,6 +1083,13 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const logoutUser = () => {
     logAuditAction('User Logged Out', `User ${currentUser?.email} signed out`);
     setCurrentUser(null);
+    setCompanyQAModalOpen(false);
+    setDemoWarningOpen(false);
+    setHoverHelpPlatform(null);
+    setMarketingModalItem(null);
+    setReceiptModalSale(null);
+    setReviewModalSale(null);
+    setLoginModalOpen(false);
     setActiveView('landing');
   };
 
@@ -1064,13 +1116,25 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setMarketingTeam,
         companyMembers,
         setCompanyMembers,
+        relatedCompanies,
+        salaryPayments,
+        teamServiceBriefs,
+        saveTeamServiceBrief,
+        recordSalaryPayment,
+        setDemoPlan,
+        hasFeature,
         reviews,
         setReviews,
+        receiptDispatches,
+        recordReceiptDispatch,
+        clearReceiptDispatchLog,
         auditLogs,
         landingMetrics,
         setLandingMetrics,
         settings,
         setSettings,
+        settingsSection,
+        setSettingsSection,
         currentUser,
         setCurrentUser,
         activeView,
@@ -1087,6 +1151,8 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setMarketingModalItem,
         receiptModalSale,
         setReceiptModalSale,
+        receiptModalIntent,
+        setReceiptModalIntent,
         reviewModalSale,
         setReviewModalSale,
         loginModalOpen,

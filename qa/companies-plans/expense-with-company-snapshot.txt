@@ -1,0 +1,138 @@
+### Page
+- Page URL: http://127.0.0.1:5173/#/pos/expenses
+- Page Title: CODE76 POS — Private Workspace
+### Snapshot
+```yaml
+- generic [ref=e4]:
+  - banner [ref=e679]:
+    - generic [ref=e680]:
+      - button "76 CODE76 POS Enterprise Product & Service SaaS ERP System" [ref=e682] [cursor=pointer]:
+        - generic [ref=e683]: "76"
+        - generic [ref=e684]:
+          - generic [ref=e685]:
+            - generic [ref=e686]: CODE76 POS
+            - generic [ref=e687]: Enterprise
+          - paragraph [ref=e688]: Product & Service SaaS ERP System
+      - generic [ref=e689]:
+        - generic [ref=e690]:
+          - button "Desktop View (Full Width)" [ref=e691] [cursor=pointer]
+          - button "Laptop View (1024px)" [ref=e694] [cursor=pointer]
+          - button "Tablet View (768px)" [ref=e697] [cursor=pointer]
+          - button "Phone Mobile View (390px)" [ref=e700] [cursor=pointer]
+        - generic [ref=e703]:
+          - button "Demo Data" [ref=e704] [cursor=pointer]
+          - button "Business Page" [ref=e1405] [cursor=pointer]
+          - button "Click to view help guide and settings for this platform" [ref=e710] [cursor=pointer]
+          - button "Active user session and access controls" [ref=e715] [cursor=pointer]:
+            - generic [ref=e716]: DR
+            - generic [ref=e717]:
+              - generic [ref=e718]: Dr. David Kimani
+              - generic [ref=e719]: "Role: CEO"
+    - generic [ref=e720]:
+      - generic [ref=e721]:
+        - generic [ref=e725]: App link
+        - generic [ref=e726]:
+          - generic [ref=e727]:
+            - generic [ref=e728]: App link
+            - textbox "App link" [ref=e729]: http://127.0.0.1:5173/
+            - button "Copy app link" [ref=e730] [cursor=pointer]:
+              - generic [ref=e734]: Copy link
+            - link "Open app link in a new tab" [ref=e735] [cursor=pointer]:
+              - /url: http://127.0.0.1:5173/
+          - status [ref=e740]
+        - button "Current demo plan" [ref=e741]: Pro · demo
+      - paragraph [ref=e742]: Open this root link to reach CODE76 sign-in/register. Browser-local records and sessions do not sync between browsers.
+    - generic [ref=e744]:
+      - button "Sales POS" [ref=e745] [cursor=pointer]
+      - button "Sales History" [ref=e749] [cursor=pointer]
+      - button "Inventory" [ref=e754] [cursor=pointer]
+      - button "Expenses" [ref=e1410] [cursor=pointer]
+      - button "Invoices" [ref=e1414] [cursor=pointer]
+      - button "Analytics & P&L" [ref=e1418] [cursor=pointer]
+      - button "Customers" [ref=e1421] [cursor=pointer]
+      - button "Vendors" [ref=e1427] [cursor=pointer]
+      - button "Transporters" [ref=e1432] [cursor=pointer]
+      - button "Marketing Team" [ref=e1438] [cursor=pointer]
+      - button "Company Members" [ref=e1442] [cursor=pointer]
+      - button "My Company" [ref=e1448] [cursor=pointer]
+      - button "Messaging" [ref=e1452] [cursor=pointer]
+      - button "Business Landing Page" [ref=e1455] [cursor=pointer]
+      - button "Settings" [ref=e759] [cursor=pointer]
+      - button "Audit & Access Logs" [ref=e1460] [cursor=pointer]
+      - button "About & Manual" [ref=e763] [cursor=pointer]
+  - main [ref=e5]:
+    - generic [ref=e2197]:
+      - generic [ref=e2198]:
+        - generic [ref=e2199]:
+          - generic [ref=e2200]:
+            - heading "Expenses Platform" [level=1] [ref=e2201]
+            - button "Click for platform guidance & settings" [ref=e2202] [cursor=pointer]
+          - paragraph [ref=e2206]: Audit operational spending across showroom rent, logistics, marketing, and staff salaries.
+        - generic [ref=e2207]:
+          - button "CSV Export" [ref=e2208] [cursor=pointer]
+          - button "PDF Export" [ref=e2212] [cursor=pointer]
+          - button "Email Ledger" [ref=e2216] [cursor=pointer]
+          - button "Record Expense" [ref=e2220] [cursor=pointer]
+      - generic [ref=e2222]:
+        - generic [ref=e2223]:
+          - generic [ref=e2224]: Total Expenses
+          - generic [ref=e2225]: KES 1,000
+          - generic [ref=e2226]: 1 entries shown
+        - generic [ref=e2227]:
+          - generic [ref=e2228]: Payroll & Salaries
+          - generic [ref=e2229]: KES 0
+          - generic [ref=e2230]: Staff compensation
+        - generic [ref=e2231]:
+          - generic [ref=e2232]: Rent & Facilities
+          - generic [ref=e2233]: KES 0
+          - generic [ref=e2234]: Premises & utilities
+        - generic [ref=e2235]:
+          - generic [ref=e2236]: Growth & Marketing
+          - generic [ref=e2237]: KES 0
+          - generic [ref=e2238]: Ad campaigns & lead gen
+      - generic [ref=e2239]:
+        - textbox "Search by title, vendor, or notes..." [ref=e2244]
+        - generic [ref=e2245]:
+          - button "All" [ref=e2246] [cursor=pointer]
+          - button "Rent" [ref=e2247] [cursor=pointer]
+          - button "Utilities" [ref=e2248] [cursor=pointer]
+          - button "Salaries" [ref=e2249] [cursor=pointer]
+          - button "Logistics" [ref=e2250] [cursor=pointer]
+          - button "Marketing" [ref=e2251] [cursor=pointer]
+          - button "Supplies" [ref=e2252] [cursor=pointer]
+          - button "Maintenance" [ref=e2253] [cursor=pointer]
+          - button "Tax" [ref=e2254] [cursor=pointer]
+          - button "Other" [ref=e2255] [cursor=pointer]
+      - table [ref=e2258]:
+        - rowgroup [ref=e2259]:
+          - row [ref=e2260]:
+            - columnheader "Actions (Start)" [ref=e2261]
+            - columnheader "Date" [ref=e2262]
+            - columnheader "Expense Title" [ref=e2263]
+            - columnheader "Category" [ref=e2264]
+            - columnheader "Vendor / Recipient" [ref=e2265]
+            - columnheader "Payment Channel" [ref=e2266]
+            - columnheader "Description" [ref=e2267]
+            - columnheader "Amount ($)" [ref=e2268]
+            - columnheader "Actions (End)" [ref=e2269]
+        - rowgroup [ref=e2270]:
+          - row [ref=e2312]:
+            - cell [ref=e2313]:
+              - generic [ref=e2314]:
+                - button "View Expense Details" [ref=e2315] [cursor=pointer]
+                - button "Export PDF Payment Voucher" [ref=e2319] [cursor=pointer]
+                - button "Delete Expense" [ref=e2323] [cursor=pointer]
+            - cell "20/10/2026" [ref=e2327]
+            - cell "TEST Electricity Bill" [ref=e2328]
+            - cell "Utilities" [ref=e2329]
+            - cell "TEST Kenya Power" [ref=e2330]
+            - cell "Bank Transfer" [ref=e2331]
+            - cell [ref=e2332]
+            - cell "KES 1000.00" [ref=e2333]
+            - cell [ref=e2334]:
+              - generic [ref=e2335]:
+                - button "View Expense Details" [ref=e2336] [cursor=pointer]
+                - button "Export PDF Payment Voucher" [ref=e2340] [cursor=pointer]
+                - button "Email expense payment voucher (.txt & .pdf) to admin/staff/vendor" [ref=e2344] [cursor=pointer]
+                - button "Delete Expense" [ref=e2348] [cursor=pointer]
+```

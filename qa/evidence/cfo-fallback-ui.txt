@@ -1,0 +1,10 @@
+### Result
+{
+  "cfoHeading": true,
+  "fallbackSummaryVisible": true,
+  "actionPlanVisible": false
+}
+### Ran Playwright code
+```js
+await page.evaluate('() => ({cfoHeading:document.body.innerText.includes(\'Gemini AI Executive P&L Strategy Report\'),fallbackSummaryVisible:document.body.innerText.includes(\'CODE76 POS recorded a temporary deficit\')||document.body.innerText.includes(\'CODE76 POS is operating profitably\'),actionPlanVisible:document.body.innerText.includes(\'Actionable Optimization Priorities:\')})');
+```

@@ -1,0 +1,203 @@
+TAP version 13
+# Subtest: Line total clamps negative quantities to zero
+ok 1 - Line total clamps negative quantities to zero
+  ---
+  duration_ms: 1.058919
+  ...
+# Subtest: Line total clamps negative unit prices to zero
+ok 2 - Line total clamps negative unit prices to zero
+  ---
+  duration_ms: 0.190294
+  ...
+# Subtest: Percentage discount above 100 cannot create a negative sale
+ok 3 - Percentage discount above 100 cannot create a negative sale
+  ---
+  duration_ms: 0.133008
+  ...
+# Subtest: Fixed discount above subtotal is capped
+ok 4 - Fixed discount above subtotal is capped
+  ---
+  duration_ms: 0.234997
+  ...
+# Subtest: Negative line discount does not increase the pure utility total
+ok 5 - Negative line discount does not increase the pure utility total
+  ---
+  duration_ms: 0.139816
+  ...
+# Subtest: Empty cart totals are all zero
+ok 6 - Empty cart totals are all zero
+  ---
+  duration_ms: 0.385498
+  ...
+# Subtest: Fractional money is rounded to two decimal places
+ok 7 - Fractional money is rounded to two decimal places
+  ---
+  duration_ms: 0.151537
+  ...
+# Subtest: Cart-wide fixed discount cannot exceed the discounted subtotal
+ok 8 - Cart-wide fixed discount cannot exceed the discounted subtotal
+  ---
+  duration_ms: 0.231849
+  ...
+# Subtest: Negative extra charges cannot reduce the total
+ok 9 - Negative extra charges cannot reduce the total
+  ---
+  duration_ms: 0.239391
+  ...
+# Subtest: Tax uses discounted merchandise and not delivery charges
+ok 10 - Tax uses discounted merchandise and not delivery charges
+  ---
+  duration_ms: 0.217409
+  ...
+# Subtest: Cash and M-Pesa split reconcile exactly
+ok 11 - Cash and M-Pesa split reconcile exactly
+  ---
+  duration_ms: 0.250275
+  ...
+# Subtest: Overpayment reports change rather than negative debt
+ok 12 - Overpayment reports change rather than negative debt
+  ---
+  duration_ms: 0.140691
+  ...
+# Subtest: Negative payments are excluded from reconciliation
+ok 13 - Negative payments are excluded from reconciliation
+  ---
+  duration_ms: 0.115098
+  ...
+# Subtest: Zero revenue has a finite zero margin
+ok 14 - Zero revenue has a finite zero margin
+  ---
+  duration_ms: 0.291825
+  ...
+# Subtest: Zero selling price reports a loss without divide-by-zero
+ok 15 - Zero selling price reports a loss without divide-by-zero
+  ---
+  duration_ms: 0.315769
+  ...
+# Subtest: CSV round-trip preserves commas and quotation marks
+ok 16 - CSV round-trip preserves commas and quotation marks
+  ---
+  duration_ms: 1.24077
+  ...
+# Subtest: [QA-CSV-01] CSV round-trip preserves quoted multiline fields
+not ok 17 - [QA-CSV-01] CSV round-trip preserves quoted multiline fields
+  ---
+  duration_ms: 4.13987
+  location: '/home/user/combopos/qa/quality-checks.test.ts:1:3981'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+
+      [
+        {
+          name: 'Widget',
+    +     notes: 'Line one'
+    +   },
+    +   {
+    +     name: 'Line two',
+    +     notes: ''
+    -     notes: 'Line one\nLine two'
+        }
+      ]
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0:
+      name: 'Widget'
+      notes: |-
+        Line one
+        Line two
+  actual:
+    0:
+      name: 'Widget'
+      notes: 'Line one'
+    1:
+      name: 'Line two'
+      notes: ''
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (/home/user/combopos/qa/quality-checks.test.ts:87:10)
+    Test.runInAsyncScope (node:async_hooks:206:9)
+    Test.run (node:internal/test_runner/test:796:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:526:18)
+    Test.postRun (node:internal/test_runner/test:889:19)
+    Test.run (node:internal/test_runner/test:835:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: [QA-CSV-02] CSV neutralizes formula-like user content
+not ok 18 - [QA-CSV-02] CSV neutralizes formula-like user content
+  ---
+  duration_ms: 2.207759
+  location: '/home/user/combopos/qa/quality-checks.test.ts:1:4171'
+  failureType: 'testCodeFailure'
+  error: 'Formula-like values must be neutralized, e.g. with a leading apostrophe.'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (/home/user/combopos/qa/quality-checks.test.ts:91:10)
+    Test.runInAsyncScope (node:async_hooks:206:9)
+    Test.run (node:internal/test_runner/test:796:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:526:18)
+    Test.postRun (node:internal/test_runner/test:889:19)
+    Test.run (node:internal/test_runner/test:835:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: [QA-SEC-03] Printable reports escape user-provided HTML
+not ok 19 - [QA-SEC-03] Printable reports escape user-provided HTML
+  ---
+  duration_ms: 15.445299
+  location: '/home/user/combopos/qa/quality-checks.test.ts:1:4391'
+  failureType: 'testCodeFailure'
+  error: 'An inert HTML marker was interpolated as markup instead of escaped text.'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (/home/user/combopos/qa/quality-checks.test.ts:100:12)
+    Test.runInAsyncScope (node:async_hooks:206:9)
+    Test.run (node:internal/test_runner/test:796:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:526:18)
+    Test.postRun (node:internal/test_runner/test:889:19)
+    Test.run (node:internal/test_runner/test:835:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+# Subtest: [QA-FIN-01] Historical COGS stays fixed when inventory cost changes
+not ok 20 - [QA-FIN-01] Historical COGS stays fixed when inventory cost changes
+  ---
+  duration_ms: 0.627805
+  location: '/home/user/combopos/qa/quality-checks.test.ts:1:5118'
+  failureType: 'testCodeFailure'
+  error: |-
+    Four units sold at a recorded cost of 50 should retain COGS 200, not use current replacement cost 80.
+
+    320 !== 200
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 200
+  actual: 320
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (/home/user/combopos/qa/quality-checks.test.ts:110:10)
+    Test.runInAsyncScope (node:async_hooks:206:9)
+    Test.run (node:internal/test_runner/test:796:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:526:18)
+    Test.postRun (node:internal/test_runner/test:889:19)
+    Test.run (node:internal/test_runner/test:835:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:526:7)
+  ...
+1..20
+# tests 20
+# suites 0
+# pass 16
+# fail 4
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 304.17788

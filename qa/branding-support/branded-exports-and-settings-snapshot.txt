@@ -1,0 +1,131 @@
+### Page
+- Page URL: http://127.0.0.1:5173/#/pos/settings
+- Page Title: CODE76 POS — Private Workspace
+### Snapshot
+```yaml
+- generic [ref=e4]:
+  - banner [ref=e693]:
+    - generic [ref=e694]:
+      - button "CODE76 POS logo CODE76 POS Enterprise Product & Service SaaS ERP System" [ref=e696] [cursor=pointer]:
+        - img "CODE76 POS logo" [ref=e698]
+        - generic [ref=e699]:
+          - generic [ref=e700]:
+            - generic [ref=e701]: CODE76 POS
+            - generic [ref=e702]: Enterprise
+          - paragraph [ref=e703]: Product & Service SaaS ERP System
+      - generic [ref=e704]:
+        - generic [ref=e705]:
+          - button "Desktop View (Full Width)" [ref=e706] [cursor=pointer]
+          - button "Laptop View (1024px)" [ref=e709] [cursor=pointer]
+          - button "Tablet View (768px)" [ref=e712] [cursor=pointer]
+          - button "Phone Mobile View (390px)" [ref=e715] [cursor=pointer]
+        - generic [ref=e718]:
+          - button "Demo Data" [ref=e719] [cursor=pointer]
+          - button "Business Page" [ref=e1469] [cursor=pointer]
+          - button "Click to view help guide and settings for this platform" [ref=e725] [cursor=pointer]
+          - button "Active user session and access controls" [ref=e730] [cursor=pointer]:
+            - generic [ref=e731]: DR
+            - generic [ref=e732]:
+              - generic [ref=e733]: Dr. David Kimani
+              - generic [ref=e734]: "Role: CEO"
+    - generic [ref=e735]:
+      - generic [ref=e736]:
+        - generic [ref=e740]: App link
+        - generic [ref=e741]:
+          - generic [ref=e742]:
+            - generic [ref=e743]: App link
+            - textbox "App link" [ref=e744]: http://127.0.0.1:5173/
+            - button "Copy app link" [ref=e745] [cursor=pointer]:
+              - generic [ref=e749]: Copy link
+            - link "Open app link in a new tab" [ref=e750] [cursor=pointer]:
+              - /url: http://127.0.0.1:5173/
+          - status [ref=e755]
+        - button "Current demo plan" [ref=e756]: Max · demo
+      - paragraph [ref=e757]: Open this root link to reach CODE76 sign-in/register. Browser-local records and sessions do not sync between browsers.
+    - note [ref=e1609]: DEMO DATA · Fictional records, contacts, reviews and bookkeeping amounts—not real business activity.
+    - generic [ref=e759]:
+      - button "Sales POS" [ref=e760] [cursor=pointer]
+      - button "Sales History" [ref=e764] [cursor=pointer]
+      - button "Inventory" [ref=e769] [cursor=pointer]
+      - button "Expenses" [ref=e1474] [cursor=pointer]
+      - button "Invoices" [ref=e1478] [cursor=pointer]
+      - button "Analytics & P&L" [ref=e1482] [cursor=pointer]
+      - button "Customers" [ref=e1485] [cursor=pointer]
+      - button "Vendors" [ref=e1491] [cursor=pointer]
+      - button "Transporters" [ref=e1496] [cursor=pointer]
+      - button "Marketing Team" [ref=e1502] [cursor=pointer]
+      - button "Company Members" [ref=e1506] [cursor=pointer]
+      - button "My Company" [ref=e1512] [cursor=pointer]
+      - button "Messaging" [ref=e1516] [cursor=pointer]
+      - button "Business Landing Page" [ref=e1519] [cursor=pointer]
+      - button "Settings" [ref=e774] [cursor=pointer]
+      - button "Audit & Access Logs" [ref=e1524] [cursor=pointer]
+      - button "About & Manual" [ref=e778] [cursor=pointer]
+  - main [ref=e5]:
+    - generic [ref=e6601]:
+      - generic [ref=e6602]:
+        - generic [ref=e6603]:
+          - generic [ref=e6604]:
+            - heading "System Settings Platform" [level=1] [ref=e6605]
+            - button "Click for platform guidance & settings" [ref=e6606] [cursor=pointer]
+          - paragraph [ref=e6610]: Configure payment methods, responsive text sizing, landing page rules, receipts, appearance, font families, backups, privileges, and PDF/Excel import pipeline.
+        - generic [ref=e7027]: Backup download requested.
+      - generic [ref=e6611]:
+        - generic [ref=e6612]:
+          - textbox "Find settings" [ref=e6613]:
+            - /placeholder: Find a setting…
+          - button "Demo Plan Settings" [ref=e6614] [cursor=pointer]
+          - button "Demo Data & Training" [active] [ref=e6618] [cursor=pointer]
+          - button "CODE76 Team Services" [ref=e6624] [cursor=pointer]
+          - button "Payment Settings" [ref=e6631] [cursor=pointer]
+          - button "Currency, Date & Time" [ref=e6635] [cursor=pointer]
+          - button "Delete All Business Data" [ref=e6640] [cursor=pointer]
+          - button "Text Sizing Settings" [ref=e6645] [cursor=pointer]
+          - button "Business Landing Page Settings" [ref=e6649] [cursor=pointer]
+          - button "Receipts Settings" [ref=e6654] [cursor=pointer]
+          - button "App Appearance Settings" [ref=e6659] [cursor=pointer]
+          - button "Font Text Settings" [ref=e6667] [cursor=pointer]
+          - button "Data Backup Settings" [ref=e6672] [cursor=pointer]
+          - button "App User Privilege Settings" [ref=e6676] [cursor=pointer]
+          - button "PDF & Excel Settings (CSV Import)" [ref=e6680] [cursor=pointer]
+          - button "Email Marketing Templates" [ref=e6685] [cursor=pointer]
+          - button "Audit Logs & Login History" [ref=e6690] [cursor=pointer]
+        - generic [ref=e6695]:
+          - generic [ref=e7031]:
+            - heading "Demo data & training" [level=2] [ref=e7032]
+            - paragraph [ref=e7033]:
+              - text: "Current mode:"
+              - strong [ref=e7034]: Synthetic demo workspace
+              - text: . Loading is never automatic. Only an administrator can confirm replacing business records; plan entitlements still apply to the loaded examples.
+            - generic [ref=e7035]:
+              - generic [ref=e7036]:
+                - strong [ref=e7037]: "28"
+                - text: inventory
+              - generic [ref=e7038]:
+                - strong [ref=e7039]: "36"
+                - text: recorded Sales
+              - generic [ref=e7040]:
+                - strong [ref=e7041]: "11"
+                - text: related Companies
+              - generic [ref=e7042]:
+                - strong [ref=e7043]: "10"
+                - text: staff
+              - generic [ref=e7044]:
+                - strong [ref=e7045]: "15"
+                - text: customers
+              - generic [ref=e7046]:
+                - strong [ref=e7047]: "4"
+                - text: salary Records
+              - generic [ref=e7048]:
+                - strong [ref=e7049]: "18"
+                - text: expenses
+              - generic [ref=e7050]:
+                - strong [ref=e7051]: "16"
+                - text: invoices
+              - generic [ref=e7052]:
+                - strong [ref=e7053]: "6"
+                - text: reviews
+            - button "Review demo replacement and confirm" [ref=e7054]
+            - paragraph [ref=e7055]: Examples cover active promotions, out-of-stock products, service billing units, linked organisations, partial/unpaid sales, staff shifts and explicit salary expenses. All amounts and identities are fictional, not a sales claim or market benchmark. Actual billing, SMTP and live payment providers are not configured by loading samples.
+          - button "Save All Settings Changes" [ref=e7003] [cursor=pointer]
+```

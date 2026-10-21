@@ -1,0 +1,115 @@
+{
+  "mode": "local no-key QA; no Gemini requests",
+  "checks": [
+    {
+      "name": "Health is healthy without an AI key",
+      "expected_status": 200,
+      "actual_status": 200,
+      "passed": true,
+      "body": {
+        "status": "ok",
+        "timestamp": "2026-10-20T10:47:22.882Z",
+        "hasApiKey": false,
+        "system": "CODE76 POS Enterprise Server"
+      },
+      "content_type": "application/json; charset=utf-8"
+    },
+    {
+      "name": "Chat uses a local no-key fallback",
+      "expected_status": 200,
+      "actual_status": 200,
+      "passed": true,
+      "body": {
+        "reply": "Welcome! Our flagship **CODE76 Touch POS Terminal 15.6\"** is currently prioritized with our promotional discount at **$449.25** (normally $599.00), ready for same-day dispatch with 2-year warranty.\n\nTo ensure our team delivers the quote to your exact business setup, what is your shop's location and preferred contact (phone, WhatsApp, or email)? And would you like to see how it pairs with our **UltraSpeed Receipt Printer**?",
+        "modelUsed": "system-grounded-engine"
+      },
+      "content_type": "application/json; charset=utf-8"
+    },
+    {
+      "name": "Marketing no-key template returns subject and body",
+      "expected_status": 200,
+      "actual_status": 200,
+      "passed": true,
+      "body": {
+        "subject": "Special 10% VIP Savings on QA Fixture - from QA Company",
+        "body": "Dear QA,\n\nWe hope your business is thriving! As an exclusive appreciation for your partnership, Our Growth Team has arranged a special 10% discount on QA Fixture.\n\nWith only 2 units remaining in stock, we invite you to secure your order this week.\n\nWarm regards,\nSales Team\nQA Company\nTel: +1 (800) 760-7676"
+      },
+      "content_type": "application/json; charset=utf-8"
+    },
+    {
+      "name": "CFO fallback exposes the action-plan field consumed by the UI",
+      "expected_status": 200,
+      "actual_status": 200,
+      "passed": false,
+      "body": {
+        "summary": "CODE76 POS is operating profitably with a Net Profit of $20 (20% net margin). Top growth lever: accelerate high-margin service setups and cross-sell thermal paper supplies to hardware buyers.",
+        "recommendations": [
+          "Incentivize top referrers with automated discounts to drive zero-cost customer acquisition.",
+          "Bundle slow-moving hardware accessories with popular touch terminals.",
+          "Follow up with customers on pending credit balances to accelerate cashflow."
+        ]
+      },
+      "content_type": "application/json; charset=utf-8"
+    },
+    {
+      "name": "Malformed JSON is rejected",
+      "expected_status": 400,
+      "actual_status": 400,
+      "passed": true,
+      "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Bad Request</pre>\n</body>\n</html>\n",
+      "content_type": "text/html; charset=utf-8"
+    },
+    {
+      "name": "Missing chat messages receive a client validation error",
+      "expected_status": 400,
+      "actual_status": 500,
+      "passed": false,
+      "body": {
+        "error": "Failed to process AI chat",
+        "details": "Cannot read properties of undefined (reading 'length')",
+        "fallbackReply": "Welcome to CODE76 POS! We are having a brief network delay with the AI concierge, but our live inventory and support team are fully available at +1 (800) 760-7676."
+      },
+      "content_type": "application/json; charset=utf-8"
+    },
+    {
+      "name": "Non-array chat messages receive a client validation error",
+      "expected_status": 400,
+      "actual_status": 200,
+      "passed": false,
+      "body": {
+        "reply": "Welcome to **CODE76 POS**! \ud83d\udc4b I am your AI Sales Concierge. Whether you need high-speed hardware or cloud ERP setup, I am here to help you maximize your store's profit.\n\nAre you looking to close an equipment order today, book an on-site service appointment, or visit our showroom to try the systems live? Tell me about your business and I'll find you the perfect deal!",
+        "modelUsed": "system-grounded-engine"
+      },
+      "content_type": "application/json; charset=utf-8"
+    },
+    {
+      "name": "Chat message with no text receives a client validation error",
+      "expected_status": 400,
+      "actual_status": 200,
+      "passed": false,
+      "body": {
+        "reply": "Welcome to **CODE76 POS**! \ud83d\udc4b I am your AI Sales Concierge. Whether you need high-speed hardware or cloud ERP setup, I am here to help you maximize your store's profit.\n\nAre you looking to close an equipment order today, book an on-site service appointment, or visit our showroom to try the systems live? Tell me about your business and I'll find you the perfect deal!",
+        "modelUsed": "system-grounded-engine"
+      },
+      "content_type": "application/json; charset=utf-8"
+    },
+    {
+      "name": "Unknown API route returns JSON 404 instead of SPA HTML",
+      "expected_status": 404,
+      "actual_status": 200,
+      "passed": false,
+      "body": "<!doctype html>\n<html lang=\"en\">\n  <head>\n    <script>\n      // Polyfill to ensure window.fetch is writable and has a setter in iframe sandbox environments\n      (function() {\n        try {\n          ",
+      "content_type": "text/html; charset=UTF-8"
+    },
+    {
+      "name": "SPA browser refresh route is served",
+      "expected_status": 200,
+      "actual_status": 200,
+      "passed": true,
+      "body": "<!doctype html>\n<html lang=\"en\">\n  <head>\n    <script>\n      // Polyfill to ensure window.fetch is writable and has a setter in iframe sandbox environments\n      (function() {\n        try {\n          ",
+      "content_type": "text/html; charset=UTF-8"
+    }
+  ],
+  "passed": 5,
+  "failed": 5
+}

@@ -1,0 +1,277 @@
+### Page
+- Page URL: http://127.0.0.1:3000/
+- Page Title: CODE76 POS - Enterprise Point of Sale & ERP Commerce Platform
+### Snapshot
+```yaml
+- generic [ref=f1e4]:
+  - banner [ref=f1e790]:
+    - generic [ref=f1e791]:
+      - button "76 CODE76 POS Enterprise Product & Service SaaS ERP System" [ref=f1e793] [cursor=pointer]:
+        - generic [ref=f1e794]: "76"
+        - generic [ref=f1e795]:
+          - generic [ref=f1e796]:
+            - generic [ref=f1e797]: CODE76 POS
+            - generic [ref=f1e798]: Enterprise
+          - paragraph [ref=f1e799]: Product & Service SaaS ERP System
+      - generic [ref=f1e800]:
+        - generic [ref=f1e801]:
+          - button "Desktop View (Full Width)" [ref=f1e802] [cursor=pointer]
+          - button "Laptop View (1024px)" [ref=f1e805] [cursor=pointer]
+          - button "Tablet View (768px)" [ref=f1e808] [cursor=pointer]
+          - button "Phone Mobile View (390px)" [ref=f1e811] [cursor=pointer]
+        - generic [ref=f1e814]:
+          - button "Light" [ref=f1e815] [cursor=pointer]
+          - button "Demo Data" [ref=f1e823] [cursor=pointer]
+          - generic [ref=f1e829]:
+            - button "Storefront" [ref=f1e830] [cursor=pointer]
+            - button "CODE76 Site" [ref=f1e835] [cursor=pointer]
+          - button "Click to view help guide and settings for this platform" [ref=f1e840] [cursor=pointer]
+          - generic [ref=f1e844]:
+            - 'button "DR Dr. David Kimani Role: CEO" [ref=f1e845] [cursor=pointer]':
+              - generic [ref=f1e846]: DR
+              - generic [ref=f1e847]:
+                - generic [ref=f1e848]: Dr. David Kimani
+                - generic [ref=f1e849]: "Role: CEO"
+            - button "Sign out and return to landing page" [ref=f1e850] [cursor=pointer]
+    - generic [ref=f1e855]:
+      - button "Sales POS" [ref=f1e856] [cursor=pointer]
+      - button "Sales History" [ref=f1e860] [cursor=pointer]
+      - button "Inventory" [ref=f1e865] [cursor=pointer]
+      - button "Expenses" [ref=f1e870] [cursor=pointer]
+      - button "Invoices" [ref=f1e874] [cursor=pointer]
+      - button "Analytics & P&L" [ref=f1e878] [cursor=pointer]
+      - button "Customers" [ref=f1e881] [cursor=pointer]
+      - button "Vendors" [ref=f1e887] [cursor=pointer]
+      - button "Transporters" [ref=f1e892] [cursor=pointer]
+      - button "Marketing Team" [ref=f1e898] [cursor=pointer]
+      - button "Company Members" [ref=f1e902] [cursor=pointer]
+      - button "My Company" [ref=f1e908] [cursor=pointer]
+      - button "Messaging" [ref=f1e912] [cursor=pointer]
+      - button "Business Landing Page" [ref=f1e915] [cursor=pointer]
+      - button "Settings" [ref=f1e920] [cursor=pointer]
+      - button "Audit & Access Logs" [ref=f1e924] [cursor=pointer]
+      - button "About & Manual" [ref=f1e928] [cursor=pointer]
+  - main [ref=f1e5]:
+    - generic [ref=f1e931]:
+      - generic [ref=f1e932]:
+        - generic [ref=f1e933]:
+          - generic [ref=f1e934]:
+            - heading "Sales POS Terminal" [level=1] [ref=f1e935]
+            - button "Click for platform guidance & settings" [ref=f1e936] [cursor=pointer]
+          - paragraph [ref=f1e940]: Multi-payment splits, live autocomplete, line & cart discounts, extra charges, and social referral tagging.
+        - generic [ref=f1e941]:
+          - combobox [ref=f1e947] [cursor=pointer]:
+            - option "Walk-in Customer" [selected]
+            - option "Michael Ouma (Kilimani)"
+            - option "Grace Ndung'u (CBD)"
+            - option "Brian Chebet (Nakuru)"
+          - combobox [ref=f1e952] [cursor=pointer]:
+            - 'option "Referred By: None" [selected]'
+            - option "Michael Ouma (Customer)"
+            - option "Grace Ndung'u (Customer)"
+            - option "Brian Chebet (Customer)"
+            - option "Jane Wanjiku (Marketor)"
+            - option "Kevin Kiplagat (Marketor)"
+            - option "Peter Nick (Developer)"
+            - option "Jane Wanjiku (Marketor)"
+            - option "David Kamau (Transporter/Driver)"
+            - option "Sarah Otieno (Accountant)"
+      - generic [ref=f1e953]:
+        - generic [ref=f1e954]:
+          - textbox "Type product name, SKU, or scan barcode to search & add..." [ref=f1e960]
+          - generic [ref=f1e961]:
+            - button "All" [ref=f1e962] [cursor=pointer]
+            - button "Hardware" [ref=f1e963] [cursor=pointer]
+            - button "Printers" [ref=f1e964] [cursor=pointer]
+            - button "Scanners" [ref=f1e965] [cursor=pointer]
+            - button "Services" [ref=f1e966] [cursor=pointer]
+            - button "Supplies" [ref=f1e967] [cursor=pointer]
+          - generic [ref=f1e968]:
+            - generic [ref=f1e969]:
+              - generic [ref=f1e970]: Product Showcase Catalog (12)
+              - generic [ref=f1e971]: (Toggle grid in Settings > Color & Appearance)
+            - generic [ref=f1e972]:
+              - generic [ref=f1e973] [cursor=pointer]:
+                - generic [ref=f1e974]:
+                  - img "CODE76 Touch POS Terminal 15.6\"" [ref=f1e976]
+                  - generic [ref=f1e977]: CODE76 Touch POS Terminal 15.6"
+                  - generic [ref=f1e978]: "Hardware | Stock: 22"
+                - generic [ref=f1e979]:
+                  - generic [ref=f1e981]:
+                    - generic [ref=f1e982]: $599.00
+                    - generic [ref=f1e983]: $449.25
+                  - button [ref=f1e984]
+              - generic [ref=f1e986] [cursor=pointer]:
+                - generic [ref=f1e987]:
+                  - img "UltraSpeed Thermal Receipt Printer 80mm" [ref=f1e989]
+                  - generic [ref=f1e990]: UltraSpeed Thermal Receipt Printer 80mm
+                  - generic [ref=f1e991]: "Printers | Stock: 45"
+                - generic [ref=f1e992]:
+                  - generic [ref=f1e994]:
+                    - generic [ref=f1e995]: $129.00
+                    - generic [ref=f1e996]: $109.65
+                  - button [ref=f1e997]
+              - generic [ref=f1e999] [cursor=pointer]:
+                - generic [ref=f1e1000]:
+                  - img "Hands-Free 2D Omnidirectional Barcode Scanner" [ref=f1e1002]
+                  - generic [ref=f1e1003]: Hands-Free 2D Omnidirectional Barcode Scanner
+                  - generic [ref=f1e1004]: "Scanners | Stock: 34"
+                - generic [ref=f1e1005]:
+                  - generic [ref=f1e1006]: $89.00
+                  - button [ref=f1e1008]
+              - generic [ref=f1e1010] [cursor=pointer]:
+                - generic [ref=f1e1011]:
+                  - img "Heavy-Duty Steel Electronic Cash Drawer" [ref=f1e1013]
+                  - generic [ref=f1e1014]: Heavy-Duty Steel Electronic Cash Drawer
+                  - generic [ref=f1e1015]: "Hardware | Stock: 19"
+                - generic [ref=f1e1016]:
+                  - generic [ref=f1e1017]: $95.00
+                  - button [ref=f1e1019]
+              - generic [ref=f1e1021] [cursor=pointer]:
+                - generic [ref=f1e1022]:
+                  - img "Enterprise Cloud ERP Setup & Staff Onboarding" [ref=f1e1024]
+                  - generic [ref=f1e1025]: Enterprise Cloud ERP Setup & Staff Onboarding
+                  - generic [ref=f1e1026]: Services | Service
+                - generic [ref=f1e1027]:
+                  - generic [ref=f1e1029]:
+                    - generic [ref=f1e1030]: $350.00
+                    - generic [ref=f1e1031]: $300.00
+                  - button [ref=f1e1032]
+              - generic [ref=f1e1034] [cursor=pointer]:
+                - generic [ref=f1e1035]:
+                  - img "Annual Priority Hardware & System Maintenance" [ref=f1e1037]
+                  - generic [ref=f1e1038]: Annual Priority Hardware & System Maintenance
+                  - generic [ref=f1e1039]: Services | Service
+                - generic [ref=f1e1040]:
+                  - generic [ref=f1e1041]: $480.00
+                  - button [ref=f1e1043]
+              - generic [ref=f1e1045] [cursor=pointer]:
+                - generic [ref=f1e1046]:
+                  - img "Wireless Handheld Smart POS 4G / NFC" [ref=f1e1048]
+                  - generic [ref=f1e1049]: Wireless Handheld Smart POS 4G / NFC
+                  - generic [ref=f1e1050]: "Hardware | Stock: 14"
+                - generic [ref=f1e1051]:
+                  - generic [ref=f1e1053]:
+                    - generic [ref=f1e1054]: $219.00
+                    - generic [ref=f1e1055]: $189.00
+                  - button [ref=f1e1056]
+              - generic [ref=f1e1058] [cursor=pointer]:
+                - generic [ref=f1e1059]:
+                  - img "Biometric Face & Fingerprint Attendance Timeclock" [ref=f1e1061]
+                  - generic [ref=f1e1062]: Biometric Face & Fingerprint Attendance Timeclock
+                  - generic [ref=f1e1063]: "Hardware | Stock: 16"
+                - generic [ref=f1e1064]:
+                  - generic [ref=f1e1065]: $179.00
+                  - button [ref=f1e1067]
+              - generic [ref=f1e1069] [cursor=pointer]:
+                - generic [ref=f1e1070]:
+                  - img "BPA-Free Premium Thermal Paper Rolls (50-Pack)" [ref=f1e1072]
+                  - generic [ref=f1e1073]: BPA-Free Premium Thermal Paper Rolls (50-Pack)
+                  - generic [ref=f1e1074]: "Supplies | Stock: 120"
+                - generic [ref=f1e1075]:
+                  - generic [ref=f1e1076]: $48.00
+                  - button [ref=f1e1078]
+              - generic [ref=f1e1080] [cursor=pointer]:
+                - generic [ref=f1e1081]:
+                  - img "PCI-DSS & Security Penetration Testing" [ref=f1e1083]
+                  - generic [ref=f1e1084]: PCI-DSS & Security Penetration Testing
+                  - generic [ref=f1e1085]: Services | Service
+                - generic [ref=f1e1086]:
+                  - generic [ref=f1e1087]: $590.00
+                  - button [ref=f1e1089]
+              - generic [ref=f1e1091] [cursor=pointer]:
+                - generic [ref=f1e1092]:
+                  - img "Dual-Screen Self-Checkout Kiosk 21.5\"" [ref=f1e1094]
+                  - generic [ref=f1e1095]: Dual-Screen Self-Checkout Kiosk 21.5"
+                  - generic [ref=f1e1096]: "Hardware | Stock: 8"
+                - generic [ref=f1e1097]:
+                  - generic [ref=f1e1099]:
+                    - generic [ref=f1e1100]: $980.00
+                    - generic [ref=f1e1101]: $880.00
+                  - button [active] [ref=f1e1102]
+              - generic [ref=f1e1104] [cursor=pointer]:
+                - generic [ref=f1e1105]:
+                  - img "Custom ERP API Integration & Inventory Automation" [ref=f1e1107]
+                  - generic [ref=f1e1108]: Custom ERP API Integration & Inventory Automation
+                  - generic [ref=f1e1109]: Services | Service
+                - generic [ref=f1e1110]:
+                  - generic [ref=f1e1112]:
+                    - generic [ref=f1e1113]: $750.00
+                    - generic [ref=f1e1114]: $600.00
+                  - button [ref=f1e1115]
+        - generic [ref=f1e1118]:
+          - generic [ref=f1e1119]:
+            - heading "Active Cart (9 items)" [level=3] [ref=f1e1223]
+            - button "Clear Cart" [ref=f1e1182] [cursor=pointer]
+          - generic [ref=f1e1186]:
+            - generic [ref=f1e1187]:
+              - generic [ref=f1e1188]:
+                - generic [ref=f1e1189]: Dual-Screen Self-Checkout Kiosk 21.5"
+                - generic [ref=f1e1190]: $880.00 each
+              - generic [ref=f1e1191]:
+                - generic [ref=f1e1192]: $7920.00
+                - button "Remove" [ref=f1e1193] [cursor=pointer]
+            - generic [ref=f1e1194]:
+              - generic [ref=f1e1195]:
+                - button [ref=f1e1196] [cursor=pointer]
+                - generic [ref=f1e1198]: "9"
+                - button [ref=f1e1199] [cursor=pointer]
+              - generic [ref=f1e1201]:
+                - generic [ref=f1e1202]: "Disc:"
+                - spinbutton "0" [ref=f1e1203]
+                - button "%" [ref=f1e1204]
+          - generic [ref=f1e1131]:
+            - generic [ref=f1e1132]:
+              - generic [ref=f1e1133]: "Cart-wide Discount:"
+              - generic [ref=f1e1134]:
+                - spinbutton "0" [ref=f1e1135]
+                - button "%" [ref=f1e1136] [cursor=pointer]
+            - generic [ref=f1e1137]:
+              - generic [ref=f1e1138]: "Add Extra Charge:"
+              - generic [ref=f1e1140]:
+                - combobox [ref=f1e1141]:
+                  - option "Transportation" [selected]
+                  - option "Tax"
+                  - option "Packaging"
+                  - option "Delivery"
+                  - option "Service Fee"
+                  - option "Installation"
+                  - option "Custom"
+                - generic [ref=f1e1142]:
+                  - spinbutton "Amount $" [ref=f1e1143]
+                  - generic [ref=f1e1144]: $
+                - button "+ Add" [ref=f1e1145] [cursor=pointer]
+          - generic [ref=f1e1146]:
+            - generic [ref=f1e1147]:
+              - generic [ref=f1e1148]: "Subtotal:"
+              - generic [ref=f1e1149]: $7920.00
+            - generic [ref=f1e1150]:
+              - generic [ref=f1e1151]: "Net Total:"
+              - generic [ref=f1e1152]: $7920.00
+          - generic [ref=f1e1153]:
+            - generic [ref=f1e1154]:
+              - generic [ref=f1e1155]: Split Payment Breakdown
+              - generic [ref=f1e1158]:
+                - button "Exact Pay" [ref=f1e1159] [cursor=pointer]
+                - button "+ Add Payment Option" [ref=f1e1160] [cursor=pointer]
+            - generic [ref=f1e1163]:
+              - combobox [ref=f1e1164]:
+                - option "Cash" [selected]
+                - option "M-Pesa"
+                - option "Card"
+                - option "Bank Wire"
+                - option "Debit Card"
+                - option "Credit / Debt"
+              - generic [ref=f1e1165]:
+                - spinbutton "0.00" [ref=f1e1166]
+                - generic [ref=f1e1167]: $
+            - generic [ref=f1e1168]:
+              - generic [ref=f1e1169]: "Total Tendered:"
+              - generic [ref=f1e1170]: $0.00
+            - generic [ref=f1e1205]:
+              - generic [ref=f1e1206]: "Pending Debt (Customer Balance):"
+              - generic [ref=f1e1207]: $7920.00
+          - generic [ref=f1e1171]:
+            - button "Complete Sale & Print Receipt ($7920.00)" [ref=f1e1224] [cursor=pointer]
+            - button "Convert to Sales Invoice (B2B Quick Invoice)" [ref=f1e1176] [cursor=pointer]
+```

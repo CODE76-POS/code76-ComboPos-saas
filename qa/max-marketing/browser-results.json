@@ -1,0 +1,305 @@
+[
+  {
+    "name": "public pricing shows all five confirmed list/promotional prices",
+    "passed": true,
+    "detail": [
+      {
+        "tier": "free",
+        "list": "$20.00",
+        "final": "0",
+        "text": "Free\n$20.00\n100% off\n$0.00\n/ month\n\nUSD \u00b7 Monthly price, not an annual charge.\n\nSelling, receipts, history with read-only debt balances, inventory without marketing/exports, basic settings and guides.\n\n\u2713\nCore sales and receipt operations\n\u2713\nInventory without marketing or data exports\n\u2713\nAppearance, currency, payments, date/time and guides\nStart with Free"
+      },
+      {
+        "tier": "starter",
+        "list": "$26.00",
+        "final": "13",
+        "text": "Starter\n$26.00\n50% off\n$13.00\n/ month\n\nUSD \u00b7 Monthly price, not an annual charge.\n\nAccess everything Pro Tier has except: emailing, referral, business landing page creation and chatbot intelligence features.\n\n\u2713\nBusiness operations, visual analytics and payroll\n\u2713\nMessaging and inventory promotion tools\n\u2713\nNo email, referral, business-page creation or chatbot intelligence\nExplore Starter"
+      },
+      {
+        "tier": "pro",
+        "list": "$50.00",
+        "final": "25",
+        "text": "Pro\n$50.00\n50% off\n$25.00\n/ month\n\nUSD \u00b7 Monthly price, not an annual charge.\n\nWith Pro Tier you access everything for your business, including:\n\n\u2713\nHistorical, live and future-prediction visual data analytics\n\u2713\nBusiness Landing Page and intelligent chatbot\n\u2713\nAll sales operations, including debt handling\n\u2713\nAnd many other workspace features\nExplore Pro"
+      },
+      {
+        "tier": "max",
+        "list": "$110.00",
+        "final": "55",
+        "text": "Max\nSoftware + team\n$110.00\n50% off\n$55.00\n/ month\n\nUSD \u00b7 Monthly price, not an annual charge.\n\nEverything in Pro, plus CODE76 team-assisted services to support your business growth.\n\n\u2713\nAdvertising and market-positioning assistance\n\u2713\nBusiness-matched lead research and referral program help\n\u2713\nSEO optimization and business cybersecurity services\n\u2713\nGrowth reviews and additional support by agreed scope\nExplore Max"
+      },
+      {
+        "tier": "lifetime",
+        "list": "$500.00",
+        "final": "250",
+        "text": "Lifetime\n$500.00\n50% off\n$250.00\none-time\n\nUSD \u00b7 No monthly software charge.\n\nAll current software features, future declared features and updates, plus access to the Max team-service package.\n\n\u2713\nAll current and future software features/updates\n\u2713\nMax team-service access included\n\u2713\nNo monthly software charge; role privileges still apply\nExplore Lifetime"
+      }
+    ]
+  },
+  {
+    "name": "only Lifetime is one-time; Free is 100% off and all paid tiers are 50% off",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "public hero and proof sections remove invented customer-performance claims",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Max and Lifetime disclose team-service scope, consent and no automatic delivery",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "growth planner shows reproducible payback and honest limits",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "public section navigation sticks and leaves the target below the header",
+    "passed": true,
+    "detail": {
+      "header": 0,
+      "bottom": 115,
+      "target": 133.484375,
+      "hash": "#growth-planner"
+    }
+  },
+  {
+    "name": "growth calculator updates the scenario from actual entered assumptions",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "growth planner does not show infinite ROI for a zero denominator",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "protected entry account link scrolls without losing the requested private route",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "workspace plan selector includes Max with the same five price cards",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "monthly comparison multiplies monthly tiers but charges Lifetime only once",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Max demo tier persists and exposes CODE76 team services",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "service brief cannot be saved without explicit business authorization",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Max saves only an honest local draft, with no delivery, payment or ad-spend side effects",
+    "passed": true,
+    "detail": {
+      "count": 1,
+      "status": "local_draft",
+      "service": "cybersecurity",
+      "expenses": 0,
+      "sales": 0
+    }
+  },
+  {
+    "name": "team draft can be copied without pretending it was sent",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Lifetime includes Max team services as explicitly requested",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "team draft persists across eligible tier changes without being dispatched",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "merchant page keeps its private/independent identity and safe buying guidance",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "private sticky menu follows the measured POS navbar without overlap",
+    "passed": true,
+    "detail": {
+      "posTop": 0,
+      "posBottom": 168,
+      "pageTop": 168,
+      "pageBottom": 285,
+      "hash": "#/pos/landing_page_builder"
+    }
+  },
+  {
+    "name": "private section navigation does not replace the protected builder hash",
+    "passed": true,
+    "detail": {
+      "posTop": 0,
+      "posBottom": 168,
+      "pageTop": 168,
+      "pageBottom": 285,
+      "hash": "#/pos/landing_page_builder"
+    }
+  },
+  {
+    "name": "mobile merchant menu recalculates its offset and stays horizontally contained",
+    "passed": true,
+    "detail": {
+      "width": 390,
+      "doc": 390,
+      "posBottom": 210,
+      "pageTop": 210
+    }
+  },
+  {
+    "name": "mobile section click still preserves private routing",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "merchant marketing headline remains independently editable",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "merchant edits do not leak into public CODE76 plans or marketing",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "public five-tier pricing and sticky navigation fit a mobile viewport",
+    "passed": true,
+    "detail": {
+      "width": 390,
+      "doc": 390,
+      "header": 390
+    }
+  },
+  {
+    "name": "Starter now allows messaging while excluding private page and team services",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Starter cannot create referral attribution in checkout",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Starter retains inventory promotion editing without an email-campaign action",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Starter contact editor does not expose referral operations",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Starter messaging exposes drafts but not email or false sent-message claims",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "messaging draft is honestly recorded as unsent",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "empty visual analytics does not invent historical revenue or future predictions",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "recorded history updates live from a real test entry without fabricating sufficient forecast history",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Pro pricing retains software access but does not include the separate team package",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Max brief remains stored after a Pro downgrade and re-upgrade",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Max licence does not let an ordinary role access private team briefs",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "non-admin cannot change tiers or turn a price card into a paid subscription",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "pricing, marketing, navigation, service draft and analytics flow has zero console errors",
+    "passed": true,
+    "detail": "### Result\nTotal messages: 4 (Errors: 0, Warnings: 0)\nReturning 0 messages for level \"error\"\n\n"
+  },
+  {
+    "name": "assistant launcher no longer covers the Lifetime pricing call to action",
+    "passed": false,
+    "detail": {
+      "ctaUnobstructed": false,
+      "launcher": "relative"
+    }
+  },
+  {
+    "name": "assistant launcher no longer covers the Lifetime pricing call to action",
+    "passed": true,
+    "detail": {
+      "actual": {
+        "ctaUnobstructed": true,
+        "launcher": "relative"
+      },
+      "note": "Initial assertion used a fresh 1280\u00d7720 viewport with the CTA below the fold; corrected to the intended desktop viewport before hit-testing."
+    }
+  },
+  {
+    "name": "product questions open on explicit request with factual plan/service help",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "final inline assistant and expanded menu keep mobile pricing usable",
+    "passed": true,
+    "detail": {
+      "width": 390,
+      "doc": 390,
+      "top": 0
+    }
+  },
+  {
+    "name": "business assistant has a non-obstructive inline entry and private sticky routing remains correct",
+    "passed": true,
+    "detail": {
+      "hash": "#/pos/landing_page_builder",
+      "pos": 168,
+      "page": 168,
+      "inline": [
+        "relative"
+      ]
+    }
+  },
+  {
+    "name": "final rebuilt landing pages finish with zero browser console errors",
+    "passed": true,
+    "detail": "### Result\nTotal messages: 2 (Errors: 0, Warnings: 0)\nReturning 0 messages for level \"error\"\n\n"
+  }
+]

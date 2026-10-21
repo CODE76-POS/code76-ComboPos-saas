@@ -1,0 +1,514 @@
+[
+  {
+    "name": "public root preserves CODE76 marketing/SEO and explains all four demo tiers",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "new workspace starts Free and shows only its allowed core platforms",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Free inventory has no marketing, email or data-export controls",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "direct private builder hash is blocked by Free entitlement even for an admin",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Free settings include regional/payments/delete but hide paid settings",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Free can persist currency, timezone and time format without changing its plan",
+    "passed": true,
+    "detail": {
+      "tier": "free",
+      "currency": "KES",
+      "zone": "Africa/Nairobi",
+      "time": "12h"
+    }
+  },
+  {
+    "name": "admin demo plan change unlocks Pro without creating a payment",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "company entry uses a company placeholder and does not ask for person avatar style",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "utility company is saved without fake contacts or unwanted vendor/staff projection",
+    "passed": true,
+    "detail": {
+      "name": "TEST Kenya Power",
+      "type": "Electricity company",
+      "kind": "company",
+      "vendors": 0,
+      "photo": ""
+    }
+  },
+  {
+    "name": "shared camera binds a real live preview after the tab mounts, with no audio",
+    "passed": true,
+    "detail": {
+      "phase": "ready",
+      "width": 1280,
+      "height": 720,
+      "playing": true,
+      "videoTracks": 1,
+      "audioTracks": 0
+    }
+  },
+  {
+    "name": "stopping camera detaches its stream and disables unready capture",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "camera flip restarts a ready stream instead of leaving a blank video",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "camera produces an attached JPEG and exits live capture",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "company functions create linked vendor/transporter/marketing views with one stable identity",
+    "passed": true,
+    "detail": {
+      "id": "party-600ee75f-1b32-4cbc-af48-412d3de5ae15",
+      "picture": "data:image/jpeg;base64,",
+      "functions": [
+        "transporter",
+        "vendor",
+        "marketer"
+      ],
+      "ids": [
+        "party-600ee75f-1b32-4cbc-af48-412d3de5ae15",
+        "party-600ee75f-1b32-4cbc-af48-412d3de5ae15",
+        "party-600ee75f-1b32-4cbc-af48-412d3de5ae15"
+      ],
+      "members": 0
+    }
+  },
+  {
+    "name": "captured camera file is a valid downscaled image, not a blank/unready placeholder",
+    "passed": true,
+    "detail": {
+      "width": 1024,
+      "height": 576,
+      "bytes": 10390
+    }
+  },
+  {
+    "name": "branch stores its parent and joins the selected company directory",
+    "passed": true,
+    "detail": {
+      "id": "party-3565e35a-8c75-4741-a043-b187825cc2ba",
+      "parent": "party-600ee75f-1b32-4cbc-af48-412d3de5ae15",
+      "kind": "branch",
+      "vendors": [
+        "party-3565e35a-8c75-4741-a043-b187825cc2ba",
+        "party-600ee75f-1b32-4cbc-af48-412d3de5ae15"
+      ]
+    }
+  },
+  {
+    "name": "companies and branches appear as organisations in the Vendors directory",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "selecting a utility fills the payee without typing its name",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "expense saves a real related-company snapshot alongside unchanged monetary fields",
+    "passed": true,
+    "detail": {
+      "name": "TEST Kenya Power",
+      "amount": 1000,
+      "category": "Utilities",
+      "type": "Electricity company",
+      "tel": "0000000000",
+      "tax": "TEST-TAX-POWER"
+    }
+  },
+  {
+    "name": "expense PDF print view includes selected company type/contact/legal details",
+    "passed": true,
+    "detail": {
+      "hasCompany": true
+    }
+  },
+  {
+    "name": "editing a company from a linked directory synchronizes every view",
+    "passed": true,
+    "detail": [
+      "2222222222",
+      "2222222222",
+      "2222222222",
+      "2222222222"
+    ]
+  },
+  {
+    "name": "editing company contacts does not rewrite an existing expense snapshot",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "staff roles, explicit avatar and half-day/off-day schedule persist and synchronize",
+    "passed": true,
+    "detail": {
+      "id": "party-fba31d6f-031b-4207-a0e0-bee0facf3117",
+      "style": "masculine",
+      "photo": "",
+      "start": "08:00",
+      "end": "12:00",
+      "off": [
+        "Friday",
+        "Saturday",
+        "Sunday"
+      ],
+      "work": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday"
+      ],
+      "rate": 1200,
+      "basis": "day",
+      "transport": "party-fba31d6f-031b-4207-a0e0-bee0facf3117",
+      "market": "party-fba31d6f-031b-4207-a0e0-bee0facf3117",
+      "payments": 0,
+      "expenses": 1
+    }
+  },
+  {
+    "name": "saving an agreed rate does not create paid salary or an expense",
+    "passed": true,
+    "detail": {
+      "id": "party-fba31d6f-031b-4207-a0e0-bee0facf3117",
+      "style": "masculine",
+      "photo": "",
+      "start": "08:00",
+      "end": "12:00",
+      "off": [
+        "Friday",
+        "Saturday",
+        "Sunday"
+      ],
+      "work": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday"
+      ],
+      "rate": 1200,
+      "basis": "day",
+      "transport": "party-fba31d6f-031b-4207-a0e0-bee0facf3117",
+      "market": "party-fba31d6f-031b-4207-a0e0-bee0facf3117",
+      "payments": 0,
+      "expenses": 1
+    }
+  },
+  {
+    "name": "salary recording starts with no paid amount and expense posting unchecked",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "actual paid amount is tracked separately without an implicit expense",
+    "passed": true,
+    "detail": {
+      "payments": 1,
+      "paid": 600,
+      "currency": "KES",
+      "expense": null,
+      "expenses": 1
+    }
+  },
+  {
+    "name": "explicit salary-expense choice posts exactly one matching expense",
+    "passed": true,
+    "detail": {
+      "payments": 2,
+      "expenses": 2,
+      "linked": 1,
+      "linkedAmount": 600,
+      "totalExpense": 1600
+    }
+  },
+  {
+    "name": "company members show a separate dated salary-payment ledger",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "stock invoice selects a saved branch rather than requiring a typed company name",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "stock invoice totals reflect actual lines rather than a hidden template",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "stock invoice preserves supplier/branch details and adds the supplied physical stock",
+    "passed": true,
+    "detail": {
+      "name": "TEST East Branch",
+      "parent": "TEST Multi Services",
+      "phone": "1111111111",
+      "total": 60,
+      "paid": 0,
+      "status": "pending",
+      "stock": 3,
+      "cost": 20
+    }
+  },
+  {
+    "name": "stock invoice PDF view includes supplier branch, parent and contact details",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "customer can choose a feminine fallback without providing or inventing a real photo",
+    "passed": true,
+    "detail": {
+      "style": "feminine",
+      "photo": "",
+      "members": 1
+    }
+  },
+  {
+    "name": "Starter exposes business operations but excludes business page, messaging and emailing",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Starter retains inventory exports but removes inventory marketing/email controls",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Starter inventory entry does not expose promotional marketing or private-page configuration",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "a direct messaging hash cannot bypass Starter plan restrictions",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Lifetime demo restores all current modules and states future-update access",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "plan changes preserve directory, payroll, invoice and inventory records",
+    "passed": true,
+    "detail": {
+      "companies": 3,
+      "staff": 1,
+      "customers": 1,
+      "payments": 2,
+      "invoices": 1,
+      "stock": 3
+    }
+  },
+  {
+    "name": "weekends-only preset selects weekend work and weekday off-days",
+    "passed": true,
+    "detail": {
+      "sat": true,
+      "sun": true,
+      "offMonday": true
+    }
+  },
+  {
+    "name": "holiday-only preset refers to the configured calendar rather than inventing holidays",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "editing linked staff roles removes only the obsolete derived directory entry",
+    "passed": true,
+    "detail": {
+      "start": "12:00",
+      "end": "18:00",
+      "roles": [
+        "Associate",
+        "Marketor"
+      ],
+      "stillDriver": false,
+      "stillMarketer": true,
+      "payments": 2,
+      "expenses": 2
+    }
+  },
+  {
+    "name": "afternoon preset and schedule edits preserve pay records without posting new expenses",
+    "passed": true,
+    "detail": {
+      "start": "12:00",
+      "end": "18:00",
+      "roles": [
+        "Associate",
+        "Marketor"
+      ],
+      "stillDriver": false,
+      "stillMarketer": true,
+      "payments": 2,
+      "expenses": 2
+    }
+  },
+  {
+    "name": "in-app manual includes companies/plans/salary/camera guidance",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "manual explains actual pay versus rates, holiday calendars and camera limits",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "manual explicitly documents plan limits, local photos and company snapshots",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "settings offer additional bookkeeping payment channels",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "enabling a payment channel retains the current Lifetime demo plan",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Free checkout offers enabled channels but removes credit/debt",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Free underpaid checkout fails clearly without recording debt or a sale",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Free full-payment sale succeeds and retains receipt operations",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "receipt applies selected currency and timestamp display preferences",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Free history exposes receipt viewing but no debt, email or business-review operations",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "plan badge, app link and core navigation fit a mobile viewport",
+    "passed": true,
+    "detail": {
+      "width": 390,
+      "document": 390,
+      "link": "http://127.0.0.1:5173/"
+    }
+  },
+  {
+    "name": "reload preserves plan, companies, schedule/payments and region but requires sign-in",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "related-company directory remains usable without document overflow on mobile",
+    "passed": true,
+    "detail": {
+      "width": 390,
+      "doc": 390
+    }
+  },
+  {
+    "name": "company and camera entry form fits the mobile viewport",
+    "passed": true,
+    "detail": {
+      "width": 390,
+      "doc": 390,
+      "dialogRight": 378
+    }
+  },
+  {
+    "name": "Lifetime entitlement does not bypass staff/payroll role privileges",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "non-admin cannot change demo plans",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "non-HR/non-finance backup redacts salary ledger, rates and linked salary expense details",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Free exposes an admin-confirmed business-data deletion workflow",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "confirmed Free deletion clears business records but preserves plan, region, account and audit",
+    "passed": true,
+    "detail": {
+      "tier": "free",
+      "zone": "Africa/Nairobi",
+      "currency": "KES",
+      "counts": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "audit": 40
+    }
+  },
+  {
+    "name": "finished build returns to public marketing/sign-in, not a protected dashboard",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "complete companies/plans/camera/payroll flow has zero browser console errors",
+    "passed": true,
+    "detail": "### Result\nTotal messages: 4 (Errors: 0, Warnings: 0)\nReturning 0 messages for level \"error\"\n\n"
+  }
+]

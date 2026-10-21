@@ -1,3 +1,5 @@
+import { BUSINESS_PAGE_DEFAULTS } from '../config/businessPage.ts';
+import { DEFAULT_CHATBOT_SETTINGS } from '../config/assistant.ts';
 import {
   AppSettings,
   AuditLog,
@@ -897,28 +899,15 @@ export const INITIAL_LANDING_METRICS: LandingMetrics = [
 ][0];
 
 export const INITIAL_SETTINGS: AppSettings = {
+  planTier: 'pro',
   payments: {
-    acceptedMethods: ['Cash', 'M-Pesa', 'Credit Card', 'Bank Transfer', 'Debit Card', 'Credit / Debt'],
+    acceptedMethods: ['Cash', 'M-Pesa', 'Airtel Money', 'T-Kash', 'Credit Card', 'Bank Transfer', 'Debit Card', 'Cheque', 'Other', 'Credit / Debt'],
     defaultCurrency: 'USD',
     taxRatePercentage: 0,
     allowDebtSales: true,
   },
   textSizing: 'normal',
-  landingPage: {
-    heroTitle: 'Transform Every Retail & Service Transaction into Predictable Profit',
-    heroSubtitle: 'Complete POS hardware, real-time inventory synchronization, automated debt tracking, and AI sales conversion for ambitious businesses.',
-    featuredCount: 6,
-    slideshowSpeedMs: 4000,
-    showSocialProof: true,
-    showChatbot: true,
-    referralBonusText: 'Refer a fellow business owner or friend! When they purchase a terminal, both of you get $50 credit or 10% discount on next restock.',
-    topReferrersLimit: 5,
-    showPromoCountdown: true,
-    customInstagram: '@code76_pos',
-    customTwitter: '@code76pos',
-    customWhatsappDirect: '+18007607676',
-    shareableLinkSlogan: 'Exclusive Enterprise Commercial POS & ERP Hardware Special',
-  },
+  landingPage: { ...BUSINESS_PAGE_DEFAULTS },
   receipts: {
     headerTitle: 'CODE76 ENTERPRISE SOLUTIONS',
     subtitle: 'Official Customer Sales Receipt',
@@ -926,7 +915,15 @@ export const INITIAL_SETTINGS: AppSettings = {
     returnPolicy: 'Goods accepted for exchange within 7 days with valid original receipt and uncompromised packaging.',
     showBarcode: true,
     showTaxPin: true,
+    promptAfterSale: true,
+    autoOpenAfterSale: true,
+    enabledFormats: ['pdf', 'txt', 'csv', 'json', 'html'],
+    enabledChannels: ['email', 'whatsapp', 'sms', 'copy'],
+    defaultChannel: 'email',
+    sendMessageTemplate: 'Hello {customer}, thank you for your purchase at {company}. Receipt {receipt} for {currency} {total} was issued on {date}. Keep this message for your records.',
+    paymentInstructions: '',
   },
+  chatbot: { ...DEFAULT_CHATBOT_SETTINGS },
   appearance: {
     theme: 'dark',
     accentColor: 'emerald',

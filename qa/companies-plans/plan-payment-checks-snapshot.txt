@@ -1,0 +1,143 @@
+### Page
+- Page URL: http://127.0.0.1:5173/#/pos
+- Page Title: CODE76 POS — Private Workspace
+### Snapshot
+```yaml
+- generic [ref=f1e4]:
+  - banner [ref=f1e681]:
+    - generic [ref=f1e682]:
+      - button "76 CODE76 POS Enterprise Product & Service SaaS ERP System" [ref=f1e684] [cursor=pointer]:
+        - generic [ref=f1e685]: "76"
+        - generic [ref=f1e686]:
+          - generic [ref=f1e687]:
+            - generic [ref=f1e688]: CODE76 POS
+            - generic [ref=f1e689]: Enterprise
+          - paragraph [ref=f1e690]: Product & Service SaaS ERP System
+      - generic [ref=f1e691]:
+        - generic [ref=f1e692]:
+          - button "Desktop View (Full Width)" [ref=f1e693] [cursor=pointer]
+          - button "Laptop View (1024px)" [ref=f1e696] [cursor=pointer]
+          - button "Tablet View (768px)" [ref=f1e699] [cursor=pointer]
+          - button "Phone Mobile View (390px)" [ref=f1e702] [cursor=pointer]
+        - generic [ref=f1e705]:
+          - button "Demo Data" [ref=f1e706] [cursor=pointer]
+          - button "Click to view help guide and settings for this platform" [ref=f1e718] [cursor=pointer]
+          - button "Active user session and access controls" [ref=f1e723] [cursor=pointer]:
+            - generic [ref=f1e724]: DR
+            - generic [ref=f1e725]:
+              - generic [ref=f1e726]: Dr. David Kimani
+              - generic [ref=f1e727]: "Role: CEO"
+    - generic [ref=f1e728]:
+      - generic [ref=f1e729]:
+        - generic [ref=f1e733]: App link
+        - generic [ref=f1e734]:
+          - generic [ref=f1e735]:
+            - generic [ref=f1e736]: App link
+            - textbox "App link" [ref=f1e737]: http://127.0.0.1:5173/
+            - button "Copy app link" [ref=f1e738] [cursor=pointer]:
+              - generic [ref=f1e742]: Copy link
+            - link "Open app link in a new tab" [ref=f1e743] [cursor=pointer]:
+              - /url: http://127.0.0.1:5173/
+          - status [ref=f1e748]
+        - button "Current demo plan" [ref=f1e749]: Free · demo
+      - paragraph [ref=f1e750]: Open this root link to reach CODE76 sign-in/register. Browser-local records and sessions do not sync between browsers.
+    - generic [ref=f1e752]:
+      - button "Sales POS" [active] [ref=f1e753] [cursor=pointer]
+      - button "Sales History" [ref=f1e757] [cursor=pointer]
+      - button "Inventory" [ref=f1e762] [cursor=pointer]
+      - button "Settings" [ref=f1e817] [cursor=pointer]
+      - button "About & Manual" [ref=f1e825] [cursor=pointer]
+  - main [ref=f1e5]:
+    - generic [ref=f1e2851]:
+      - generic [ref=f1e2852]:
+        - generic [ref=f1e2853]:
+          - generic [ref=f1e2854]:
+            - heading "Sales POS Terminal" [level=1] [ref=f1e2855]
+            - button "Click for platform guidance & settings" [ref=f1e2856] [cursor=pointer]
+          - paragraph [ref=f1e2860]: Multi-payment splits, live autocomplete, line & cart discounts, extra charges, and social referral tagging.
+        - generic [ref=f1e2861]:
+          - combobox [ref=f1e2867] [cursor=pointer]:
+            - option "Walk-in Customer" [selected]
+            - option "TEST Amina Customer ()"
+          - combobox [ref=f1e2872] [cursor=pointer]:
+            - 'option "Referred By: None" [selected]'
+            - option "TEST Amina Customer (Customer)"
+            - option "TEST Musa Driver (Marketor)"
+            - option "TEST Multi Services (Marketor)"
+            - option "TEST Musa Driver (Associate)"
+      - generic [ref=f1e2873]:
+        - generic [ref=f1e2874]:
+          - textbox "Type product name, SKU, or scan barcode to search & add..." [ref=f1e2880]
+          - generic [ref=f1e2881]:
+            - button "All" [ref=f1e2882] [cursor=pointer]
+            - button "Hardware" [ref=f1e2883] [cursor=pointer]
+          - generic [ref=f1e2884]:
+            - generic [ref=f1e2885]:
+              - generic [ref=f1e2886]: Product Showcase Catalog (1)
+              - generic [ref=f1e2887]: (Toggle grid in Settings > Color & Appearance)
+            - generic [ref=f1e2889] [cursor=pointer]:
+              - generic [ref=f1e2890]:
+                - generic [ref=f1e2891]: TEST Stock Item
+                - generic [ref=f1e2892]: "Hardware | Stock: 3"
+              - generic [ref=f1e2893]:
+                - generic [ref=f1e2894]: KES 27.00
+                - button [ref=f1e2896]
+        - generic [ref=f1e2899]:
+          - heading "Active Cart (0 items)" [level=3] [ref=f1e2905]
+          - generic [ref=f1e2906]:
+            - paragraph [ref=f1e2910]: Cart is currently empty
+            - paragraph [ref=f1e2911]: Search products or click catalog items above to add.
+          - generic [ref=f1e2912]:
+            - generic [ref=f1e2913]:
+              - generic [ref=f1e2914]: "Cart-wide Discount:"
+              - generic [ref=f1e2915]:
+                - spinbutton "0" [ref=f1e2916]
+                - button "%" [ref=f1e2917] [cursor=pointer]
+            - generic [ref=f1e2918]:
+              - generic [ref=f1e2919]: "Add Extra Charge:"
+              - generic [ref=f1e2921]:
+                - combobox [ref=f1e2922]:
+                  - option "Transportation" [selected]
+                  - option "Tax"
+                  - option "Packaging"
+                  - option "Delivery"
+                  - option "Service Fee"
+                  - option "Installation"
+                  - option "Custom"
+                - generic [ref=f1e2923]:
+                  - spinbutton "Amount $" [ref=f1e2924]
+                  - generic [ref=f1e2925]: $
+                - button "+ Add" [ref=f1e2926] [cursor=pointer]
+          - generic [ref=f1e2927]:
+            - generic [ref=f1e2928]:
+              - generic [ref=f1e2929]: "Subtotal:"
+              - generic [ref=f1e2930]: KES 0.00
+            - generic [ref=f1e2931]:
+              - generic [ref=f1e2932]: "Net Total:"
+              - generic [ref=f1e2933]: KES 0.00
+          - generic [ref=f1e2934]:
+            - generic [ref=f1e2935]:
+              - generic [ref=f1e2936]: Split Payment Breakdown
+              - generic [ref=f1e2939]:
+                - button "One payment" [ref=f1e2940] [cursor=pointer]
+                - button "+ Add Payment Option" [ref=f1e2941] [cursor=pointer]
+            - generic [ref=f1e2944]:
+              - combobox "Payment 1 method" [ref=f1e2945]:
+                - option "Cash" [selected]
+                - option "M-Pesa"
+                - option "Airtel Money"
+                - option "T-Kash"
+                - option "Credit Card"
+                - option "Bank Transfer"
+                - option "Debit Card"
+                - option "Cheque"
+                - option "Other"
+                - option "PayPal"
+              - generic [ref=f1e2946]:
+                - spinbutton "Payment 1 amount" [ref=f1e2947]
+                - generic [ref=f1e2948]: $
+            - generic [ref=f1e2949]:
+              - generic [ref=f1e2950]: "Total Tendered:"
+              - generic [ref=f1e2951]: KES 0.00
+          - button "Complete Sale & Print Receipt (KES 0.00)" [disabled] [ref=f1e2953] [cursor=pointer]
+```

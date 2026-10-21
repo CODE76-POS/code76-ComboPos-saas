@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { directoryPhoto } from '../../utils/directory.ts';
+import React, { useState, useEffect } from 'react';
 import { usePOS } from '../../context/POSContext.tsx';
 import { Star, MessageSquare, X, CheckCircle2, ShieldCheck } from 'lucide-react';
 import { UniversalPhotoInput } from '../common/UniversalPhotoInput.tsx';
@@ -12,10 +13,10 @@ export const ReviewCaptureModal: React.FC = () => {
   const [submitted, setSubmitted] = useState<boolean>(false);
   const associatedCustomer = customers.find((c) => c.id === reviewModalSale?.customerId);
   const [customPhotoUrl, setCustomPhotoUrl] = useState<string>(
-    associatedCustomer?.photoUrl ||
-      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80'
+    associatedCustomer?.photoUrl || ''
   );
 
+  useEffect(()=>{if(reviewModalSale){setCustomPhotoUrl(associatedCustomer?.photoUrl || '');setComment('');setRating(5);setIsApprovedForLanding(true);}},[reviewModalSale?.id]);
   if (!reviewModalSale) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -25,6 +26,7 @@ export const ReviewCaptureModal: React.FC = () => {
     addReview({
       customerName: reviewModalSale.customerName || 'Valued Customer',
       customerPhotoUrl: customPhotoUrl || associatedCustomer?.photoUrl,
+      avatarStyle: associatedCustomer?.avatarStyle || 'neutral',
       customerLocation: associatedCustomer?.location || 'Verified Buyer',
       rating,
       comment: comment.trim(),
@@ -98,6 +100,7 @@ export const ReviewCaptureModal: React.FC = () => {
                     key={star}
                     type="button"
                     onClick={() => setRating(star)}
+                    aria-label={`Rate ${star} ${star === 1 ? 'star' : 'stars'}`} aria-pressed={rating === star}
                     className="p-1 text-slate-600 hover:scale-110 transition cursor-pointer"
                   >
                     <Star
@@ -121,7 +124,7 @@ export const ReviewCaptureModal: React.FC = () => {
                 label="Customer Photo / Avatar (Link, Google Drive, Device Upload / Drag, Live Camera Snapshot)"
                 value={customPhotoUrl}
                 onChange={(url) => setCustomPhotoUrl(url)}
-                helperText="Attached customer portrait displays on the public landing page social proof card."
+                helperText="A supplied customer photo appears with approved feedback in your private Business Landing Page preview."
               />
             </div>
 
@@ -135,7 +138,8 @@ export const ReviewCaptureModal: React.FC = () => {
                 required
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
-                placeholder="e.g. The terminal is ultra fast and easy for our cashiers to use. Highly recommend CODE76 for all retail businesses!"
+                aria-label="Customer review details"
+                placeholder="Describe the product or service and your experience with this business."
                 className="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-sm text-slate-100 focus:outline-none focus:border-amber-500"
               />
             </div>
@@ -152,9 +156,9 @@ export const ReviewCaptureModal: React.FC = () => {
               <label htmlFor="landingApproval" className="text-xs text-slate-300 cursor-pointer">
                 <span className="font-semibold text-slate-100 flex items-center gap-1.5">
                   <ShieldCheck className="w-3.5 h-3.5 text-teal-400" />
-                  Showcase on Public E-Commerce Landing Page
+                  Show on this business’s private Business Landing Page
                 </span>
-                Display this verified purchase testimonial to prospective leads and visitors for social proof.
+                Approved feedback appears automatically in the business-page preview; it does not edit the public CODE76 website.
               </label>
             </div>
 

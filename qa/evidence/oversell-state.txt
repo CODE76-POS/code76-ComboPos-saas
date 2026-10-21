@@ -1,0 +1,14 @@
+### Result
+{
+  "receipt": "REC-7605",
+  "quantitySold": 9,
+  "stockAtSale": 8,
+  "stockAfter": 0,
+  "status": "completed",
+  "paid": 7920,
+  "netTotal": 7920
+}
+### Ran Playwright code
+```js
+await page.evaluate('() => {const s=JSON.parse(localStorage.getItem(\'code76_pos_state_v1\'));const sale=s.sales[0];return {receipt:sale.receiptNo,quantitySold:sale.items[0].quantity,stockAtSale:sale.items[0].product.stock,stockAfter:s.products.find(p=>p.id===\'prod-11\').stock,status:sale.status,paid:sale.amountPaid,netTotal:sale.netTotal}}');
+```
