@@ -3,7 +3,7 @@ import {createDemoWorkspace} from '../data/demoWorkspace.ts';
 import {applyDebtPayment,type DebtPaymentOptions} from '../utils/debt.ts';
 import { TEAM_SERVICES } from '../config/teamServices.ts';
 import { invoiceDraftTotals } from '../utils/invoiceDraft.ts';
-import { hasPlanFeature, planTier, requirePlanFeature, PLAN_TIERS, type Feature } from '../utils/plans.ts';
+import { directoryFeature, hasPlanFeature, planTier, requirePlanFeature, PLAN_TIERS, type Feature } from '../utils/plans.ts';
 import { canonicalDirectoryId, directoryName, snapshotParty, uniqueParties, upsertDirectory, removeDirectory, validateDirectory, type DirectoryCollections } from '../utils/directory.ts';
 import { prepareSalaryPayment } from '../utils/staffing.ts';
 import { serviceUnitLabel } from '../utils/serviceUnits.ts';
@@ -392,7 +392,7 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       canSell:'selling', canSendReceipts:'receipts', canSettleDebt:'debts',
       canViewInventory:'inventory', canEditInventory:'inventory', canAdjustStock:'inventory',
       canViewExpenses:'expenses', canEditExpenses:'expenses', canViewInvoices:'invoices',
-      canViewAnalytics:'analytics', canManagePeople:'directory', canManageSchedules:'payroll',
+      canViewAnalytics:'analytics', canManageSchedules:'payroll',
       canExportPdf:'data_export', canImportCsv:'imports', canViewAuditLogs:'audit',
       canModifySettings:'appearance', canEditLandingPage:'business_landing',
       canManageChatbot:'chatbot', canDeleteData:'delete_data',
@@ -600,7 +600,7 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // Stable identities project into selected directories; historical snapshots remain immutable.
   const addPerson = (category: PersonRecord['category'], personData: Omit<PersonRecord, 'id' | 'createdAt'>): PersonRecord => {
-    requirePlanFeature(settings, 'directory');
+    requirePlanFeature(settings, directoryFeature(category));
     if (!hasPrivilege('canManagePeople')) throw new Error('Directory changes require Manage People permission.');
     const person: PersonRecord = { ...personData, id: `party-${crypto.randomUUID()}`, category, sourceCategory: category, createdAt: new Date().toISOString() };
     validateDirectory(person, directoriesRef.current.relatedCompanies);
@@ -609,14 +609,14 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return person;
   };
   const updatePerson = (category: PersonRecord['category'], person: PersonRecord) => {
-    requirePlanFeature(settings, 'directory');
+    requirePlanFeature(settings, directoryFeature(category || person.category));
     if (!hasPrivilege('canManagePeople')) throw new Error('Directory changes require Manage People permission.');
     validateDirectory(person, directoriesRef.current.relatedCompanies);
     applyDirectories(upsertDirectory(directoriesRef.current, person));
     logAuditAction('Updated Person', `Updated linked identity ${canonicalDirectoryId(person.id)}: ${directoryName(person)}`);
   };
-  const deletePerson = (_category: PersonRecord['category'], id: string) => {
-    requirePlanFeature(settings, 'directory');
+  const deletePerson = (category: PersonRecord['category'], id: string) => {
+    requirePlanFeature(settings, directoryFeature(category));
     if (!hasPrivilege('canManagePeople')) throw new Error('Directory deletion requires Manage People permission.');
     applyDirectories(removeDirectory(directoriesRef.current, id));
     logAuditAction('Deleted Person', `Removed linked identity ${canonicalDirectoryId(id)} from directories; historical transactions/payments retained`);

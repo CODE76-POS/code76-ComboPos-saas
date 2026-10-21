@@ -456,7 +456,7 @@ export function registerBusiness(input: BusinessRegistrationInput, storage?: Sto
     companyName,
     ownerEmail: email,
     createdAt: new Date().toISOString(),
-    planTier: 'pro',
+    planTier: 'free',
   };
   const salt = createSalt();
   const answerSalt = createSalt();

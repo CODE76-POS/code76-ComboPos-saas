@@ -525,7 +525,7 @@ export const USER_MANUAL: ManualEntry[] = [
     category: 'Reference',
     summary: 'Demo tiers change which platforms open. Prices are illustrative, no payment gateway is connected and no licence is created.',
     steps: [
-      'Free — selling, receipts, history with read-only debt balances, basic inventory, appearance/payments/regional settings and guides.',
+      'Free — selling, receipts, history with read-only debt balances, basic inventory, your company profile, company members with their logins and roles, appearance/payments/regional settings and guides.',
       'Starter — everything Pro has except email, referral operations, business-page creation and chatbot intelligence.',
       'Pro — all software including analytics, business page, chatbot and debt handling.',
       'Max — Pro plus CODE76 team-service access.',

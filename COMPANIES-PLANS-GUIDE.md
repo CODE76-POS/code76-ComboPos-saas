@@ -4,7 +4,7 @@
 
 ## Live app
 
-Open **CODE76 POS — Workspace Preview**, **port 5173**, in Arena's Live Preview panel. The app URL remains available in the POS top navbar. A new workspace starts Free; select **CEO / Admin → skip/complete setup → Current demo plan → Pro or Lifetime** to test company, payroll and other paid features. Existing saved workspaces without a tier retain Pro-equivalent access. No billing or subscription provider is connected.
+Open **CODE76 POS — Workspace Preview**, **port 5173**, in Arena's Live Preview panel. The app URL remains available in the POS top navbar. A new workspace starts Free, which now includes the My Company profile and Company Members (with team logins and recovery questions). Select **CEO / Admin → skip/complete setup → Current demo plan → Pro or Lifetime** to test finance, payroll and other paid features. Existing saved workspaces without a tier retain Pro-equivalent access. No billing or subscription provider is connected.
 
 ## People versus organisations
 
@@ -50,7 +50,7 @@ Use the member's **Wallet / Salary payments** action to record an already-paid a
 
 | Tier | Included | Excluded / limits |
 |---|---|---|
-| **Free** | Selling, receipts, history with debt balances read-only, basic inventory, appearance/receipts, currency/payments/date/time, admin-confirmed business-data deletion, help | No new credit/debt or repayment actions; no inventory marketing/export; no advanced company/finance/people, business page, merchant chatbot, messaging or email |
+| **Free** | Selling, receipts, history with debt balances read-only, basic inventory, **My Company profile**, **Company Members with their roles and logins**, appearance/receipts, currency/payments/date/time, admin-confirmed business-data deletion, help | No new credit/debt or repayment actions; no inventory marketing/export; no customer/vendor/transporter/marketing directories; no finance, analytics, payroll, business page, merchant chatbot, messaging or email |
 | **Starter** | Pro business operations including companies, staff/payroll, invoices/expenses, analytics, permitted exports and audit | No inventory marketing, Business Landing Page, merchant chatbot, messaging or email |
 | **Pro** | All current features, subject to role privileges | Intended monthly-subscription model; no real billing connected |
 | **Lifetime** | All current and future declared features/updates, subject to role privileges | Intended lifetime-access model; no real billing connected |

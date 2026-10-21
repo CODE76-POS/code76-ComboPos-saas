@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { FEATURES, PLAN_TIERS, hasPlanFeature, canOpenPlatform, canOpenSettings, planTier, requirePlanFeature } from '../../src/utils/plans.ts';
+import { FEATURES, PLAN_TIERS, hasPlanFeature, canOpenPlatform, canOpenSettings, directoryFeature, planTier, requirePlanFeature } from '../../src/utils/plans.ts';
 import { INITIAL_SETTINGS } from '../../src/data/initialData.ts';
 import { mergeAppSettings } from '../../src/utils/businessPageSettings.ts';
 import { DIRECTORY_KEYS, directoryName, directoryMemberships, directoryPhoto, upsertDirectory, removeDirectory, snapshotParty, partyDetails, uniqueParties, validateDirectory, canonicalDirectoryId, type DirectoryCollections } from '../../src/utils/directory.ts';
@@ -17,7 +17,7 @@ const prefs = (planTier: AppSettings['planTier']='pro'): AppSettings => ({...str
 const person = (patch: Partial<PersonRecord>={}): PersonRecord => ({id:'TEST-member',firstName:'TEST',secondName:'Person',tel1:'',tel2:'',whatsappNo:'',email1:'',email2:'',address:'',location:'',country:'',photoUrl:'',photoConsentForLanding:false,category:'company_member',roles:['Transporter/Driver','Marketor'],createdAt:'2026-10-20T00:00:00Z',...patch});
 const empty = (): DirectoryCollections => ({customers:[],vendors:[],transporters:[],marketingTeam:[],companyMembers:[],relatedCompanies:[]});
 const source = (path:string) => readFileSync(new URL(`../../${path}`,import.meta.url),'utf8');
-const free = new Set(['selling','receipts','sales_history','inventory','appearance','payments','regional','delete_data','about']);
+const free = new Set(['selling','receipts','sales_history','inventory','appearance','payments','regional','delete_data','about','company_members','company_profile']);
 const starterOff = new Set(['business_landing','chatbot','email','referrals']);
 for (const tier of PLAN_TIERS) for (const feature of FEATURES) test(`${tier} entitlement: ${feature}`,()=>{
   assert.equal(hasPlanFeature(tier,feature),feature==='team_services'?(tier==='max'||tier==='lifetime'):tier==='free'?free.has(feature):tier==='starter'?!starterOff.has(feature):true);
@@ -29,9 +29,22 @@ test('new workspaces default to Free while older saved settings retain Pro acces
   assert.equal(mergeAppSettings(INITIAL_SETTINGS,{planTier:'starter'}).planTier,'starter');
 });
 test('downgrade does not delete or rewrite records',()=>{const data={products:[{name:'TEST'}],salaryPayments:[{id:'TEST-payment'}]};const saved=JSON.stringify(data);assert.equal(hasPlanFeature('free','payroll'),false);assert.equal(JSON.stringify(data),saved);});
-test('Free platform navigation only exposes licensed basic modules',()=>{
-  for(const platform of ['selling','sales_history','inventory','settings','about'] as const)assert.equal(canOpenPlatform(prefs('free'),platform),true);
-  for(const platform of ['expenses','invoices','my_company','customers','company_members','messaging','audit_logs','landing_page_builder'] as const)assert.equal(canOpenPlatform(prefs('free'),platform),false);
+test('Free platform navigation exposes basic modules plus the company profile and company members',()=>{
+  for(const platform of ['selling','sales_history','inventory','settings','about','my_company','company_members'] as const)assert.equal(canOpenPlatform(prefs('free'),platform),true);
+  for(const platform of ['expenses','invoices','customers','vendors','transporters','marketing_team','messaging','audit_logs','landing_page_builder'] as const)assert.equal(canOpenPlatform(prefs('free'),platform),false);
+});
+test('Free company-member edits pass the plan guard while other directories stay paid',()=>{
+  assert.equal(directoryFeature('company_member'),'company_members');
+  for(const category of ['customer','vendor','transporter','marketer','related_company'] as const)assert.equal(directoryFeature(category),'directory');
+  assert.doesNotThrow(()=>requirePlanFeature(prefs('free'),directoryFeature('company_member')));
+  assert.throws(()=>requirePlanFeature(prefs('free'),directoryFeature('customer')),/not included/);
+  assert.throws(()=>requirePlanFeature(prefs('free'),'directory'),/not included/);
+  assert.equal(hasPlanFeature('free','company_profile'),true);
+  assert.equal(canOpenSettings(prefs('free'),'teamAccess'),true);
+  assert.equal(canOpenSettings(prefs('free'),'privileges'),false);
+  assert.equal(hasPlanFeature('starter','company_members'),true);
+  assert.equal(hasPlanFeature('free','payroll'),false);
+  assert.equal(hasPlanFeature('free','data_export'),false);
 });
 test('Free has currency/date/appearance/payment/delete settings but no imports, backup or email',()=>{
   for(const section of ['regional','appearance','payments','dataEraser','plans'] as const)assert.equal(canOpenSettings(prefs('free'),section),true);
@@ -44,7 +57,11 @@ test('Starter retains companies, payroll, messaging and promotions with four exp
 test('context-level paid actions reject Free as well as hiding its menu',()=>{
   assert.throws(()=>requirePlanFeature(prefs('free'),'payroll'),/not included/);
   const text=source('src/context/POSContext.tsx');
-  for(const feature of ['directory','payroll','expenses','invoices','debts'])assert.ok(text.replace(/\s+/g,'').includes(`requirePlanFeature(settings,'${feature}')`),`Missing plan guard: ${feature}`);
+  for(const feature of ['payroll','expenses','invoices','debts'])assert.ok(text.replace(/\s+/g,'').includes(`requirePlanFeature(settings,'${feature}')`),`Missing plan guard: ${feature}`);
+  // Directory writes are gated per category: company members are Free, other directories stay paid.
+  assert.ok(text.replace(/\s+/g,'').includes('requirePlanFeature(settings,directoryFeature(category))'));
+  assert.equal(directoryFeature('company_member'),'company_members');
+  assert.equal(directoryFeature('customer'),'directory');
   assert.ok(text.includes('saleData.amountPaid + 0.001 < saleData.netTotal'));
 });
 test('only an admin can select a valid demo tier; save preferences cannot revert it',()=>{
