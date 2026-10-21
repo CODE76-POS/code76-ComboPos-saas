@@ -1,0 +1,26 @@
+Print / Save as PDF Close
+CODE76 ENTERPRISE
+SOLUTIONS
+Precision Point of Sale, ERP & Next-Gen Commerce
+Suite 76, Silicon Boulevard, Tech District, Nairobi Hub / Global
+Online, Kenya / International
+Tel: +1 (800) 760-7676 | Email: code76pos@gmail.com
+Tax/VAT PIN: P051982736Z
+Expense Payment Voucher - TEST
+Electricity Bill
+Generated: 20/10/2026 07:15:54 pm (Africa/Nairobi)
+System: CODE76 POS Enterprise
+Total Records: 8
+DETAIL FIELD INFORMATION
+Expense Title TEST Electricity Bill
+Cost Category Utilities
+Amount Disbursed KES 1000.00
+Disbursement Date 20/10/2026
+Vendor / Beneficiary TEST Kenya Power
+Payment Channel Bank Transfer
+Operational Notes
+Related company / branch
+details (saved at entry)
+TEST Kenya Power · Electricity company · Tel: 0000000000 · Email:
+qa.power@example.test · TEST Power Road · Tax PIN: TEST-TAX-POWER
+CODE76 POS - Official System Generated Document Authorized Signature / Stamp: ______________________ Page 1 of 1

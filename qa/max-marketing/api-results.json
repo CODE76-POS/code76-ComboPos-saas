@@ -1,0 +1,21 @@
+{
+  "hasApiKey": false,
+  "checks": [
+    {
+      "name": "published software prices",
+      "passed": true
+    },
+    {
+      "name": "no fake appointment or service delivery",
+      "passed": true
+    },
+    {
+      "name": "no automatically assigned referral cash",
+      "passed": true
+    },
+    {
+      "name": "merchant assistant remains independent of CODE76 offers",
+      "passed": true
+    }
+  ]
+}

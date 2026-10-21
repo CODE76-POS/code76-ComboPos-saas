@@ -1,0 +1,160 @@
+### Page
+- Page URL: http://127.0.0.1:5173/#/pos/audit_logs
+- Page Title: CODE76 POS — Private Workspace
+### Snapshot
+```yaml
+- generic [ref=e4]:
+  - banner [ref=e655]:
+    - generic [ref=e656]:
+      - button "76 CODE76 POS Enterprise Product & Service SaaS ERP System" [ref=e658] [cursor=pointer]:
+        - generic [ref=e659]: "76"
+        - generic [ref=e660]:
+          - generic [ref=e661]:
+            - generic [ref=e662]: CODE76 POS
+            - generic [ref=e663]: Enterprise
+          - paragraph [ref=e664]: Product & Service SaaS ERP System
+      - generic [ref=e665]:
+        - generic [ref=e666]:
+          - button "Desktop View (Full Width)" [ref=e667] [cursor=pointer]
+          - button "Laptop View (1024px)" [ref=e670] [cursor=pointer]
+          - button "Tablet View (768px)" [ref=e673] [cursor=pointer]
+          - button "Phone Mobile View (390px)" [ref=e676] [cursor=pointer]
+        - generic [ref=e679]:
+          - button "Demo Data" [ref=e680] [cursor=pointer]
+          - button "Business Page" [ref=e687] [cursor=pointer]
+          - button "Click to view help guide and settings for this platform" [ref=e692] [cursor=pointer]
+          - button "Active user session and access controls" [ref=e697] [cursor=pointer]:
+            - generic [ref=e698]: DR
+            - generic [ref=e699]:
+              - generic [ref=e700]: Dr. David Kimani
+              - generic [ref=e701]: "Role: CEO"
+    - generic [ref=e702]:
+      - generic [ref=e703]:
+        - generic [ref=e707]: App link
+        - generic [ref=e708]:
+          - generic [ref=e709]:
+            - generic [ref=e710]: App link
+            - textbox "App link" [ref=e711]: http://127.0.0.1:5173/
+            - button "Copy app link" [ref=e712] [cursor=pointer]:
+              - generic [ref=e716]: Copy link
+            - link "Open app link in a new tab" [ref=e717] [cursor=pointer]:
+              - /url: http://127.0.0.1:5173/
+          - status [ref=e722]
+      - paragraph [ref=e723]: Open this root link to reach CODE76 sign-in/register. Browser-local records and sessions do not sync between browsers.
+    - generic [ref=e725]:
+      - button "Sales POS" [ref=e726] [cursor=pointer]
+      - button "Sales History" [ref=e730] [cursor=pointer]
+      - button "Inventory" [ref=e735] [cursor=pointer]
+      - button "Expenses" [ref=e740] [cursor=pointer]
+      - button "Invoices" [ref=e744] [cursor=pointer]
+      - button "Analytics & P&L" [ref=e748] [cursor=pointer]
+      - button "Customers" [ref=e751] [cursor=pointer]
+      - button "Vendors" [ref=e757] [cursor=pointer]
+      - button "Transporters" [ref=e762] [cursor=pointer]
+      - button "Marketing Team" [ref=e768] [cursor=pointer]
+      - button "Company Members" [ref=e772] [cursor=pointer]
+      - button "My Company" [ref=e778] [cursor=pointer]
+      - button "Messaging" [ref=e782] [cursor=pointer]
+      - button "Business Landing Page" [ref=e785] [cursor=pointer]
+      - button "Settings" [ref=e790] [cursor=pointer]
+      - button "Audit & Access Logs" [ref=e794] [cursor=pointer]
+      - button "About & Manual" [ref=e798] [cursor=pointer]
+  - main [ref=e5]:
+    - generic [ref=e2633]:
+      - generic [ref=e2634]:
+        - generic [ref=e2635]:
+          - generic [ref=e2636]:
+            - heading "User Access History & Security Audit Logs" [level=1] [ref=e2637]
+            - button "Click for platform guidance & settings" [ref=e2641] [cursor=pointer]
+          - paragraph [ref=e2645]: "Browser-local activity records: user sign-ins, operations and sign-outs. Filter the results before downloading a report."
+        - generic [ref=e2646]:
+          - button "Download access history PDF" [ref=e2647] [cursor=pointer]:
+            - generic [ref=e2651]: Export PDF
+          - button "Download access history CSV" [ref=e2652] [cursor=pointer]:
+            - generic [ref=e2656]: Export CSV
+          - button "Download access history TXT" [ref=e2657]: TXT
+          - button "Email Audit Trail (PDF / CSV)" [ref=e2661] [cursor=pointer]
+      - status [ref=e2870]: PDF download requested. Check your browser downloads.
+      - generic [ref=e2666]:
+        - generic [ref=e2667]:
+          - generic [ref=e2668]:
+            - generic [ref=e2669]: Total Actions Logged
+            - generic [ref=e2673]: "8"
+            - generic [ref=e2674]: Continuous security trail
+          - generic [ref=e2675]:
+            - generic [ref=e2676]: User Logins Recorded
+            - generic [ref=e2681]: "1"
+            - generic [ref=e2682]: Authenticated sessions
+          - generic [ref=e2683]:
+            - generic [ref=e2684]: User Logouts Recorded
+            - generic [ref=e2689]: "0"
+            - generic [ref=e2690]: Gracefully closed sessions
+          - generic [ref=e2691]:
+            - generic [ref=e2692]: Sales / Admin Events
+            - generic [ref=e2697]: "1"
+            - generic [ref=e2698]: Business & config updates
+        - generic [ref=e2699]:
+          - textbox "Search by user name, action, role, details, device or IP..." [ref=e2704]: TEST service support
+          - generic [ref=e2705]:
+            - combobox [ref=e2706] [cursor=pointer]:
+              - option "All Action Categories" [selected]
+              - option "Logins Only"
+              - option "Logouts Only"
+              - option "Sales & Checkouts"
+              - option "Captured Leads & Quotes"
+              - option "Admin & System Changes"
+            - combobox [ref=e2707] [cursor=pointer]:
+              - option "All Recorded Dates" [selected]
+              - option "Today's Activity Only"
+        - generic [ref=e2708]:
+          - table [ref=e2710]:
+            - rowgroup [ref=e2711]:
+              - row [ref=e2712]:
+                - columnheader "Date & Time" [ref=e2713]
+                - columnheader "User & Role" [ref=e2714]
+                - columnheader "Action" [ref=e2715]
+                - columnheader "Activity Description" [ref=e2716]
+                - columnheader "Device & IP" [ref=e2717]
+                - columnheader "Action / Email" [ref=e2718]
+            - rowgroup [ref=e2719]:
+              - row [ref=e2777]:
+                - cell "Oct 20, 2026 02:34:00 PM" [ref=e2778]:
+                  - generic [ref=e2779]: Oct 20, 2026
+                  - generic [ref=e2780]: 02:34:00 PM
+                - 'cell "DR Dr. David Kimani Role: CEO" [ref=e2781]':
+                  - generic [ref=e2782]:
+                    - generic [ref=e2783]: DR
+                    - generic [ref=e2784]:
+                      - generic [ref=e2785]: Dr. David Kimani
+                      - generic [ref=e2786]: "Role: CEO"
+                - cell "Updated Product" [ref=e2787]
+                - 'cell "Updated TEST service support (SKU: SKU-753379)" [ref=e2792]'
+                - cell "Linux x86_64 (Mozilla/5.0 (X11; Linux x86_64) )" [ref=e2794]:
+                  - generic "Linux x86_64 (Mozilla/5.0 (X11; Linux x86_64) )" [ref=e2798]
+                - cell [ref=e2799]:
+                  - button "Email" [ref=e2800] [cursor=pointer]
+              - row [ref=e2805]:
+                - cell "Oct 20, 2026 02:33:10 PM" [ref=e2806]:
+                  - generic [ref=e2807]: Oct 20, 2026
+                  - generic [ref=e2808]: 02:33:10 PM
+                - 'cell "DR Dr. David Kimani Role: CEO" [ref=e2809]':
+                  - generic [ref=e2810]:
+                    - generic [ref=e2811]: DR
+                    - generic [ref=e2812]:
+                      - generic [ref=e2813]: Dr. David Kimani
+                      - generic [ref=e2814]: "Role: CEO"
+                - cell "Added Product" [ref=e2815]
+                - 'cell "Created service: TEST service support (ID: ITEM-2026-6827)" [ref=e2820]'
+                - cell "Linux x86_64 (Mozilla/5.0 (X11; Linux x86_64) )" [ref=e2822]:
+                  - generic "Linux x86_64 (Mozilla/5.0 (X11; Linux x86_64) )" [ref=e2826]
+                - cell [ref=e2827]:
+                  - button "Email" [ref=e2828] [cursor=pointer]
+          - generic [ref=e2862]:
+            - generic [ref=e2863]:
+              - text: Displaying
+              - strong [ref=e2864]: "2"
+              - text: of
+              - strong [ref=e2865]: "8"
+              - text: recorded logs
+            - generic [ref=e2866]: Browser-local audit records
+```

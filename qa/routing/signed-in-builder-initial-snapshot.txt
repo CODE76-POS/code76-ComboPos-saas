@@ -1,0 +1,208 @@
+### Page
+- Page URL: http://127.0.0.1:3000/#/pos/landing_page_builder
+- Page Title: Business Landing Page | CODE76 POS — Private Workspace
+### Snapshot
+```yaml
+- generic [ref=f2e3]:
+  - generic [ref=f2e4]:
+    - banner [ref=f2e785]:
+      - generic [ref=f2e786]:
+        - button "76 CODE76 POS Enterprise Product & Service SaaS ERP System" [ref=f2e788] [cursor=pointer]:
+          - generic [ref=f2e789]: "76"
+          - generic [ref=f2e790]:
+            - generic [ref=f2e791]:
+              - generic [ref=f2e792]: CODE76 POS
+              - generic [ref=f2e793]: Enterprise
+            - paragraph [ref=f2e794]: Product & Service SaaS ERP System
+        - generic [ref=f2e795]:
+          - generic [ref=f2e796]:
+            - button "Desktop View (Full Width)" [ref=f2e797] [cursor=pointer]
+            - button "Laptop View (1024px)" [ref=f2e800] [cursor=pointer]
+            - button "Tablet View (768px)" [ref=f2e803] [cursor=pointer]
+            - button "Phone Mobile View (390px)" [ref=f2e806] [cursor=pointer]
+          - generic [ref=f2e809]:
+            - button "Light" [ref=f2e810] [cursor=pointer]
+            - button "Demo Data" [ref=f2e818] [cursor=pointer]
+            - generic [ref=f2e824]:
+              - button "Business Page" [ref=f2e825] [cursor=pointer]
+              - button "CODE76 Site" [ref=f2e830] [cursor=pointer]
+            - button "Click to view help guide and settings for this platform" [ref=f2e835] [cursor=pointer]
+            - generic [ref=f2e839]:
+              - 'button "DR Dr. David Kimani Role: CEO" [ref=f2e840] [cursor=pointer]':
+                - generic [ref=f2e841]: DR
+                - generic [ref=f2e842]:
+                  - generic [ref=f2e843]: Dr. David Kimani
+                  - generic [ref=f2e844]: "Role: CEO"
+              - button "Sign out and return to landing page" [ref=f2e845] [cursor=pointer]
+      - generic [ref=f2e850]:
+        - button "Sales POS" [ref=f2e851] [cursor=pointer]
+        - button "Sales History" [ref=f2e855] [cursor=pointer]
+        - button "Inventory" [ref=f2e860] [cursor=pointer]
+        - button "Expenses" [ref=f2e865] [cursor=pointer]
+        - button "Invoices" [ref=f2e869] [cursor=pointer]
+        - button "Analytics & P&L" [ref=f2e873] [cursor=pointer]
+        - button "Customers" [ref=f2e876] [cursor=pointer]
+        - button "Vendors" [ref=f2e882] [cursor=pointer]
+        - button "Transporters" [ref=f2e887] [cursor=pointer]
+        - button "Marketing Team" [ref=f2e893] [cursor=pointer]
+        - button "Company Members" [ref=f2e897] [cursor=pointer]
+        - button "My Company" [ref=f2e903] [cursor=pointer]
+        - button "Messaging" [ref=f2e907] [cursor=pointer]
+        - button "Business Landing Page" [ref=f2e910] [cursor=pointer]
+        - button "Settings" [ref=f2e915] [cursor=pointer]
+        - button "Audit & Access Logs" [ref=f2e919] [cursor=pointer]
+        - button "About & Manual" [ref=f2e923] [cursor=pointer]
+    - main [ref=f2e5]:
+      - generic [ref=f2e926]:
+        - navigation [ref=f2e927]:
+          - generic [ref=f2e934]:
+            - generic [ref=f2e935]: Your Business
+            - generic [ref=f2e936]: Products & services from our business
+          - generic [ref=f2e937]:
+            - link "Featured Items" [ref=f2e938] [cursor=pointer]:
+              - /url: "#featured"
+            - link "Browse Catalog" [ref=f2e939] [cursor=pointer]:
+              - /url: "#matcher"
+            - link "Product Catalog" [ref=f2e940] [cursor=pointer]:
+              - /url: "#matcher"
+            - link "Customer Reviews" [ref=f2e941] [cursor=pointer]:
+              - /url: "#reviews"
+            - link "Contact Store" [ref=f2e942] [cursor=pointer]:
+              - /url: "#contact"
+          - generic [ref=f2e943]:
+            - button "Open private business page link" [ref=f2e944] [cursor=pointer]:
+              - generic [ref=f2e951]: Private Link
+            - generic [ref=f2e952]:
+              - generic [ref=f2e953]:
+                - generic [ref=f2e954]: DR
+                - generic [ref=f2e955]:
+                  - generic [ref=f2e956]: Dr. David Kimani
+                  - generic [ref=f2e957]: CEO
+              - button "Business page settings" [ref=f2e958] [cursor=pointer]
+              - button "Return to POS" [ref=f2e962] [cursor=pointer]
+        - note [ref=f2e968]:
+          - strong [ref=f2e969]: Private Business Landing Page preview.
+          - text: Only signed-in POS users can access this screen. This page is not published to the public website.
+        - generic [ref=f2e972]:
+          - strong [ref=f2e973]: This catalog is being prepared.
+          - text: Products and services will appear here when the business adds them to Inventory.
+        - generic [ref=f2e975]:
+          - generic [ref=f2e976]: Our products & services
+          - heading "Your Business" [level=1] [ref=f2e981]
+          - paragraph [ref=f2e982]: Explore our products and services. Contact us for availability and more information.
+          - generic [ref=f2e983]:
+            - generic [ref=f2e989]:
+              - strong [ref=f2e990]: "0"
+              - text: Live SKUs Synchronized
+            - strong [ref=f2e995]: No reviews yet
+            - generic [ref=f2e1000]:
+              - text: "Hours:"
+              - strong [ref=f2e1001]: Contact us for hours
+          - generic [ref=f2e1002]:
+            - link "Browse Featured Items" [ref=f2e1003] [cursor=pointer]:
+              - /url: "#featured"
+            - link "Browse the Catalog" [ref=f2e1008] [cursor=pointer]:
+              - /url: "#matcher"
+        - generic [ref=f2e1013]:
+          - generic [ref=f2e1014]:
+            - generic [ref=f2e1015]:
+              - generic [ref=f2e1016]: From our Inventory
+              - heading "Featured Products & Services" [level=2] [ref=f2e1021]
+            - paragraph [ref=f2e1022]: Products, prices and stock from this business’s Inventory. Contact the business to confirm availability.
+          - status [ref=f2e1023]:
+            - heading "No products or services yet" [level=3] [ref=f2e1028]
+            - paragraph [ref=f2e1029]: This business has not added any catalog items. There are no sample products here.
+            - button "Add your first item in Inventory" [ref=f2e1030] [cursor=pointer]
+        - generic [ref=f2e1032]:
+          - generic [ref=f2e1033]:
+            - generic [ref=f2e1034]: Interactive Commercial Matcher
+            - heading "Find What You’re Looking For" [level=2] [ref=f2e1038]
+            - paragraph [ref=f2e1039]: Browse this business’s categories, or search for a product or service by name, description or SKU.
+          - generic [ref=f2e1040]:
+            - button "All Items" [ref=f2e1042] [cursor=pointer]
+            - textbox "Search catalog SKUs..." [ref=f2e1047]
+        - generic [ref=f2e1050]:
+          - generic [ref=f2e1051]:
+            - heading "Your Business" [level=3] [ref=f2e1056]
+            - paragraph
+            - generic [ref=f2e1057]: "TAX PIN: Not provided"
+          - generic [ref=f2e1058]:
+            - heading "Direct Contacts" [level=4] [ref=f2e1059]
+            - generic [ref=f2e1060]: Phone not provided
+            - generic [ref=f2e1064]: Email not provided
+          - generic [ref=f2e1069]:
+            - heading "Store Hours & Location" [level=4] [ref=f2e1070]
+            - generic [ref=f2e1071]: Location not provided
+            - generic [ref=f2e1076]: Contact us for hours
+        - button "Open Your Business assistant" [ref=f2e1081] [cursor=pointer]:
+          - generic [ref=f2e1087]:
+            - generic [ref=f2e1088]: AI Sales Concierge
+            - generic [ref=f2e1093]: Products, services & contact details
+  - dialog [ref=f2e1095]:
+    - banner [ref=f2e1096]:
+      - generic [ref=f2e1097]: "76"
+      - generic [ref=f2e1099]:
+        - text: A good start, your way
+        - paragraph [ref=f2e1100]: CODE76 workspace setup
+      - button "Save progress and close setup" [ref=f2e1101] [cursor=pointer]
+    - list "Setup progress" [ref=f2e1105]:
+      - listitem [ref=f2e1106]:
+        - generic [ref=f2e1107]: "1"
+        - generic [ref=f2e1108]: Your workspace
+      - listitem [ref=f2e1109]:
+        - generic [ref=f2e1110]: "2"
+        - generic [ref=f2e1111]: My Company
+      - listitem [ref=f2e1112]:
+        - generic [ref=f2e1113]: "3"
+        - generic [ref=f2e1114]: First inventory
+      - listitem [ref=f2e1115]:
+        - generic [ref=f2e1116]: "4"
+        - generic [ref=f2e1117]: Find your way
+    - generic [ref=f2e1118]:
+      - generic [ref=f2e1119]:
+        - generic [ref=f2e1120]: Step 1 of 4 · Your workspace
+        - heading "Make yourself comfortable." [active] [level=2] [ref=f2e1121]
+        - paragraph [ref=f2e1122]: Choose a look and text size that feel right. These preferences apply to your POS workspace—not either public landing page.
+      - group "Pick your theme" [ref=f2e1123]:
+        - generic [ref=f2e1131]:
+          - button "Light Bright surfaces, clear contrast" [ref=f2e1132] [cursor=pointer]:
+            - generic [ref=f2e1143]:
+              - generic [ref=f2e1144]: Sales overview
+              - strong [ref=f2e1145]: 12,450.00
+            - generic [ref=f2e1163]:
+              - strong [ref=f2e1164]: Light
+              - generic [ref=f2e1165]: Bright surfaces, clear contrast
+          - button "Dark Softer on the eyes after hours" [pressed] [ref=f2e1167] [cursor=pointer]:
+            - generic [ref=f2e1178]:
+              - generic [ref=f2e1179]: Sales overview
+              - strong [ref=f2e1180]: 12,450.00
+            - generic [ref=f2e1194]:
+              - strong [ref=f2e1195]: Dark
+              - generic [ref=f2e1196]: Softer on the eyes after hours
+      - group "Choose a text size" [ref=f2e1200]:
+        - generic [ref=f2e1204]:
+          - button "Aa Compact More on your screen" [ref=f2e1205] [cursor=pointer]:
+            - generic [ref=f2e1206]: Aa
+            - strong [ref=f2e1207]: Compact
+            - generic [ref=f2e1208]: More on your screen
+          - button "Aa Normal A balanced everyday view" [pressed] [ref=f2e1209] [cursor=pointer]:
+            - generic [ref=f2e1210]: Aa
+            - strong [ref=f2e1211]: Normal
+            - generic [ref=f2e1212]: A balanced everyday view
+          - button "Aa Large Comfortably readable" [ref=f2e1213] [cursor=pointer]:
+            - generic [ref=f2e1214]: Aa
+            - strong [ref=f2e1215]: Large
+            - generic [ref=f2e1216]: Comfortably readable
+          - button "Aa Extra large More room for every word" [ref=f2e1217] [cursor=pointer]:
+            - generic [ref=f2e1218]: Aa
+            - strong [ref=f2e1219]: Extra large
+            - generic [ref=f2e1220]: More room for every word
+        - generic [ref=f2e1226]:
+          - strong [ref=f2e1227]: Every detail, easy to read.
+          - text: Your products, sales and totals will use this text size.
+    - contentinfo [ref=f2e1228]:
+      - generic [ref=f2e1229]:
+        - button "Skip setup for now" [ref=f2e1230] [cursor=pointer]
+        - button "Continue to My Company" [ref=f2e1231] [cursor=pointer]
+      - paragraph [ref=f2e1234]: Change this any time in Settings → Color / Appearance or Text Sizing.
+```

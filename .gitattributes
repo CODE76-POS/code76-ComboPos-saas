@@ -1,0 +1,3 @@
+# Preserve the upstream font license and byte-exact RFC 4180 download evidence.
+public/fonts/AUDIT-FONT-LICENSE.txt whitespace=-blank-at-eol
+qa/usability/downloads/*.csv -text whitespace=cr-at-eol

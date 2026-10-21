@@ -1,0 +1,490 @@
+import { code76SiteReply } from '../../utils/code76Offers.ts';
+import React, { useState, useRef, useEffect } from 'react';
+import { usePOS } from '../../context/POSContext.tsx';
+import { useCode76Site } from '../../context/Code76SiteContext.tsx';
+import { CODE76_SITE } from '../../config/code76Site.ts';
+import { catalogChatContext, landingPageData } from '../../utils/landingPages.ts';
+import type { LandingSurface } from '../../utils/landingPages.ts';
+import { businessCatalogReply } from '../../utils/storefrontChat.ts';
+import {
+  MessageSquare,
+  X,
+  Send,
+  Sparkles,
+  Bot,
+  User,
+  ShoppingBag,
+  Star,
+  ArrowRight,
+  ShieldCheck,
+  CheckCircle2,
+  Gift,
+  Calendar,
+  MapPin,
+  Lightbulb,
+  PhoneCall,
+  RotateCcw,
+} from 'lucide-react';
+import { ProductItem } from '../../types/index.ts';
+import { DEFAULT_CHATBOT_SETTINGS } from '../../config/assistant.ts';
+
+interface ChatMessage {
+  role: 'model' | 'user';
+  text: string;
+}
+
+export interface InquiryLeadData {
+  name: string;
+  email: string;
+  phone: string;
+  location: string;
+  preferredContact?: string;
+  product: ProductItem;
+  notes?: string;
+}
+
+interface AIChatbotWidgetProps {
+  surface: LandingSurface;
+  inlineLauncher?: boolean;
+  inquiryLead?: InquiryLeadData | null;
+  isOpenControlled?: boolean;
+  onCloseControlled?: () => void;
+}
+
+export const AIChatbotWidget: React.FC<AIChatbotWidgetProps> = ({
+  surface,
+  inlineLauncher = false,
+  inquiryLead,
+  isOpenControlled,
+  onCloseControlled,
+}) => {
+  const pos = usePOS();
+  const site = useCode76Site();
+  const isBusiness = surface === 'business';
+  const { products, company, reviews } = landingPageData(surface, pos);
+  const settings = isBusiness ? pos.settings : { landingPage: CODE76_SITE.landingPage };
+  const setLandingMetrics = isBusiness ? pos.setLandingMetrics : site.setMetrics;
+  const safeContext = catalogChatContext(surface, pos);
+  const assistant = isBusiness ? { ...DEFAULT_CHATBOT_SETTINGS, ...pos.settings.chatbot } : null;
+  const assistantEnabled = !isBusiness || (pos.hasFeature('chatbot') && assistant!.enabled !== false);
+  const replyOptions = { showPrices: assistant?.showPrices !== false, showStock: assistant?.showStock !== false };
+  const recordContact = (email: string) => {
+    const contact = {
+      firstName: 'Website visitor', secondName: '', tel1: '', tel2: '', whatsappNo: '',
+      email1: email, email2: '', address: '', location: '', country: '', photoUrl: '',
+      photoConsentForLanding: false, category: 'customer' as const,
+      notes: `Contact requested through the ${isBusiness ? 'merchant business' : 'CODE76 product'} website assistant.`,
+    };
+    if (isBusiness) pos.addPerson('customer', contact); else site.addSiteLead(contact);
+  };
+
+  const [isOpenInternal, setIsOpenInternal] = useState(false);
+  const isOpen = isOpenControlled !== undefined ? isOpenControlled : isOpenInternal;
+
+  const handleOpen = () => {
+    setIsOpenInternal(true);
+  };
+
+  const handleClose = () => {
+    setIsOpenInternal(false);
+    if (onCloseControlled) onCloseControlled();
+  };
+
+  const [messages, setMessages] = useState<ChatMessage[]>([
+    {
+      role: 'model',
+      text: isBusiness
+        ? `${assistant?.greeting || DEFAULT_CHATBOT_SETTINGS.greeting}`
+        : code76SiteReply(''),
+    },
+  ]);
+  const [inputText, setInputText] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [enableThinking, setEnableThinking] = useState(false);
+  const [leadCaptured, setLeadCaptured] = useState(false);
+  const [leadEmail, setLeadEmail] = useState('');
+  const [referralFriendName, setReferralFriendName] = useState('');
+  const [referralSubmitted, setReferralSubmitted] = useState(false);
+
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Auto-scroll on new message
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages, isOpen]);
+
+  // When an inquiry lead arrives from the quote modal, trigger tailored psychological sales dialogue
+  const handledLeadRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (inquiryLead && inquiryLead.product) {
+      const leadKey = `${inquiryLead.email}-${inquiryLead.product.id}`;
+      if (handledLeadRef.current !== leadKey) {
+        handledLeadRef.current = leadKey;
+        setIsOpenInternal(true);
+
+        const promoPrice = inquiryLead.product.isOnPromo
+          ? inquiryLead.product.promoDiscountPrice || inquiryLead.product.sellingPrice
+          : inquiryLead.product.sellingPrice;
+
+        const isService = inquiryLead.product.type === 'service';
+
+        const greeting = isBusiness
+          ? `Hello ${inquiryLead.name}! Your inquiry about ${inquiryLead.product.name} (${company.currency} ${promoPrice.toFixed(2)}) was recorded in this browser. Please contact ${company.name} to confirm availability, arrange a service or complete an order. This chat has not reserved stock or confirmed an appointment.`
+          : `Hello **${inquiryLead.name}**! 👋 Welcome! I have recorded your quote request for the **${inquiryLead.product.name}** (${inquiryLead.product.isOnPromo ? `🔥 Promotional Special: $${promoPrice.toFixed(2)}` : `$${promoPrice.toFixed(2)}`}).\n\n` +
+          (isService
+            ? `📅 **Book Priority On-Site Demo**: As this is an enterprise commercial service, would you like our deployment specialist to **book a 20-minute on-site installation appointment** at your location in **${inquiryLead.location || 'your area'}** this week?`
+            : `🏢 **Close Order or Visit Showroom**: We have units in stock reserved for you. Would you like to **finalize your order with warranty protection**, or would you prefer to **visit our showroom** at **${company.address || 'CBD Showroom'}, ${company.location}** to test the terminal with live barcode scanning?`) +
+          `\n\n💡 **Your Feedback**: What stood out to you most about this item, and are there any specific suggestions or workflow features that would make it even more perfect for your daily operations?`;
+
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: 'model',
+            text: greeting,
+          },
+        ]);
+
+        if (inquiryLead.email) {
+          setLeadCaptured(true);
+        }
+      }
+    }
+  }, [inquiryLead, company]);
+
+  const handleSend = async (customPrompt?: string) => {
+    const textToSend = customPrompt || inputText;
+    if (!textToSend.trim() || loading) return;
+
+    const userMsg: ChatMessage = { role: 'user', text: textToSend };
+    setMessages((prev) => [...prev, userMsg]);
+    setInputText('');
+    setLoading(true);
+
+    // Track bot conversation metric
+    setLandingMetrics((prev) => ({
+      ...prev,
+      chatbotConversations: prev.chatbotConversations + 1,
+    }));
+
+    try {
+      const res = await fetch('/api/gemini/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          surface,
+          messages: [...messages, userMsg],
+          posContext: safeContext,
+          visitorNeed: inquiryLead ? `Customer ${inquiryLead.name} inquired about ${inquiryLead.product.name} at location ${inquiryLead.location}` : undefined,
+          enableThinking,
+        }),
+      });
+
+      const data = await res.json();
+      const botReply = data.reply || data.fallbackReply || (isBusiness ? `${businessCatalogReply(textToSend, safeContext, replyOptions)}${assistant?.fallbackMessage ? `\n\n${assistant.fallbackMessage}` : ''}` : 'I am ready to help you find the right CODE76 POS solution.');
+      setMessages((prev) => [...prev, { role: 'model', text: botReply }]);
+    } catch (e) {
+      console.error('Chatbot error:', e);
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: 'model',
+          text: isBusiness ? businessCatalogReply(textToSend, safeContext, replyOptions) : code76SiteReply(textToSend),
+        },
+      ]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleLeadSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!leadEmail.trim()) return;
+
+    recordContact(leadEmail.trim());
+    setLeadCaptured(true);
+    setLandingMetrics((prev) => ({
+      ...prev,
+      leadsCaptured: prev.leadsCaptured + 1,
+    }));
+
+    setMessages((prev) => [
+      ...prev,
+      {
+        role: 'model',
+        text: `Thank you! Your contact (${leadEmail}) was recorded in this browser. Please contact ${company.name} directly for a confirmed quote; this assistant does not send email or reserve items.`,
+      },
+    ]);
+  };
+
+  const handleReferralSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!referralFriendName.trim()) return;
+
+    setReferralSubmitted(true);
+    setLandingMetrics((prev) => ({
+      ...prev,
+      referralVisits: prev.referralVisits + 1,
+    }));
+
+    setMessages((prev) => [
+      ...prev,
+      {
+        role: 'model',
+        text: isBusiness ? `Thanks for sharing ${company.name} with ${referralFriendName}. Please contact the business to confirm its referral terms; no reward has been assigned automatically.` : `Thanks for your interest in referring ${referralFriendName} to CODE76. Please contact our team to confirm the current referral offer.`,
+      },
+    ]);
+  };
+
+  if (isBusiness && !assistantEnabled) {
+    return (
+      <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4 text-sm text-slate-300">
+        <p className="flex items-center gap-1.5 font-bold text-slate-100"><Bot className="h-4 w-4 text-teal-400" />{assistant?.assistantName || 'Business assistant'} is offline</p>
+        <p className="mt-1 text-xs leading-relaxed text-slate-400">{assistant?.offlineNotice || DEFAULT_CHATBOT_SETTINGS.offlineNotice}</p>
+        {(assistant?.handoffContact || company.tel1 || company.email) && (
+          <p className="mt-2 text-xs text-teal-300">Contact: {assistant?.handoffContact || company.tel1 || company.email}</p>
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <>
+      {/* Floating Toggle Button with Neon Accents */}
+      {!isOpen && (
+        <button
+          onClick={handleOpen}
+          className={`${inlineLauncher?'relative inline-flex rounded-xl':'fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 rounded-full'} p-3.5 sm:p-4 bg-teal-700 hover:bg-teal-600 text-white border border-teal-500/40 flex items-center gap-3 transition-colors cursor-pointer group`}
+          aria-label={`Open ${isBusiness ? company.name : 'CODE76'} assistant`}
+          title={isBusiness ? `Ask ${company.name} about its catalog` : 'Open CODE76 product advisor'}
+        >
+          <div className="relative">
+            <Bot className="w-5 h-5 sm:w-6 sm:h-6" />
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-300 absolute -top-1 -right-1 ring-2 ring-emerald-600 animate-ping" />
+          </div>
+          <div className={inlineLauncher?"text-left pr-1":"text-left hidden sm:block pr-1"}>
+            <div className="text-xs font-black leading-tight flex items-center gap-1">
+              <span>{isBusiness?'Ask about this business':'Ask CODE76'}</span>
+              <Sparkles className="w-3.5 h-3.5 text-emerald-200" />
+            </div>
+            <div className="text-[10px] text-emerald-100 opacity-95 leading-tight">
+              {isBusiness ? 'Products, services & contact details' : 'CODE76 products & pricing'}
+            </div>
+          </div>
+        </button>
+      )}
+
+      {/* Chat Window with Responsive Viewport Containment */}
+      {isOpen && (
+        <div className="fixed bottom-3 right-3 sm:bottom-6 sm:right-6 z-50 w-full sm:w-[410px] max-w-[calc(100vw-24px)] h-[580px] max-h-[85vh] rounded-3xl bg-slate-900 border-2 border-teal-500/40 shadow-[0_0_40px_rgba(15,23,42,0.95)] flex flex-col overflow-hidden text-white animate-in slide-in-from-bottom-5 duration-200 backdrop-blur-md">
+          {/* Header with Neon Accents */}
+          <div className="p-3.5 sm:p-4 bg-gradient-to-r from-teal-800 via-slate-900 to-slate-900 border-b border-teal-500/30 flex items-center justify-between shrink-0">
+            <div className="flex items-center gap-2.5">
+              <div className="w-9 h-9 rounded-xl bg-teal-500/25 text-teal-300 flex items-center justify-center border border-teal-400/50 font-bold shadow-[0_0_12px_rgba(20,184,166,0.3)]">
+                <Bot className="w-5 h-5 text-teal-300" />
+              </div>
+              <div>
+                <div className="text-xs font-black flex items-center gap-1.5 text-slate-100">
+                  <span>{isBusiness ? (assistant?.assistantName || `${company.name} assistant`) : 'CODE76 Sales Concierge'}</span>
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block animate-ping" />
+                </div>
+                <div className="text-[10px] text-teal-300 font-medium">{isBusiness ? `Catalogue questions & contacts · ${assistant?.tone || 'friendly'}` : 'Product, plans & service information'}</div>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-1">
+              <button
+                onClick={() => setEnableThinking(!enableThinking)}
+                title="Toggle High Thinking Mode"
+                className={`p-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 transition ${
+                  enableThinking
+                    ? 'bg-purple-600 text-white shadow-xs'
+                    : 'bg-slate-800 text-slate-400 hover:text-white'
+                }`}
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                <span className="text-[10px] hidden sm:inline">Thinking</span>
+              </button>
+
+              <button
+                aria-label="Close assistant"
+                onClick={handleClose}
+                className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+
+          {/* Messages Area */}
+          <div className="flex-1 p-3.5 overflow-y-auto space-y-3 text-xs scrollbar-thin">
+            {messages.map((m, idx) => (
+              <div
+                key={idx}
+                className={`flex gap-2.5 ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}
+              >
+                {m.role === 'model' && (
+                  <div className="w-7 h-7 rounded-lg bg-teal-500/20 text-teal-300 flex items-center justify-center shrink-0 border border-teal-500/30">
+                    <Bot className="w-4 h-4" />
+                  </div>
+                )}
+
+                <div
+                  className={`p-3 rounded-2xl max-w-[85%] leading-relaxed ${
+                    m.role === 'user'
+                      ? 'bg-teal-600 text-white rounded-tr-xs shadow-md shadow-teal-600/20'
+                      : 'bg-slate-950/80 text-slate-200 border border-slate-800 rounded-tl-xs shadow-xs'
+                  }`}
+                >
+                  <div className="whitespace-pre-wrap">{m.text}</div>
+                </div>
+
+                {m.role === 'user' && (
+                  <div className="w-7 h-7 rounded-lg bg-slate-800 text-teal-300 flex items-center justify-center shrink-0 border border-slate-700">
+                    <User className="w-4 h-4" />
+                  </div>
+                )}
+              </div>
+            ))}
+
+            {loading && (
+              <div className="flex gap-2 items-center text-slate-400 text-xs italic">
+                <div className="w-7 h-7 rounded-lg bg-slate-800 flex items-center justify-center">
+                  <Bot className="w-4 h-4 text-teal-400 animate-spin" />
+                </div>
+                <span>Analyzing catalog & calculating recommendations...</span>
+              </div>
+            )}
+
+            <div ref={messagesEndRef} />
+          </div>
+
+          {/* Contextual quick prompts. Merchant-defined prompts come from Chatbot settings. */}
+          <div className="p-2 border-t border-slate-800 bg-slate-950/80 flex items-center gap-1.5 overflow-x-auto scrollbar-none shrink-0">
+            {isBusiness && assistant?.quickPrompts?.map((prompt) => (
+              <button
+                key={prompt}
+                onClick={() => handleSend(prompt)}
+                className="px-2.5 py-1 rounded-full bg-teal-950/80 hover:bg-teal-900 text-[10px] text-teal-300 font-semibold whitespace-nowrap cursor-pointer border border-teal-700/60 flex items-center gap-1 shadow-xs"
+              >
+                <Sparkles className="w-3 h-3" />
+                {prompt}
+              </button>
+            ))}
+            <button
+              onClick={() => handleSend(isBusiness ? 'How can I arrange a service or appointment with your business?' : 'I want to book an on-site service appointment or live demo this week.')}
+              className="px-2.5 py-1 rounded-full bg-teal-950/80 hover:bg-teal-900 text-[10px] text-teal-300 font-semibold whitespace-nowrap cursor-pointer border border-teal-700/60 flex items-center gap-1 shadow-xs"
+            >
+              <Calendar className="w-3 h-3" />
+              Book Appointment
+            </button>
+            <button
+              onClick={() => handleSend(isBusiness ? 'Where is your business, and what are your opening hours?' : 'Can I visit your showroom in person to test the touch terminal and receipt printers?')}
+              className="px-2.5 py-1 rounded-full bg-sky-950/80 hover:bg-sky-900 text-[10px] text-sky-300 font-semibold whitespace-nowrap cursor-pointer border border-sky-700/60 flex items-center gap-1 shadow-xs"
+            >
+              <MapPin className="w-3 h-3" />
+              {isBusiness ? 'Location & hours' : 'Visit Showroom'}
+            </button>
+            <button
+              onClick={() => handleSend(isBusiness ? 'Tell me about your products and services.' : 'What features make this POS item stand out, and can we customize it for our store?')}
+              className="px-2.5 py-1 rounded-full bg-amber-950/80 hover:bg-amber-900 text-[10px] text-amber-300 font-semibold whitespace-nowrap cursor-pointer border border-amber-700/60 flex items-center gap-1 shadow-xs"
+            >
+              <Lightbulb className="w-3 h-3" />
+              Custom Suggestions
+            </button>
+            <button
+              onClick={() => handleSend('Are there lighter or alternative budget-friendly items if I change my mind?')}
+              className="px-2.5 py-1 rounded-full bg-slate-800 hover:bg-slate-700 text-[10px] text-slate-300 font-semibold whitespace-nowrap cursor-pointer border border-slate-700 flex items-center gap-1 shadow-xs"
+            >
+              <RotateCcw className="w-3 h-3" />
+              Alternative Options
+            </button>
+            <button
+              onClick={() => handleSend(isBusiness ? 'Does your business have a referral offer?' : 'How can I refer a colleague or friend to CODE76?')}
+              className="px-2.5 py-1 rounded-full bg-purple-950/80 hover:bg-purple-900 text-[10px] text-purple-300 font-semibold whitespace-nowrap cursor-pointer border border-purple-700/60 flex items-center gap-1 shadow-xs"
+            >
+              <Gift className="w-3 h-3" />
+              {isBusiness ? 'Referral details' : 'Refer CODE76'}
+            </button>
+          </div>
+
+          {/* Quick Lead capture box if not yet captured */}
+          {!leadCaptured && (!isBusiness || assistant?.collectLeads !== false) && (
+            <div className="px-3 py-2 bg-slate-950 border-t border-slate-800 shrink-0">
+              <form onSubmit={handleLeadSubmit} className="flex gap-1.5">
+                <input
+                  type="email"
+                  aria-label="Email for an inquiry"
+                  required
+                  placeholder="Your email for an inquiry..."
+                  value={leadEmail}
+                  onChange={(e) => setLeadEmail(e.target.value)}
+                  className="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1 text-[11px] text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-teal-500"
+                />
+                <button
+                  type="submit"
+                  className="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-[10px] font-bold cursor-pointer whitespace-nowrap"
+                >
+                  Get Quote
+                </button>
+              </form>
+            </div>
+          )}
+
+          {/* Referral Incentive Box */}
+          {!referralSubmitted && settings.landingPage.referralBonusText.trim() && (
+            <div className="px-3 py-1.5 bg-gradient-to-r from-amber-950/70 to-purple-950/70 border-t border-slate-800 text-[11px] flex items-center justify-between shrink-0">
+              <div className="flex items-center gap-1 text-amber-300 text-[10px]">
+                <Gift className="w-3.5 h-3.5" />
+                <span className="font-semibold">{isBusiness ? 'Refer a friend:' : 'Refer someone to CODE76:'}</span>
+              </div>
+              <form onSubmit={handleReferralSubmit} className="flex gap-1">
+                <input
+                  type="text"
+                  placeholder="Friend's name or phone..."
+                  value={referralFriendName}
+                  onChange={(e) => setReferralFriendName(e.target.value)}
+                  className="w-28 bg-slate-900 border border-slate-700 rounded px-1.5 py-0.5 text-[10px] text-slate-100"
+                />
+                <button
+                  type="submit"
+                  className="px-2 py-0.5 bg-amber-600 hover:bg-amber-500 text-white rounded text-[10px] font-bold cursor-pointer"
+                >
+                  Refer
+                </button>
+              </form>
+            </div>
+          )}
+
+          {/* Message Input Field */}
+          <div className="p-3 bg-slate-900 border-t border-slate-800 shrink-0">
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleSend();
+              }}
+              className="flex items-center gap-2"
+            >
+              <input
+                type="text"
+                aria-label="Message the assistant"
+                placeholder={isBusiness ? 'Ask about products, prices or contact details...' : 'Ask about CODE76 products and services...'}
+                value={inputText}
+                onChange={(e) => setInputText(e.target.value)}
+                className="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-teal-500"
+              />
+              <button
+                type="submit"
+                aria-label="Send message"
+                disabled={!inputText.trim() || loading}
+                className="p-2 rounded-xl bg-teal-600 hover:bg-teal-500 disabled:opacity-40 text-white transition cursor-pointer shadow-md shadow-teal-600/30 active:scale-95"
+              >
+                <Send className="w-4 h-4" />
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+    </>
+  );
+};

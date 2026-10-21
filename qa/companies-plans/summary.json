@@ -1,0 +1,62 @@
+{
+  "date": "2026-10-20",
+  "typecheck": "pass",
+  "production_build": "pass",
+  "unit": {
+    "passed": 352,
+    "total": 352,
+    "new_scope": 171,
+    "retained_regressions": 181
+  },
+  "browser": {
+    "passed": 64,
+    "distinct_cases": 64,
+    "failed": 0,
+    "console_errors": 0
+  },
+  "http": {
+    "passed": 21,
+    "total": 21
+  },
+  "camera": {
+    "test_device": "Chromium synthetic video device; no real person/hardware",
+    "saved_jpeg_dimensions": [
+      1024,
+      576
+    ],
+    "nonuniform_image_pixels": true,
+    "audio_tracks_requested": false,
+    "stop_and_flip_verified": true
+  },
+  "pdfs": {
+    "expense_company_details": "parsed",
+    "stock_branch_parent_contact_details": "parsed",
+    "workflow": "application print/export popup, then browser Save as PDF (CLI pdf command)"
+  },
+  "demo_plans_only": true,
+  "real_billing_or_money_transfer": false,
+  "test_only_records": {
+    "companies": 3,
+    "staff": 1,
+    "customer": 1,
+    "salary_payments": 2,
+    "salary_linked_expenses": 1,
+    "electricity_expenses": 1,
+    "stock_invoices": 1,
+    "fully_paid_pos_sales": 1
+  },
+  "test_data_cleanup": "Only synthetic business records in the isolated tool browser were deleted using the tested Free admin deletion workflow; user preview/browser data untouched.",
+  "api_keys_used": false,
+  "live_ai_calls": false,
+  "runtime": {
+    "port": 5173,
+    "production": true,
+    "single_app_server": true
+  },
+  "limitations": [
+    "client-side demo entitlements/roles, not paid billing or server/tenant security",
+    "real camera access depends on browser/hardware/embedding host permission",
+    "business data is browser-local; no public merchant publishing or cross-browser sync",
+    "historical accounting/export issues outside this scope are not certified fixed"
+  ]
+}

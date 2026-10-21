@@ -1,0 +1,135 @@
+### Page
+- Page URL: http://127.0.0.1:5173/#/pos/settings
+- Page Title: CODE76 POS — Private Workspace
+### Snapshot
+```yaml
+- generic [ref=e4]:
+  - banner [ref=e707]:
+    - generic [ref=e708]:
+      - button "76 CODE76 POS Enterprise Product & Service SaaS ERP System" [ref=e710] [cursor=pointer]:
+        - generic [ref=e711]: "76"
+        - generic [ref=e712]:
+          - generic [ref=e713]:
+            - generic [ref=e714]: CODE76 POS
+            - generic [ref=e715]: Enterprise
+          - paragraph [ref=e716]: Product & Service SaaS ERP System
+      - generic [ref=e717]:
+        - generic [ref=e718]:
+          - button "Desktop View (Full Width)" [ref=e719] [cursor=pointer]
+          - button "Laptop View (1024px)" [ref=e722] [cursor=pointer]
+          - button "Tablet View (768px)" [ref=e725] [cursor=pointer]
+          - button "Phone Mobile View (390px)" [ref=e728] [cursor=pointer]
+        - generic [ref=e731]:
+          - button "Demo Data" [ref=e732] [cursor=pointer]
+          - button "Business Page" [ref=e1311] [cursor=pointer]
+          - button "Click to view help guide and settings for this platform" [ref=e738] [cursor=pointer]
+          - button "Active user session and access controls" [ref=e743] [cursor=pointer]:
+            - generic [ref=e744]: DR
+            - generic [ref=e745]:
+              - generic [ref=e746]: Dr. David Kimani
+              - generic [ref=e747]: "Role: CEO"
+    - generic [ref=e748]:
+      - generic [ref=e749]:
+        - generic [ref=e753]: App link
+        - generic [ref=e754]:
+          - generic [ref=e755]:
+            - generic [ref=e756]: App link
+            - textbox "App link" [ref=e757]: http://127.0.0.1:5173/
+            - button "Copy app link" [ref=e758] [cursor=pointer]:
+              - generic [ref=e762]: Copy link
+            - link "Open app link in a new tab" [ref=e763] [cursor=pointer]:
+              - /url: http://127.0.0.1:5173/
+          - status [ref=e768]
+        - button "Current demo plan" [ref=e769]: Lifetime · demo
+      - paragraph [ref=e770]: Open this root link to reach CODE76 sign-in/register. Browser-local records and sessions do not sync between browsers.
+    - generic [ref=e772]:
+      - button "Sales POS" [ref=e773] [cursor=pointer]
+      - button "Sales History" [ref=e777] [cursor=pointer]
+      - button "Inventory" [ref=e782] [cursor=pointer]
+      - button "Expenses" [ref=e1316] [cursor=pointer]
+      - button "Invoices" [ref=e1320] [cursor=pointer]
+      - button "Analytics & P&L" [ref=e1324] [cursor=pointer]
+      - button "Customers" [ref=e1327] [cursor=pointer]
+      - button "Vendors" [ref=e1333] [cursor=pointer]
+      - button "Transporters" [ref=e1338] [cursor=pointer]
+      - button "Marketing Team" [ref=e1344] [cursor=pointer]
+      - button "Company Members" [ref=e1348] [cursor=pointer]
+      - button "My Company" [ref=e1354] [cursor=pointer]
+      - button "Messaging" [ref=e1358] [cursor=pointer]
+      - button "Business Landing Page" [ref=e1361] [cursor=pointer]
+      - button "Settings" [ref=e787] [cursor=pointer]
+      - button "Audit & Access Logs" [ref=e1366] [cursor=pointer]
+      - button "About & Manual" [ref=e791] [cursor=pointer]
+  - main [ref=e5]:
+    - generic [ref=e945]:
+      - generic [ref=e947]:
+        - generic [ref=e948]:
+          - heading "System Settings Platform" [level=1] [ref=e949]
+          - button "Click for platform guidance & settings" [ref=e950] [cursor=pointer]
+        - paragraph [ref=e954]: Configure payment methods, responsive text sizing, landing page rules, receipts, appearance, font families, backups, privileges, and PDF/Excel import pipeline.
+      - generic [ref=e955]:
+        - generic [ref=e956]:
+          - button "Demo Plan Settings" [ref=e957] [cursor=pointer]
+          - button "CODE76 Team Services" [active] [ref=e1370] [cursor=pointer]
+          - button "Payment Settings" [ref=e961] [cursor=pointer]
+          - button "Currency, Date & Time" [ref=e965] [cursor=pointer]
+          - button "Delete All Business Data" [ref=e970] [cursor=pointer]
+          - button "Text Sizing Settings" [ref=e975] [cursor=pointer]
+          - button "Business Landing Page Settings" [ref=e1377] [cursor=pointer]
+          - button "Receipts Settings" [ref=e979] [cursor=pointer]
+          - button "App Appearance Settings" [ref=e984] [cursor=pointer]
+          - button "Font Text Settings" [ref=e992] [cursor=pointer]
+          - button "Data Backup Settings" [ref=e1382] [cursor=pointer]
+          - button "App User Privilege Settings" [ref=e1386] [cursor=pointer]
+          - button "PDF & Excel Settings (CSV Import)" [ref=e1390] [cursor=pointer]
+          - button "Email Marketing Templates" [ref=e1395] [cursor=pointer]
+          - button "Audit Logs & Login History" [ref=e1400] [cursor=pointer]
+        - generic [ref=e997]:
+          - generic [ref=e1745]:
+            - generic [ref=e1746]:
+              - heading "CODE76 team services — Max & Lifetime" [level=2] [ref=e1747]
+              - paragraph [ref=e1748]: Max and Lifetime include access to CODE76 team-assisted services. Agree scope, delivery schedule and any third-party/ad spend first; access is not unlimited work or a guaranteed outcome.
+              - paragraph [ref=e1749]: "Demo workflow: briefs are saved in this browser only. No backend delivery, lead list, ad campaign, security test, team notification or service fulfilment is connected."
+            - generic [ref=e1750]:
+              - generic [ref=e1751]:
+                - text: Service
+                - combobox "Team service" [ref=e1752]:
+                  - option "Advertising & market positioning" [selected]
+                  - option "Business-matched customer lead research"
+                  - option "Referral program assistance"
+                  - option "SEO & website conversion review"
+                  - option "Business cybersecurity services"
+                  - option "Growth reviews & staff enablement"
+              - paragraph [ref=e1753]: An agreed campaign brief and measurement plan. Ad spend/platform fees require separate approval.
+              - generic [ref=e1754]:
+                - generic [ref=e1755]:
+                  - text: Business name
+                  - textbox "Service brief business name" [ref=e1756]
+                - generic [ref=e1757]:
+                  - text: Business website (optional)
+                  - textbox "Service brief website" [ref=e1758]:
+                    - /placeholder: https://
+              - generic [ref=e1759]:
+                - text: Your goal
+                - textbox "Service brief goal" [ref=e1760]:
+                  - /placeholder: What business outcome would you like help planning?
+              - generic [ref=e1761]:
+                - text: Scope, audience and constraints
+                - textbox "Service brief scope" [ref=e1762]:
+                  - /placeholder: Business audience, approved website/assets, budget boundaries or timing. Do not paste passwords, tokens or private customer lists.
+              - generic [ref=e1763]:
+                - text: Business contact (optional)
+                - textbox "Service brief contact" [ref=e1764]
+              - generic [ref=e1765]:
+                - checkbox "Authorized service brief" [ref=e1766]
+                - text: I am authorized to request work for this business and understand this is a local draft—not an instruction to spend, contact leads, test systems or deliver services.
+              - button "Save local service brief" [ref=e1767]
+            - generic [ref=e1768]:
+              - heading "Saved local drafts" [level=3] [ref=e1769]
+              - article [ref=e1770]:
+                - heading "Business cybersecurity services · TEST merchant only" [level=4] [ref=e1771]
+                - paragraph [ref=e1772]: LOCAL DRAFT · Not delivered · 2026-10-20T19:58:15.906Z
+                - generic [ref=e1773]: https://example.test TEST review account access and backup readiness TEST owned assets only; do not scan or contact anything
+                - button "Copy service brief" [ref=e1774]
+          - button "Save All Settings Changes" [ref=e1305] [cursor=pointer]
+```

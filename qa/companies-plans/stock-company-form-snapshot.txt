@@ -1,0 +1,145 @@
+### Page
+- Page URL: http://127.0.0.1:5173/#/pos/invoices
+- Page Title: CODE76 POS — Private Workspace
+### Snapshot
+```yaml
+- generic [ref=e4]:
+  - banner [ref=e679]:
+    - generic [ref=e680]:
+      - button "76 CODE76 POS Enterprise Product & Service SaaS ERP System" [ref=e682] [cursor=pointer]:
+        - generic [ref=e683]: "76"
+        - generic [ref=e684]:
+          - generic [ref=e685]:
+            - generic [ref=e686]: CODE76 POS
+            - generic [ref=e687]: Enterprise
+          - paragraph [ref=e688]: Product & Service SaaS ERP System
+      - generic [ref=e689]:
+        - generic [ref=e690]:
+          - button "Desktop View (Full Width)" [ref=e691] [cursor=pointer]
+          - button "Laptop View (1024px)" [ref=e694] [cursor=pointer]
+          - button "Tablet View (768px)" [ref=e697] [cursor=pointer]
+          - button "Phone Mobile View (390px)" [ref=e700] [cursor=pointer]
+        - generic [ref=e703]:
+          - button "Demo Data" [ref=e704] [cursor=pointer]
+          - button "Business Page" [ref=e1405] [cursor=pointer]
+          - button "Click to view help guide and settings for this platform" [ref=e710] [cursor=pointer]
+          - button "Active user session and access controls" [ref=e715] [cursor=pointer]:
+            - generic [ref=e716]: DR
+            - generic [ref=e717]:
+              - generic [ref=e718]: Dr. David Kimani
+              - generic [ref=e719]: "Role: CEO"
+    - generic [ref=e720]:
+      - generic [ref=e721]:
+        - generic [ref=e725]: App link
+        - generic [ref=e726]:
+          - generic [ref=e727]:
+            - generic [ref=e728]: App link
+            - textbox "App link" [ref=e729]: http://127.0.0.1:5173/
+            - button "Copy app link" [ref=e730] [cursor=pointer]:
+              - generic [ref=e734]: Copy link
+            - link "Open app link in a new tab" [ref=e735] [cursor=pointer]:
+              - /url: http://127.0.0.1:5173/
+          - status [ref=e740]
+        - button "Current demo plan" [ref=e741]: Pro · demo
+      - paragraph [ref=e742]: Open this root link to reach CODE76 sign-in/register. Browser-local records and sessions do not sync between browsers.
+    - generic [ref=e744]:
+      - button "Sales POS" [ref=e745] [cursor=pointer]
+      - button "Sales History" [ref=e749] [cursor=pointer]
+      - button "Inventory" [ref=e754] [cursor=pointer]
+      - button "Expenses" [ref=e1410] [cursor=pointer]
+      - button "Invoices" [ref=e1414] [cursor=pointer]
+      - button "Analytics & P&L" [ref=e1418] [cursor=pointer]
+      - button "Customers" [ref=e1421] [cursor=pointer]
+      - button "Vendors" [ref=e1427] [cursor=pointer]
+      - button "Transporters" [ref=e1432] [cursor=pointer]
+      - button "Marketing Team" [ref=e1438] [cursor=pointer]
+      - button "Company Members" [ref=e1442] [cursor=pointer]
+      - button "My Company" [ref=e1448] [cursor=pointer]
+      - button "Messaging" [ref=e1452] [cursor=pointer]
+      - button "Business Landing Page" [ref=e1455] [cursor=pointer]
+      - button "Settings" [ref=e759] [cursor=pointer]
+      - button "Audit & Access Logs" [ref=e1460] [cursor=pointer]
+      - button "About & Manual" [ref=e763] [cursor=pointer]
+  - main [ref=e5]:
+    - generic [ref=e3256]:
+      - generic [ref=e3257]:
+        - generic [ref=e3258]:
+          - generic [ref=e3259]:
+            - heading "Invoices Platform" [level=1] [ref=e3260]
+            - button "Click for platform guidance & settings" [ref=e3261] [cursor=pointer]
+          - paragraph [ref=e3265]: Billing management for both customer Sales Invoices and vendor Stock Purchase Invoices.
+        - generic [ref=e3266]:
+          - button "CSV Export" [ref=e3267] [cursor=pointer]
+          - button "PDF Ledger" [ref=e3271] [cursor=pointer]
+          - button "Email Invoices (.txt & .pdf)" [ref=e3275] [cursor=pointer]
+          - button "Create Invoice" [active] [ref=e3280] [cursor=pointer]
+      - generic [ref=e3282]:
+        - 'textbox "Search invoice #, customer, or vendor..." [ref=e3287]'
+        - generic [ref=e3288]:
+          - button "All Invoices" [ref=e3289] [cursor=pointer]
+          - button "Sales Invoices (Customers)" [ref=e3290] [cursor=pointer]
+          - button "Stock Purchases (Vendors)" [ref=e3291] [cursor=pointer]
+      - table [ref=e3294]:
+        - rowgroup [ref=e3295]:
+          - row [ref=e3296]:
+            - columnheader "Actions (Start)" [ref=e3297]
+            - 'columnheader "Invoice #" [ref=e3298]'
+            - columnheader "Classification" [ref=e3299]
+            - columnheader "Billed Party" [ref=e3300]
+            - columnheader "Issue Date" [ref=e3301]
+            - columnheader "Due Date" [ref=e3302]
+            - columnheader "Subtotal" [ref=e3303]
+            - columnheader "Total ($)" [ref=e3304]
+            - columnheader "Amount Paid" [ref=e3305]
+            - columnheader "Status" [ref=e3306]
+            - columnheader "Actions (End)" [ref=e3307]
+        - rowgroup [ref=e3308]:
+          - row [ref=e3309]:
+            - cell "No invoice records found." [ref=e3310]
+      - generic [ref=e3312]:
+        - button [ref=e3313]
+        - heading "Generate Commercial Invoice" [level=3] [ref=e3317]
+        - generic [ref=e3318]:
+          - generic [ref=e3319]:
+            - generic [ref=e3320]:
+              - generic [ref=e3321]: Invoice Number
+              - textbox [ref=e3322]: INV-098002
+            - generic [ref=e3323]:
+              - generic [ref=e3324]: Invoice Type
+              - combobox "Invoice type" [ref=e3325]:
+                - option "Sales Invoice (Customer)"
+                - option "Stock Purchase (Vendor PO)" [selected]
+          - generic [ref=e3326]:
+            - generic [ref=e3327]:
+              - text: Invoice company / branch / contact
+              - combobox "Invoice company / branch / contact" [ref=e3328]:
+                - option "Manual name / legacy record" [selected]
+                - option "TEST Kenya Power · Electricity company"
+                - option "TEST Multi Services · Transporting company"
+                - option "TEST East Branch — branch · Vendor company"
+            - paragraph [ref=e3329]: Manage companies and branches in My Company → Other Companies & Branches. Existing typed names remain supported.
+          - generic [ref=e3330]:
+            - generic [ref=e3331]: Billed Party (Vendor) *
+            - textbox "Invoice party name" [ref=e3332]:
+              - /placeholder: e.g. Apex Supermarket Group
+          - generic [ref=e3333]:
+            - generic [ref=e3334]:
+              - generic [ref=e3335]: Issue Date
+              - textbox [ref=e3336]: 2026-10-20
+            - generic [ref=e3337]:
+              - generic [ref=e3338]: Due Date
+              - textbox [ref=e3339]: 2026-11-03
+          - generic [ref=e3340]:
+            - generic [ref=e3341]:
+              - generic [ref=e3342]: Total Bill Amount ($)
+              - spinbutton [ref=e3343]: "0"
+            - generic [ref=e3344]:
+              - generic [ref=e3345]: Initial Amount Paid ($)
+              - spinbutton [ref=e3346]: "0"
+          - generic [ref=e3347]:
+            - generic [ref=e3348]: Payment Terms & Notes
+            - textbox [ref=e3349]: Payment net 14 days.
+          - generic [ref=e3350]:
+            - button "Cancel" [ref=e3351]
+            - button "Issue Invoice" [ref=e3352]
+```

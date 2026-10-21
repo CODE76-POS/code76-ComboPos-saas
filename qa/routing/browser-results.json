@@ -1,0 +1,281 @@
+[
+  {
+    "name": "public root renders CODE76 marketing, not a merchant workspace",
+    "passed": true,
+    "detail": {
+      "href": "http://127.0.0.1:3000/",
+      "surface": "code76",
+      "title": "CODE76 POS \u2014 Point of Sale, Inventory & Business Management",
+      "canonical": [
+        "http://127.0.0.1:3000/"
+      ],
+      "robots": "noindex, nofollow",
+      "og": "http://127.0.0.1:3000/",
+      "merchantDialog": false
+    }
+  },
+  {
+    "name": "public root has one canonical and matching OG URL",
+    "passed": true,
+    "detail": {
+      "href": "http://127.0.0.1:3000/",
+      "surface": "code76",
+      "title": "CODE76 POS \u2014 Point of Sale, Inventory & Business Management",
+      "canonical": [
+        "http://127.0.0.1:3000/"
+      ],
+      "robots": "noindex, nofollow",
+      "og": "http://127.0.0.1:3000/",
+      "merchantDialog": false
+    }
+  },
+  {
+    "name": "workspace preview stays noindex",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "public root exposes sign-in and registration but no guest business-page buttons",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "obsolete ?view=storefront shows the public site, never merchant content",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "anonymous internal-builder request displays the sign-in page, without mounting merchant content",
+    "passed": true,
+    "detail": {
+      "surface": "code76",
+      "hash": "#/pos/landing_page_builder",
+      "robots": "noindex, nofollow",
+      "schema": false,
+      "merchantMetrics": 0
+    }
+  },
+  {
+    "name": "anonymous private request does not increment merchant visits",
+    "passed": true,
+    "detail": {
+      "surface": "code76",
+      "hash": "#/pos/landing_page_builder",
+      "robots": "noindex, nofollow",
+      "schema": false,
+      "merchantMetrics": 0
+    }
+  },
+  {
+    "name": "protected sign-in entry is noindex and omits public structured data",
+    "passed": true,
+    "detail": {
+      "surface": "code76",
+      "hash": "#/pos/landing_page_builder",
+      "robots": "noindex, nofollow",
+      "schema": false,
+      "merchantMetrics": 0
+    }
+  },
+  {
+    "name": "successful sign-in returns to the requested internal builder route",
+    "passed": true,
+    "detail": {
+      "surface": "business",
+      "hash": "#/pos/landing_page_builder",
+      "title": "Business Landing Page | CODE76 POS \u2014 Private Workspace"
+    }
+  },
+  {
+    "name": "guided setup remains available but can be skipped without blocking the private builder",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "merchant catalog anchor scrolls without losing the protected hash route",
+    "passed": true,
+    "detail": {
+      "hash": "#/pos/landing_page_builder",
+      "surface": "business",
+      "scroll": 1062
+    }
+  },
+  {
+    "name": "builder offers only a clearly private sign-in-required internal link",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "business settings open only inside the authenticated POS settings route",
+    "passed": true,
+    "detail": {
+      "hash": "#/pos/settings",
+      "surface": "pos",
+      "robots": "noindex, nofollow"
+    }
+  },
+  {
+    "name": "Back returns directly to builder and independent merchant edits are retained",
+    "passed": true,
+    "detail": {
+      "hash": "#/pos/landing_page_builder",
+      "surface": "business",
+      "headlines": [
+        "TEST Internal Builder Only"
+      ]
+    }
+  },
+  {
+    "name": "Forward restores the internal settings route",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "authenticated user returning to base URL sees public CODE76, not dashboard or business page",
+    "passed": true,
+    "detail": {
+      "href": "http://127.0.0.1:3000/",
+      "surface": "code76",
+      "canonical": [
+        "http://127.0.0.1:3000/"
+      ],
+      "title": "CODE76 POS \u2014 Point of Sale, Inventory & Business Management",
+      "schema": "http://127.0.0.1:3000/"
+    }
+  },
+  {
+    "name": "public metadata is restored without duplicate canonicals or private fragments",
+    "passed": true,
+    "detail": {
+      "href": "http://127.0.0.1:3000/",
+      "surface": "code76",
+      "canonical": [
+        "http://127.0.0.1:3000/"
+      ],
+      "title": "CODE76 POS \u2014 Point of Sale, Inventory & Business Management",
+      "schema": "http://127.0.0.1:3000/"
+    }
+  },
+  {
+    "name": "public marketing section anchors still work with hash-based POS routes",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "public Enter POS opens the explicit authenticated workspace route",
+    "passed": true,
+    "detail": {
+      "hash": "#/pos",
+      "surface": "pos"
+    }
+  },
+  {
+    "name": "One payment checkout label survives the routing update",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "internal Business Page shortcut uses landing_page_builder only",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "sign-out returns to public root and removes all private navigation/dialogs",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Back after sign-out cannot reopen the merchant builder or count a merchant visit",
+    "passed": true,
+    "detail": {
+      "hash": "#/pos/landing_page_builder",
+      "surface": "code76",
+      "visitors": 3
+    }
+  },
+  {
+    "name": "/index.html renders the public site and canonicalizes to root",
+    "passed": true,
+    "detail": {
+      "surface": "code76",
+      "canonical": "http://127.0.0.1:3000/"
+    }
+  },
+  {
+    "name": "registration form remains reachable on the public root",
+    "passed": false,
+    "detail": null
+  },
+  {
+    "name": "registration form remains reachable on the public root",
+    "passed": true,
+    "detail": "Corrected the test label after inspecting the actual registration button; no app defect."
+  },
+  {
+    "name": "public page and registration fit a 390px mobile viewport",
+    "passed": false,
+    "detail": {
+      "width": 390,
+      "documentWidth": 404
+    }
+  },
+  {
+    "name": "public page and registration fit a 390px mobile viewport",
+    "passed": true,
+    "detail": {
+      "after_footer_wrap_fix": {
+        "width": 390,
+        "documentWidth": 390
+      }
+    }
+  },
+  {
+    "name": "private builder works and fits the 390px mobile viewport",
+    "passed": true,
+    "detail": {
+      "surface": "business",
+      "hash": "#/pos/landing_page_builder",
+      "width": 390,
+      "documentWidth": 390,
+      "canonical": "http://127.0.0.1:3000/",
+      "robots": "noindex, nofollow"
+    }
+  },
+  {
+    "name": "private builder keeps one public-root canonical and noindex metadata",
+    "passed": true,
+    "detail": {
+      "surface": "business",
+      "hash": "#/pos/landing_page_builder",
+      "width": 390,
+      "documentWidth": 390,
+      "canonical": "http://127.0.0.1:3000/",
+      "robots": "noindex, nofollow"
+    }
+  },
+  {
+    "name": "full reload fails closed without a session and never restores merchant content from saved records",
+    "passed": true,
+    "detail": {
+      "surface": "code76",
+      "hash": "#/pos/landing_page_builder",
+      "width": 390,
+      "documentWidth": 390
+    }
+  },
+  {
+    "name": "protected sign-in notice also fits the mobile viewport",
+    "passed": true,
+    "detail": {
+      "surface": "code76",
+      "hash": "#/pos/landing_page_builder",
+      "width": 390,
+      "documentWidth": 390
+    }
+  },
+  {
+    "name": "browser route checks finish without console errors",
+    "passed": true,
+    "detail": "### Result\nTotal messages: 1 (Errors: 0, Warnings: 0)\nReturning 0 messages for level \"error\"\n\n"
+  }
+]

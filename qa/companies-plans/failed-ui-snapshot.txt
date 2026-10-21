@@ -1,0 +1,128 @@
+### Page
+- Page URL: http://127.0.0.1:5173/#/pos/settings
+- Page Title: CODE76 POS — Private Workspace
+### Snapshot
+```yaml
+- generic [ref=f2e4]:
+  - banner [ref=f2e681]:
+    - generic [ref=f2e682]:
+      - button "76 CODE76 POS Enterprise Product & Service SaaS ERP System" [ref=f2e684] [cursor=pointer]:
+        - generic [ref=f2e685]: "76"
+        - generic [ref=f2e686]:
+          - generic [ref=f2e687]:
+            - generic [ref=f2e688]: CODE76 POS
+            - generic [ref=f2e689]: Enterprise
+          - paragraph [ref=f2e690]: Product & Service SaaS ERP System
+      - generic [ref=f2e691]:
+        - generic [ref=f2e692]:
+          - button "Desktop View (Full Width)" [ref=f2e693] [cursor=pointer]
+          - button "Laptop View (1024px)" [ref=f2e696] [cursor=pointer]
+          - button "Tablet View (768px)" [ref=f2e699] [cursor=pointer]
+          - button "Phone Mobile View (390px)" [ref=f2e702] [cursor=pointer]
+        - generic [ref=f2e705]:
+          - button "Demo Data" [ref=f2e706] [cursor=pointer]
+          - button "Click to view help guide and settings for this platform" [ref=f2e712] [cursor=pointer]
+          - button "Active user session and access controls" [ref=f2e717] [cursor=pointer]:
+            - generic [ref=f2e718]: DR
+            - generic [ref=f2e719]:
+              - generic [ref=f2e720]: Dr. David Kimani
+              - generic [ref=f2e721]: "Role: CEO"
+    - generic [ref=f2e722]:
+      - generic [ref=f2e723]:
+        - generic [ref=f2e727]: App link
+        - generic [ref=f2e728]:
+          - generic [ref=f2e729]:
+            - generic [ref=f2e730]: App link
+            - textbox "App link" [ref=f2e731]: http://127.0.0.1:5173/
+            - button "Copy app link" [ref=f2e732] [cursor=pointer]:
+              - generic [ref=f2e736]: Copy link
+            - link "Open app link in a new tab" [ref=f2e737] [cursor=pointer]:
+              - /url: http://127.0.0.1:5173/
+          - status [ref=f2e742]
+        - button "Current demo plan" [ref=f2e743]: Free · demo
+      - paragraph [ref=f2e744]: Open this root link to reach CODE76 sign-in/register. Browser-local records and sessions do not sync between browsers.
+    - generic [ref=f2e746]:
+      - button "Sales POS" [ref=f2e747] [cursor=pointer]
+      - button "Sales History" [ref=f2e751] [cursor=pointer]
+      - button "Inventory" [ref=f2e756] [cursor=pointer]
+      - button "Settings" [ref=f2e761] [cursor=pointer]
+      - button "About & Manual" [ref=f2e765] [cursor=pointer]
+  - main [ref=f2e5]:
+    - generic [ref=f2e768]:
+      - generic [ref=f2e770]:
+        - generic [ref=f2e771]:
+          - heading "System Settings Platform" [level=1] [ref=f2e772]
+          - button "Click for platform guidance & settings" [ref=f2e773] [cursor=pointer]
+        - paragraph [ref=f2e777]: Configure payment methods, responsive text sizing, landing page rules, receipts, appearance, font families, backups, privileges, and PDF/Excel import pipeline.
+      - generic [ref=f2e778]:
+        - generic [ref=f2e779]:
+          - button "Demo Plan Settings" [ref=f2e780] [cursor=pointer]
+          - button "Payment Settings" [ref=f2e784] [cursor=pointer]
+          - button "Currency, Date & Time" [ref=f2e788] [cursor=pointer]
+          - button "Delete All Business Data" [ref=f2e793] [cursor=pointer]
+          - button "Text Sizing Settings" [ref=f2e798] [cursor=pointer]
+          - button "Receipts Settings" [ref=f2e802] [cursor=pointer]
+          - button "App Appearance Settings" [ref=f2e807] [cursor=pointer]
+          - button "Font Text Settings" [ref=f2e815] [cursor=pointer]
+        - generic [ref=f2e820]:
+          - generic [ref=f2e821]:
+            - generic [ref=f2e822]:
+              - heading "Payments & Checkout Settings" [level=3] [ref=f2e823]
+              - paragraph [ref=f2e824]: Configure multi-payment channels, currencies, and tax.
+            - generic [ref=f2e825]:
+              - generic [ref=f2e826]: Accepted Payment Methods
+              - generic [ref=f2e827]:
+                - generic [ref=f2e828] [cursor=pointer]:
+                  - checkbox "Cash" [checked] [ref=f2e829]
+                  - generic [ref=f2e830]: Cash
+                - generic [ref=f2e831] [cursor=pointer]:
+                  - checkbox "M-Pesa" [checked] [ref=f2e832]
+                  - generic [ref=f2e833]: M-Pesa
+                - generic [ref=f2e834] [cursor=pointer]:
+                  - checkbox "Airtel Money" [checked] [ref=f2e835]
+                  - generic [ref=f2e836]: Airtel Money
+                - generic [ref=f2e837] [cursor=pointer]:
+                  - checkbox "T-Kash" [checked] [ref=f2e838]
+                  - generic [ref=f2e839]: T-Kash
+                - generic [ref=f2e840] [cursor=pointer]:
+                  - checkbox "Credit Card" [checked] [ref=f2e841]
+                  - generic [ref=f2e842]: Credit Card
+                - generic [ref=f2e843] [cursor=pointer]:
+                  - checkbox "Debit Card" [checked] [ref=f2e844]
+                  - generic [ref=f2e845]: Debit Card
+                - generic [ref=f2e846] [cursor=pointer]:
+                  - checkbox "Bank Transfer" [checked] [ref=f2e847]
+                  - generic [ref=f2e848]: Bank Transfer
+                - generic [ref=f2e849] [cursor=pointer]:
+                  - checkbox "Cheque" [checked] [ref=f2e850]
+                  - generic [ref=f2e851]: Cheque
+                - generic [ref=f2e852] [cursor=pointer]:
+                  - checkbox "PayPal" [checked] [ref=f2e853]
+                  - generic [ref=f2e854]: PayPal
+                - generic [ref=f2e855] [cursor=pointer]:
+                  - checkbox "Gift Card" [ref=f2e856]
+                  - generic [ref=f2e857]: Gift Card
+                - generic [ref=f2e858] [cursor=pointer]:
+                  - checkbox "Voucher" [ref=f2e859]
+                  - generic [ref=f2e860]: Voucher
+                - generic [ref=f2e861] [cursor=pointer]:
+                  - checkbox "Crypto" [ref=f2e862]
+                  - generic [ref=f2e863]: Crypto
+                - generic [ref=f2e864] [cursor=pointer]:
+                  - checkbox "Other" [checked] [ref=f2e865]
+                  - generic [ref=f2e866]: Other
+                - generic [ref=f2e867] [cursor=pointer]:
+                  - checkbox "Credit / Debt" [checked] [ref=f2e868]
+                  - generic [ref=f2e869]: Credit / Debt
+            - generic [ref=f2e870]:
+              - generic [ref=f2e871]:
+                - generic [ref=f2e872]: Default Currency Symbol
+                - textbox [ref=f2e873]: KES
+              - generic [ref=f2e874]:
+                - generic [ref=f2e875]: Standard Sales Tax Rate (%)
+                - spinbutton [ref=f2e876]: "0"
+            - generic [ref=f2e877]:
+              - checkbox "Allow partial payment & customer credit debts (Tracked in Sales History platform)" [checked] [disabled] [ref=f2e878]
+              - generic [ref=f2e879] [cursor=pointer]: Allow partial payment & customer credit debts (Tracked in Sales History platform)
+          - button "Save All Settings Changes" [ref=f2e881] [cursor=pointer]
+```

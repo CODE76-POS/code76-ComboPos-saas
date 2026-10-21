@@ -1,0 +1,915 @@
+TAP version 13
+# Subtest: empty onboarding profile contains no CODE76 identity, contacts or tax registration
+ok 1 - empty onboarding profile contains no CODE76 identity, contacts or tax registration
+  ---
+  duration_ms: 1.449772
+  ...
+# Subtest: untouched CODE76 demo profile is not an actual merchant profile
+ok 2 - untouched CODE76 demo profile is not an actual merchant profile
+  ---
+  duration_ms: 0.248245
+  ...
+# Subtest: merchant can deliberately configure a company with the CODE76 name
+ok 3 - merchant can deliberately configure a company with the CODE76 name
+  ---
+  duration_ms: 0.221273
+  ...
+# Subtest: nonempty custom profile remains compatible with existing saved merchants
+ok 4 - nonempty custom profile remains compatible with existing saved merchants
+  ---
+  duration_ms: 0.224227
+  ...
+# Subtest: configured flag cannot make a blank name valid
+ok 5 - configured flag cannot make a blank name valid
+  ---
+  duration_ms: 0.214011
+  ...
+# Subtest: all four real text sizing values have increasing, visible sample sizes
+ok 6 - all four real text sizing values have increasing, visible sample sizes
+  ---
+  duration_ms: 1.210601
+  ...
+# Subtest: starter item saves supplied stock and prices, trimmed name and category
+ok 7 - starter item saves supplied stock and prices, trimmed name and category
+  ---
+  duration_ms: 0.360958
+  ...
+# Subtest: blank optional cost/stock are zero, never invented sample stock or prices
+ok 8 - blank optional cost/stock are zero, never invented sample stock or prices
+  ---
+  duration_ms: 0.26191
+  ...
+# Subtest: starter service does not fabricate physical stock
+ok 9 - starter service does not fabricate physical stock
+  ---
+  duration_ms: 0.67845
+  ...
+# Subtest: starter items have unique inventory IDs
+ok 10 - starter items have unique inventory IDs
+  ---
+  duration_ms: 3.126932
+  ...
+# Subtest: starter validation rejects name="  "
+ok 11 - starter validation rejects name="  "
+  ---
+  duration_ms: 0.49821
+  ...
+# Subtest: starter validation rejects sellingPrice=""
+ok 12 - starter validation rejects sellingPrice=""
+  ---
+  duration_ms: 0.202233
+  ...
+# Subtest: starter validation rejects sellingPrice="-1"
+ok 13 - starter validation rejects sellingPrice="-1"
+  ---
+  duration_ms: 0.160903
+  ...
+# Subtest: starter validation rejects costPrice="-1"
+ok 14 - starter validation rejects costPrice="-1"
+  ---
+  duration_ms: 0.350789
+  ...
+# Subtest: starter validation rejects sellingPrice="Infinity"
+ok 15 - starter validation rejects sellingPrice="Infinity"
+  ---
+  duration_ms: 0.166613
+  ...
+# Subtest: starter validation rejects sellingPrice="NaN"
+ok 16 - starter validation rejects sellingPrice="NaN"
+  ---
+  duration_ms: 0.176087
+  ...
+# Subtest: starter validation rejects sellingPrice="1e308"
+ok 17 - starter validation rejects sellingPrice="1e308"
+  ---
+  duration_ms: 0.170172
+  ...
+# Subtest: starter validation rejects stock="-1"
+ok 18 - starter validation rejects stock="-1"
+  ---
+  duration_ms: 0.449393
+  ...
+# Subtest: starter validation rejects stock="1.5"
+ok 19 - starter validation rejects stock="1.5"
+  ---
+  duration_ms: 0.192434
+  ...
+# Subtest: starter validation rejects stock="9007199254740992"
+ok 20 - starter validation rejects stock="9007199254740992"
+  ---
+  duration_ms: 0.232359
+  ...
+# Subtest: setup progress restores stage, saved IDs and unsaved company draft
+ok 21 - setup progress restores stage, saved IDs and unsaved company draft
+  ---
+  duration_ms: 0.548587
+  ...
+# Subtest: corrupt or old setup progress fails safely
+ok 22 - corrupt or old setup progress fails safely
+  ---
+  duration_ms: 0.317962
+  ...
+# Subtest: storage quota failure is reported, not thrown
+ok 23 - storage quota failure is reported, not thrown
+  ---
+  duration_ms: 0.278423
+  ...
+# Subtest: business page uses merchant identity and the actual saved inventory array
+ok 24 - business page uses merchant identity and the actual saved inventory array
+  ---
+  duration_ms: 0.22997
+  ...
+# Subtest: empty business catalog and reviews stay empty
+ok 25 - empty business catalog and reviews stay empty
+  ---
+  duration_ms: 0.214711
+  ...
+# Subtest: public CODE76 site ignores merchant brand and inventory
+ok 26 - public CODE76 site ignores merchant brand and inventory
+  ---
+  duration_ms: 0.243567
+  ...
+# Subtest: public CODE76 content is frozen against accidental mutation
+ok 27 - public CODE76 content is frozen against accidental mutation
+  ---
+  duration_ms: 0.192961
+  ...
+# Subtest: new business page defaults contain no CODE76 offers or social handles
+ok 28 - new business page defaults contain no CODE76 offers or social handles
+  ---
+  duration_ms: 0.321353
+  ...
+# Subtest: one-time migration removes unchanged legacy CODE76 copy
+ok 29 - one-time migration removes unchanged legacy CODE76 copy
+  ---
+  duration_ms: 0.286982
+  ...
+# Subtest: migration preserves custom merchant text, controls and contacts
+ok 30 - migration preserves custom merchant text, controls and contacts
+  ---
+  duration_ms: 0.324108
+  ...
+# Subtest: versioned settings are not repeatedly cleaned if merchant intentionally uses a legacy phrase
+ok 31 - versioned settings are not repeatedly cleaned if merchant intentionally uses a legacy phrase
+  ---
+  duration_ms: 0.171725
+  ...
+# Subtest: old partial settings acquire missing defaults without losing selected theme
+ok 32 - old partial settings acquire missing defaults without losing selected theme
+  ---
+  duration_ms: 29.267512
+  ...
+# Subtest: public marketing configuration has no import dependency on merchant page defaults
+ok 33 - public marketing configuration has no import dependency on merchant page defaults
+  ---
+  duration_ms: 0.90423
+  ...
+# Subtest: legacy storefront query cannot select an anonymous business page
+ok 34 - legacy storefront query cannot select an anonymous business page
+  ---
+  duration_ms: 0.501765
+  ...
+# Subtest: base URL always selects the CODE76 product site, including for signed-in users
+ok 35 - base URL always selects the CODE76 product site, including for signed-in users
+  ---
+  duration_ms: 0.250413
+  ...
+# Subtest: invalid routes and unauthenticated POS requests safely show the public site
+ok 36 - invalid routes and unauthenticated POS requests safely show the public site
+  ---
+  duration_ms: 0.200103
+  ...
+# Subtest: private page links preserve deployment paths and unrelated parameters using hash routing
+ok 37 - private page links preserve deployment paths and unrelated parameters using hash routing
+  ---
+  duration_ms: 1.045772
+  ...
+# Subtest: business chat excludes cost prices, tax IDs and non-public reviews
+ok 38 - business chat excludes cost prices, tax IDs and non-public reviews
+  ---
+  duration_ms: 0.455961
+  ...
+# Subtest: CODE76 chat cannot consume merchant records
+ok 39 - CODE76 chat cannot consume merchant records
+  ---
+  duration_ms: 0.385276
+  ...
+# Subtest: business fallback quotes actual merchandise and merchant currency
+ok 40 - business fallback quotes actual merchandise and merchant currency
+  ---
+  duration_ms: 0.941208
+  ...
+# Subtest: empty business assistant invents no equipment
+ok 41 - empty business assistant invents no equipment
+  ---
+  duration_ms: 0.492106
+  ...
+# Subtest: business assistant never confirms a reservation or appointment
+ok 42 - business assistant never confirms a reservation or appointment
+  ---
+  duration_ms: 0.185565
+  ...
+# Subtest: out-of-stock business merchandise is honestly labelled
+ok 43 - out-of-stock business merchandise is honestly labelled
+  ---
+  duration_ms: 0.22546
+  ...
+# Subtest: public leads and metrics have their own storage key
+ok 44 - public leads and metrics have their own storage key
+  ---
+  duration_ms: 0.189629
+  ...
+# Subtest: public landing page reads only auth/navigation from POS context
+ok 45 - public landing page reads only auth/navigation from POS context
+  ---
+  duration_ms: 0.697574
+  ...
+# Subtest: business page has no implicit INITIAL_* demo fallback or fixed 4.9 rating
+ok 46 - business page has no implicit INITIAL_* demo fallback or fixed 4.9 rating
+  ---
+  duration_ms: 0.436837
+  ...
+# Subtest: both chatbot callers explicitly identify their page surface
+ok 47 - both chatbot callers explicitly identify their page surface
+  ---
+  duration_ms: 2.513619
+  ...
+# Subtest: payment action is One payment and split removal uses a labelled trash icon
+ok 48 - payment action is One payment and split removal uses a labelled trash icon
+  ---
+  duration_ms: 0.393761
+  ...
+# Subtest: wizard includes real settings/help/manual icons and enforces starter cap
+ok 49 - wizard includes real settings/help/manual icons and enforces starter cap
+  ---
+  duration_ms: 0.373444
+  ...
+# Subtest: theme state is derived from persisted Settings rather than divergent local state
+ok 50 - theme state is derived from persisted Settings rather than divergent local state
+  ---
+  duration_ms: 0.244415
+  ...
+# Subtest: POS font preferences are scoped away from both landing pages
+ok 51 - POS font preferences are scoped away from both landing pages
+  ---
+  duration_ms: 0.256064
+  ...
+# Subtest: base URL stays public with authenticated=false
+ok 52 - base URL stays public with authenticated=false
+  ---
+  duration_ms: 1.998418
+  ...
+# Subtest: base URL stays public with authenticated=true
+ok 53 - base URL stays public with authenticated=true
+  ---
+  duration_ms: 0.2057
+  ...
+# Subtest: public marketing anchor \#about never opens a merchant screen
+ok 54 - public marketing anchor \#about never opens a merchant screen
+  ---
+  duration_ms: 0.185696
+  ...
+# Subtest: public marketing anchor \#features never opens a merchant screen
+ok 55 - public marketing anchor \#features never opens a merchant screen
+  ---
+  duration_ms: 0.121472
+  ...
+# Subtest: public marketing anchor \#portal-access never opens a merchant screen
+ok 56 - public marketing anchor \#portal-access never opens a merchant screen
+  ---
+  duration_ms: 0.113093
+  ...
+# Subtest: public marketing anchor \#contact never opens a merchant screen
+ok 57 - public marketing anchor \#contact never opens a merchant screen
+  ---
+  duration_ms: 0.246148
+  ...
+# Subtest: public marketing anchor \#reviews never opens a merchant screen
+ok 58 - public marketing anchor \#reviews never opens a merchant screen
+  ---
+  duration_ms: 0.134638
+  ...
+# Subtest: public marketing anchor \#/ never opens a merchant screen
+ok 59 - public marketing anchor \#/ never opens a merchant screen
+  ---
+  duration_ms: 0.12038
+  ...
+# Subtest: /selling: explicit internal route, round trip and authentication guard
+ok 60 - /selling: explicit internal route, round trip and authentication guard
+  ---
+  duration_ms: 1.912024
+  ...
+# Subtest: /sales_history: explicit internal route, round trip and authentication guard
+ok 61 - /sales_history: explicit internal route, round trip and authentication guard
+  ---
+  duration_ms: 0.294447
+  ...
+# Subtest: /inventory: explicit internal route, round trip and authentication guard
+ok 62 - /inventory: explicit internal route, round trip and authentication guard
+  ---
+  duration_ms: 0.342674
+  ...
+# Subtest: /expenses: explicit internal route, round trip and authentication guard
+ok 63 - /expenses: explicit internal route, round trip and authentication guard
+  ---
+  duration_ms: 0.213231
+  ...
+# Subtest: /invoices: explicit internal route, round trip and authentication guard
+ok 64 - /invoices: explicit internal route, round trip and authentication guard
+  ---
+  duration_ms: 0.202821
+  ...
+# Subtest: /analytics: explicit internal route, round trip and authentication guard
+ok 65 - /analytics: explicit internal route, round trip and authentication guard
+  ---
+  duration_ms: 0.325339
+  ...
+# Subtest: /customers: explicit internal route, round trip and authentication guard
+ok 66 - /customers: explicit internal route, round trip and authentication guard
+  ---
+  duration_ms: 0.17662
+  ...
+# Subtest: /vendors: explicit internal route, round trip and authentication guard
+ok 67 - /vendors: explicit internal route, round trip and authentication guard
+  ---
+  duration_ms: 0.191681
+  ...
+# Subtest: /transporters: explicit internal route, round trip and authentication guard
+ok 68 - /transporters: explicit internal route, round trip and authentication guard
+  ---
+  duration_ms: 0.226075
+  ...
+# Subtest: /marketing_team: explicit internal route, round trip and authentication guard
+ok 69 - /marketing_team: explicit internal route, round trip and authentication guard
+  ---
+  duration_ms: 0.418486
+  ...
+# Subtest: /company_members: explicit internal route, round trip and authentication guard
+ok 70 - /company_members: explicit internal route, round trip and authentication guard
+  ---
+  duration_ms: 0.294162
+  ...
+# Subtest: /my_company: explicit internal route, round trip and authentication guard
+ok 71 - /my_company: explicit internal route, round trip and authentication guard
+  ---
+  duration_ms: 0.19925
+  ...
+# Subtest: /messaging: explicit internal route, round trip and authentication guard
+ok 72 - /messaging: explicit internal route, round trip and authentication guard
+  ---
+  duration_ms: 0.190389
+  ...
+# Subtest: /landing_page_builder: explicit internal route, round trip and authentication guard
+ok 73 - /landing_page_builder: explicit internal route, round trip and authentication guard
+  ---
+  duration_ms: 0.170396
+  ...
+# Subtest: /settings: explicit internal route, round trip and authentication guard
+ok 74 - /settings: explicit internal route, round trip and authentication guard
+  ---
+  duration_ms: 0.226709
+  ...
+# Subtest: /audit_logs: explicit internal route, round trip and authentication guard
+ok 75 - /audit_logs: explicit internal route, round trip and authentication guard
+  ---
+  duration_ms: 0.164473
+  ...
+# Subtest: /about: explicit internal route, round trip and authentication guard
+ok 76 - /about: explicit internal route, round trip and authentication guard
+  ---
+  duration_ms: 0.241977
+  ...
+# Subtest: invalid or obsolete route \#/storefront is public only
+ok 77 - invalid or obsolete route \#/storefront is public only
+  ---
+  duration_ms: 0.144885
+  ...
+# Subtest: invalid or obsolete route \#storefront is public only
+ok 78 - invalid or obsolete route \#storefront is public only
+  ---
+  duration_ms: 0.105176
+  ...
+# Subtest: invalid or obsolete route \#/landing_page_builder is public only
+ok 79 - invalid or obsolete route \#/landing_page_builder is public only
+  ---
+  duration_ms: 0.100673
+  ...
+# Subtest: invalid or obsolete route \#/pos/storefront is public only
+ok 80 - invalid or obsolete route \#/pos/storefront is public only
+  ---
+  duration_ms: 0.09143
+  ...
+# Subtest: invalid or obsolete route \#/pos/landing_page_builder/extra is public only
+ok 81 - invalid or obsolete route \#/pos/landing_page_builder/extra is public only
+  ---
+  duration_ms: 0.093604
+  ...
+# Subtest: invalid or obsolete route \#//pos/settings is public only
+ok 82 - invalid or obsolete route \#//pos/settings is public only
+  ---
+  duration_ms: 0.136751
+  ...
+# Subtest: invalid or obsolete route \#/POS/settings is public only
+ok 83 - invalid or obsolete route \#/POS/settings is public only
+  ---
+  duration_ms: 0.114036
+  ...
+# Subtest: invalid or obsolete route \#/pos/%6canding_page_builder is public only
+ok 84 - invalid or obsolete route \#/pos/%6canding_page_builder is public only
+  ---
+  duration_ms: 0.170655
+  ...
+# Subtest: legacy query links cannot open a standalone merchant page, even with an authenticated user
+ok 85 - legacy query links cannot open a standalone merchant page, even with an authenticated user
+  ---
+  duration_ms: 0.200944
+  ...
+# Subtest: return-to-site URL removes both the private hash and the obsolete view parameter
+ok 86 - return-to-site URL removes both the private hash and the obsolete view parameter
+  ---
+  duration_ms: 0.401699
+  ...
+# Subtest: internal builder is the only business-page JSX entry and has the shared workspace guard
+ok 87 - internal builder is the only business-page JSX entry and has the shared workspace guard
+  ---
+  duration_ms: 0.568124
+  ...
+# Subtest: merchant component checks auth again and cannot count anonymous visits
+ok 88 - merchant component checks auth again and cannot count anonymous visits
+  ---
+  duration_ms: 0.595961
+  ...
+# Subtest: all eight merchant section links scroll without overwriting the private hash route
+ok 89 - all eight merchant section links scroll without overwriting the private hash route
+  ---
+  duration_ms: 0.520461
+  ...
+# Subtest: public page has metadata and no guest merchant launch controls
+ok 90 - public page has metadata and no guest merchant launch controls
+  ---
+  duration_ms: 0.770435
+  ...
+# Subtest: router listens to hash and browser history; saved merchant records are not authentication
+ok 91 - router listens to hash and browser history; saved merchant records are not authentication
+  ---
+  duration_ms: 0.348011
+  ...
+# Subtest: canonical normalization: https://shop.example.com/?utm_source=test\#/pos/landing_page_builder
+ok 92 - canonical normalization: https://shop.example.com/?utm_source=test\#/pos/landing_page_builder
+  ---
+  duration_ms: 0.356614
+  ...
+# Subtest: canonical normalization: https://shop.example.com/index.html
+ok 93 - canonical normalization: https://shop.example.com/index.html
+  ---
+  duration_ms: 0.12333
+  ...
+# Subtest: canonical normalization: https://shop.example.com/private/page
+ok 94 - canonical normalization: https://shop.example.com/private/page
+  ---
+  duration_ms: 0.109391
+  ...
+# Subtest: invalid canonical rejected: undefined
+ok 95 - invalid canonical rejected: undefined
+  ---
+  duration_ms: 0.13228
+  ...
+# Subtest: invalid canonical rejected: MY_APP_URL
+ok 96 - invalid canonical rejected: MY_APP_URL
+  ---
+  duration_ms: 0.162954
+  ...
+# Subtest: invalid canonical rejected: /
+ok 97 - invalid canonical rejected: /
+  ---
+  duration_ms: 0.147933
+  ...
+# Subtest: invalid canonical rejected: javascript:alert(1)
+ok 98 - invalid canonical rejected: javascript:alert(1)
+  ---
+  duration_ms: 0.108953
+  ...
+# Subtest: invalid canonical rejected: file:///etc/passwd
+ok 99 - invalid canonical rejected: file:///etc/passwd
+  ---
+  duration_ms: 0.113872
+  ...
+# Subtest: invalid canonical rejected: https://user:secret@shop.example.com/
+ok 100 - invalid canonical rejected: https://user:secret@shop.example.com/
+  ---
+  duration_ms: 0.119905
+  ...
+# Subtest: local or workspace preview is noindex: http://localhost:3000/
+ok 101 - local or workspace preview is noindex: http://localhost:3000/
+  ---
+  duration_ms: 1.789005
+  ...
+# Subtest: local or workspace preview is noindex: http://127.0.0.1:3000/
+ok 102 - local or workspace preview is noindex: http://127.0.0.1:3000/
+  ---
+  duration_ms: 0.199919
+  ...
+# Subtest: local or workspace preview is noindex: http://[::1]:3000/
+ok 103 - local or workspace preview is noindex: http://[::1]:3000/
+  ---
+  duration_ms: 0.154861
+  ...
+# Subtest: local or workspace preview is noindex: https://3000-workspace.e2b.app/
+ok 104 - local or workspace preview is noindex: https://3000-workspace.e2b.app/
+  ---
+  duration_ms: 0.099568
+  ...
+# Subtest: production site may be indexed, but explicit staging opt-out wins
+ok 105 - production site may be indexed, but explicit staging opt-out wins
+  ---
+  duration_ms: 0.149139
+  ...
+# Subtest: proxy-aware fallback never guesses a production domain
+ok 106 - proxy-aware fallback never guesses a production domain
+  ---
+  duration_ms: 0.429333
+  ...
+# Subtest: invalid host headers cannot inject markup or credentials into SEO metadata
+ok 107 - invalid host headers cannot inject markup or credentials into SEO metadata
+  ---
+  duration_ms: 0.261437
+  ...
+# Subtest: public head has one canonical, aligned title/description/social tags and correct robots
+ok 108 - public head has one canonical, aligned title/description/social tags and correct robots
+  ---
+  duration_ms: 1.063894
+  ...
+# Subtest: workspace/staging metadata is noindex and never canonicalizes a private route
+ok 109 - workspace/staging metadata is noindex and never canonicalizes a private route
+  ---
+  duration_ms: 0.235717
+  ...
+# Subtest: structured data describes the actual web app without invented pricing or native-platform claims
+ok 110 - structured data describes the actual web app without invented pricing or native-platform claims
+  ---
+  duration_ms: 0.333196
+  ...
+# Subtest: sharing image is a real local 1200 by 630 PNG, not an external image dependency
+ok 111 - sharing image is a real local 1200 by 630 PNG, not an external image dependency
+  ---
+  duration_ms: 1.152472
+  ...
+# Subtest: SEO renderer escapes attributes and rejects an unmarked template
+ok 112 - SEO renderer escapes attributes and rejects an unmarked template
+  ---
+  duration_ms: 0.522202
+  ...
+# Subtest: root and index have explicit HTTP handlers, API misses are not swallowed, preview host is allowed
+ok 113 - root and index have explicit HTTP handlers, API misses are not swallowed, preview host is allowed
+  ---
+  duration_ms: 0.534394
+  ...
+# Subtest: clipboard success is awaited and fallback is not called
+ok 114 - clipboard success is awaited and fallback is not called
+  ---
+  duration_ms: 1.50056
+  ...
+# Subtest: blocked modern clipboard falls back to a real successful legacy copy
+ok 115 - blocked modern clipboard falls back to a real successful legacy copy
+  ---
+  duration_ms: 0.40672
+  ...
+# Subtest: missing modern clipboard can use the legacy copy path
+ok 116 - missing modern clipboard can use the legacy copy path
+  ---
+  duration_ms: 0.340216
+  ...
+# Subtest: no clipboard APIs never claims the link was copied
+ok 117 - no clipboard APIs never claims the link was copied
+  ---
+  duration_ms: 0.147797
+  ...
+# Subtest: rejected/false clipboard paths require manual selection rather than false success
+ok 118 - rejected/false clipboard paths require manual selection rather than false success
+  ---
+  duration_ms: 0.222651
+  ...
+# Subtest: exceptions from both clipboard mechanisms still produce a usable manual fallback
+ok 119 - exceptions from both clipboard mechanisms still produce a usable manual fallback
+  ---
+  duration_ms: 0.173204
+  ...
+# Subtest: empty text is not copied or reported successful
+ok 120 - empty text is not copied or reported successful
+  ---
+  duration_ms: 0.170461
+  ...
+# Subtest: copy field exposes read-only selectable text, status and keyboard-copy instructions
+ok 121 - copy field exposes read-only selectable text, status and keyboard-copy instructions
+  ---
+  duration_ms: 0.513255
+  ...
+# Subtest: app link strips authentication tokens, userinfo, query and private hashes
+ok 122 - app link strips authentication tokens, userinfo, query and private hashes
+  ---
+  duration_ms: 0.384232
+  ...
+# Subtest: app link supports a configured base path but never another origin
+ok 123 - app link supports a configured base path but never another origin
+  ---
+  duration_ms: 0.362262
+  ...
+# Subtest: workspace links are identified for an honest host-authorization warning
+ok 124 - workspace links are identified for an honest host-authorization warning
+  ---
+  duration_ms: 0.172964
+  ...
+# Subtest: navbar contains app link and session access, not the removed public-site/logout/theme actions
+ok 125 - navbar contains app link and session access, not the removed public-site/logout/theme actions
+  ---
+  duration_ms: 0.281524
+  ...
+# Subtest: service quantity basis Per task completion round-trips and formats correctly
+ok 126 - service quantity basis Per task completion round-trips and formats correctly
+  ---
+  duration_ms: 0.361479
+  ...
+# Subtest: service quantity basis Per minute round-trips and formats correctly
+ok 127 - service quantity basis Per minute round-trips and formats correctly
+  ---
+  duration_ms: 0.170542
+  ...
+# Subtest: service quantity basis Per hour round-trips and formats correctly
+ok 128 - service quantity basis Per hour round-trips and formats correctly
+  ---
+  duration_ms: 0.117963
+  ...
+# Subtest: service quantity basis Per day round-trips and formats correctly
+ok 129 - service quantity basis Per day round-trips and formats correctly
+  ---
+  duration_ms: 0.191101
+  ...
+# Subtest: service quantity basis Per week round-trips and formats correctly
+ok 130 - service quantity basis Per week round-trips and formats correctly
+  ---
+  duration_ms: 0.109509
+  ...
+# Subtest: service quantity basis Per month round-trips and formats correctly
+ok 131 - service quantity basis Per month round-trips and formats correctly
+  ---
+  duration_ms: 0.191395
+  ...
+# Subtest: service quantity basis Per year round-trips and formats correctly
+ok 132 - service quantity basis Per year round-trips and formats correctly
+  ---
+  duration_ms: 0.126223
+  ...
+# Subtest: service quantity basis Per session round-trips and formats correctly
+ok 133 - service quantity basis Per session round-trips and formats correctly
+  ---
+  duration_ms: 0.176514
+  ...
+# Subtest: service quantity basis Per visit round-trips and formats correctly
+ok 134 - service quantity basis Per visit round-trips and formats correctly
+  ---
+  duration_ms: 0.137587
+  ...
+# Subtest: service quantity basis Per project round-trips and formats correctly
+ok 135 - service quantity basis Per project round-trips and formats correctly
+  ---
+  duration_ms: 0.102558
+  ...
+# Subtest: new hourly starter service stores its billing unit without fictitious stock
+ok 136 - new hourly starter service stores its billing unit without fictitious stock
+  ---
+  duration_ms: 0.577164
+  ...
+# Subtest: product stock semantics are unchanged and no service unit is attached
+ok 137 - product stock semantics are unchanged and no service unit is attached
+  ---
+  duration_ms: 0.222944
+  ...
+# Subtest: legacy services have a safe editable task-completion display default
+ok 138 - legacy services have a safe editable task-completion display default
+  ---
+  duration_ms: 0.127335
+  ...
+# Subtest: invalid explicitly supplied service units are rejected rather than changing the rate basis
+ok 139 - invalid explicitly supplied service units are rejected rather than changing the rate basis
+  ---
+  duration_ms: 0.323703
+  ...
+# Subtest: both inventory entry paths expose service unit selection; new services are not 9999 stock
+ok 140 - both inventory entry paths expose service unit selection; new services are not 9999 stock
+  ---
+  duration_ms: 0.694136
+  ...
+# Subtest: unauthenticated users cannot view or export history
+ok 141 - unauthenticated users cannot view or export history
+  ---
+  duration_ms: 0.409484
+  ...
+# Subtest: no privilege means no view or export, regardless of a UI unlock
+ok 142 - no privilege means no view or export, regardless of a UI unlock
+  ---
+  duration_ms: 0.311836
+  ...
+# Subtest: admins may view and export even when role flags are false
+ok 143 - admins may view and export even when role flags are false
+  ---
+  duration_ms: 0.212798
+  ...
+# Subtest: view-only privilege does not grant file export
+ok 144 - view-only privilege does not grant file export
+  ---
+  duration_ms: 0.192501
+  ...
+# Subtest: export flag alone cannot expose access history
+ok 145 - export flag alone cannot expose access history
+  ---
+  duration_ms: 0.161019
+  ...
+# Subtest: both required privileges allow delegated non-admin history exports
+ok 146 - both required privileges allow delegated non-admin history exports
+  ---
+  duration_ms: 0.367616
+  ...
+# Subtest: secondary active roles can grant privileges consistently with POS context
+ok 147 - secondary active roles can grant privileges consistently with POS context
+  ---
+  duration_ms: 0.187486
+  ...
+# Subtest: a named CEO role without admin status or granted privileges does not bypass the policy
+ok 148 - a named CEO role without admin status or granted privileges does not bypass the policy
+  ---
+  duration_ms: 0.183352
+  ...
+# Subtest: export authorization fails closed when rights are revoked
+ok 149 - export authorization fails closed when rights are revoked
+  ---
+  duration_ms: 3.947368
+  ...
+# Subtest: audit no longer has a PIN or click-to-unlock backdoor and rechecks pending PDF downloads
+ok 150 - audit no longer has a PIN or click-to-unlock backdoor and rechecks pending PDF downloads
+  ---
+  duration_ms: 0.472066
+  ...
+# Subtest: session dialog locates history/downloads and handles sign-out inside the widget
+ok 151 - session dialog locates history/downloads and handles sign-out inside the widget
+  ---
+  duration_ms: 0.327746
+  ...
+# Subtest: all three history entry points use the same guarded component
+ok 152 - all three history entry points use the same guarded component
+  ---
+  duration_ms: 0.629763
+  ...
+# Subtest: non-admins cannot save a modified permission map or open role-grant controls
+ok 153 - non-admins cannot save a modified permission map or open role-grant controls
+  ---
+  duration_ms: 0.429843
+  ...
+# Subtest: full backup cannot bypass restricted history export
+ok 154 - full backup cannot bypass restricted history export
+  ---
+  duration_ms: 0.6444
+  ...
+# Subtest: history CSV neutralizes formula-like value "=HYPERLINK(\\"bad\\")"
+ok 155 - history CSV neutralizes formula-like value "=HYPERLINK(\\"bad\\")"
+  ---
+  duration_ms: 0.223628
+  ...
+# Subtest: history CSV neutralizes formula-like value "+cmd"
+ok 156 - history CSV neutralizes formula-like value "+cmd"
+  ---
+  duration_ms: 0.20689
+  ...
+# Subtest: history CSV neutralizes formula-like value "-10+cmd"
+ok 157 - history CSV neutralizes formula-like value "-10+cmd"
+  ---
+  duration_ms: 0.16383
+  ...
+# Subtest: history CSV neutralizes formula-like value "@SUM(A1)"
+ok 158 - history CSV neutralizes formula-like value "@SUM(A1)"
+  ---
+  duration_ms: 0.122067
+  ...
+# Subtest: history CSV neutralizes formula-like value "  =SUM(A1)"
+ok 159 - history CSV neutralizes formula-like value "  =SUM(A1)"
+  ---
+  duration_ms: 0.112584
+  ...
+# Subtest: history CSV neutralizes formula-like value "\\t=2+2"
+ok 160 - history CSV neutralizes formula-like value "\\t=2+2"
+  ---
+  duration_ms: 0.118068
+  ...
+# Subtest: CSV preserves Unicode and quotes newlines, commas and quotation marks
+ok 161 - CSV preserves Unicode and quotes newlines, commas and quotation marks
+  ---
+  duration_ms: 0.366618
+  ...
+# Subtest: empty CSV retains headers and TXT retains export metadata
+ok 162 - empty CSV retains headers and TXT retains export metadata
+  ---
+  duration_ms: 0.279858
+  ...
+# Subtest: TXT escapes embedded newlines in record values without dropping Unicode
+ok 163 - TXT escapes embedded newlines in record values without dropping Unicode
+  ---
+  duration_ms: 0.296678
+  ...
+# Subtest: PDF is a real downloadable, Unicode-font, paginated document rather than a print-window placeholder
+ok 164 - PDF is a real downloadable, Unicode-font, paginated document rather than a print-window placeholder
+  ---
+  duration_ms: 384.160055
+  ...
+# Subtest: appearance settings own light/dark controls and preserve saved preference state
+ok 165 - appearance settings own light/dark controls and preserve saved preference state
+  ---
+  duration_ms: 0.540309
+  ...
+# Subtest: empty merchant reviews have no placeholder badge or navigation; approved reviews remain reactive
+ok 166 - empty merchant reviews have no placeholder badge or navigation; approved reviews remain reactive
+  ---
+  duration_ms: 0.336838
+  ...
+# Subtest: public replacement contains exactly 18 unique real modules and useful benefit descriptions
+ok 167 - public replacement contains exactly 18 unique real modules and useful benefit descriptions
+  ---
+  duration_ms: 0.604492
+  ...
+# Subtest: public marketing copy does not promise public merchant publishing or unconfigured live messaging
+ok 168 - public marketing copy does not promise public merchant publishing or unconfigured live messaging
+  ---
+  duration_ms: 0.143906
+  ...
+# Subtest: database restore cannot replace role privileges for a non-admin
+ok 169 - database restore cannot replace role privileges for a non-admin
+  ---
+  duration_ms: 0.295001
+  ...
+# Subtest: theme examples retain their own colors instead of inheriting opposite-mode utility overrides
+ok 170 - theme examples retain their own colors instead of inheriting opposite-mode utility overrides
+  ---
+  duration_ms: 0.400082
+  ...
+# Subtest: review capture describes merchant feedback and private business-page approval, not CODE76 promotion
+ok 171 - review capture describes merchant feedback and private business-page approval, not CODE76 promotion
+  ---
+  duration_ms: 0.147452
+  ...
+# Subtest: document-preview copying also awaits the shared clipboard result before claiming success
+ok 172 - document-preview copying also awaits the shared clipboard result before claiming success
+  ---
+  duration_ms: 0.252212
+  ...
+# Subtest: private business links are created from a clean app root so query credentials cannot leak
+ok 173 - private business links are created from a clean app root so query credentials cannot leak
+  ---
+  duration_ms: 0.275979
+  ...
+# Subtest: zero-stock services keep their billing basis in the honest no-key catalog assistant
+ok 174 - zero-stock services keep their billing basis in the honest no-key catalog assistant
+  ---
+  duration_ms: 19.338329
+  ...
+# Subtest: calculateLineItemTotal applies percentage discount correctly
+ok 175 - calculateLineItemTotal applies percentage discount correctly
+  ---
+  duration_ms: 0.802097
+  ...
+# Subtest: calculateLineItemTotal applies fixed discount correctly
+ok 176 - calculateLineItemTotal applies fixed discount correctly
+  ---
+  duration_ms: 0.161643
+  ...
+# Subtest: calculateCartTotals computes subtotal, extra charges and taxes
+ok 177 - calculateCartTotals computes subtotal, extra charges and taxes
+  ---
+  duration_ms: 0.479731
+  ...
+# Subtest: calculatePaymentsAndDebt tracks remaining debt and change due
+ok 178 - calculatePaymentsAndDebt tracks remaining debt and change due
+  ---
+  duration_ms: 0.253304
+  ...
+# Subtest: calculateFinancialHealth evaluates P&L, COGS, and profit margin
+ok 179 - calculateFinancialHealth evaluates P&L, COGS, and profit margin
+  ---
+  duration_ms: 0.35548
+  ...
+# Subtest: calculateProductProfitMargin detects profit, break-even, and selling at a loss
+ok 180 - calculateProductProfitMargin detects profit, break-even, and selling at a loss
+  ---
+  duration_ms: 0.207387
+  ...
+# Subtest: generateUniqueInventoryId generates unique read-only IDs without colliding
+ok 181 - generateUniqueInventoryId generates unique read-only IDs without colliding
+  ---
+  duration_ms: 0.242942
+  ...
+1..181
+# tests 181
+# suites 0
+# pass 181
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1958.570769

@@ -1,0 +1,55 @@
+{
+  "date": "2026-10-20",
+  "scope": "app link/clipboard, streamlined navbar/session, service billing units, guarded access-history downloads, empty reviews and 18 public platform cards",
+  "typecheck": "pass",
+  "build": "pass",
+  "unit": {
+    "total": 181,
+    "passed": 181,
+    "new_scope": 61,
+    "retained_regressions": 120
+  },
+  "browser": {
+    "raw_attempts": 60,
+    "distinct_cases": 59,
+    "final_passed": 59,
+    "final_failed": 0,
+    "console_errors": 0
+  },
+  "http": {
+    "total": 21,
+    "passed": 21
+  },
+  "download_validation": {
+    "csv_filtered_rows": 2,
+    "txt_filtered_rows": 2,
+    "pdf_filtered_rows": 2,
+    "pdf_pages": 1,
+    "unicode_pdf_extraction": "pass"
+  },
+  "runtime": {
+    "port": 5173,
+    "mode": "production",
+    "single_server": true,
+    "hasApiKey": false
+  },
+  "external_browsers": {
+    "unauthenticated_workspace_host_status": 403,
+    "reason": "Arena/E2B traffic access token required before application",
+    "app_root_and_index_status": 200,
+    "public_deployment_claimed": false
+  },
+  "keys_used": false,
+  "real_emails_or_payments_sent": false,
+  "test_only_local_bookkeeping_sales": 1,
+  "notes": [
+    "A test initially used SaleTransaction.total instead of netTotal; the corrected assertion passed. Raw attempt retained.",
+    "The CLI sanitized underscores in a downloaded backup filename; the inspection path was corrected.",
+    "The opposite-theme sample inherited light-mode colors; dedicated scoped sample styles fixed this and were retested."
+  ],
+  "limitations": [
+    "existing browser-local/client-side auth and data, not production server/tenant security",
+    "preview URL requires authorized Arena preview access in other browsers",
+    "legacy accounting/export issues outside this scope are not certified fixed"
+  ]
+}

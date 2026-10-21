@@ -1,0 +1,119 @@
+### Page
+- Page URL: http://127.0.0.1:5173/#/pos/vendors
+- Page Title: CODE76 POS — Private Workspace
+### Snapshot
+```yaml
+- generic [ref=e4]:
+  - banner [ref=e679]:
+    - generic [ref=e680]:
+      - button "76 CODE76 POS Enterprise Product & Service SaaS ERP System" [ref=e682] [cursor=pointer]:
+        - generic [ref=e683]: "76"
+        - generic [ref=e684]:
+          - generic [ref=e685]:
+            - generic [ref=e686]: CODE76 POS
+            - generic [ref=e687]: Enterprise
+          - paragraph [ref=e688]: Product & Service SaaS ERP System
+      - generic [ref=e689]:
+        - generic [ref=e690]:
+          - button "Desktop View (Full Width)" [ref=e691] [cursor=pointer]
+          - button "Laptop View (1024px)" [ref=e694] [cursor=pointer]
+          - button "Tablet View (768px)" [ref=e697] [cursor=pointer]
+          - button "Phone Mobile View (390px)" [ref=e700] [cursor=pointer]
+        - generic [ref=e703]:
+          - button "Demo Data" [ref=e704] [cursor=pointer]
+          - button "Business Page" [ref=e1405] [cursor=pointer]
+          - button "Click to view help guide and settings for this platform" [ref=e710] [cursor=pointer]
+          - button "Active user session and access controls" [ref=e715] [cursor=pointer]:
+            - generic [ref=e716]: DR
+            - generic [ref=e717]:
+              - generic [ref=e718]: Dr. David Kimani
+              - generic [ref=e719]: "Role: CEO"
+    - generic [ref=e720]:
+      - generic [ref=e721]:
+        - generic [ref=e725]: App link
+        - generic [ref=e726]:
+          - generic [ref=e727]:
+            - generic [ref=e728]: App link
+            - textbox "App link" [ref=e729]: http://127.0.0.1:5173/
+            - button "Copy app link" [ref=e730] [cursor=pointer]:
+              - generic [ref=e734]: Copy link
+            - link "Open app link in a new tab" [ref=e735] [cursor=pointer]:
+              - /url: http://127.0.0.1:5173/
+          - status [ref=e740]
+        - button "Current demo plan" [ref=e741]: Pro · demo
+      - paragraph [ref=e742]: Open this root link to reach CODE76 sign-in/register. Browser-local records and sessions do not sync between browsers.
+    - generic [ref=e744]:
+      - button "Sales POS" [ref=e745] [cursor=pointer]
+      - button "Sales History" [ref=e749] [cursor=pointer]
+      - button "Inventory" [ref=e754] [cursor=pointer]
+      - button "Expenses" [ref=e1410] [cursor=pointer]
+      - button "Invoices" [ref=e1414] [cursor=pointer]
+      - button "Analytics & P&L" [ref=e1418] [cursor=pointer]
+      - button "Customers" [ref=e1421] [cursor=pointer]
+      - button "Vendors" [active] [ref=e1427] [cursor=pointer]
+      - button "Transporters" [ref=e1432] [cursor=pointer]
+      - button "Marketing Team" [ref=e1438] [cursor=pointer]
+      - button "Company Members" [ref=e1442] [cursor=pointer]
+      - button "My Company" [ref=e1448] [cursor=pointer]
+      - button "Messaging" [ref=e1452] [cursor=pointer]
+      - button "Business Landing Page" [ref=e1455] [cursor=pointer]
+      - button "Settings" [ref=e759] [cursor=pointer]
+      - button "Audit & Access Logs" [ref=e1460] [cursor=pointer]
+      - button "About & Manual" [ref=e763] [cursor=pointer]
+  - main [ref=e5]:
+    - generic [ref=e2104]:
+      - generic [ref=e2105]:
+        - generic [ref=e2106]:
+          - heading [level=1] [ref=e2107]:
+            - text: Vendors & Hardware Suppliers
+            - button "Directory guidance" [ref=e2108]
+          - paragraph [ref=e2112]: Hardware importers, thermal paper manufacturers, and wholesale distributor accounts.
+        - generic [ref=e2113]:
+          - button "Export CSV" [ref=e2114]
+          - button "PDF Directory" [ref=e2118]
+          - button "Email directory" [ref=e2122]
+          - button "Add record" [ref=e2126]
+      - textbox "Search directory" [ref=e2132]:
+        - /placeholder: Search name, company type, contact or location
+      - table [ref=e2134]:
+        - rowgroup [ref=e2135]:
+          - row [ref=e2136]:
+            - columnheader "Name / type" [ref=e2137]
+            - columnheader "Contacts" [ref=e2138]
+            - columnheader "Location" [ref=e2139]
+            - columnheader "Roles / schedule" [ref=e2140]
+            - columnheader "Actions" [ref=e2141]
+        - rowgroup [ref=e2142]:
+          - row [ref=e2143]:
+            - cell [ref=e2144]:
+              - generic [ref=e2145]:
+                - img "TEST East Branch illustrated placeholder" [ref=e2146]
+                - generic [ref=e2147]:
+                  - strong [ref=e2148]: TEST East Branch
+                  - text: branch · Vendor company
+            - cell "1111111111 —" [ref=e2149]: 1111111111—
+            - cell "—" [ref=e2150]
+            - cell "vendor" [ref=e2151]
+            - cell [ref=e2152]:
+              - generic [ref=e2153]:
+                - button "View TEST East Branch" [ref=e2154]
+                - button "Edit TEST East Branch" [ref=e2158]
+                - button "Delete TEST East Branch" [ref=e2162]
+                - button "Export profile PDF for TEST East Branch" [ref=e2166]
+          - row [ref=e2170]:
+            - cell [ref=e2171]:
+              - generic [ref=e2172]:
+                - img "TEST Multi Services photo" [ref=e2173]
+                - generic [ref=e2174]:
+                  - strong [ref=e2175]: TEST Multi Services
+                  - text: company · Transporting company
+            - cell "— —" [ref=e2176]: ——
+            - cell "—" [ref=e2177]
+            - cell "transporter / vendor / marketer" [ref=e2178]
+            - cell [ref=e2179]:
+              - generic [ref=e2180]:
+                - button "View TEST Multi Services" [ref=e2181]
+                - button "Edit TEST Multi Services" [ref=e2185]
+                - button "Delete TEST Multi Services" [ref=e2189]
+                - button "Export profile PDF for TEST Multi Services" [ref=e2193]
+```

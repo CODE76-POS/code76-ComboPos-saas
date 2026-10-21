@@ -1,0 +1,223 @@
+[
+  {
+    "name": "public site uses the actual local CODE76 logo and supplied social/email URLs",
+    "passed": true,
+    "detail": {
+      "logo": "/code76-logo.png",
+      "youtube": 3,
+      "facebook": 2,
+      "email": 5
+    }
+  },
+  {
+    "name": "About/help replaces fake stable-version and licence claims with useful support/status",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "About support uses confirmed Gmail and truthfully shows missing SMTP configuration",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "support draft fallback is offered without falsely claiming a sent message",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "richer demo dataset is opt-in, synthetic and requires explicit administrator confirmation",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "confirmed training dataset loads with expanded linked records and retains Max entitlement",
+    "passed": true,
+    "detail": {
+      "demo": true,
+      "plan": "max",
+      "products": 28,
+      "sales": 36,
+      "companies": 11,
+      "payroll": 4,
+      "expenses": 18,
+      "invoices": 16
+    }
+  },
+  {
+    "name": "synthetic demo mode remains visible rather than pretending records are real business results",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "debt dialog loads the selected live balance and excludes credit as a repayment",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "overpayment is blocked without altering the receivable",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "partial debt collection updates one immutable ledger and linked invoice without adding revenue",
+    "passed": true,
+    "detail": {
+      "paid": 148,
+      "debt": 68,
+      "status": "debt_partial",
+      "entries": 1,
+      "invoicePaid": 148,
+      "invoiceStatus": "pending",
+      "saleCount": 36
+    }
+  },
+  {
+    "name": "full collection closes both balances and retains dated references",
+    "passed": true,
+    "detail": {
+      "paid": 216,
+      "debt": 0,
+      "status": "completed",
+      "entries": 2,
+      "invoicePaid": 216,
+      "invoiceStatus": "paid"
+    }
+  },
+  {
+    "name": "debt-payment voucher carries the required creator credit and links",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "updated receipt shows actual repayment history and creator footer, not credit as cash",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "settings include a clear opt-in training section and synthetic dataset status",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "inventory CSV has valid data rows and attribution columns, not corrupt footer rows",
+    "passed": true,
+    "detail": {
+      "rows": 28,
+      "columns": 26
+    }
+  },
+  {
+    "name": "filtered history CSV retains its two records and full attribution",
+    "passed": true,
+    "detail": {
+      "rows": 2
+    }
+  },
+  {
+    "name": "TXT file contains the exact creator/email/YouTube block",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "direct PDF contains clickable creator links on each page",
+    "passed": true,
+    "detail": {
+      "pages": 1,
+      "annotations": 3
+    }
+  },
+  {
+    "name": "JSON backup is valid/importable with credit metadata rather than appended invalid text",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "settings search finds training without changing entitlements",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "merchant footer has exact creator line and live email/YouTube CTA",
+    "passed": true,
+    "detail": {
+      "text": "Website created by CODE76.\n\nemail: code76pos@gmail.com\n\nyoutube: https://www.youtube.com/@CODE76-fn4fj\n\nCreate your website with CODE76",
+      "email": "mailto:code76pos@gmail.com",
+      "youtube": "https://www.youtube.com/@CODE76-fn4fj"
+    }
+  },
+  {
+    "name": "printed receipt isolates financial content from background dashboard and keeps attribution",
+    "passed": true,
+    "detail": {
+      "pages": 1
+    }
+  },
+  {
+    "name": "business chat prioritizes exact SKU and quotes actual out-of-stock status",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "business chat answers a budget query from real catalog data without inventing a discount",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "business assistant never claims a confirmed order, appointment or payment",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "official logo, enhanced About/support form and navigation fit a mobile viewport",
+    "passed": true,
+    "detail": {
+      "width": 390,
+      "doc": 390,
+      "logo": 150
+    }
+  },
+  {
+    "name": "plan status is truthful about demo entitlements and contains creator credit",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "manual is updated for support setup, document credits, demo data and debt safety",
+    "passed": false,
+    "detail": null
+  },
+  {
+    "name": "manual is updated for support setup, document credits, demo data and debt safety",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "manual explains server mail configuration and format-safe credits",
+    "passed": false,
+    "detail": null
+  },
+  {
+    "name": "manual explains server mail configuration and format-safe credits",
+    "passed": true,
+    "detail": "Corrected the test to open, not close, the accordion that defaults expanded."
+  },
+  {
+    "name": "mobile help navigation stays compact and support form remains horizontally contained",
+    "passed": true,
+    "detail": {
+      "width": 390,
+      "doc": 390,
+      "navHeight": 54
+    }
+  },
+  {
+    "name": "recorded repayments persist across the final rebuild and signed-out reload",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "sales-invoice PDF print view contains unchanged invoice data and the full creator CTA",
+    "passed": true,
+    "detail": null
+  }
+]

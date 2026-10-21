@@ -1,0 +1,94 @@
+{
+  "checks": [
+    {
+      "name": "/ serves the application shell, not 403",
+      "passed": true
+    },
+    {
+      "name": "/ has one absolute public-root canonical without private query/hash",
+      "passed": true
+    },
+    {
+      "name": "/index.html serves the application shell, not 403",
+      "passed": true
+    },
+    {
+      "name": "/index.html has one absolute public-root canonical without private query/hash",
+      "passed": true
+    },
+    {
+      "name": "/?view=storefront serves the application shell, not 403",
+      "passed": true
+    },
+    {
+      "name": "/?view=storefront has one absolute public-root canonical without private query/hash",
+      "passed": true
+    },
+    {
+      "name": "/pos/landing_page_builder serves the application shell, not 403",
+      "passed": true
+    },
+    {
+      "name": "/pos/landing_page_builder has one absolute public-root canonical without private query/hash",
+      "passed": true
+    },
+    {
+      "name": "/landing_page_builder serves the application shell, not 403",
+      "passed": true
+    },
+    {
+      "name": "/landing_page_builder has one absolute public-root canonical without private query/hash",
+      "passed": true
+    },
+    {
+      "name": "HEAD / is 200 with no body",
+      "passed": true
+    },
+    {
+      "name": "server is healthy and no Gemini key is loaded",
+      "passed": true
+    },
+    {
+      "name": "unknown API is JSON 404, never the public HTML fallback",
+      "passed": true
+    },
+    {
+      "name": "missing JS is 404, not HTML disguised as a module",
+      "passed": true
+    },
+    {
+      "name": "own social image is served successfully",
+      "passed": true
+    },
+    {
+      "name": "workspace/local robots disallow indexing",
+      "passed": true
+    },
+    {
+      "name": "sitemap contains only the public product root",
+      "passed": true
+    },
+    {
+      "name": "production-like host gets absolute HTTPS canonical and public index/follow metadata",
+      "passed": true
+    },
+    {
+      "name": "public robots points to the public sitemap and excludes API/legacy workspace paths",
+      "passed": true
+    },
+    {
+      "name": "application accepts workspace-preview host and keeps it noindex",
+      "passed": true
+    },
+    {
+      "name": "proxy-forwarded host/protocol use the correct public preview origin",
+      "passed": true
+    }
+  ],
+  "health": {
+    "status": "ok",
+    "timestamp": "2026-10-20T21:14:15.514Z",
+    "hasApiKey": false,
+    "system": "CODE76 POS Enterprise Server"
+  }
+}

@@ -1,0 +1,432 @@
+### Page
+- Page URL: http://127.0.0.1:5173/#/pos/audit_logs
+- Page Title: CODE76 POS — Private Workspace
+### Snapshot
+```yaml
+- generic [ref=e4]:
+  - banner [ref=e7124]:
+    - generic [ref=e7125]:
+      - button "76 CODE76 POS Enterprise Product & Service SaaS ERP System" [ref=e7127] [cursor=pointer]:
+        - generic [ref=e7128]: "76"
+        - generic [ref=e7129]:
+          - generic [ref=e7130]:
+            - generic [ref=e7131]: CODE76 POS
+            - generic [ref=e7132]: Enterprise
+          - paragraph [ref=e7133]: Product & Service SaaS ERP System
+      - generic [ref=e7134]:
+        - generic [ref=e7135]:
+          - button "Desktop View (Full Width)" [ref=e7136] [cursor=pointer]
+          - button "Laptop View (1024px)" [ref=e7139] [cursor=pointer]
+          - button "Tablet View (768px)" [ref=e7142] [cursor=pointer]
+          - button "Phone Mobile View (390px)" [ref=e7145] [cursor=pointer]
+        - generic [ref=e7148]:
+          - button "Demo Data" [ref=e7149] [cursor=pointer]
+          - button "Business Page" [ref=e7156] [cursor=pointer]
+          - button "Click to view help guide and settings for this platform" [ref=e7161] [cursor=pointer]
+          - button "Active user session and access controls" [ref=e7166] [cursor=pointer]:
+            - generic [ref=e7167]: SA
+            - generic [ref=e7168]:
+              - generic [ref=e7169]: Sarah Kiprono
+              - generic [ref=e7170]: "Role: Cashier"
+    - generic [ref=e7171]:
+      - generic [ref=e7172]:
+        - generic [ref=e7176]: App link
+        - generic [ref=e7177]:
+          - generic [ref=e7178]:
+            - generic [ref=e7179]: App link
+            - textbox "App link" [ref=e7180]: http://127.0.0.1:5173/
+            - button "Copy app link" [ref=e7181] [cursor=pointer]:
+              - generic [ref=e7185]: Copy link
+            - link "Open app link in a new tab" [ref=e7186] [cursor=pointer]:
+              - /url: http://127.0.0.1:5173/
+          - status [ref=e7191]
+      - paragraph [ref=e7192]: Open this root link to reach CODE76 sign-in/register. Browser-local records and sessions do not sync between browsers.
+    - generic [ref=e7194]:
+      - button "Sales POS" [ref=e7195] [cursor=pointer]
+      - button "Sales History" [ref=e7199] [cursor=pointer]
+      - button "Inventory" [ref=e7204] [cursor=pointer]
+      - button "Expenses" [ref=e7209] [cursor=pointer]
+      - button "Invoices" [ref=e7213] [cursor=pointer]
+      - button "Analytics & P&L" [ref=e7217] [cursor=pointer]
+      - button "Customers" [ref=e7220] [cursor=pointer]
+      - button "Vendors" [ref=e7226] [cursor=pointer]
+      - button "Transporters" [ref=e7231] [cursor=pointer]
+      - button "Marketing Team" [ref=e7237] [cursor=pointer]
+      - button "Company Members" [ref=e7241] [cursor=pointer]
+      - button "My Company" [ref=e7247] [cursor=pointer]
+      - button "Messaging" [ref=e7251] [cursor=pointer]
+      - button "Business Landing Page" [ref=e7254] [cursor=pointer]
+      - button "Settings" [ref=e7259] [cursor=pointer]
+      - button "Audit & Access Logs" [ref=e7263] [cursor=pointer]
+      - button "About & Manual" [ref=e7267] [cursor=pointer]
+  - main [ref=e5]:
+    - generic [ref=e7420]:
+      - generic [ref=e7421]:
+        - generic [ref=e7422]:
+          - generic [ref=e7423]:
+            - heading "User Access History & Security Audit Logs" [level=1] [ref=e7424]
+            - button "Click for platform guidance & settings" [ref=e7428] [cursor=pointer]
+          - paragraph [ref=e7432]: "Browser-local activity records: user sign-ins, operations and sign-outs. Filter the results before downloading a report."
+        - generic [ref=e7433]:
+          - button "Download access history PDF" [ref=e7434] [cursor=pointer]:
+            - generic [ref=e7438]: Export PDF
+          - button "Download access history CSV" [active] [ref=e7439] [cursor=pointer]:
+            - generic [ref=e7443]: Export CSV
+          - button "Download access history TXT" [ref=e7444]: TXT
+          - button "Email Audit Trail (PDF / CSV)" [ref=e7448] [cursor=pointer]
+      - status [ref=e8030]: CSV download requested. Check your browser downloads.
+      - generic [ref=e7453]:
+        - generic [ref=e7454]:
+          - generic [ref=e7455]:
+            - generic [ref=e7456]: Total Actions Logged
+            - generic [ref=e7460]: "19"
+            - generic [ref=e7461]: Continuous security trail
+          - generic [ref=e7462]:
+            - generic [ref=e7463]: User Logins Recorded
+            - generic [ref=e7468]: "4"
+            - generic [ref=e7469]: Authenticated sessions
+          - generic [ref=e7470]:
+            - generic [ref=e7471]: User Logouts Recorded
+            - generic [ref=e7476]: "3"
+            - generic [ref=e7477]: Gracefully closed sessions
+          - generic [ref=e7478]:
+            - generic [ref=e7479]: Sales / Admin Events
+            - generic [ref=e7484]: "4"
+            - generic [ref=e7485]: Business & config updates
+        - generic [ref=e7486]:
+          - textbox "Search by user name, action, role, details, device or IP..." [ref=e7491]
+          - generic [ref=e7492]:
+            - combobox [ref=e7493] [cursor=pointer]:
+              - option "All Action Categories" [selected]
+              - option "Logins Only"
+              - option "Logouts Only"
+              - option "Sales & Checkouts"
+              - option "Captured Leads & Quotes"
+              - option "Admin & System Changes"
+            - combobox [ref=e7494] [cursor=pointer]:
+              - option "All Recorded Dates" [selected]
+              - option "Today's Activity Only"
+        - generic [ref=e7495]:
+          - table [ref=e7497]:
+            - rowgroup [ref=e7498]:
+              - row [ref=e7499]:
+                - columnheader "Date & Time" [ref=e7500]
+                - columnheader "User & Role" [ref=e7501]
+                - columnheader "Action" [ref=e7502]
+                - columnheader "Activity Description" [ref=e7503]
+                - columnheader "Device & IP" [ref=e7504]
+                - columnheader "Action / Email" [ref=e7505]
+            - rowgroup [ref=e7506]:
+              - row [ref=e8031]:
+                - cell "Oct 20, 2026 02:44:21 PM" [ref=e8032]:
+                  - generic [ref=e8033]: Oct 20, 2026
+                  - generic [ref=e8034]: 02:44:21 PM
+                - 'cell "SA Sarah Kiprono Role: Cashier" [ref=e8035]':
+                  - generic [ref=e8036]:
+                    - generic [ref=e8037]: SA
+                    - generic [ref=e8038]:
+                      - generic [ref=e8039]: Sarah Kiprono
+                      - generic [ref=e8040]: "Role: Cashier"
+                - cell "Exported Access History CSV" [ref=e8041]
+                - cell "Downloaded 18 filtered records" [ref=e8046]
+                - cell "Linux x86_64 (Mozilla/5.0 (X11; Linux x86_64) )" [ref=e8048]:
+                  - generic "Linux x86_64 (Mozilla/5.0 (X11; Linux x86_64) )" [ref=e8052]
+                - cell [ref=e8053]:
+                  - button "Email" [ref=e8054] [cursor=pointer]
+              - row [ref=e7507]:
+                - cell "Oct 20, 2026 02:44:16 PM" [ref=e7508]:
+                  - generic [ref=e7509]: Oct 20, 2026
+                  - generic [ref=e7510]: 02:44:16 PM
+                - 'cell "UN Unauthenticated User Role: Other" [ref=e7511]':
+                  - generic [ref=e7512]:
+                    - generic [ref=e7513]: UN
+                    - generic [ref=e7514]:
+                      - generic [ref=e7515]: Unauthenticated User
+                      - generic [ref=e7516]: "Role: Other"
+                - cell "User Logged In" [ref=e7517]
+                - 'cell "User sarah.k@code76.com signed in with role: Cashier" [ref=e7523]'
+                - cell "Linux x86_64 (Mozilla/5.0 (X11; Linux x86_64) )" [ref=e7525]:
+                  - generic "Linux x86_64 (Mozilla/5.0 (X11; Linux x86_64) )" [ref=e7529]
+                - cell [ref=e7530]:
+                  - button "Email" [ref=e7531] [cursor=pointer]
+              - row [ref=e7536]:
+                - cell "Oct 20, 2026 02:44:14 PM" [ref=e7537]:
+                  - generic [ref=e7538]: Oct 20, 2026
+                  - generic [ref=e7539]: 02:44:14 PM
+                - 'cell "DR Dr. David Kimani Role: CEO" [ref=e7540]':
+                  - generic [ref=e7541]:
+                    - generic [ref=e7542]: DR
+                    - generic [ref=e7543]:
+                      - generic [ref=e7544]: Dr. David Kimani
+                      - generic [ref=e7545]: "Role: CEO"
+                - cell "User Logged Out" [ref=e7546]
+                - cell "User david.k@code76.com signed out" [ref=e7552]
+                - cell "Linux x86_64 (Mozilla/5.0 (X11; Linux x86_64) )" [ref=e7554]:
+                  - generic "Linux x86_64 (Mozilla/5.0 (X11; Linux x86_64) )" [ref=e7558]
+                - cell [ref=e7559]:
+                  - button "Email" [ref=e7560] [cursor=pointer]
+              - row [ref=e7565]:
+                - cell "Oct 20, 2026 02:44:11 PM" [ref=e7566]:
+                  - generic [ref=e7567]: Oct 20, 2026
+                  - generic [ref=e7568]: 02:44:11 PM
+                - 'cell "DR Dr. David Kimani Role: CEO" [ref=e7569]':
+                  - generic [ref=e7570]:
+                    - generic [ref=e7571]: DR
+                    - generic [ref=e7572]:
+                      - generic [ref=e7573]: Dr. David Kimani
+                      - generic [ref=e7574]: "Role: CEO"
+                - cell "Updated System Settings" [ref=e7575]
+                - cell "Saved configuration changes in privileges" [ref=e7581]
+                - cell "Linux x86_64 (Mozilla/5.0 (X11; Linux x86_64) )" [ref=e7583]:
+                  - generic "Linux x86_64 (Mozilla/5.0 (X11; Linux x86_64) )" [ref=e7587]
+                - cell [ref=e7588]:
+                  - button "Email" [ref=e7589] [cursor=pointer]
+              - row [ref=e7594]:
+                - cell "Oct 20, 2026 02:44:06 PM" [ref=e7595]:
+                  - generic [ref=e7596]: Oct 20, 2026
+                  - generic [ref=e7597]: 02:44:06 PM
+                - 'cell "UN Unauthenticated User Role: Other" [ref=e7598]':
+                  - generic [ref=e7599]:
+                    - generic [ref=e7600]: UN
+                    - generic [ref=e7601]:
+                      - generic [ref=e7602]: Unauthenticated User
+                      - generic [ref=e7603]: "Role: Other"
+                - cell "User Logged In" [ref=e7604]
+                - 'cell "User david.k@code76.com signed in with role: CEO" [ref=e7610]'
+                - cell "Linux x86_64 (Mozilla/5.0 (X11; Linux x86_64) )" [ref=e7612]:
+                  - generic "Linux x86_64 (Mozilla/5.0 (X11; Linux x86_64) )" [ref=e7616]
+                - cell [ref=e7617]:
+                  - button "Email" [ref=e7618] [cursor=pointer]
+              - row [ref=e7623]:
+                - cell "Oct 20, 2026 02:44:04 PM" [ref=e7624]:
+                  - generic [ref=e7625]: Oct 20, 2026
+                  - generic [ref=e7626]: 02:44:04 PM
+                - 'cell "SA Sarah Kiprono Role: Cashier" [ref=e7627]':
+                  - generic [ref=e7628]:
+                    - generic [ref=e7629]: SA
+                    - generic [ref=e7630]:
+                      - generic [ref=e7631]: Sarah Kiprono
+                      - generic [ref=e7632]: "Role: Cashier"
+                - cell "User Logged Out" [ref=e7633]
+                - cell "User sarah.k@code76.com signed out" [ref=e7639]
+                - cell "Linux x86_64 (Mozilla/5.0 (X11; Linux x86_64) )" [ref=e7641]:
+                  - generic "Linux x86_64 (Mozilla/5.0 (X11; Linux x86_64) )" [ref=e7645]
+                - cell [ref=e7646]:
+                  - button "Email" [ref=e7647] [cursor=pointer]
+              - row [ref=e7652]:
+                - cell "Oct 20, 2026 02:43:16 PM" [ref=e7653]:
+                  - generic [ref=e7654]: Oct 20, 2026
+                  - generic [ref=e7655]: 02:43:16 PM
+                - 'cell "SA Sarah Kiprono Role: Cashier" [ref=e7656]':
+                  - generic [ref=e7657]:
+                    - generic [ref=e7658]: SA
+                    - generic [ref=e7659]:
+                      - generic [ref=e7660]: Sarah Kiprono
+                      - generic [ref=e7661]: "Role: Cashier"
+                - cell "Exported Database Backup" [ref=e7662]
+                - cell "Created JSON backup with access history excluded by permissions" [ref=e7667]
+                - cell "Linux x86_64 (Mozilla/5.0 (X11; Linux x86_64) )" [ref=e7669]:
+                  - generic "Linux x86_64 (Mozilla/5.0 (X11; Linux x86_64) )" [ref=e7673]
+                - cell [ref=e7674]:
+                  - button "Email" [ref=e7675] [cursor=pointer]
+              - row [ref=e7680]:
+                - cell "Oct 20, 2026 02:40:39 PM" [ref=e7681]:
+                  - generic [ref=e7682]: Oct 20, 2026
+                  - generic [ref=e7683]: 02:40:39 PM
+                - 'cell "UN Unauthenticated User Role: Other" [ref=e7684]':
+                  - generic [ref=e7685]:
+                    - generic [ref=e7686]: UN
+                    - generic [ref=e7687]:
+                      - generic [ref=e7688]: Unauthenticated User
+                      - generic [ref=e7689]: "Role: Other"
+                - cell "User Logged In" [ref=e7690]
+                - 'cell "User sarah.k@code76.com signed in with role: Cashier" [ref=e7696]'
+                - cell "Linux x86_64 (Mozilla/5.0 (X11; Linux x86_64) )" [ref=e7698]:
+                  - generic "Linux x86_64 (Mozilla/5.0 (X11; Linux x86_64) )" [ref=e7702]
+                - cell [ref=e7703]:
+                  - button "Email" [ref=e7704] [cursor=pointer]
+              - row [ref=e7709]:
+                - cell "Oct 20, 2026 02:40:36 PM" [ref=e7710]:
+                  - generic [ref=e7711]: Oct 20, 2026
+                  - generic [ref=e7712]: 02:40:36 PM
+                - 'cell "DR Dr. David Kimani Role: CEO" [ref=e7713]':
+                  - generic [ref=e7714]:
+                    - generic [ref=e7715]: DR
+                    - generic [ref=e7716]:
+                      - generic [ref=e7717]: Dr. David Kimani
+                      - generic [ref=e7718]: "Role: CEO"
+                - cell "User Logged Out" [ref=e7719]
+                - cell "User david.k@code76.com signed out" [ref=e7725]
+                - cell "Linux x86_64 (Mozilla/5.0 (X11; Linux x86_64) )" [ref=e7727]:
+                  - generic "Linux x86_64 (Mozilla/5.0 (X11; Linux x86_64) )" [ref=e7731]
+                - cell [ref=e7732]:
+                  - button "Email" [ref=e7733] [cursor=pointer]
+              - row [ref=e7738]:
+                - cell "Oct 20, 2026 02:40:32 PM" [ref=e7739]:
+                  - generic [ref=e7740]: Oct 20, 2026
+                  - generic [ref=e7741]: 02:40:32 PM
+                - 'cell "DR Dr. David Kimani Role: CEO" [ref=e7742]':
+                  - generic [ref=e7743]:
+                    - generic [ref=e7744]: DR
+                    - generic [ref=e7745]:
+                      - generic [ref=e7746]: Dr. David Kimani
+                      - generic [ref=e7747]: "Role: CEO"
+                - cell "Updated System Settings" [ref=e7748]
+                - cell "Saved configuration changes in privileges" [ref=e7754]
+                - cell "Linux x86_64 (Mozilla/5.0 (X11; Linux x86_64) )" [ref=e7756]:
+                  - generic "Linux x86_64 (Mozilla/5.0 (X11; Linux x86_64) )" [ref=e7760]
+                - cell [ref=e7761]:
+                  - button "Email" [ref=e7762] [cursor=pointer]
+              - row [ref=e7767]:
+                - cell "Oct 20, 2026 02:39:31 PM" [ref=e7768]:
+                  - generic [ref=e7769]: Oct 20, 2026
+                  - generic [ref=e7770]: 02:39:31 PM
+                - 'cell "DR Dr. David Kimani Role: CEO" [ref=e7771]':
+                  - generic [ref=e7772]:
+                    - generic [ref=e7773]: DR
+                    - generic [ref=e7774]:
+                      - generic [ref=e7775]: Dr. David Kimani
+                      - generic [ref=e7776]: "Role: CEO"
+                - cell "Updated System Settings" [ref=e7777]
+                - cell "Saved configuration changes in appearance" [ref=e7783]
+                - cell "Linux x86_64 (Mozilla/5.0 (X11; Linux x86_64) )" [ref=e7785]:
+                  - generic "Linux x86_64 (Mozilla/5.0 (X11; Linux x86_64) )" [ref=e7789]
+                - cell [ref=e7790]:
+                  - button "Email" [ref=e7791] [cursor=pointer]
+              - row [ref=e7796]:
+                - cell "Oct 20, 2026 02:38:38 PM" [ref=e7797]:
+                  - generic [ref=e7798]: Oct 20, 2026
+                  - generic [ref=e7799]: 02:38:38 PM
+                - 'cell "DR Dr. David Kimani Role: CEO" [ref=e7800]':
+                  - generic [ref=e7801]:
+                    - generic [ref=e7802]: DR
+                    - generic [ref=e7803]:
+                      - generic [ref=e7804]: Dr. David Kimani
+                      - generic [ref=e7805]: "Role: CEO"
+                - cell "Exported Access History PDF" [ref=e7806]
+                - cell "Downloaded 2 filtered records" [ref=e7811]
+                - cell "Linux x86_64 (Mozilla/5.0 (X11; Linux x86_64) )" [ref=e7813]:
+                  - generic "Linux x86_64 (Mozilla/5.0 (X11; Linux x86_64) )" [ref=e7817]
+                - cell [ref=e7818]:
+                  - button "Email" [ref=e7819] [cursor=pointer]
+              - row [ref=e7824]:
+                - cell "Oct 20, 2026 02:38:37 PM" [ref=e7825]:
+                  - generic [ref=e7826]: Oct 20, 2026
+                  - generic [ref=e7827]: 02:38:37 PM
+                - 'cell "DR Dr. David Kimani Role: CEO" [ref=e7828]':
+                  - generic [ref=e7829]:
+                    - generic [ref=e7830]: DR
+                    - generic [ref=e7831]:
+                      - generic [ref=e7832]: Dr. David Kimani
+                      - generic [ref=e7833]: "Role: CEO"
+                - cell "Exported Access History TXT" [ref=e7834]
+                - cell "Downloaded 2 filtered records" [ref=e7839]
+                - cell "Linux x86_64 (Mozilla/5.0 (X11; Linux x86_64) )" [ref=e7841]:
+                  - generic "Linux x86_64 (Mozilla/5.0 (X11; Linux x86_64) )" [ref=e7845]
+                - cell [ref=e7846]:
+                  - button "Email" [ref=e7847] [cursor=pointer]
+              - row [ref=e7852]:
+                - cell "Oct 20, 2026 02:38:35 PM" [ref=e7853]:
+                  - generic [ref=e7854]: Oct 20, 2026
+                  - generic [ref=e7855]: 02:38:35 PM
+                - 'cell "DR Dr. David Kimani Role: CEO" [ref=e7856]':
+                  - generic [ref=e7857]:
+                    - generic [ref=e7858]: DR
+                    - generic [ref=e7859]:
+                      - generic [ref=e7860]: Dr. David Kimani
+                      - generic [ref=e7861]: "Role: CEO"
+                - cell "Exported Access History CSV" [ref=e7862]
+                - cell "Downloaded 2 filtered records" [ref=e7867]
+                - cell "Linux x86_64 (Mozilla/5.0 (X11; Linux x86_64) )" [ref=e7869]:
+                  - generic "Linux x86_64 (Mozilla/5.0 (X11; Linux x86_64) )" [ref=e7873]
+                - cell [ref=e7874]:
+                  - button "Email" [ref=e7875] [cursor=pointer]
+              - row [ref=e7880]:
+                - cell "Oct 20, 2026 02:36:55 PM" [ref=e7881]:
+                  - generic [ref=e7882]: Oct 20, 2026
+                  - generic [ref=e7883]: 02:36:55 PM
+                - 'cell "DR Dr. David Kimani Role: CEO" [ref=e7884]':
+                  - generic [ref=e7885]:
+                    - generic [ref=e7886]: DR
+                    - generic [ref=e7887]:
+                      - generic [ref=e7888]: Dr. David Kimani
+                      - generic [ref=e7889]: "Role: CEO"
+                - cell "Added Customer Review" [ref=e7890]
+                - cell "Received 5-star review from Walk-in Retail Buyer" [ref=e7895]
+                - cell "Linux x86_64 (Mozilla/5.0 (X11; Linux x86_64) )" [ref=e7897]:
+                  - generic "Linux x86_64 (Mozilla/5.0 (X11; Linux x86_64) )" [ref=e7901]
+                - cell [ref=e7902]:
+                  - button "Email" [ref=e7903] [cursor=pointer]
+              - row [ref=e7908]:
+                - cell "Oct 20, 2026 02:35:12 PM" [ref=e7909]:
+                  - generic [ref=e7910]: Oct 20, 2026
+                  - generic [ref=e7911]: 02:35:12 PM
+                - 'cell "DR Dr. David Kimani Role: CEO" [ref=e7912]':
+                  - generic [ref=e7913]:
+                    - generic [ref=e7914]: DR
+                    - generic [ref=e7915]:
+                      - generic [ref=e7916]: Dr. David Kimani
+                      - generic [ref=e7917]: "Role: CEO"
+                - cell "Completed Sale" [ref=e7918]
+                - 'cell "Receipt REC-7601 for Walk-in Retail Buyer - Net: $200.00" [ref=e7924]'
+                - cell "Linux x86_64 (Mozilla/5.0 (X11; Linux x86_64) )" [ref=e7926]:
+                  - generic "Linux x86_64 (Mozilla/5.0 (X11; Linux x86_64) )" [ref=e7930]
+                - cell [ref=e7931]:
+                  - button "Email" [ref=e7932] [cursor=pointer]
+              - row [ref=e7937]:
+                - cell "Oct 20, 2026 02:34:00 PM" [ref=e7938]:
+                  - generic [ref=e7939]: Oct 20, 2026
+                  - generic [ref=e7940]: 02:34:00 PM
+                - 'cell "DR Dr. David Kimani Role: CEO" [ref=e7941]':
+                  - generic [ref=e7942]:
+                    - generic [ref=e7943]: DR
+                    - generic [ref=e7944]:
+                      - generic [ref=e7945]: Dr. David Kimani
+                      - generic [ref=e7946]: "Role: CEO"
+                - cell "Updated Product" [ref=e7947]
+                - 'cell "Updated TEST service support (SKU: SKU-753379)" [ref=e7952]'
+                - cell "Linux x86_64 (Mozilla/5.0 (X11; Linux x86_64) )" [ref=e7954]:
+                  - generic "Linux x86_64 (Mozilla/5.0 (X11; Linux x86_64) )" [ref=e7958]
+                - cell [ref=e7959]:
+                  - button "Email" [ref=e7960] [cursor=pointer]
+              - row [ref=e7965]:
+                - cell "Oct 20, 2026 02:33:10 PM" [ref=e7966]:
+                  - generic [ref=e7967]: Oct 20, 2026
+                  - generic [ref=e7968]: 02:33:10 PM
+                - 'cell "DR Dr. David Kimani Role: CEO" [ref=e7969]':
+                  - generic [ref=e7970]:
+                    - generic [ref=e7971]: DR
+                    - generic [ref=e7972]:
+                      - generic [ref=e7973]: Dr. David Kimani
+                      - generic [ref=e7974]: "Role: CEO"
+                - cell "Added Product" [ref=e7975]
+                - 'cell "Created service: TEST service support (ID: ITEM-2026-6827)" [ref=e7980]'
+                - cell "Linux x86_64 (Mozilla/5.0 (X11; Linux x86_64) )" [ref=e7982]:
+                  - generic "Linux x86_64 (Mozilla/5.0 (X11; Linux x86_64) )" [ref=e7986]
+                - cell [ref=e7987]:
+                  - button "Email" [ref=e7988] [cursor=pointer]
+              - row [ref=e7993]:
+                - cell "Oct 20, 2026 02:31:34 PM" [ref=e7994]:
+                  - generic [ref=e7995]: Oct 20, 2026
+                  - generic [ref=e7996]: 02:31:34 PM
+                - 'cell "UN Unauthenticated User Role: Other" [ref=e7997]':
+                  - generic [ref=e7998]:
+                    - generic [ref=e7999]: UN
+                    - generic [ref=e8000]:
+                      - generic [ref=e8001]: Unauthenticated User
+                      - generic [ref=e8002]: "Role: Other"
+                - cell "User Logged In" [ref=e8003]
+                - 'cell "User david.k@code76.com signed in with role: CEO" [ref=e8009]'
+                - cell "Linux x86_64 (Mozilla/5.0 (X11; Linux x86_64) )" [ref=e8011]:
+                  - generic "Linux x86_64 (Mozilla/5.0 (X11; Linux x86_64) )" [ref=e8015]
+                - cell [ref=e8016]:
+                  - button "Email" [ref=e8017] [cursor=pointer]
+          - generic [ref=e8022]:
+            - generic [ref=e8023]:
+              - text: Displaying
+              - strong [ref=e8024]: "19"
+              - text: of
+              - strong [ref=e8025]: "19"
+              - text: recorded logs
+            - generic [ref=e8026]: Browser-local audit records
+```

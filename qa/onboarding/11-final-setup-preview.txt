@@ -1,0 +1,200 @@
+### Page
+- Page URL: http://127.0.0.1:3000/?view=pos
+- Page Title: CODE76 POS — Workspace
+### Snapshot
+```yaml
+- generic [ref=f6e3]:
+  - generic [ref=f6e4]:
+    - banner [ref=f6e789]:
+      - generic [ref=f6e790]:
+        - button "76 CODE76 POS Enterprise Product & Service SaaS ERP System" [ref=f6e792] [cursor=pointer]:
+          - generic [ref=f6e793]: "76"
+          - generic [ref=f6e794]:
+            - generic [ref=f6e795]:
+              - generic [ref=f6e796]: CODE76 POS
+              - generic [ref=f6e797]: Enterprise
+            - paragraph [ref=f6e798]: Product & Service SaaS ERP System
+        - generic [ref=f6e799]:
+          - generic [ref=f6e800]:
+            - button "Desktop View (Full Width)" [ref=f6e801] [cursor=pointer]
+            - button "Laptop View (1024px)" [ref=f6e804] [cursor=pointer]
+            - button "Tablet View (768px)" [ref=f6e807] [cursor=pointer]
+            - button "Phone Mobile View (390px)" [ref=f6e810] [cursor=pointer]
+          - generic [ref=f6e813]:
+            - button "Light" [ref=f6e2067] [cursor=pointer]
+            - button "Demo Data" [ref=f6e822] [cursor=pointer]
+            - generic [ref=f6e828]:
+              - button "Storefront" [ref=f6e829] [cursor=pointer]
+              - button "CODE76 Site" [ref=f6e834] [cursor=pointer]
+            - button "Click to view help guide and settings for this platform" [ref=f6e839] [cursor=pointer]
+            - generic [ref=f6e843]:
+              - 'button "DR Dr. David Kimani Role: CEO" [ref=f6e844] [cursor=pointer]':
+                - generic [ref=f6e845]: DR
+                - generic [ref=f6e846]:
+                  - generic [ref=f6e847]: Dr. David Kimani
+                  - generic [ref=f6e848]: "Role: CEO"
+              - button "Sign out and return to landing page" [ref=f6e849] [cursor=pointer]
+      - generic [ref=f6e854]:
+        - button "Sales POS" [ref=f6e855] [cursor=pointer]
+        - button "Sales History" [ref=f6e859] [cursor=pointer]
+        - button "Inventory" [ref=f6e864] [cursor=pointer]
+        - button "Expenses" [ref=f6e869] [cursor=pointer]
+        - button "Invoices" [ref=f6e873] [cursor=pointer]
+        - button "Analytics & P&L" [ref=f6e877] [cursor=pointer]
+        - button "Customers" [ref=f6e880] [cursor=pointer]
+        - button "Vendors" [ref=f6e886] [cursor=pointer]
+        - button "Transporters" [ref=f6e891] [cursor=pointer]
+        - button "Marketing Team" [ref=f6e897] [cursor=pointer]
+        - button "Company Members" [ref=f6e901] [cursor=pointer]
+        - button "My Company" [ref=f6e907] [cursor=pointer]
+        - button "Messaging" [ref=f6e911] [cursor=pointer]
+        - button "Business Landing Page" [ref=f6e914] [cursor=pointer]
+        - button "Settings" [ref=f6e919] [cursor=pointer]
+        - button "Audit & Access Logs" [ref=f6e923] [cursor=pointer]
+        - button "About & Manual" [ref=f6e927] [cursor=pointer]
+    - main [ref=f6e5]:
+      - generic [ref=f6e1795]:
+        - generic [ref=f6e1796]:
+          - generic [ref=f6e1797]:
+            - generic [ref=f6e1798]:
+              - heading "My Company Profile" [level=1] [ref=f6e1799]
+              - button "Click for platform guidance & settings" [ref=f6e1800] [cursor=pointer]
+            - paragraph [ref=f6e1804]: Define your business identity, contacts and legal details for your Business Landing Page and receipts. This does not edit the CODE76 main site.
+          - button "Open guided setup" [ref=f6e1805] [cursor=pointer]
+        - generic [ref=f6e1809]:
+          - generic [ref=f6e1811]:
+            - generic [ref=f6e1812]:
+              - generic [ref=f6e1813]:
+                - generic [ref=f6e1814]: Company Legal Name *
+                - textbox [ref=f6e1815]: TEST Skip Shop
+              - generic [ref=f6e1816]:
+                - generic [ref=f6e1817]: Company Slogan / Tagline
+                - textbox [ref=f6e1818]
+            - generic [ref=f6e1819]:
+              - generic [ref=f6e1820]: Mission & Vision Statement
+              - textbox [ref=f6e1821]
+            - generic [ref=f6e1822]:
+              - generic [ref=f6e1823]:
+                - generic [ref=f6e1824]: Business Registration No
+                - textbox [ref=f6e1825]
+              - generic [ref=f6e1826]:
+                - generic [ref=f6e1827]: Tax / VAT PIN
+                - textbox [ref=f6e1828]
+            - generic [ref=f6e1829]:
+              - generic [ref=f6e1830]:
+                - generic [ref=f6e1831]: Primary Telephone *
+                - textbox [ref=f6e1832]
+              - generic [ref=f6e1833]:
+                - generic [ref=f6e1834]: Secondary Telephone
+                - textbox [ref=f6e1835]
+              - generic [ref=f6e1836]:
+                - generic [ref=f6e1837]: Official WhatsApp
+                - textbox [ref=f6e1838]
+            - generic [ref=f6e1839]:
+              - generic [ref=f6e1840]:
+                - generic [ref=f6e1841]: Primary Email Address
+                - textbox [ref=f6e1842]
+              - generic [ref=f6e1843]:
+                - generic [ref=f6e1844]: Operating Currency
+                - textbox [ref=f6e1845]: USD
+            - generic [ref=f6e1846]:
+              - generic [ref=f6e1847]:
+                - generic [ref=f6e1848]: Physical Address
+                - textbox [ref=f6e1849]
+              - generic [ref=f6e1850]:
+                - generic [ref=f6e1851]: City / Region
+                - textbox [ref=f6e1852]
+              - generic [ref=f6e1853]:
+                - generic [ref=f6e1854]: Country
+                - textbox [ref=f6e1855]
+            - generic [ref=f6e1857]:
+              - generic [ref=f6e1858]: Official Company Logo / Stamp (Link, Google Drive, Device Upload / Drag, Live Camera Snapshot)
+              - generic [ref=f6e1860]:
+                - button "Device / Drag" [ref=f6e1861] [cursor=pointer]
+                - button "Camera" [ref=f6e1866] [cursor=pointer]
+                - button "Photo Link" [ref=f6e1871] [cursor=pointer]
+                - button "Google Drive" [ref=f6e1876] [cursor=pointer]
+              - generic [ref=f6e1885] [cursor=pointer]:
+                - generic [ref=f6e1886]: Drag & Drop photo here, or Browse Device
+                - text: Supports JPEG, PNG, WEBP, GIF, SVG (Up to 10MB)
+              - paragraph [ref=f6e1887]: Brand logo appears on thermal receipts, PDF commercial invoices, and Business Landing Page header.
+            - generic [ref=f6e1888]:
+              - generic [ref=f6e1889]: Operating Hours
+              - textbox [ref=f6e1890]
+            - button "Save Company Changes" [ref=f6e1892] [cursor=pointer]
+          - generic [ref=f6e1898]:
+            - generic [ref=f6e1899]: Business Page & Receipt Brand Preview
+            - heading "TEST Skip Shop" [level=3] [ref=f6e1900]
+            - paragraph
+            - generic [ref=f6e1901]: ","
+            - generic [ref=f6e1918]:
+              - generic [ref=f6e1919]: Autonomous Sync Active
+              - text: This data feeds your Business Landing Page, PDF vouchers and receipts. It never edits the CODE76 main website.
+  - dialog [ref=f6e1924]:
+    - banner [ref=f6e1925]:
+      - generic [ref=f6e1926]: "76"
+      - generic [ref=f6e1928]:
+        - text: A good start, your way
+        - paragraph [ref=f6e1929]: CODE76 workspace setup
+      - button "Save progress and close setup" [ref=f6e1930] [cursor=pointer]
+    - list "Setup progress" [ref=f6e1934]:
+      - listitem [ref=f6e1935]:
+        - generic [ref=f6e1936]: "1"
+        - generic [ref=f6e1937]: Your workspace
+      - listitem [ref=f6e1938]:
+        - generic [ref=f6e1939]: "2"
+        - generic [ref=f6e1940]: My Company
+      - listitem [ref=f6e1941]:
+        - generic [ref=f6e1942]: "3"
+        - generic [ref=f6e1943]: First inventory
+      - listitem [ref=f6e1944]:
+        - generic [ref=f6e1945]: "4"
+        - generic [ref=f6e1946]: Find your way
+    - generic [ref=f6e1947]:
+      - generic [ref=f6e1948]:
+        - generic [ref=f6e1949]: Step 1 of 4 · Your workspace
+        - heading "Make yourself comfortable." [level=2] [ref=f6e1950]
+        - paragraph [ref=f6e1951]: Choose a look and text size that feel right. These preferences apply to your POS workspace—not either public landing page.
+      - group "Pick your theme" [ref=f6e1952]:
+        - generic [ref=f6e1960]:
+          - button "Light Bright surfaces, clear contrast" [ref=f6e1961] [cursor=pointer]:
+            - generic [ref=f6e1972]:
+              - generic [ref=f6e1973]: Sales overview
+              - strong [ref=f6e1974]: 12,450.00
+            - generic [ref=f6e1992]:
+              - strong [ref=f6e1993]: Light
+              - generic [ref=f6e1994]: Bright surfaces, clear contrast
+          - button "Dark Softer on the eyes after hours" [pressed] [ref=f6e1998] [cursor=pointer]:
+            - generic [ref=f6e2009]:
+              - generic [ref=f6e2010]: Sales overview
+              - strong [ref=f6e2011]: 12,450.00
+            - generic [ref=f6e2025]:
+              - strong [ref=f6e2026]: Dark
+              - generic [ref=f6e2027]: Softer on the eyes after hours
+      - group "Choose a text size" [ref=f6e2029]:
+        - generic [ref=f6e2033]:
+          - button "Aa Compact More on your screen" [ref=f6e2034] [cursor=pointer]:
+            - generic [ref=f6e2035]: Aa
+            - strong [ref=f6e2036]: Compact
+            - generic [ref=f6e2037]: More on your screen
+          - button "Aa Normal A balanced everyday view" [active] [pressed] [ref=f6e2038] [cursor=pointer]:
+            - generic [ref=f6e2039]: Aa
+            - strong [ref=f6e2040]: Normal
+            - generic [ref=f6e2041]: A balanced everyday view
+          - button "Aa Large Comfortably readable" [ref=f6e2042] [cursor=pointer]:
+            - generic [ref=f6e2043]: Aa
+            - strong [ref=f6e2044]: Large
+            - generic [ref=f6e2045]: Comfortably readable
+          - button "Aa Extra large More room for every word" [ref=f6e2046] [cursor=pointer]:
+            - generic [ref=f6e2047]: Aa
+            - strong [ref=f6e2048]: Extra large
+            - generic [ref=f6e2049]: More room for every word
+        - generic [ref=f6e2055]:
+          - strong [ref=f6e2056]: Every detail, easy to read.
+          - text: Your products, sales and totals will use this text size.
+    - contentinfo [ref=f6e2057]:
+      - generic [ref=f6e2058]:
+        - button "Skip setup for now" [ref=f6e2059] [cursor=pointer]
+        - button "Continue to My Company" [ref=f6e2060] [cursor=pointer]
+      - paragraph [ref=f6e2063]: Change this any time in Settings → Color / Appearance or Text Sizing.
+```

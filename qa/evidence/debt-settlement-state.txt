@@ -1,0 +1,21 @@
+### Result
+{
+  "receipt": "REC-7604",
+  "amountPaid": 90.1,
+  "debtAmount": 0,
+  "status": "completed",
+  "payments": [
+    {
+      "method": "Cash",
+      "amount": 20
+    },
+    {
+      "method": "Cash",
+      "amount": 70.1
+    }
+  ]
+}
+### Ran Playwright code
+```js
+await page.evaluate('() => {const s=JSON.parse(localStorage.getItem(\'code76_pos_state_v1\'));const x=s.sales.find(x=>x.receiptNo===\'REC-7604\');return {receipt:x.receiptNo,amountPaid:x.amountPaid,debtAmount:x.debtAmount,status:x.status,payments:x.payments}}');
+```

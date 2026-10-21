@@ -1,0 +1,7 @@
+import React from 'react';
+import type { PersonRecord } from '../../types/index.ts';
+import { directoryName, canonicalDirectoryId, partyDetails, snapshotParty } from '../../utils/directory.ts';
+export function PartyPicker({ label = 'Related company / branch / contact', value, parties, onChange }: { label?: string; value?: string; parties: PersonRecord[]; onChange: (party?: PersonRecord) => void }) {
+  const selected = parties.find(p => canonicalDirectoryId(p.id) === value);
+  return <div className="space-y-2"><label className="block text-xs font-semibold text-slate-400">{label}<select aria-label={label} value={value || ''} onChange={event => onChange(parties.find(p => canonicalDirectoryId(p.id) === event.target.value))} className="mt-1 w-full rounded-xl border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-slate-100"><option value="">Manual name / legacy record</option>{parties.map(p => <option key={canonicalDirectoryId(p.id)} value={canonicalDirectoryId(p.id)}>{directoryName(p)}{p.entityType === 'branch' ? ' — branch' : ''}{p.companyType ? ` · ${p.companyType}` : ''}</option>)}</select></label>{selected && <p className="rounded-lg border border-teal-900 p-2 text-xs text-teal-300">{partyDetails(snapshotParty(selected,parties))}<br/>These details will be saved as a historical snapshot on this transaction.</p>}<p className="text-[11px] text-slate-400">Manage companies and branches in My Company → Other Companies & Branches. Existing typed names remain supported.</p></div>;
+}

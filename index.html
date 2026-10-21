@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <script>
+      // Polyfill to ensure window.fetch is writable and has a setter in iframe sandbox environments
+      (function() {
+        try {
+          var origFetch = window.fetch ? window.fetch.bind(window) : null;
+          var _currentFetch = origFetch;
+          Object.defineProperty(window, 'fetch', {
+            configurable: true,
+            enumerable: true,
+            get: function() {
+              return _currentFetch;
+            },
+            set: function(newFetch) {
+              _currentFetch = newFetch;
+            }
+          });
+        } catch (e) {
+          try {
+            var f = window.fetch ? window.fetch.bind(window) : null;
+            if (f) {
+              Object.defineProperty(window, 'fetch', {
+                value: f,
+                writable: true,
+                configurable: true,
+                enumerable: true
+              });
+            }
+          } catch (err) {}
+        }
+      })();
+    </script>
+    <!-- code76:seo:start -->
+    <title>CODE76 POS — Point of Sale, Inventory &amp; Business Management</title>
+    <meta name="description" content="Manage sales, inventory, invoices and business reporting with CODE76 POS. Explore the platform, then sign in or create an account for your business." />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="/" vite-ignore />
+    <!-- code76:seo:end -->
+  </head>
+  <body class="bg-slate-950 text-slate-100 antialiased selection:bg-teal-500 selection:text-white">
+    <noscript><h1>CODE76 POS</h1><p>Point of sale, inventory and business management. Enable JavaScript to explore CODE76, sign in or create an account.</p></noscript>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

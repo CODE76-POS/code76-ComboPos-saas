@@ -1,0 +1,6 @@
+{
+  "name": "CODE76 POS",
+  "description": "High-Performance Service & Product SaaS ERP, Point of Sale and AI-Powered E-Commerce Landing Platform",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

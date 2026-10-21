@@ -1,0 +1,38 @@
+### Ran Playwright code
+```js
+await page.getByRole('button', { name: 'Download access history CSV' }).click();
+```
+### Page
+- Page URL: http://127.0.0.1:5173/#/pos/audit_logs
+- Page Title: CODE76 POS — Private Workspace
+### Snapshot
+- [Snapshot](.playwright-cli/page-2026-10-20T14-38-36-305Z.yml)
+### Events
+- Downloading file CODE76-Access-History-2026-10-20T14-38-35-775Z.csv ...
+- Downloaded file CODE76-Access-History-2026-10-20T14-38-35-775Z.csv to ".playwright-cli/CODE76-Access-History-2026-10-20T14-38-35-775Z.csv"
+
+### Ran Playwright code
+```js
+await page.getByRole('button', { name: 'Download access history TXT' }).click();
+```
+### Page
+- Page URL: http://127.0.0.1:5173/#/pos/audit_logs
+- Page Title: CODE76 POS — Private Workspace
+### Snapshot
+- [Snapshot](.playwright-cli/page-2026-10-20T14-38-37-702Z.yml)
+### Events
+- Downloading file CODE76-Access-History-2026-10-20T14-38-37-159Z.txt ...
+- Downloaded file CODE76-Access-History-2026-10-20T14-38-37-159Z.txt to ".playwright-cli/CODE76-Access-History-2026-10-20T14-38-37-159Z.txt"
+
+### Ran Playwright code
+```js
+await page.getByRole('button', { name: 'Download access history PDF' }).click();
+```
+### Page
+- Page URL: http://127.0.0.1:5173/#/pos/audit_logs
+- Page Title: CODE76 POS — Private Workspace
+### Snapshot
+- [Snapshot](.playwright-cli/page-2026-10-20T14-38-39-619Z.yml)
+### Events
+- Downloading file CODE76-Access-History-2026-10-20T14-38-38-799Z.pdf ...
+- Downloaded file CODE76-Access-History-2026-10-20T14-38-38-799Z.pdf to ".playwright-cli/CODE76-Access-History-2026-10-20T14-38-38-799Z.pdf"

@@ -1,0 +1,32 @@
+{
+  "feature": "guided-setup-and-landing-isolation",
+  "baseRevision": "77b5cfccf9168fa851125b7dfb564bf102aae22b",
+  "branch": "feat/guided-setup-and-landing-isolation",
+  "typecheck": "pass",
+  "productionBuild": "pass",
+  "unitChecks": 58,
+  "unitPassed": 58,
+  "apiChecks": 5,
+  "apiPassed": 5,
+  "browserChecks": 57,
+  "browserPassed": 57,
+  "browserFailed": 0,
+  "rawBrowserAttempts": 60,
+  "correctedTestAssertions": [
+    "CLI snapshots include native inert nodes; inspect the native DOM inert flag.",
+    "Payment button hover uses a darker background; check contrast ratio instead of one RGB value."
+  ],
+  "consoleErrors": 0,
+  "liveAIUsed": false,
+  "livePaymentsOrEmailsSent": false,
+  "browserTestData": "Isolated browser-local TEST fixtures only; no merchant-server database exists.",
+  "githubPushed": false,
+  "githubBlocker": "No authenticated GitHub write credentials available in workspace.",
+  "historicalQAScope": "Earlier QA-CHECKLIST remains a pre-feature baseline. This feature pass is not a complete production/security re-certification.",
+  "serverHealth": {
+    "status": "ok",
+    "timestamp": "2026-10-20T11:47:22.074Z",
+    "hasApiKey": false,
+    "system": "CODE76 POS Enterprise Server"
+  }
+}

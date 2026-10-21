@@ -1,0 +1,91 @@
+{
+  "date": "2026-10-20",
+  "typecheck": "pass",
+  "build": "pass",
+  "unit": {
+    "total": 442,
+    "passed": 442
+  },
+  "browser": {
+    "raw_attempts": 44,
+    "distinct_cases": 43,
+    "final_passed": 43,
+    "final_failed": 0,
+    "console_errors": 0
+  },
+  "http": {
+    "total": 21,
+    "passed": 21
+  },
+  "no_key_api": {
+    "total": 4,
+    "passed": 4
+  },
+  "pricing": {
+    "currency": "USD",
+    "standard": {
+      "free": 20,
+      "starter": 26,
+      "pro": 50,
+      "max": 110,
+      "lifetime": 500
+    },
+    "final": {
+      "free": 0,
+      "starter": 13,
+      "pro": 25,
+      "max": 55,
+      "lifetime": 250
+    },
+    "paid_discount_percent": 50,
+    "free_discount_percent": 100,
+    "monthly": [
+      "free",
+      "starter",
+      "pro",
+      "max"
+    ],
+    "one_time": [
+      "lifetime"
+    ]
+  },
+  "decisions": {
+    "lifetime_includes_team_access": true,
+    "starter_exclusions": [
+      "email",
+      "referrals",
+      "business_landing",
+      "chatbot"
+    ],
+    "navigation": "coordinated sticky section menus"
+  },
+  "services": {
+    "workflow": "browser-local authorized drafts, not delivered",
+    "fulfilment_or_ad_spend": false
+  },
+  "sources_reviewed": [
+    "15 equations.txt",
+    "from femine.txt",
+    "from power psychology.txt"
+  ],
+  "source_use": "transparent planning arithmetic, clarity, proof hygiene, relevant opt-in questions and buyer autonomy; no coercive/profiling methods",
+  "known_initial_findings": [
+    "historical tier/nav source assertions updated to the new confirmed policy",
+    "floating assistant obscured a pricing CTA; converted both launchers to inline areas",
+    "one hit-test initially targeted a below-fold CTA in a fresh 1280x720 viewport; corrected to the intended viewport and passed; raw attempt retained"
+  ],
+  "limitations": [
+    "demo billing and client-side auth/entitlements, not production subscriptions/server tenant security",
+    "team-service drafts are not sent or fulfilled",
+    "forecast scenarios are estimates, not AI/confidence intervals or guaranteed results",
+    "workspace preview access/lifetime is controlled by Arena; no public deployment claimed",
+    "legacy accounting/analytics outside this scope remain uncertified"
+  ],
+  "api_keys_used": false,
+  "real_payments_emails_ad_spend_security_tests": false,
+  "runtime": {
+    "port": 5173,
+    "production": true,
+    "single_server": true
+  }
+}

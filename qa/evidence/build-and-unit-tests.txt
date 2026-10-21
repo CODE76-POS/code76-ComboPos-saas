@@ -1,0 +1,79 @@
+
+--- Typecheck ---
+
+> react-example@0.0.0 lint
+> tsc --noEmit
+
+
+--- Existing tests ---
+TAP version 13
+# Subtest: calculateLineItemTotal applies percentage discount correctly
+ok 1 - calculateLineItemTotal applies percentage discount correctly
+  ---
+  duration_ms: 1.078669
+  ...
+# Subtest: calculateLineItemTotal applies fixed discount correctly
+ok 2 - calculateLineItemTotal applies fixed discount correctly
+  ---
+  duration_ms: 0.230957
+  ...
+# Subtest: calculateCartTotals computes subtotal, extra charges and taxes
+ok 3 - calculateCartTotals computes subtotal, extra charges and taxes
+  ---
+  duration_ms: 0.70028
+  ...
+# Subtest: calculatePaymentsAndDebt tracks remaining debt and change due
+ok 4 - calculatePaymentsAndDebt tracks remaining debt and change due
+  ---
+  duration_ms: 0.22874
+  ...
+# Subtest: calculateFinancialHealth evaluates P&L, COGS, and profit margin
+ok 5 - calculateFinancialHealth evaluates P&L, COGS, and profit margin
+  ---
+  duration_ms: 0.402304
+  ...
+# Subtest: calculateProductProfitMargin detects profit, break-even, and selling at a loss
+ok 6 - calculateProductProfitMargin detects profit, break-even, and selling at a loss
+  ---
+  duration_ms: 0.207632
+  ...
+# Subtest: generateUniqueInventoryId generates unique read-only IDs without colliding
+ok 7 - generateUniqueInventoryId generates unique read-only IDs without colliding
+  ---
+  duration_ms: 0.271167
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 393.751851
+
+--- Production build ---
+
+> react-example@0.0.0 build
+> vite build
+
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - `__dirname` (vite.config.ts:11:27). Use `import.meta.dirname` instead
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+vite v8.3.4 building client environment for production...
+transforming...
+✓ 2626 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                     3.95 kB │ gzip:   1.38 kB
+dist/assets/index-Kbar3BN7.css    103.01 kB │ gzip:  14.46 kB
+dist/assets/index-zGjW3dqZ.js   1,366.82 kB │ gzip: 345.42 kB
+
+[plugin builtin:vite-reporter]
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 1.54s
+
+RESULTS types=0 tests=0 build=0

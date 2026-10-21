@@ -1,0 +1,4 @@
+
+> react-example@0.0.0 lint
+> node scripts/typecheck.mjs
+

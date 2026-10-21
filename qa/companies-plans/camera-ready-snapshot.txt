@@ -1,0 +1,218 @@
+### Page
+- Page URL: http://127.0.0.1:5173/#/pos/my_company
+- Page Title: CODE76 POS — Private Workspace
+### Snapshot
+```yaml
+- generic [ref=e4]:
+  - banner [ref=e679]:
+    - generic [ref=e680]:
+      - button "76 CODE76 POS Enterprise Product & Service SaaS ERP System" [ref=e682] [cursor=pointer]:
+        - generic [ref=e683]: "76"
+        - generic [ref=e684]:
+          - generic [ref=e685]:
+            - generic [ref=e686]: CODE76 POS
+            - generic [ref=e687]: Enterprise
+          - paragraph [ref=e688]: Product & Service SaaS ERP System
+      - generic [ref=e689]:
+        - generic [ref=e690]:
+          - button "Desktop View (Full Width)" [ref=e691] [cursor=pointer]
+          - button "Laptop View (1024px)" [ref=e694] [cursor=pointer]
+          - button "Tablet View (768px)" [ref=e697] [cursor=pointer]
+          - button "Phone Mobile View (390px)" [ref=e700] [cursor=pointer]
+        - generic [ref=e703]:
+          - button "Demo Data" [ref=e704] [cursor=pointer]
+          - button "Business Page" [ref=e1405] [cursor=pointer]
+          - button "Click to view help guide and settings for this platform" [ref=e710] [cursor=pointer]
+          - button "Active user session and access controls" [ref=e715] [cursor=pointer]:
+            - generic [ref=e716]: DR
+            - generic [ref=e717]:
+              - generic [ref=e718]: Dr. David Kimani
+              - generic [ref=e719]: "Role: CEO"
+    - generic [ref=e720]:
+      - generic [ref=e721]:
+        - generic [ref=e725]: App link
+        - generic [ref=e726]:
+          - generic [ref=e727]:
+            - generic [ref=e728]: App link
+            - textbox "App link" [ref=e729]: http://127.0.0.1:5173/
+            - button "Copy app link" [ref=e730] [cursor=pointer]:
+              - generic [ref=e734]: Copy link
+            - link "Open app link in a new tab" [ref=e735] [cursor=pointer]:
+              - /url: http://127.0.0.1:5173/
+          - status [ref=e740]
+        - button "Current demo plan" [ref=e741]: Pro · demo
+      - paragraph [ref=e742]: Open this root link to reach CODE76 sign-in/register. Browser-local records and sessions do not sync between browsers.
+    - generic [ref=e744]:
+      - button "Sales POS" [ref=e745] [cursor=pointer]
+      - button "Sales History" [ref=e749] [cursor=pointer]
+      - button "Inventory" [ref=e754] [cursor=pointer]
+      - button "Expenses" [ref=e1410] [cursor=pointer]
+      - button "Invoices" [ref=e1414] [cursor=pointer]
+      - button "Analytics & P&L" [ref=e1418] [cursor=pointer]
+      - button "Customers" [ref=e1421] [cursor=pointer]
+      - button "Vendors" [ref=e1427] [cursor=pointer]
+      - button "Transporters" [ref=e1432] [cursor=pointer]
+      - button "Marketing Team" [ref=e1438] [cursor=pointer]
+      - button "Company Members" [ref=e1442] [cursor=pointer]
+      - button "My Company" [ref=e1448] [cursor=pointer]
+      - button "Messaging" [ref=e1452] [cursor=pointer]
+      - button "Business Landing Page" [ref=e1455] [cursor=pointer]
+      - button "Settings" [ref=e759] [cursor=pointer]
+      - button "Audit & Access Logs" [ref=e1460] [cursor=pointer]
+      - button "About & Manual" [ref=e763] [cursor=pointer]
+  - main [ref=e5]:
+    - generic [ref=e1493]:
+      - generic [ref=e1494]:
+        - generic [ref=e1495]:
+          - generic [ref=e1496]:
+            - heading "My Company Profile" [level=1] [ref=e1497]
+            - button "Click for platform guidance & settings" [ref=e1498] [cursor=pointer]
+          - paragraph [ref=e1502]: Define your business identity, contacts and legal details for your Business Landing Page and receipts. This does not edit the CODE76 main site.
+        - button "Open guided setup" [ref=e1503] [cursor=pointer]
+      - generic [ref=e1507]:
+        - button "My company profile" [ref=e1508]
+        - button "Other Companies & Branches" [ref=e1509]
+      - generic [ref=e1623]:
+        - generic [ref=e1624]:
+          - generic [ref=e1625]:
+            - heading [level=1] [ref=e1626]:
+              - text: Other Companies & Branches
+              - button "Directory guidance" [ref=e1627]
+            - paragraph [ref=e1631]: Utilities, suppliers, transport companies, marketing companies and business branches.
+          - generic [ref=e1632]:
+            - button "Export CSV" [ref=e1633]
+            - button "PDF Directory" [ref=e1637]
+            - button "Email directory" [ref=e1641]
+            - button "Add company / branch" [ref=e1645]
+        - textbox "Search directory" [ref=e1651]:
+          - /placeholder: Search name, company type, contact or location
+        - paragraph [ref=e1652]: Add companies and branches here. Selected vendor, transporter and marketing functions automatically link the same identity into those directories. Electricity, water and other utilities are selectable on expenses and purchase invoices.
+        - table [ref=e1654]:
+          - rowgroup [ref=e1655]:
+            - row [ref=e1656]:
+              - columnheader "Name / type" [ref=e1657]
+              - columnheader "Contacts" [ref=e1658]
+              - columnheader "Location" [ref=e1659]
+              - columnheader "Roles / schedule" [ref=e1660]
+              - columnheader "Actions" [ref=e1661]
+          - rowgroup [ref=e1662]:
+            - row [ref=e1772]:
+              - cell [ref=e1773]:
+                - generic [ref=e1774]:
+                  - img "TEST Kenya Power illustrated placeholder" [ref=e1775]
+                  - generic [ref=e1776]:
+                    - strong [ref=e1777]: TEST Kenya Power
+                    - text: company · Electricity company
+              - cell "0000000000 qa.power@example.test" [ref=e1778]: 0000000000qa.power@example.test
+              - cell "—" [ref=e1779]
+              - cell [ref=e1780]
+              - cell [ref=e1781]:
+                - generic [ref=e1782]:
+                  - button "View TEST Kenya Power" [ref=e1783]
+                  - button "Edit TEST Kenya Power" [ref=e1787]
+                  - button "Delete TEST Kenya Power" [ref=e1791]
+                  - button "Export profile PDF for TEST Kenya Power" [ref=e1795]
+        - dialog "Directory entry" [ref=e1800]:
+          - button "Close directory entry" [ref=e1801]
+          - heading "Add directory entry" [level=2] [ref=e1805]
+          - generic [ref=e1806]:
+            - generic [ref=e1807]:
+              - generic [ref=e1808]: Entry type
+              - combobox "Entry type" [ref=e1809]:
+                - option "Person"
+                - option "Company" [selected]
+                - option "Company branch"
+            - generic [ref=e1810]:
+              - generic [ref=e1811]:
+                - generic [ref=e1812]: Company / branch name
+                - textbox "Company / branch name" [ref=e1813]: TEST Multi Services
+              - generic [ref=e1814]:
+                - generic [ref=e1815]: Company type
+                - combobox "Company type" [ref=e1816]:
+                  - option "Vendor company"
+                  - option "Transporting company" [selected]
+                  - option "Marketing company"
+                  - option "Electricity company"
+                  - option "Water company"
+                  - option "Internet / telecom company"
+                  - option "Landlord / property company"
+                  - option "Other related company"
+              - generic [ref=e1817]:
+                - paragraph [ref=e1818]: Also list this company in
+                - generic [ref=e1819]:
+                  - generic [ref=e1820]:
+                    - checkbox "Company function vendor" [checked] [ref=e1821]
+                    - text: Vendors
+                  - generic [ref=e1822]:
+                    - checkbox "Company function transporter" [checked] [ref=e1823]
+                    - text: Transporting companies
+                  - generic [ref=e1824]:
+                    - checkbox "Company function marketer" [checked] [ref=e1825]
+                    - text: Marketing companies
+              - generic [ref=e1826]:
+                - generic [ref=e1827]: Registration number
+                - textbox "Registration number" [ref=e1828]
+              - generic [ref=e1829]:
+                - generic [ref=e1830]: Tax / VAT PIN
+                - textbox "Tax / VAT PIN" [ref=e1831]
+            - generic [ref=e1832]:
+              - generic [ref=e1833]:
+                - generic [ref=e1834]: Primary telephone
+                - textbox "Primary telephone" [ref=e1835]
+              - generic [ref=e1836]:
+                - generic [ref=e1837]: Secondary telephone
+                - textbox "Secondary telephone" [ref=e1838]
+              - generic [ref=e1839]:
+                - generic [ref=e1840]: WhatsApp
+                - textbox "WhatsApp" [ref=e1841]
+              - generic [ref=e1842]:
+                - generic [ref=e1843]: Primary email
+                - textbox "Primary email" [ref=e1844]
+              - generic [ref=e1845]:
+                - generic [ref=e1846]: Secondary email
+                - textbox "Secondary email" [ref=e1847]
+              - generic [ref=e1848]:
+                - generic [ref=e1849]: Address
+                - textbox "Address" [ref=e1850]
+              - generic [ref=e1851]:
+                - generic [ref=e1852]: City / location
+                - textbox "City / location" [ref=e1853]
+              - generic [ref=e1854]:
+                - generic [ref=e1855]: Country
+                - textbox "Country" [ref=e1856]
+            - generic [ref=e1857]:
+              - generic [ref=e1858]: Company logo / branch photo
+              - generic [ref=e1860]:
+                - button "Device / Drag" [ref=e1861] [cursor=pointer]
+                - button "Camera" [ref=e1866] [cursor=pointer]
+                - button "Photo Link" [ref=e1871] [cursor=pointer]
+                - button "Google Drive" [ref=e1876] [cursor=pointer]
+              - generic [ref=e1905]:
+                - generic "Live camera preview" [ref=e1907]
+                - generic [ref=e1908]:
+                  - button "Retry camera" [active] [ref=e1917]
+                  - button "Flip Camera (Front)" [ref=e1910]
+                  - button "Take Snapshot Photo" [ref=e1911]
+                  - button "Turn off camera" [ref=e1912]: Stop camera
+                - button "Use device camera / choose a photo instead" [ref=e1913]
+                - paragraph [ref=e1914]: Live camera needs HTTPS, browser permission and permission from an embedding host. The app cannot override a host’s camera policy. Captures stay local until you save the entry.
+            - generic [ref=e1887]:
+              - img "Selected photo or illustrated fallback" [ref=e1888]
+              - paragraph [ref=e1889]: Company placeholder—not a person portrait.
+            - generic [ref=e1890]:
+              - checkbox "Consent to use the supplied photo on the private business-page preview" [ref=e1891]
+              - text: Consent to use the supplied photo on the private business-page preview
+            - generic [ref=e1892]:
+              - generic [ref=e1893]:
+                - generic [ref=e1894]: Referral count
+                - spinbutton "Referral count" [ref=e1895]: "0"
+              - generic [ref=e1896]:
+                - generic [ref=e1897]: Referral volume
+                - spinbutton "Referral volume" [ref=e1898]: "0"
+            - generic [ref=e1899]:
+              - generic [ref=e1900]: Notes
+              - textbox "Notes" [ref=e1901]
+            - generic [ref=e1902]:
+              - button "Cancel" [ref=e1903]
+              - button "Save directory entry" [ref=e1904]
+```

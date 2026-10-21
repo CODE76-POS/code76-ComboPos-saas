@@ -1,0 +1,22 @@
+Print / Save as PDF Close
+CODE76 ENTERPRISE
+SOLUTIONS
+Precision Point of Sale, ERP & Next-Gen Commerce
+Suite 76, Silicon Boulevard, Tech District, Nairobi Hub / Global
+Online, Kenya / International
+Tel: +1 (800) 760-7676 | Email: code76pos@gmail.com
+Tax/VAT PIN: P051982736Z
+Official Commercial Invoice -
+TEST-STOCK-001
+Generated: 20/10/2026 07:23:44 pm (Africa/Nairobi)
+System: CODE76 POS Enterprise
+Total Records: 1
+INVOICE NO: TEST-STOCK-001 TYPE: Stock Purchase Payable
+BILLED TO / FROM: TEST East Branch (Vendor)
+RELATED COMPANY / BRANCH DETAILS (SAVED AT ENTRY): TEST East Branch · Vendor company · Branch
+of TEST Multi Services · Tel: 1111111111
+ISSUE DATE: 20/10/2026 DUE DATE: 03/11/2026 TOTAL DUE: KES 60.00 PAID: KES 0.00
+STATUS: PENDING
+ITEM DESCRIPTION QTY UNIT PRICE ($) LINE TOTAL ($)
+TEST Stock Item 3 20.00 60.00
+CODE76 POS - Official System Generated Document Authorized Signature / Stamp: ______________________ Page 1 of 1

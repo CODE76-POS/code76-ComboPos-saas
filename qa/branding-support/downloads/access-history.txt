@@ -1,0 +1,28 @@
+CODE76 POS — User access history
+Generated: 2026-10-20T21:17:28.949Z
+Exported by: "Dr. David Kimani"
+Filtered records: 2
+Browser-local activity records; not a tamper-proof server audit.
+
+--- Record 1 ---
+Log ID: "log-1792530963802-900"
+Timestamp (ISO): "2026-10-20T21:16:03.802Z"
+User: "Dr. David Kimani"
+Role: "CEO"
+Action: "Recorded Debt Payment"
+Details: "Recorded 68 USD for DEMO-REC-1002; remaining 0. Bookkeeping only; no transfer initiated."
+Device / IP: "Linux x86_64 (Mozilla/5.0 (X11; Linux x86_64) )"
+
+--- Record 2 ---
+Log ID: "log-1792530959252-612"
+Timestamp (ISO): "2026-10-20T21:15:59.252Z"
+User: "Dr. David Kimani"
+Role: "CEO"
+Action: "Recorded Debt Payment"
+Details: "Recorded 40 USD for DEMO-REC-1002; remaining 68. Bookkeeping only; no transfer initiated."
+Device / IP: "Linux x86_64 (Mozilla/5.0 (X11; Linux x86_64) )"
+
+Website created by CODE76.
+email: code76pos@gmail.com
+youtube: https://www.youtube.com/@CODE76-fn4fj
+Create your website with CODE76: code76pos@gmail.com

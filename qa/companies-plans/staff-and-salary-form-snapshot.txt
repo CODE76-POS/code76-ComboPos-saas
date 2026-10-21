@@ -1,0 +1,173 @@
+### Page
+- Page URL: http://127.0.0.1:5173/#/pos/company_members
+- Page Title: CODE76 POS — Private Workspace
+### Snapshot
+```yaml
+- generic [ref=e4]:
+  - banner [ref=e679]:
+    - generic [ref=e680]:
+      - button "76 CODE76 POS Enterprise Product & Service SaaS ERP System" [ref=e682] [cursor=pointer]:
+        - generic [ref=e683]: "76"
+        - generic [ref=e684]:
+          - generic [ref=e685]:
+            - generic [ref=e686]: CODE76 POS
+            - generic [ref=e687]: Enterprise
+          - paragraph [ref=e688]: Product & Service SaaS ERP System
+      - generic [ref=e689]:
+        - generic [ref=e690]:
+          - button "Desktop View (Full Width)" [ref=e691] [cursor=pointer]
+          - button "Laptop View (1024px)" [ref=e694] [cursor=pointer]
+          - button "Tablet View (768px)" [ref=e697] [cursor=pointer]
+          - button "Phone Mobile View (390px)" [ref=e700] [cursor=pointer]
+        - generic [ref=e703]:
+          - button "Demo Data" [ref=e704] [cursor=pointer]
+          - button "Business Page" [ref=e1405] [cursor=pointer]
+          - button "Click to view help guide and settings for this platform" [ref=e710] [cursor=pointer]
+          - button "Active user session and access controls" [ref=e715] [cursor=pointer]:
+            - generic [ref=e716]: DR
+            - generic [ref=e717]:
+              - generic [ref=e718]: Dr. David Kimani
+              - generic [ref=e719]: "Role: CEO"
+    - generic [ref=e720]:
+      - generic [ref=e721]:
+        - generic [ref=e725]: App link
+        - generic [ref=e726]:
+          - generic [ref=e727]:
+            - generic [ref=e728]: App link
+            - textbox "App link" [ref=e729]: http://127.0.0.1:5173/
+            - button "Copy app link" [ref=e730] [cursor=pointer]:
+              - generic [ref=e734]: Copy link
+            - link "Open app link in a new tab" [ref=e735] [cursor=pointer]:
+              - /url: http://127.0.0.1:5173/
+          - status [ref=e740]
+        - button "Current demo plan" [ref=e741]: Pro · demo
+      - paragraph [ref=e742]: Open this root link to reach CODE76 sign-in/register. Browser-local records and sessions do not sync between browsers.
+    - generic [ref=e744]:
+      - button "Sales POS" [ref=e745] [cursor=pointer]
+      - button "Sales History" [ref=e749] [cursor=pointer]
+      - button "Inventory" [ref=e754] [cursor=pointer]
+      - button "Expenses" [ref=e1410] [cursor=pointer]
+      - button "Invoices" [ref=e1414] [cursor=pointer]
+      - button "Analytics & P&L" [ref=e1418] [cursor=pointer]
+      - button "Customers" [ref=e1421] [cursor=pointer]
+      - button "Vendors" [ref=e1427] [cursor=pointer]
+      - button "Transporters" [ref=e1432] [cursor=pointer]
+      - button "Marketing Team" [ref=e1438] [cursor=pointer]
+      - button "Company Members" [ref=e1442] [cursor=pointer]
+      - button "My Company" [ref=e1448] [cursor=pointer]
+      - button "Messaging" [ref=e1452] [cursor=pointer]
+      - button "Business Landing Page" [ref=e1455] [cursor=pointer]
+      - button "Settings" [ref=e759] [cursor=pointer]
+      - button "Audit & Access Logs" [ref=e1460] [cursor=pointer]
+      - button "About & Manual" [ref=e763] [cursor=pointer]
+  - main [ref=e5]:
+    - generic [ref=e2927]:
+      - generic [ref=e2928]:
+        - generic [ref=e2929]:
+          - heading [level=1] [ref=e2930]:
+            - text: Company Members & Staff Directory
+            - button "Directory guidance" [ref=e2931]
+          - paragraph [ref=e2935]: Internal staff with mandatory dual-role job titles and auto-synchronization to Transporters and Marketing Team.
+        - generic [ref=e2936]:
+          - button "Export CSV" [ref=e2937]
+          - button "PDF Directory" [ref=e2941]
+          - button "Email directory" [ref=e2945]
+          - button "Add record" [ref=e2949]
+      - textbox "Search directory" [ref=e2955]:
+        - /placeholder: Search name, company type, contact or location
+      - table [ref=e2957]:
+        - rowgroup [ref=e2958]:
+          - row [ref=e2959]:
+            - columnheader "Name / type" [ref=e2960]
+            - columnheader "Contacts" [ref=e2961]
+            - columnheader "Location" [ref=e2962]
+            - columnheader "Roles / schedule" [ref=e2963]
+            - columnheader "Actions" [ref=e2964]
+        - rowgroup [ref=e2965]:
+          - row [ref=e3139]:
+            - cell [ref=e3140]:
+              - generic [ref=e3141]:
+                - img "TEST Musa Driver illustrated placeholder" [ref=e3142]
+                - generic [ref=e3143]:
+                  - strong [ref=e3144]: TEST Musa Driver
+                  - text: Person
+            - cell "— —" [ref=e3145]: ——
+            - cell "—" [ref=e3146]
+            - cell "Transporter/Driver / Marketor 08:00 – 12:00" [ref=e3147]:
+              - text: Transporter/Driver / Marketor
+              - generic [ref=e3148]: 08:00 – 12:00
+            - cell [ref=e3149]:
+              - generic [ref=e3150]:
+                - button "View TEST Musa Driver" [ref=e3151]
+                - button "Edit TEST Musa Driver" [ref=e3155]
+                - button "Delete TEST Musa Driver" [ref=e3159]
+                - button "Export profile PDF for TEST Musa Driver" [ref=e3163]
+                - button "Salary payments for TEST Musa Driver" [active] [ref=e3167]
+      - generic [ref=e2968]:
+        - heading "Recorded salary payments" [level=2] [ref=e2969]
+        - paragraph [ref=e2970]: Agreed rates are not payments. Records below are explicit bookkeeping entries, not transfers; historical entries remain if a member is removed.
+        - table [ref=e2972]:
+          - rowgroup [ref=e2973]:
+            - row [ref=e2974]:
+              - columnheader "Member" [ref=e2975]
+              - columnheader "Paid on" [ref=e2976]
+              - columnheader "Amount" [ref=e2977]
+              - columnheader "Basis / period" [ref=e2978]
+              - columnheader "Channel / reference" [ref=e2979]
+              - columnheader "Expense" [ref=e2980]
+          - rowgroup [ref=e2981]:
+            - row [ref=e2982]:
+              - cell "No salary payments recorded." [ref=e2983]
+      - dialog "Record salary payment" [ref=e3172]:
+        - button "Close salary payment" [ref=e3173]
+        - heading "Record paid salary — TEST Musa Driver" [level=2] [ref=e3177]
+        - paragraph [ref=e3178]: "Bookkeeping only; no funds are transferred. Agreed rate: KES 1200 per day."
+        - generic [ref=e3179]:
+          - generic [ref=e3180]:
+            - generic [ref=e3181]:
+              - generic [ref=e3182]: Paid amount
+              - spinbutton "Paid salary amount" [ref=e3183]
+            - generic [ref=e3184]:
+              - generic [ref=e3185]: Paid on
+              - textbox "Salary paid on" [ref=e3186]: 2026-10-20
+            - generic [ref=e3187]:
+              - generic [ref=e3188]: Payment basis
+              - combobox "Salary payment basis" [ref=e3189]:
+                - option "Per month"
+                - option "Per week"
+                - option "Per day" [selected]
+                - option "Per hour"
+                - option "Per completed task"
+                - option "Per delivery"
+                - option "Per session"
+                - option "Per project"
+            - generic [ref=e3190]:
+              - generic [ref=e3191]: Payment channel
+              - combobox "Salary payment channel" [ref=e3192]:
+                - option "Cash"
+                - option "M-Pesa"
+                - option "Airtel Money"
+                - option "T-Kash"
+                - option "Credit Card"
+                - option "Debit Card"
+                - option "Bank Transfer" [selected]
+                - option "Cheque"
+                - option "PayPal"
+                - option "Gift Card"
+                - option "Voucher"
+                - option "Crypto"
+                - option "Other"
+          - generic [ref=e3193]:
+            - generic [ref=e3194]: Period / tasks / deliveries covered
+            - textbox "Salary period covered" [ref=e3195]
+          - generic [ref=e3196]:
+            - generic [ref=e3197]: Payment reference
+            - textbox "Salary payment reference" [ref=e3198]
+          - generic [ref=e3199]:
+            - checkbox "Also record this salary payment as an expense" [ref=e3200]
+            - text: Also record this exact payment once in Salaries expenses
+          - paragraph [ref=e3201]: Unchecked means no expense is created. This avoids counting an expense twice if you already recorded it.
+          - button "Record salary payment only" [ref=e3202]
+        - heading "Previous recorded payments" [level=3] [ref=e3203]
+        - paragraph [ref=e3204]: No payments recorded for this member.
+```

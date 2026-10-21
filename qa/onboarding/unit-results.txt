@@ -1,0 +1,300 @@
+TAP version 13
+# Subtest: empty onboarding profile contains no CODE76 identity, contacts or tax registration
+ok 1 - empty onboarding profile contains no CODE76 identity, contacts or tax registration
+  ---
+  duration_ms: 0.789079
+  ...
+# Subtest: untouched CODE76 demo profile is not an actual merchant profile
+ok 2 - untouched CODE76 demo profile is not an actual merchant profile
+  ---
+  duration_ms: 0.151238
+  ...
+# Subtest: merchant can deliberately configure a company with the CODE76 name
+ok 3 - merchant can deliberately configure a company with the CODE76 name
+  ---
+  duration_ms: 0.123885
+  ...
+# Subtest: nonempty custom profile remains compatible with existing saved merchants
+ok 4 - nonempty custom profile remains compatible with existing saved merchants
+  ---
+  duration_ms: 0.108307
+  ...
+# Subtest: configured flag cannot make a blank name valid
+ok 5 - configured flag cannot make a blank name valid
+  ---
+  duration_ms: 0.125322
+  ...
+# Subtest: all four real text sizing values have increasing, visible sample sizes
+ok 6 - all four real text sizing values have increasing, visible sample sizes
+  ---
+  duration_ms: 0.664114
+  ...
+# Subtest: starter item saves supplied stock and prices, trimmed name and category
+ok 7 - starter item saves supplied stock and prices, trimmed name and category
+  ---
+  duration_ms: 0.177478
+  ...
+# Subtest: blank optional cost/stock are zero, never invented sample stock or prices
+ok 8 - blank optional cost/stock are zero, never invented sample stock or prices
+  ---
+  duration_ms: 0.204828
+  ...
+# Subtest: starter service does not fabricate physical stock
+ok 9 - starter service does not fabricate physical stock
+  ---
+  duration_ms: 0.221911
+  ...
+# Subtest: starter items have unique inventory IDs
+ok 10 - starter items have unique inventory IDs
+  ---
+  duration_ms: 2.303059
+  ...
+# Subtest: starter validation rejects name="  "
+ok 11 - starter validation rejects name="  "
+  ---
+  duration_ms: 0.393436
+  ...
+# Subtest: starter validation rejects sellingPrice=""
+ok 12 - starter validation rejects sellingPrice=""
+  ---
+  duration_ms: 0.110233
+  ...
+# Subtest: starter validation rejects sellingPrice="-1"
+ok 13 - starter validation rejects sellingPrice="-1"
+  ---
+  duration_ms: 0.093054
+  ...
+# Subtest: starter validation rejects costPrice="-1"
+ok 14 - starter validation rejects costPrice="-1"
+  ---
+  duration_ms: 0.149405
+  ...
+# Subtest: starter validation rejects sellingPrice="Infinity"
+ok 15 - starter validation rejects sellingPrice="Infinity"
+  ---
+  duration_ms: 0.102726
+  ...
+# Subtest: starter validation rejects sellingPrice="NaN"
+ok 16 - starter validation rejects sellingPrice="NaN"
+  ---
+  duration_ms: 0.146794
+  ...
+# Subtest: starter validation rejects sellingPrice="1e308"
+ok 17 - starter validation rejects sellingPrice="1e308"
+  ---
+  duration_ms: 0.108789
+  ...
+# Subtest: starter validation rejects stock="-1"
+ok 18 - starter validation rejects stock="-1"
+  ---
+  duration_ms: 0.255815
+  ...
+# Subtest: starter validation rejects stock="1.5"
+ok 19 - starter validation rejects stock="1.5"
+  ---
+  duration_ms: 0.117031
+  ...
+# Subtest: starter validation rejects stock="9007199254740992"
+ok 20 - starter validation rejects stock="9007199254740992"
+  ---
+  duration_ms: 0.139397
+  ...
+# Subtest: setup progress restores stage, saved IDs and unsaved company draft
+ok 21 - setup progress restores stage, saved IDs and unsaved company draft
+  ---
+  duration_ms: 0.400947
+  ...
+# Subtest: corrupt or old setup progress fails safely
+ok 22 - corrupt or old setup progress fails safely
+  ---
+  duration_ms: 0.208708
+  ...
+# Subtest: storage quota failure is reported, not thrown
+ok 23 - storage quota failure is reported, not thrown
+  ---
+  duration_ms: 0.128992
+  ...
+# Subtest: business page uses merchant identity and the actual saved inventory array
+ok 24 - business page uses merchant identity and the actual saved inventory array
+  ---
+  duration_ms: 0.121666
+  ...
+# Subtest: empty business catalog and reviews stay empty
+ok 25 - empty business catalog and reviews stay empty
+  ---
+  duration_ms: 0.119486
+  ...
+# Subtest: public CODE76 site ignores merchant brand and inventory
+ok 26 - public CODE76 site ignores merchant brand and inventory
+  ---
+  duration_ms: 0.239683
+  ...
+# Subtest: public CODE76 content is frozen against accidental mutation
+ok 27 - public CODE76 content is frozen against accidental mutation
+  ---
+  duration_ms: 0.095507
+  ...
+# Subtest: new business page defaults contain no CODE76 offers or social handles
+ok 28 - new business page defaults contain no CODE76 offers or social handles
+  ---
+  duration_ms: 0.190193
+  ...
+# Subtest: one-time migration removes unchanged legacy CODE76 copy
+ok 29 - one-time migration removes unchanged legacy CODE76 copy
+  ---
+  duration_ms: 0.167299
+  ...
+# Subtest: migration preserves custom merchant text, controls and contacts
+ok 30 - migration preserves custom merchant text, controls and contacts
+  ---
+  duration_ms: 0.126556
+  ...
+# Subtest: versioned settings are not repeatedly cleaned if merchant intentionally uses a legacy phrase
+ok 31 - versioned settings are not repeatedly cleaned if merchant intentionally uses a legacy phrase
+  ---
+  duration_ms: 0.100711
+  ...
+# Subtest: old partial settings acquire missing defaults without losing selected theme
+ok 32 - old partial settings acquire missing defaults without losing selected theme
+  ---
+  duration_ms: 0.242452
+  ...
+# Subtest: public marketing configuration has no import dependency on merchant page defaults
+ok 33 - public marketing configuration has no import dependency on merchant page defaults
+  ---
+  duration_ms: 0.434463
+  ...
+# Subtest: storefront query opens the business page without a POS login
+ok 34 - storefront query opens the business page without a POS login
+  ---
+  duration_ms: 0.223875
+  ...
+# Subtest: CODE76 query always selects the product site
+ok 35 - CODE76 query always selects the product site
+  ---
+  duration_ms: 0.14874
+  ...
+# Subtest: invalid routes fall back safely
+ok 36 - invalid routes fall back safely
+  ---
+  duration_ms: 0.101654
+  ...
+# Subtest: page links preserve deployment paths, select the correct view and clear old anchors
+ok 37 - page links preserve deployment paths, select the correct view and clear old anchors
+  ---
+  duration_ms: 0.421496
+  ...
+# Subtest: business chat excludes cost prices, tax IDs and non-public reviews
+ok 38 - business chat excludes cost prices, tax IDs and non-public reviews
+  ---
+  duration_ms: 0.245969
+  ...
+# Subtest: CODE76 chat cannot consume merchant records
+ok 39 - CODE76 chat cannot consume merchant records
+  ---
+  duration_ms: 0.31095
+  ...
+# Subtest: business fallback quotes actual merchandise and merchant currency
+ok 40 - business fallback quotes actual merchandise and merchant currency
+  ---
+  duration_ms: 0.874679
+  ...
+# Subtest: empty business assistant invents no equipment
+ok 41 - empty business assistant invents no equipment
+  ---
+  duration_ms: 0.311189
+  ...
+# Subtest: business assistant never confirms a reservation or appointment
+ok 42 - business assistant never confirms a reservation or appointment
+  ---
+  duration_ms: 0.156856
+  ...
+# Subtest: out-of-stock business merchandise is honestly labelled
+ok 43 - out-of-stock business merchandise is honestly labelled
+  ---
+  duration_ms: 0.253337
+  ...
+# Subtest: public leads and metrics have their own storage key
+ok 44 - public leads and metrics have their own storage key
+  ---
+  duration_ms: 0.142388
+  ...
+# Subtest: public landing page reads only auth/navigation from POS context
+ok 45 - public landing page reads only auth/navigation from POS context
+  ---
+  duration_ms: 0.770476
+  ...
+# Subtest: business page has no implicit INITIAL_* demo fallback or fixed 4.9 rating
+ok 46 - business page has no implicit INITIAL_* demo fallback or fixed 4.9 rating
+  ---
+  duration_ms: 0.396729
+  ...
+# Subtest: both chatbot callers explicitly identify their page surface
+ok 47 - both chatbot callers explicitly identify their page surface
+  ---
+  duration_ms: 0.788125
+  ...
+# Subtest: payment action is One payment and split removal uses a labelled trash icon
+ok 48 - payment action is One payment and split removal uses a labelled trash icon
+  ---
+  duration_ms: 2.254841
+  ...
+# Subtest: wizard includes real settings/help/manual icons and enforces starter cap
+ok 49 - wizard includes real settings/help/manual icons and enforces starter cap
+  ---
+  duration_ms: 0.360766
+  ...
+# Subtest: theme state is derived from persisted Settings rather than divergent local state
+ok 50 - theme state is derived from persisted Settings rather than divergent local state
+  ---
+  duration_ms: 0.248615
+  ...
+# Subtest: POS font preferences are scoped away from both landing pages
+ok 51 - POS font preferences are scoped away from both landing pages
+  ---
+  duration_ms: 0.228168
+  ...
+# Subtest: calculateLineItemTotal applies percentage discount correctly
+ok 52 - calculateLineItemTotal applies percentage discount correctly
+  ---
+  duration_ms: 0.870521
+  ...
+# Subtest: calculateLineItemTotal applies fixed discount correctly
+ok 53 - calculateLineItemTotal applies fixed discount correctly
+  ---
+  duration_ms: 0.170455
+  ...
+# Subtest: calculateCartTotals computes subtotal, extra charges and taxes
+ok 54 - calculateCartTotals computes subtotal, extra charges and taxes
+  ---
+  duration_ms: 0.566299
+  ...
+# Subtest: calculatePaymentsAndDebt tracks remaining debt and change due
+ok 55 - calculatePaymentsAndDebt tracks remaining debt and change due
+  ---
+  duration_ms: 0.212663
+  ...
+# Subtest: calculateFinancialHealth evaluates P&L, COGS, and profit margin
+ok 56 - calculateFinancialHealth evaluates P&L, COGS, and profit margin
+  ---
+  duration_ms: 0.404711
+  ...
+# Subtest: calculateProductProfitMargin detects profit, break-even, and selling at a loss
+ok 57 - calculateProductProfitMargin detects profit, break-even, and selling at a loss
+  ---
+  duration_ms: 0.204895
+  ...
+# Subtest: generateUniqueInventoryId generates unique read-only IDs without colliding
+ok 58 - generateUniqueInventoryId generates unique read-only IDs without colliding
+  ---
+  duration_ms: 0.226289
+  ...
+1..58
+# tests 58
+# suites 0
+# pass 58
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 507.384213

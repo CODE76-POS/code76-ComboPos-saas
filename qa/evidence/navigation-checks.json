@@ -1,0 +1,212 @@
+[
+  {
+    "platform": "Sales History",
+    "passed": true,
+    "headings": [
+      [
+        "Sales History & Debt Platform",
+        "1"
+      ]
+    ]
+  },
+  {
+    "platform": "Inventory",
+    "passed": true,
+    "headings": [
+      [
+        "Products & Commercial Services Inventory",
+        "1"
+      ]
+    ]
+  },
+  {
+    "platform": "Expenses",
+    "passed": true,
+    "headings": [
+      [
+        "Expenses Platform",
+        "1"
+      ]
+    ]
+  },
+  {
+    "platform": "Invoices",
+    "passed": true,
+    "headings": [
+      [
+        "Invoices Platform",
+        "1"
+      ]
+    ]
+  },
+  {
+    "platform": "Analytics & P&L",
+    "passed": true,
+    "headings": [
+      [
+        "Executive Analytics & Interactive Infographics",
+        "1"
+      ],
+      [
+        "Interactive Answers to Your Core Business & Landing Questions",
+        "2"
+      ],
+      [
+        "Profit & Loss Verdict: Operating in a Deficit",
+        "3"
+      ]
+    ]
+  },
+  {
+    "platform": "Customers",
+    "passed": true,
+    "headings": [
+      [
+        "Customers Directory",
+        "1"
+      ]
+    ]
+  },
+  {
+    "platform": "Vendors",
+    "passed": true,
+    "headings": [
+      [
+        "Vendors & Hardware Suppliers",
+        "1"
+      ]
+    ]
+  },
+  {
+    "platform": "Transporters",
+    "passed": true,
+    "headings": [
+      [
+        "Transporters & Freight Logistics",
+        "1"
+      ]
+    ]
+  },
+  {
+    "platform": "Marketing Team",
+    "passed": true,
+    "headings": [
+      [
+        "Marketing & Growth Team",
+        "1"
+      ]
+    ]
+  },
+  {
+    "platform": "Company Members",
+    "passed": true,
+    "headings": [
+      [
+        "Company Members & Staff Directory",
+        "1"
+      ]
+    ]
+  },
+  {
+    "platform": "My Company",
+    "passed": true,
+    "headings": [
+      [
+        "My Company Profile",
+        "1"
+      ],
+      [
+        "CODE76 ENTERPRISE SOLUTIONS",
+        "3"
+      ]
+    ]
+  },
+  {
+    "platform": "Messaging",
+    "passed": true,
+    "headings": [
+      [
+        "Messaging & Communications",
+        "1"
+      ],
+      [
+        "Compose Message",
+        "2"
+      ],
+      [
+        "Recent Dispatch Log",
+        "3"
+      ]
+    ]
+  },
+  {
+    "platform": "Business Landing Page",
+    "passed": true,
+    "headings": [
+      [
+        "Transform Every Retail & Service Transaction into Predictable Profit",
+        "1"
+      ],
+      [
+        "Featured Equipment & Solutions",
+        "2"
+      ],
+      [
+        "CODE76 Touch POS Terminal 15.6\\\"",
+        "3"
+      ]
+    ]
+  },
+  {
+    "platform": "Settings",
+    "passed": true,
+    "headings": [
+      [
+        "System Settings Platform",
+        "1"
+      ],
+      [
+        "Payments & Checkout Settings",
+        "3"
+      ]
+    ]
+  },
+  {
+    "platform": "Audit & Access Logs",
+    "passed": true,
+    "headings": [
+      [
+        "User Access History & Security Audit Logs",
+        "1"
+      ]
+    ]
+  },
+  {
+    "platform": "About & Manual",
+    "passed": true,
+    "headings": [
+      [
+        "About CODE76 POS & Manual",
+        "1"
+      ],
+      [
+        "Complete Application User Manual",
+        "3"
+      ]
+    ]
+  },
+  {
+    "platform": "Sales POS",
+    "passed": true,
+    "headings": [
+      [
+        "Sales POS Terminal",
+        "1"
+      ],
+      [
+        "Active Cart (0 items)",
+        "3"
+      ]
+    ]
+  }
+]

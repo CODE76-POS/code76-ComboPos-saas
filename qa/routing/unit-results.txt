@@ -1,0 +1,610 @@
+TAP version 13
+# Subtest: empty onboarding profile contains no CODE76 identity, contacts or tax registration
+ok 1 - empty onboarding profile contains no CODE76 identity, contacts or tax registration
+  ---
+  duration_ms: 0.918326
+  ...
+# Subtest: untouched CODE76 demo profile is not an actual merchant profile
+ok 2 - untouched CODE76 demo profile is not an actual merchant profile
+  ---
+  duration_ms: 0.151868
+  ...
+# Subtest: merchant can deliberately configure a company with the CODE76 name
+ok 3 - merchant can deliberately configure a company with the CODE76 name
+  ---
+  duration_ms: 0.21927
+  ...
+# Subtest: nonempty custom profile remains compatible with existing saved merchants
+ok 4 - nonempty custom profile remains compatible with existing saved merchants
+  ---
+  duration_ms: 0.123512
+  ...
+# Subtest: configured flag cannot make a blank name valid
+ok 5 - configured flag cannot make a blank name valid
+  ---
+  duration_ms: 0.129927
+  ...
+# Subtest: all four real text sizing values have increasing, visible sample sizes
+ok 6 - all four real text sizing values have increasing, visible sample sizes
+  ---
+  duration_ms: 0.746526
+  ...
+# Subtest: starter item saves supplied stock and prices, trimmed name and category
+ok 7 - starter item saves supplied stock and prices, trimmed name and category
+  ---
+  duration_ms: 0.198419
+  ...
+# Subtest: blank optional cost/stock are zero, never invented sample stock or prices
+ok 8 - blank optional cost/stock are zero, never invented sample stock or prices
+  ---
+  duration_ms: 0.150429
+  ...
+# Subtest: starter service does not fabricate physical stock
+ok 9 - starter service does not fabricate physical stock
+  ---
+  duration_ms: 0.245772
+  ...
+# Subtest: starter items have unique inventory IDs
+ok 10 - starter items have unique inventory IDs
+  ---
+  duration_ms: 0.915442
+  ...
+# Subtest: starter validation rejects name="  "
+ok 11 - starter validation rejects name="  "
+  ---
+  duration_ms: 0.276648
+  ...
+# Subtest: starter validation rejects sellingPrice=""
+ok 12 - starter validation rejects sellingPrice=""
+  ---
+  duration_ms: 0.109048
+  ...
+# Subtest: starter validation rejects sellingPrice="-1"
+ok 13 - starter validation rejects sellingPrice="-1"
+  ---
+  duration_ms: 0.09773
+  ...
+# Subtest: starter validation rejects costPrice="-1"
+ok 14 - starter validation rejects costPrice="-1"
+  ---
+  duration_ms: 0.196753
+  ...
+# Subtest: starter validation rejects sellingPrice="Infinity"
+ok 15 - starter validation rejects sellingPrice="Infinity"
+  ---
+  duration_ms: 0.195616
+  ...
+# Subtest: starter validation rejects sellingPrice="NaN"
+ok 16 - starter validation rejects sellingPrice="NaN"
+  ---
+  duration_ms: 0.12453
+  ...
+# Subtest: starter validation rejects sellingPrice="1e308"
+ok 17 - starter validation rejects sellingPrice="1e308"
+  ---
+  duration_ms: 0.102617
+  ...
+# Subtest: starter validation rejects stock="-1"
+ok 18 - starter validation rejects stock="-1"
+  ---
+  duration_ms: 0.259198
+  ...
+# Subtest: starter validation rejects stock="1.5"
+ok 19 - starter validation rejects stock="1.5"
+  ---
+  duration_ms: 0.169184
+  ...
+# Subtest: starter validation rejects stock="9007199254740992"
+ok 20 - starter validation rejects stock="9007199254740992"
+  ---
+  duration_ms: 0.154968
+  ...
+# Subtest: setup progress restores stage, saved IDs and unsaved company draft
+ok 21 - setup progress restores stage, saved IDs and unsaved company draft
+  ---
+  duration_ms: 0.358706
+  ...
+# Subtest: corrupt or old setup progress fails safely
+ok 22 - corrupt or old setup progress fails safely
+  ---
+  duration_ms: 0.21471
+  ...
+# Subtest: storage quota failure is reported, not thrown
+ok 23 - storage quota failure is reported, not thrown
+  ---
+  duration_ms: 0.183403
+  ...
+# Subtest: business page uses merchant identity and the actual saved inventory array
+ok 24 - business page uses merchant identity and the actual saved inventory array
+  ---
+  duration_ms: 0.139141
+  ...
+# Subtest: empty business catalog and reviews stay empty
+ok 25 - empty business catalog and reviews stay empty
+  ---
+  duration_ms: 0.120788
+  ...
+# Subtest: public CODE76 site ignores merchant brand and inventory
+ok 26 - public CODE76 site ignores merchant brand and inventory
+  ---
+  duration_ms: 0.137067
+  ...
+# Subtest: public CODE76 content is frozen against accidental mutation
+ok 27 - public CODE76 content is frozen against accidental mutation
+  ---
+  duration_ms: 0.093478
+  ...
+# Subtest: new business page defaults contain no CODE76 offers or social handles
+ok 28 - new business page defaults contain no CODE76 offers or social handles
+  ---
+  duration_ms: 0.177794
+  ...
+# Subtest: one-time migration removes unchanged legacy CODE76 copy
+ok 29 - one-time migration removes unchanged legacy CODE76 copy
+  ---
+  duration_ms: 0.227246
+  ...
+# Subtest: migration preserves custom merchant text, controls and contacts
+ok 30 - migration preserves custom merchant text, controls and contacts
+  ---
+  duration_ms: 0.143286
+  ...
+# Subtest: versioned settings are not repeatedly cleaned if merchant intentionally uses a legacy phrase
+ok 31 - versioned settings are not repeatedly cleaned if merchant intentionally uses a legacy phrase
+  ---
+  duration_ms: 0.109041
+  ...
+# Subtest: old partial settings acquire missing defaults without losing selected theme
+ok 32 - old partial settings acquire missing defaults without losing selected theme
+  ---
+  duration_ms: 0.202969
+  ...
+# Subtest: public marketing configuration has no import dependency on merchant page defaults
+ok 33 - public marketing configuration has no import dependency on merchant page defaults
+  ---
+  duration_ms: 0.570361
+  ...
+# Subtest: legacy storefront query cannot select an anonymous business page
+ok 34 - legacy storefront query cannot select an anonymous business page
+  ---
+  duration_ms: 0.249118
+  ...
+# Subtest: base URL always selects the CODE76 product site, including for signed-in users
+ok 35 - base URL always selects the CODE76 product site, including for signed-in users
+  ---
+  duration_ms: 0.154834
+  ...
+# Subtest: invalid routes and unauthenticated POS requests safely show the public site
+ok 36 - invalid routes and unauthenticated POS requests safely show the public site
+  ---
+  duration_ms: 0.117521
+  ...
+# Subtest: private page links preserve deployment paths and unrelated parameters using hash routing
+ok 37 - private page links preserve deployment paths and unrelated parameters using hash routing
+  ---
+  duration_ms: 0.611357
+  ...
+# Subtest: business chat excludes cost prices, tax IDs and non-public reviews
+ok 38 - business chat excludes cost prices, tax IDs and non-public reviews
+  ---
+  duration_ms: 1.984579
+  ...
+# Subtest: CODE76 chat cannot consume merchant records
+ok 39 - CODE76 chat cannot consume merchant records
+  ---
+  duration_ms: 0.272679
+  ...
+# Subtest: business fallback quotes actual merchandise and merchant currency
+ok 40 - business fallback quotes actual merchandise and merchant currency
+  ---
+  duration_ms: 0.89895
+  ...
+# Subtest: empty business assistant invents no equipment
+ok 41 - empty business assistant invents no equipment
+  ---
+  duration_ms: 0.347164
+  ...
+# Subtest: business assistant never confirms a reservation or appointment
+ok 42 - business assistant never confirms a reservation or appointment
+  ---
+  duration_ms: 0.151765
+  ...
+# Subtest: out-of-stock business merchandise is honestly labelled
+ok 43 - out-of-stock business merchandise is honestly labelled
+  ---
+  duration_ms: 3.49716
+  ...
+# Subtest: public leads and metrics have their own storage key
+ok 44 - public leads and metrics have their own storage key
+  ---
+  duration_ms: 0.295668
+  ...
+# Subtest: public landing page reads only auth/navigation from POS context
+ok 45 - public landing page reads only auth/navigation from POS context
+  ---
+  duration_ms: 0.838204
+  ...
+# Subtest: business page has no implicit INITIAL_* demo fallback or fixed 4.9 rating
+ok 46 - business page has no implicit INITIAL_* demo fallback or fixed 4.9 rating
+  ---
+  duration_ms: 0.370675
+  ...
+# Subtest: both chatbot callers explicitly identify their page surface
+ok 47 - both chatbot callers explicitly identify their page surface
+  ---
+  duration_ms: 0.763483
+  ...
+# Subtest: payment action is One payment and split removal uses a labelled trash icon
+ok 48 - payment action is One payment and split removal uses a labelled trash icon
+  ---
+  duration_ms: 0.299806
+  ...
+# Subtest: wizard includes real settings/help/manual icons and enforces starter cap
+ok 49 - wizard includes real settings/help/manual icons and enforces starter cap
+  ---
+  duration_ms: 0.308034
+  ...
+# Subtest: theme state is derived from persisted Settings rather than divergent local state
+ok 50 - theme state is derived from persisted Settings rather than divergent local state
+  ---
+  duration_ms: 0.246715
+  ...
+# Subtest: POS font preferences are scoped away from both landing pages
+ok 51 - POS font preferences are scoped away from both landing pages
+  ---
+  duration_ms: 0.209771
+  ...
+# Subtest: base URL stays public with authenticated=false
+ok 52 - base URL stays public with authenticated=false
+  ---
+  duration_ms: 1.666552
+  ...
+# Subtest: base URL stays public with authenticated=true
+ok 53 - base URL stays public with authenticated=true
+  ---
+  duration_ms: 0.176388
+  ...
+# Subtest: public marketing anchor \#about never opens a merchant screen
+ok 54 - public marketing anchor \#about never opens a merchant screen
+  ---
+  duration_ms: 0.138987
+  ...
+# Subtest: public marketing anchor \#features never opens a merchant screen
+ok 55 - public marketing anchor \#features never opens a merchant screen
+  ---
+  duration_ms: 0.10356
+  ...
+# Subtest: public marketing anchor \#portal-access never opens a merchant screen
+ok 56 - public marketing anchor \#portal-access never opens a merchant screen
+  ---
+  duration_ms: 0.160062
+  ...
+# Subtest: public marketing anchor \#contact never opens a merchant screen
+ok 57 - public marketing anchor \#contact never opens a merchant screen
+  ---
+  duration_ms: 0.090064
+  ...
+# Subtest: public marketing anchor \#reviews never opens a merchant screen
+ok 58 - public marketing anchor \#reviews never opens a merchant screen
+  ---
+  duration_ms: 0.086387
+  ...
+# Subtest: public marketing anchor \#/ never opens a merchant screen
+ok 59 - public marketing anchor \#/ never opens a merchant screen
+  ---
+  duration_ms: 0.101735
+  ...
+# Subtest: /selling: explicit internal route, round trip and authentication guard
+ok 60 - /selling: explicit internal route, round trip and authentication guard
+  ---
+  duration_ms: 0.611373
+  ...
+# Subtest: /sales_history: explicit internal route, round trip and authentication guard
+ok 61 - /sales_history: explicit internal route, round trip and authentication guard
+  ---
+  duration_ms: 0.356156
+  ...
+# Subtest: /inventory: explicit internal route, round trip and authentication guard
+ok 62 - /inventory: explicit internal route, round trip and authentication guard
+  ---
+  duration_ms: 0.218242
+  ...
+# Subtest: /expenses: explicit internal route, round trip and authentication guard
+ok 63 - /expenses: explicit internal route, round trip and authentication guard
+  ---
+  duration_ms: 1.22437
+  ...
+# Subtest: /invoices: explicit internal route, round trip and authentication guard
+ok 64 - /invoices: explicit internal route, round trip and authentication guard
+  ---
+  duration_ms: 0.223781
+  ...
+# Subtest: /analytics: explicit internal route, round trip and authentication guard
+ok 65 - /analytics: explicit internal route, round trip and authentication guard
+  ---
+  duration_ms: 0.236307
+  ...
+# Subtest: /customers: explicit internal route, round trip and authentication guard
+ok 66 - /customers: explicit internal route, round trip and authentication guard
+  ---
+  duration_ms: 0.130814
+  ...
+# Subtest: /vendors: explicit internal route, round trip and authentication guard
+ok 67 - /vendors: explicit internal route, round trip and authentication guard
+  ---
+  duration_ms: 0.14815
+  ...
+# Subtest: /transporters: explicit internal route, round trip and authentication guard
+ok 68 - /transporters: explicit internal route, round trip and authentication guard
+  ---
+  duration_ms: 0.174372
+  ...
+# Subtest: /marketing_team: explicit internal route, round trip and authentication guard
+ok 69 - /marketing_team: explicit internal route, round trip and authentication guard
+  ---
+  duration_ms: 0.350827
+  ...
+# Subtest: /company_members: explicit internal route, round trip and authentication guard
+ok 70 - /company_members: explicit internal route, round trip and authentication guard
+  ---
+  duration_ms: 0.230835
+  ...
+# Subtest: /my_company: explicit internal route, round trip and authentication guard
+ok 71 - /my_company: explicit internal route, round trip and authentication guard
+  ---
+  duration_ms: 0.116706
+  ...
+# Subtest: /messaging: explicit internal route, round trip and authentication guard
+ok 72 - /messaging: explicit internal route, round trip and authentication guard
+  ---
+  duration_ms: 0.101797
+  ...
+# Subtest: /landing_page_builder: explicit internal route, round trip and authentication guard
+ok 73 - /landing_page_builder: explicit internal route, round trip and authentication guard
+  ---
+  duration_ms: 0.106764
+  ...
+# Subtest: /settings: explicit internal route, round trip and authentication guard
+ok 74 - /settings: explicit internal route, round trip and authentication guard
+  ---
+  duration_ms: 0.267147
+  ...
+# Subtest: /audit_logs: explicit internal route, round trip and authentication guard
+ok 75 - /audit_logs: explicit internal route, round trip and authentication guard
+  ---
+  duration_ms: 0.121718
+  ...
+# Subtest: /about: explicit internal route, round trip and authentication guard
+ok 76 - /about: explicit internal route, round trip and authentication guard
+  ---
+  duration_ms: 0.114033
+  ...
+# Subtest: invalid or obsolete route \#/storefront is public only
+ok 77 - invalid or obsolete route \#/storefront is public only
+  ---
+  duration_ms: 0.133952
+  ...
+# Subtest: invalid or obsolete route \#storefront is public only
+ok 78 - invalid or obsolete route \#storefront is public only
+  ---
+  duration_ms: 0.072717
+  ...
+# Subtest: invalid or obsolete route \#/landing_page_builder is public only
+ok 79 - invalid or obsolete route \#/landing_page_builder is public only
+  ---
+  duration_ms: 0.086209
+  ...
+# Subtest: invalid or obsolete route \#/pos/storefront is public only
+ok 80 - invalid or obsolete route \#/pos/storefront is public only
+  ---
+  duration_ms: 0.097947
+  ...
+# Subtest: invalid or obsolete route \#/pos/landing_page_builder/extra is public only
+ok 81 - invalid or obsolete route \#/pos/landing_page_builder/extra is public only
+  ---
+  duration_ms: 0.077513
+  ...
+# Subtest: invalid or obsolete route \#//pos/settings is public only
+ok 82 - invalid or obsolete route \#//pos/settings is public only
+  ---
+  duration_ms: 0.069113
+  ...
+# Subtest: invalid or obsolete route \#/POS/settings is public only
+ok 83 - invalid or obsolete route \#/POS/settings is public only
+  ---
+  duration_ms: 0.071325
+  ...
+# Subtest: invalid or obsolete route \#/pos/%6canding_page_builder is public only
+ok 84 - invalid or obsolete route \#/pos/%6canding_page_builder is public only
+  ---
+  duration_ms: 0.122489
+  ...
+# Subtest: legacy query links cannot open a standalone merchant page, even with an authenticated user
+ok 85 - legacy query links cannot open a standalone merchant page, even with an authenticated user
+  ---
+  duration_ms: 0.197205
+  ...
+# Subtest: return-to-site URL removes both the private hash and the obsolete view parameter
+ok 86 - return-to-site URL removes both the private hash and the obsolete view parameter
+  ---
+  duration_ms: 0.318945
+  ...
+# Subtest: internal builder is the only business-page JSX entry and has the shared workspace guard
+ok 87 - internal builder is the only business-page JSX entry and has the shared workspace guard
+  ---
+  duration_ms: 0.451824
+  ...
+# Subtest: merchant component checks auth again and cannot count anonymous visits
+ok 88 - merchant component checks auth again and cannot count anonymous visits
+  ---
+  duration_ms: 0.484134
+  ...
+# Subtest: all eight merchant section links scroll without overwriting the private hash route
+ok 89 - all eight merchant section links scroll without overwriting the private hash route
+  ---
+  duration_ms: 0.448103
+  ...
+# Subtest: public page has metadata and no guest merchant launch controls
+ok 90 - public page has metadata and no guest merchant launch controls
+  ---
+  duration_ms: 0.77762
+  ...
+# Subtest: router listens to hash and browser history; saved merchant records are not authentication
+ok 91 - router listens to hash and browser history; saved merchant records are not authentication
+  ---
+  duration_ms: 0.260509
+  ...
+# Subtest: canonical normalization: https://shop.example.com/?utm_source=test\#/pos/landing_page_builder
+ok 92 - canonical normalization: https://shop.example.com/?utm_source=test\#/pos/landing_page_builder
+  ---
+  duration_ms: 0.283644
+  ...
+# Subtest: canonical normalization: https://shop.example.com/index.html
+ok 93 - canonical normalization: https://shop.example.com/index.html
+  ---
+  duration_ms: 0.134439
+  ...
+# Subtest: canonical normalization: https://shop.example.com/private/page
+ok 94 - canonical normalization: https://shop.example.com/private/page
+  ---
+  duration_ms: 0.085389
+  ...
+# Subtest: invalid canonical rejected: undefined
+ok 95 - invalid canonical rejected: undefined
+  ---
+  duration_ms: 0.108297
+  ...
+# Subtest: invalid canonical rejected: MY_APP_URL
+ok 96 - invalid canonical rejected: MY_APP_URL
+  ---
+  duration_ms: 0.115351
+  ...
+# Subtest: invalid canonical rejected: /
+ok 97 - invalid canonical rejected: /
+  ---
+  duration_ms: 0.105869
+  ...
+# Subtest: invalid canonical rejected: javascript:alert(1)
+ok 98 - invalid canonical rejected: javascript:alert(1)
+  ---
+  duration_ms: 0.078289
+  ...
+# Subtest: invalid canonical rejected: file:///etc/passwd
+ok 99 - invalid canonical rejected: file:///etc/passwd
+  ---
+  duration_ms: 0.089418
+  ...
+# Subtest: invalid canonical rejected: https://user:secret@shop.example.com/
+ok 100 - invalid canonical rejected: https://user:secret@shop.example.com/
+  ---
+  duration_ms: 0.080005
+  ...
+# Subtest: local or workspace preview is noindex: http://localhost:3000/
+ok 101 - local or workspace preview is noindex: http://localhost:3000/
+  ---
+  duration_ms: 0.187264
+  ...
+# Subtest: local or workspace preview is noindex: http://127.0.0.1:3000/
+ok 102 - local or workspace preview is noindex: http://127.0.0.1:3000/
+  ---
+  duration_ms: 0.791907
+  ...
+# Subtest: local or workspace preview is noindex: http://[::1]:3000/
+ok 103 - local or workspace preview is noindex: http://[::1]:3000/
+  ---
+  duration_ms: 0.165523
+  ...
+# Subtest: local or workspace preview is noindex: https://3000-workspace.e2b.app/
+ok 104 - local or workspace preview is noindex: https://3000-workspace.e2b.app/
+  ---
+  duration_ms: 0.093516
+  ...
+# Subtest: production site may be indexed, but explicit staging opt-out wins
+ok 105 - production site may be indexed, but explicit staging opt-out wins
+  ---
+  duration_ms: 0.221102
+  ...
+# Subtest: proxy-aware fallback never guesses a production domain
+ok 106 - proxy-aware fallback never guesses a production domain
+  ---
+  duration_ms: 0.39103
+  ...
+# Subtest: invalid host headers cannot inject markup or credentials into SEO metadata
+ok 107 - invalid host headers cannot inject markup or credentials into SEO metadata
+  ---
+  duration_ms: 1.058675
+  ...
+# Subtest: public head has one canonical, aligned title/description/social tags and correct robots
+ok 108 - public head has one canonical, aligned title/description/social tags and correct robots
+  ---
+  duration_ms: 0.774517
+  ...
+# Subtest: workspace/staging metadata is noindex and never canonicalizes a private route
+ok 109 - workspace/staging metadata is noindex and never canonicalizes a private route
+  ---
+  duration_ms: 0.179231
+  ...
+# Subtest: structured data describes the actual web app without invented pricing or native-platform claims
+ok 110 - structured data describes the actual web app without invented pricing or native-platform claims
+  ---
+  duration_ms: 0.304558
+  ...
+# Subtest: sharing image is a real local 1200 by 630 PNG, not an external image dependency
+ok 111 - sharing image is a real local 1200 by 630 PNG, not an external image dependency
+  ---
+  duration_ms: 0.5944
+  ...
+# Subtest: SEO renderer escapes attributes and rejects an unmarked template
+ok 112 - SEO renderer escapes attributes and rejects an unmarked template
+  ---
+  duration_ms: 0.453498
+  ...
+# Subtest: root and index have explicit HTTP handlers, API misses are not swallowed, preview host is allowed
+ok 113 - root and index have explicit HTTP handlers, API misses are not swallowed, preview host is allowed
+  ---
+  duration_ms: 0.37806
+  ...
+# Subtest: calculateLineItemTotal applies percentage discount correctly
+ok 114 - calculateLineItemTotal applies percentage discount correctly
+  ---
+  duration_ms: 0.946797
+  ...
+# Subtest: calculateLineItemTotal applies fixed discount correctly
+ok 115 - calculateLineItemTotal applies fixed discount correctly
+  ---
+  duration_ms: 0.179769
+  ...
+# Subtest: calculateCartTotals computes subtotal, extra charges and taxes
+ok 116 - calculateCartTotals computes subtotal, extra charges and taxes
+  ---
+  duration_ms: 0.567569
+  ...
+# Subtest: calculatePaymentsAndDebt tracks remaining debt and change due
+ok 117 - calculatePaymentsAndDebt tracks remaining debt and change due
+  ---
+  duration_ms: 0.207649
+  ...
+# Subtest: calculateFinancialHealth evaluates P&L, COGS, and profit margin
+ok 118 - calculateFinancialHealth evaluates P&L, COGS, and profit margin
+  ---
+  duration_ms: 0.372926
+  ...
+# Subtest: calculateProductProfitMargin detects profit, break-even, and selling at a loss
+ok 119 - calculateProductProfitMargin detects profit, break-even, and selling at a loss
+  ---
+  duration_ms: 0.274839
+  ...
+# Subtest: generateUniqueInventoryId generates unique read-only IDs without colliding
+ok 120 - generateUniqueInventoryId generates unique read-only IDs without colliding
+  ---
+  duration_ms: 0.231538
+  ...
+1..120
+# tests 120
+# suites 0
+# pass 120
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 907.502312
