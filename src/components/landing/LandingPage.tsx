@@ -37,6 +37,19 @@ import {
   Monitor,
   Smartphone,
   Send,
+  Shield,
+  FileText,
+  FileSpreadsheet,
+  HardDrive,
+  Eye,
+  History,
+  KeyRound,
+  Download,
+  Upload,
+  FileDown,
+  FileUp,
+  MailCheck,
+  Fingerprint,
 } from 'lucide-react';
 import { AIChatbotWidget } from './AIChatbotWidget.tsx';
 import { SecurityQuestionFields } from '../common/SecurityQuestionFields.tsx';
@@ -279,6 +292,7 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
           sections={[
             { id: 'start', label: 'Overview' },
             { id: 'benefits', label: 'Why Choose CODE76 POS' },
+            { id: 'data-secured', label: 'My Business Data Secured' },
             { id: 'platforms', label: 'Over 15+ Platforms/Features' },
             { id: 'plans', label: 'Plans & Pricing' },
             { id: 'contact', label: 'Contact Sales' },
@@ -307,27 +321,51 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
             </p>
 
             <p className="text-sm sm:text-base text-slate-400 leading-relaxed max-w-2xl">
-              Bring products, services, checkout and business records into one workspace. Start with Free, grow into Pro, or add CODE76 team assistance with Max. See what fits before making a commitment.
+              Bring products, services, checkouts, Data Protection and business records into one workspace. Start with Free, grow into Pro, or add CODE76 team assistance with Max. See what fits before making a commitment.
             </p>
 
-            {/* Core Product Highlights Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-slate-300 pt-1">
-              <div className="flex items-center gap-2 bg-slate-900/80 p-3 rounded-xl border border-slate-800">
-                <Zap className="w-4 h-4 text-teal-400 shrink-0" />
-                <span>Multi-Split Tender: Cash, M-Pesa, Visa/MC &amp; Wire</span>
-              </div>
-              <div className="flex items-center gap-2 bg-slate-900/80 p-3 rounded-xl border border-slate-800">
-                <Database className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>Real-Time Stock Decrement &amp; Reorder Alerts</span>
-              </div>
-              <div className="flex items-center gap-2 bg-slate-900/80 p-3 rounded-xl border border-slate-800">
-                <Users className="w-4 h-4 text-indigo-400 shrink-0" />
-                <span>Dual-Role Staff Management &amp; Granular RBAC</span>
-              </div>
-              <div className="flex items-center gap-2 bg-slate-900/80 p-3 rounded-xl border border-slate-800">
-                <Receipt className="w-4 h-4 text-amber-400 shrink-0" />
-                <span>Thermal ESC/POS 80mm/58mm &amp; Digital Receipts</span>
-              </div>
+            {/* Interactive Questions Grid - Neon Clickable Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+              <a
+                href="#benefits"
+                onClick={(e) => { e.preventDefault(); document.getElementById('benefits')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }}
+                className="group flex items-center gap-3 bg-slate-900/80 p-4 rounded-xl border border-teal-500/30 hover:border-teal-400 hover:shadow-[0_0_18px_rgba(20,184,166,0.45)] hover:bg-slate-900 transition-all cursor-pointer"
+              >
+                <span className="w-9 h-9 rounded-lg bg-teal-500/15 border border-teal-500/30 text-teal-300 flex items-center justify-center shrink-0 group-hover:bg-teal-500/25 group-hover:shadow-[0_0_10px_rgba(20,184,166,0.5)] transition-all">
+                  <HelpCircle className="w-5 h-5" />
+                </span>
+                <span className="text-xs font-bold text-slate-200 group-hover:text-teal-200 group-hover:drop-shadow-[0_0_6px_rgba(20,184,166,0.8)] transition-all">Why Choose CODE76 POS ?</span>
+              </a>
+              <a
+                href="#data-secured"
+                onClick={(e) => { e.preventDefault(); document.getElementById('data-secured')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }}
+                className="group flex items-center gap-3 bg-slate-900/80 p-4 rounded-xl border border-emerald-500/30 hover:border-emerald-400 hover:shadow-[0_0_18px_rgba(16,185,129,0.45)] hover:bg-slate-900 transition-all cursor-pointer"
+              >
+                <span className="w-9 h-9 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 flex items-center justify-center shrink-0 group-hover:bg-emerald-500/25 group-hover:shadow-[0_0_10px_rgba(16,185,129,0.5)] transition-all">
+                  <ShieldCheck className="w-5 h-5" />
+                </span>
+                <span className="text-xs font-bold text-slate-200 group-hover:text-emerald-200 group-hover:drop-shadow-[0_0_6px_rgba(16,185,129,0.8)] transition-all">How Secure is my Business Data with CODE76 POS ?</span>
+              </a>
+              <a
+                href="#platforms"
+                onClick={(e) => { e.preventDefault(); document.getElementById('platforms')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }}
+                className="group flex items-center gap-3 bg-slate-900/80 p-4 rounded-xl border border-cyan-500/30 hover:border-cyan-400 hover:shadow-[0_0_18px_rgba(6,182,212,0.45)] hover:bg-slate-900 transition-all cursor-pointer"
+              >
+                <span className="w-9 h-9 rounded-lg bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 flex items-center justify-center shrink-0 group-hover:bg-cyan-500/25 group-hover:shadow-[0_0_10px_rgba(6,182,212,0.5)] transition-all">
+                  <Database className="w-5 h-5" />
+                </span>
+                <span className="text-xs font-bold text-slate-200 group-hover:text-cyan-200 group-hover:drop-shadow-[0_0_6px_rgba(6,182,212,0.8)] transition-all">What Other Problems &amp; How CODE76 POS platforms/features solves them ?</span>
+              </a>
+              <a
+                href="#plans"
+                onClick={(e) => { e.preventDefault(); document.getElementById('plans')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }}
+                className="group flex items-center gap-3 bg-slate-900/80 p-4 rounded-xl border border-amber-500/30 hover:border-amber-400 hover:shadow-[0_0_18px_rgba(245,158,11,0.45)] hover:bg-slate-900 transition-all cursor-pointer"
+              >
+                <span className="w-9 h-9 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-300 flex items-center justify-center shrink-0 group-hover:bg-amber-500/25 group-hover:shadow-[0_0_10px_rgba(245,158,11,0.5)] transition-all">
+                  <DollarSign className="w-5 h-5" />
+                </span>
+                <span className="text-xs font-bold text-slate-200 group-hover:text-amber-200 group-hover:drop-shadow-[0_0_6px_rgba(245,158,11,0.8)] transition-all">Is CODE76 POS Free ?</span>
+              </a>
             </div>
 
             <div className="flex flex-wrap gap-3 pt-2">
@@ -340,18 +378,6 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
                 className="inline-flex rounded-xl bg-teal-600 px-5 py-3 text-sm font-bold text-white hover:bg-teal-500 shadow-lg shadow-teal-600/30 transition cursor-pointer"
               >
                 Sign In to POS Workspace &rarr;
-              </a>
-              <a
-                href="#benefits"
-                className="inline-flex rounded-xl border border-slate-700 px-5 py-3 text-sm font-bold text-slate-200 hover:bg-slate-900 transition"
-              >
-                Why Choose CODE76 POS
-              </a>
-              <a
-                href="#contact"
-                className="inline-flex rounded-xl border border-teal-900 px-5 py-3 text-sm font-bold text-teal-300 hover:bg-teal-950 transition"
-              >
-                Request Enterprise Demo
               </a>
             </div>
 
@@ -672,10 +698,216 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
               </li>
             </ul>
           </div>
+
+          {/* Benefit 7 - Business Data Security */}
+          <div className="rounded-2xl border border-slate-800 bg-slate-900/90 p-6 hover:border-emerald-500/50 transition shadow-lg flex flex-col">
+            <div className="w-12 h-12 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center mb-4 border border-emerald-500/30">
+              <Shield className="w-6 h-6" />
+            </div>
+            <h3 className="text-lg font-bold text-slate-100 mb-2">Military-Grade Business Data Security</h3>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Your business records never leave secure boundaries. CODE76 POS isolates each workspace, encrypts backups with AES-256, and enforces strict login restrictions and privilege checks so only authorized staff can view or edit sensitive data.
+            </p>
+            <ul className="mt-4 space-y-1.5 text-[11px] text-slate-300 border-t border-slate-800 pt-3 flex-1">
+              <li className="flex items-center gap-1.5">
+                <Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                <span>Login restrictions, session lock &amp; device binding</span>
+              </li>
+              <li className="flex items-center gap-1.5">
+                <Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                <span>Granular privilege enforcement &amp; role approvals</span>
+              </li>
+            </ul>
+            <a href="#data-secured" onClick={(e) => { e.preventDefault(); document.getElementById('data-secured')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} className="mt-4 inline-flex items-center gap-1.5 self-start px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition shadow-md shadow-emerald-600/20 cursor-pointer">
+              Learn more <span aria-hidden>→</span>
+            </a>
+          </div>
+
+          {/* Benefit 8 */}
+          <div className="rounded-2xl border border-slate-800 bg-slate-900/90 p-6 hover:border-teal-500/50 transition shadow-lg flex flex-col">
+            <div className="w-12 h-12 rounded-xl bg-teal-500/20 text-teal-400 flex items-center justify-center mb-4 border border-teal-500/30">
+              <HardDrive className="w-6 h-6" />
+            </div>
+            <h3 className="text-lg font-bold text-slate-100 mb-2">Zero Data Loss &amp; Instant Recovery</h3>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Prevent catastrophic loss from theft, hardware failure or accidental deletion. Automated local and cloud backups, plus PDF &amp; Excel exports, guarantee you can restore your entire business in minutes.
+            </p>
+            <ul className="mt-4 space-y-1.5 text-[11px] text-slate-300 border-t border-slate-800 pt-3 flex-1">
+              <li className="flex items-center gap-1.5">
+                <Check className="w-3.5 h-3.5 text-teal-400 shrink-0" />
+                <span>PDF Data exports &amp; Excel exports/imports</span>
+              </li>
+              <li className="flex items-center gap-1.5">
+                <Check className="w-3.5 h-3.5 text-teal-400 shrink-0" />
+                <span>Automated BackUp operations with one-click restore</span>
+              </li>
+            </ul>
+            <a href="#data-secured" onClick={(e) => { e.preventDefault(); document.getElementById('data-secured')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} className="mt-4 inline-flex items-center gap-1.5 self-start px-4 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold transition shadow-md shadow-teal-600/20 cursor-pointer">
+              Learn more <span aria-hidden>→</span>
+            </a>
+          </div>
+
+          {/* Benefit 9 */}
+          <div className="rounded-2xl border border-slate-800 bg-slate-900/90 p-6 hover:border-amber-500/50 transition shadow-lg flex flex-col">
+            <div className="w-12 h-12 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center mb-4 border border-amber-500/30">
+              <Eye className="w-6 h-6" />
+            </div>
+            <h3 className="text-lg font-bold text-slate-100 mb-2">Full Accountability &amp; Access Intelligence</h3>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Know who did what, when and where. Every login, price change, discount and export is tracked in immutable audit logs with user access login tracking visible only to authorized admins.
+            </p>
+            <ul className="mt-4 space-y-1.5 text-[11px] text-slate-300 border-t border-slate-800 pt-3 flex-1">
+              <li className="flex items-center gap-1.5">
+                <Check className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                <span>User Access Login tracking with device &amp; IP logs</span>
+              </li>
+              <li className="flex items-center gap-1.5">
+                <Check className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                <span>Privileges features &amp; forensic audit history</span>
+              </li>
+            </ul>
+            <a href="#data-secured" onClick={(e) => { e.preventDefault(); document.getElementById('data-secured')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} className="mt-4 inline-flex items-center gap-1.5 self-start px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold transition shadow-md shadow-amber-600/20 cursor-pointer">
+              Learn more <span aria-hidden>→</span>
+            </a>
+          </div>
+
+          {/* Benefit 10 */}
+          <div className="rounded-2xl border border-slate-800 bg-slate-900/90 p-6 hover:border-cyan-500/50 transition shadow-lg flex flex-col">
+            <div className="w-12 h-12 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center mb-4 border border-cyan-500/30">
+              <MailCheck className="w-6 h-6" />
+            </div>
+            <h3 className="text-lg font-bold text-slate-100 mb-2">Emailing Data &amp; Offline-First Resilience</h3>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Keep business moving even offline. Local-first operations store every sale locally then sync in cloud. Email reports, backups and receipts directly to owners and accountants without manual downloads.
+            </p>
+            <ul className="mt-4 space-y-1.5 text-[11px] text-slate-300 border-t border-slate-800 pt-3 flex-1">
+              <li className="flex items-center gap-1.5">
+                <Check className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+                <span>Emailing Data to users &amp; automated report dispatch</span>
+              </li>
+              <li className="flex items-center gap-1.5">
+                <Check className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+                <span>Offline vault with cloud sync &amp; and more recovery tools</span>
+              </li>
+            </ul>
+            <a href="#data-secured" onClick={(e) => { e.preventDefault(); document.getElementById('data-secured')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} className="mt-4 inline-flex items-center gap-1.5 self-start px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold transition shadow-md shadow-cyan-600/20 cursor-pointer">
+              Learn more <span aria-hidden>→</span>
+            </a>
+          </div>
         </div>
       </section>
 
-      {/* 3. OVER 15+ INTEGRATED PLATFORMS SHOWCASE WITH DEEP-DIVE BREAKDOWNS */}
+      {/* 3. MY BUSINESS DATA SECURED - IN-DEPTH DATA PROTECTION */}
+      <section id="data-secured" className="max-w-7xl mx-auto px-4 py-14 scroll-mt-20">
+        <div className="text-center max-w-3xl mx-auto mb-10">
+          <span className="text-xs uppercase font-extrabold tracking-widest text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-3 py-1 rounded-full inline-flex items-center gap-1.5">
+            <ShieldCheck className="w-4 h-4" /> My Business Data Secured
+          </span>
+          <h2 className="mt-3 text-2xl sm:text-4xl font-black text-slate-100 tracking-tight">
+            How CODE76 POS Secures Your Data &amp; Prevents Data Loss
+          </h2>
+          <p className="mt-3 text-sm text-slate-300 leading-relaxed font-medium">
+            Your business is your livelihood — we treat every record like a vault asset. From encrypted local storage to cloud backups, granular privileges and forensic login tracking, CODE76 POS ensures your data is protected, portable, and always recoverable.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* PDF Exports */}
+          <div className="rounded-2xl border border-slate-800 bg-slate-900/90 p-6 hover:border-teal-500/50 transition shadow-lg">
+            <div className="w-12 h-12 rounded-xl bg-teal-500/20 text-teal-400 flex items-center justify-center mb-4 border border-teal-500/30">
+              <FileText className="w-6 h-6" />
+            </div>
+            <h3 className="text-base font-bold text-slate-100 mb-2">PDF Data Exports</h3>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Export any ledger — sales, expenses, invoices, inventory, staff payroll and audit logs — as print-ready PDFs with your company logo, Tax PIN, serial numbers and legal footers. Generate monthly P&amp;L, stock valuation and receipt reprints in one click, and share them offline without needing the app open.
+            </p>
+          </div>
+
+          {/* Excel Exports/Imports */}
+          <div className="rounded-2xl border border-slate-800 bg-slate-900/90 p-6 hover:border-emerald-500/50 transition shadow-lg">
+            <div className="w-12 h-12 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center mb-4 border border-emerald-500/30">
+              <FileSpreadsheet className="w-6 h-6" />
+            </div>
+            <h3 className="text-base font-bold text-slate-100 mb-2">Excel Data Exports and Imports</h3>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Bulk-import thousands of products, customers, suppliers and opening balances from Excel/CSV (.xlsx, .csv) with validation and duplicate detection. Export any table to Excel for accountant reconciliation, pivot analysis or external reporting — then re-import updates without losing audit history. No retyping, no data entry backlog.
+            </p>
+          </div>
+
+          {/* Backup Operations */}
+          <div className="rounded-2xl border border-slate-800 bg-slate-900/90 p-6 hover:border-cyan-500/50 transition shadow-lg">
+            <div className="w-12 h-12 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center mb-4 border border-cyan-500/30">
+              <HardDrive className="w-6 h-6" />
+            </div>
+            <h3 className="text-base font-bold text-slate-100 mb-2">BackUp Operations</h3>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Automated local and encrypted cloud backups run in the background. Create full workspace snapshots containing products, sales, customers and settings. One-click restore brings your entire business back after theft, hard-drive crash or accidental deletion — with SHA-256 checksums verifying integrity before restore.
+            </p>
+          </div>
+
+          {/* Emailing Data */}
+          <div className="rounded-2xl border border-slate-800 bg-slate-900/90 p-6 hover:border-amber-500/50 transition shadow-lg">
+            <div className="w-12 h-12 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center mb-4 border border-amber-500/30">
+              <MailCheck className="w-6 h-6" />
+            </div>
+            <h3 className="text-base font-bold text-slate-100 mb-2">Emailing Data to Users</h3>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Send daily sales summaries, low-stock alerts, backup files, PDF invoices and salary slips directly to owners, managers or accountants via email. Configure automated dispatches or trigger manual sends from any report view — ensuring stakeholders have records even without app access.
+            </p>
+          </div>
+
+          {/* Login Restrictions */}
+          <div className="rounded-2xl border border-slate-800 bg-slate-900/90 p-6 hover:border-rose-500/50 transition shadow-lg">
+            <div className="w-12 h-12 rounded-xl bg-rose-500/20 text-rose-400 flex items-center justify-center mb-4 border border-rose-500/30">
+              <Lock className="w-6 h-6" />
+            </div>
+            <h3 className="text-base font-bold text-slate-100 mb-2">Login Restrictions</h3>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Protect every entry point. Enforce CEO/Admin approval for new devices, session timeouts, protected routes that require sign-in, and isolated business workspaces. Failed logins are flagged, and sensitive operations require re-authentication — stopping unauthorized access even on shared till devices.
+            </p>
+          </div>
+
+          {/* Privileges Features */}
+          <div className="rounded-2xl border border-slate-800 bg-slate-900/90 p-6 hover:border-indigo-500/50 transition shadow-lg">
+            <div className="w-12 h-12 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center mb-4 border border-indigo-500/30">
+              <KeyRound className="w-6 h-6" />
+            </div>
+            <h3 className="text-base font-bold text-slate-100 mb-2">Privileges Features</h3>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Fine-grained RBAC — assign up to 2 roles per member (e.g. Cashier + Inventory Clerk) with granular toggles for price edits, discounts, refunds, payroll, backups and data exports. Only users with explicit permissions see or change critical data, reducing internal fraud and accidental overwrites.
+            </p>
+          </div>
+
+          {/* User Access Login Tracking */}
+          <div className="rounded-2xl border border-slate-800 bg-slate-900/90 p-6 hover:border-sky-500/50 transition shadow-lg">
+            <div className="w-12 h-12 rounded-xl bg-sky-500/20 text-sky-400 flex items-center justify-center mb-4 border border-sky-500/30">
+              <Eye className="w-6 h-6" />
+            </div>
+            <h3 className="text-base font-bold text-slate-100 mb-2">User Access Login Tracking</h3>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Every sign-in, sign-out, failed attempt, stock adjustment, discount override and export is written to an immutable audit log with timestamps, device signatures and user identity. Filter by user, date or action, export logs as PDF/TXT/CSV, and prove compliance during disputes or financial reviews.
+            </p>
+          </div>
+
+          {/* And More */}
+          <div className="rounded-2xl border border-teal-500/40 bg-gradient-to-br from-teal-950/40 via-slate-900/90 to-emerald-950/30 p-6 hover:border-teal-400 transition shadow-lg">
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-teal-600 to-emerald-500 text-white flex items-center justify-center mb-4 shadow-md">
+              <Fingerprint className="w-6 h-6" />
+            </div>
+            <h3 className="text-base font-bold text-slate-100 mb-2">And More — Continuous Protection</h3>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Offline-first vault keeps selling without internet then syncs safely, localStorage isolation per business, configurable retention policies, duplicate-safe idempotent payroll/expense posting, and future-ready encrypted cloud vault — so your business data stays yours, secure and never lost.
+            </p>
+            <ul className="mt-3 space-y-1 text-[11px] text-teal-200/90">
+              <li className="flex items-center gap-1.5"><Check className="w-3 h-3 text-teal-400" /> Offline vault &amp; cloud sync</li>
+              <li className="flex items-center gap-1.5"><Check className="w-3 h-3 text-teal-400" /> Isolated workspaces &amp; retention controls</li>
+              <li className="flex items-center gap-1.5"><Check className="w-3 h-3 text-teal-400" /> Idempotent exports &amp; recovery verification</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* 4. OVER 15+ INTEGRATED PLATFORMS SHOWCASE WITH DEEP-DIVE BREAKDOWNS */}
       <section id="platforms" aria-label="CODE76 platforms and features" className="max-w-7xl mx-auto px-4 py-14 scroll-mt-20">
         <div className="text-center max-w-3xl mx-auto mb-10">
           <span className="text-xs uppercase font-extrabold tracking-widest text-teal-400 bg-teal-500/10 border border-teal-500/30 px-3 py-1 rounded-full">
