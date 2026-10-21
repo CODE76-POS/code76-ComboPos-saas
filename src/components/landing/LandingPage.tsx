@@ -320,9 +320,18 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
               CODE76 POS is an All-in-One Business ToolKit, enterprise-grade Point of Sale and ERP management suite crafted specifically for supermarkets, pharmacies, restaurants, wholesale distributors, and retail businesses. From multi-split checkouts to automated stock deduction and compliance audit trails, we empower businesses with uncompromised speed and transparency.
             </p>
 
-            <p className="text-sm sm:text-base text-slate-400 leading-relaxed max-w-2xl">
-              Bring products, services, checkouts, Data Protection and business records into one workspace. Start with Free, grow into Pro, or add CODE76 team assistance with Max. See what fits before making a commitment.
-            </p>
+            <div className="space-y-3 max-w-2xl text-sm sm:text-base text-slate-400 leading-relaxed">
+              <p>Bring products, services, checkouts, Data Protection and business records into one workspace.</p>
+              <p className="font-semibold text-slate-300">The Best Part about CODE76 POS, you can run business stimulation operation using the built-in Demo Data feature in just 5 super-easy steps right now for free:</p>
+              <ol className="list-decimal list-inside space-y-1.5 text-xs sm:text-sm bg-slate-900/80 border border-slate-800 rounded-xl p-4">
+                <li><span className="font-bold text-teal-300">Step 1:</span> Go to free plan and register an account.</li>
+                <li><span className="font-bold text-teal-300">Step 2:</span> Login — skip setup wizard.</li>
+                <li><span className="font-bold text-teal-300">Step 3:</span> Go to the top side of the navbar menu click <span className="font-mono text-slate-200 bg-slate-800 px-1.5 py-0.5 rounded">Demo Data</span>.</li>
+                <li><span className="font-bold text-teal-300">Step 4:</span> On the Demo Data pop up widget select or tick <span className="italic text-slate-300">" I understand ..."</span> button and finally click <span className="font-bold text-emerald-300">"Load confirmed demo workspace"</span> button.</li>
+              </ol>
+              <p className="text-emerald-300 font-bold text-sm">That's it!!! Now you get some dummy/demo data to practice running a business using CODE76 POS.</p>
+              <p>Start with Free, grow into Pro, or add CODE76 team assistance with Max. See what fits before making a commitment.</p>
+            </div>
 
             {/* Interactive Questions Grid - Neon Clickable Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
