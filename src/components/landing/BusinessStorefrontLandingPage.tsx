@@ -39,10 +39,23 @@ import {
   Tag,
   Check,
   Building,
+  Building2,
   DollarSign,
   Package,
   Settings,
   X,
+  Globe,
+  Heart,
+  Target,
+  Lightbulb,
+  Gem,
+  BookOpen,
+  ChevronDown,
+  Info,
+  Compass,
+  BadgeCheck,
+  Zap,
+  Truck,
 } from 'lucide-react';
 import { AIChatbotWidget, InquiryLeadData } from './AIChatbotWidget.tsx';
 import { ProductItem } from '../../types/index.ts';
@@ -341,7 +354,7 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
           )}
         </div>
       </nav>
-      <LandingSectionNav label="Business page sections" preserveHash sections={[{id:'business-start',label:'Overview'},{id:'featured',label:'Featured'},{id:'matcher',label:'Catalog'},{id:'buying-guide',label:'How to choose'},...(showReviews?[{id:'reviews',label:'Reviews'}]:[]),...(hasFeature('referrals')&&settings.landingPage.referralBonusText.trim()?[{id:'referrals',label:'Referrals'}]:[]),...(hasFeature('chatbot')&&settings.landingPage.showChatbot?[{id:'assistant',label:'Ask the business'}]:[]),{id:'contact',label:'Contact'}]}/>
+      <LandingSectionNav label="Business page sections" preserveHash sections={[{id:'business-start',label:'Overview'},{id:'featured',label:'Featured'},{id:'matcher',label:'Catalog'},{id:'buying-guide',label:'How to choose'},{id:'why-choose-business',label:'Why Choose Us'},{id:'about-business',label:'About Us'},...(showReviews?[{id:'reviews',label:'Reviews'}]:[]),...(hasFeature('referrals')&&settings.landingPage.referralBonusText.trim()?[{id:'referrals',label:'Referrals'}]:[]),{id:'business-faqs',label:'FAQs'},...(hasFeature('chatbot')&&settings.landingPage.showChatbot?[{id:'assistant',label:'Ask the business'}]:[]),{id:'contact',label:'Contact'}]}/>
       </header>
 
       <div className="border-b border-teal-800/60 bg-teal-950/70 px-4 py-3 text-center text-xs text-teal-100" role="note">
@@ -474,6 +487,97 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
 
       <section id="buying-guide" className="max-w-7xl mx-auto px-4 py-8"><div className="grid md:grid-cols-3 gap-3">{[{title:'1. Find a good fit',copy:'Browse the actual catalog, compare descriptions and check the displayed price or service billing unit.'},{title:'2. Confirm the details',copy:'Ask about current availability, service scope, timing and any applicable terms before making a decision.'},{title:'3. Choose your next step',copy:'Use the business contact details to arrange an order or service. This preview does not take payment, reserve stock or confirm appointments.'}].map(step=><article key={step.title} className="rounded-2xl border border-slate-800 bg-slate-900 p-4"><h2 className="font-bold text-sm text-teal-300">{step.title}</h2><p className="mt-2 text-xs leading-relaxed text-slate-400">{step.copy}</p></article>)}</div>
         <p className="mt-3 rounded-xl border border-slate-800 bg-slate-950 p-3 text-[11px] leading-relaxed text-slate-500"><strong className="text-slate-300">Payment & ordering:</strong> this page does not accept card, mobile-money or cash payments. Orders, deposits and delivery arrangements are agreed directly with the business using the contact details below. A quote request only records your interest in this browser.</p></section>
+
+      {/* WHY CHOOSE US - MERCHANT */}
+      <section id="why-choose-business" className="max-w-7xl mx-auto px-4 py-14 scroll-mt-20">
+        <div className="text-center max-w-3xl mx-auto mb-10">
+          <span className="text-xs uppercase font-extrabold tracking-widest text-amber-400 bg-amber-500/10 border border-amber-500/30 px-3 py-1 rounded-full inline-flex items-center gap-1.5">
+            <Award className="w-4 h-4" /> Why Choose Us
+          </span>
+          <h2 className="mt-3 text-2xl sm:text-4xl font-black text-slate-100 tracking-tight">
+            Why Choose {displayCompany.name}?
+          </h2>
+          <p className="mt-3 text-sm text-slate-400 leading-relaxed">
+            We combine quality products, honest pricing and personal service — every item is verified from our live Inventory and every review is from real customers.
+          </p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[
+            { icon: BadgeCheck, color: 'text-emerald-400', bg: 'bg-emerald-500/15', border: 'border-emerald-500/30', title: 'Quality Assured', desc: 'Every product and service listing comes directly from our Inventory with accurate descriptions, pricing and stock — no bait-and-switch.' },
+            { icon: DollarSign, color: 'text-teal-400', bg: 'bg-teal-500/15', border: 'border-teal-500/30', title: 'Fair & Transparent Pricing', desc: `Clear pricing in ${currency} with no hidden fees. What you see is what you confirm with us before any commitment.` },
+            { icon: Truck, color: 'text-sky-400', bg: 'bg-sky-500/15', border: 'border-sky-500/30', title: 'Fast & Reliable Fulfilment', desc: 'Coordinated logistics and local delivery options ensure your order or service is handled professionally and on time.' },
+            { icon: Star, color: 'text-amber-400', bg: 'bg-amber-500/15', border: 'border-amber-500/30', title: 'Verified Customer Reviews', desc: 'Approved reviews with ratings from genuine buyers — not fabricated testimonials. See what neighbours say about us.' },
+            { icon: MapPin, color: 'text-indigo-400', bg: 'bg-indigo-500/15', border: 'border-indigo-500/30', title: 'Local & Accessible', desc: `${displayCompany.location ? `Proudly serving ${displayCompany.location}${displayCompany.country ? `, ${displayCompany.country}` : ''}.` : 'Rooted in your community — visit us, call or WhatsApp anytime.'} ${displayCompany.operatingHours ? `Open: ${displayCompany.operatingHours}.` : ''}` },
+            { icon: Heart, color: 'text-rose-400', bg: 'bg-rose-500/15', border: 'border-rose-500/30', title: 'Customer-First Support', desc: 'Direct contact via phone, WhatsApp or email — no bots, no queue. We answer questions about availability, scope and terms honestly.' },
+          ].map(item => {
+            const Icon = item.icon;
+            return (
+              <div key={item.title} className="rounded-2xl border border-slate-800 bg-slate-900 p-6 hover:border-teal-500/40 transition shadow-lg">
+                <div className={`w-12 h-12 rounded-xl ${item.bg} border ${item.border} ${item.color} flex items-center justify-center mb-4`}>
+                  <Icon className="w-6 h-6" />
+                </div>
+                <h3 className="text-base font-bold text-slate-100 mb-2">{item.title}</h3>
+                <p className="text-xs text-slate-400 leading-relaxed">{item.desc}</p>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* ABOUT US - MERCHANT */}
+      <section id="about-business" className="max-w-7xl mx-auto px-4 py-14 scroll-mt-20">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div className="lg:col-span-7">
+            <span className="text-xs uppercase font-extrabold tracking-widest text-sky-400 bg-sky-500/10 border border-sky-500/30 px-3 py-1 rounded-full inline-flex items-center gap-1.5">
+              <Building2 className="w-4 h-4" /> About {displayCompany.name}
+            </span>
+            <h2 className="mt-3 text-2xl sm:text-3xl font-black text-slate-100 tracking-tight">
+              The Story Behind Our Business
+            </h2>
+            <p className="mt-3 text-sm text-slate-300 leading-relaxed">
+              {displayCompany.vision || displayCompany.slogan || 'We are committed to delivering excellent products and dependable services that make everyday life easier for our customers.'}
+            </p>
+            <p className="mt-3 text-sm text-slate-400 leading-relaxed">
+              Based in {displayCompany.location || 'your community'}{displayCompany.country ? `, ${displayCompany.country}` : ''} {displayCompany.address ? `at ${displayCompany.address}` : ''}, we have built our reputation on trust, consistency and personal care. {displayCompany.operatingHours ? `We operate ${displayCompany.operatingHours} to be there when you need us.` : ''} Whether you browse our catalog online or visit us in person, you get the same honest pricing, verified stock and friendly guidance.
+            </p>
+            <div className="mt-6 grid grid-cols-3 gap-3 text-center">
+              <div className="rounded-2xl bg-slate-900 border border-slate-800 p-4">
+                <div className="text-lg font-black text-teal-300">{displayProducts.length}</div>
+                <div className="text-[10px] uppercase font-bold tracking-wider text-slate-400">Catalog Items</div>
+              </div>
+              <div className="rounded-2xl bg-slate-900 border border-slate-800 p-4">
+                <div className="text-lg font-black text-amber-300">{approvedReviews.length || 0}</div>
+                <div className="text-[10px] uppercase font-bold tracking-wider text-slate-400">Verified Reviews</div>
+              </div>
+              <div className="rounded-2xl bg-slate-900 border border-slate-800 p-4">
+                <div className="text-lg font-black text-sky-300">{companyMembers.length + marketingTeam.length}</div>
+                <div className="text-[10px] uppercase font-bold tracking-wider text-slate-400">Team Members</div>
+              </div>
+            </div>
+          </div>
+          <div className="lg:col-span-5">
+            <div className="rounded-3xl border border-slate-800 bg-slate-900 p-6 shadow-xl">
+              <div className="flex items-center gap-3 mb-4">
+                <span className="w-10 h-10 rounded-xl bg-indigo-500/20 border border-indigo-500/30 text-indigo-300 flex items-center justify-center">
+                  <Compass className="w-5 h-5" />
+                </span>
+                <h3 className="font-bold text-slate-100">Our Promise</h3>
+              </div>
+              <ul className="space-y-3 text-xs text-slate-300">
+                <li className="flex gap-2.5"><Target className="w-4 h-4 text-teal-400 shrink-0 mt-0.5" /><span><strong className="text-slate-100">Mission:</strong> To provide quality products and reliable services at fair prices with transparent communication.</span></li>
+                <li className="flex gap-2.5"><Globe className="w-4 h-4 text-sky-400 shrink-0 mt-0.5" /><span><strong className="text-slate-100">Vision:</strong> To be the most trusted local provider — where every customer feels valued and every order is handled with care.</span></li>
+                <li className="flex gap-2.5"><BookOpen className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" /><span><strong className="text-slate-100">Location:</strong> {[displayCompany.address, displayCompany.location, displayCompany.country].filter(Boolean).join(', ') || 'Contact us for directions'}.</span></li>
+                <li className="flex gap-2.5"><Clock className="w-4 h-4 text-violet-400 shrink-0 mt-0.5" /><span><strong className="text-slate-100">Hours:</strong> {displayCompany.operatingHours || 'Contact us for hours'}.</span></li>
+                <li className="flex gap-2.5"><ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" /><span><strong className="text-slate-100">Contact:</strong> {displayCompany.tel1 || 'Phone pending'} {displayCompany.whatsapp ? `· WhatsApp ${displayCompany.whatsapp}` : ''} {displayCompany.email ? `· ${displayCompany.email}` : ''}</span></li>
+              </ul>
+              <div className="mt-5 flex gap-2">
+                <a href="#featured" onClick={scrollToSection} className="flex-1 px-4 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold text-center transition">Browse Catalog</a>
+                <a href="#contact" onClick={scrollToSection} className="flex-1 px-4 py-2.5 rounded-xl border border-slate-700 bg-slate-950 hover:bg-slate-900 text-slate-200 text-xs font-bold text-center transition">Contact Us</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* 1. PRIMARY LIVE CATALOG (ITEMS 1 TO 6) */}
       <section id="featured" className="max-w-7xl mx-auto px-4 py-12 scroll-mt-20">
@@ -893,6 +997,43 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
 
       {/* 6. STORE OFFICIAL CONTACT & LOCATION DETAILS */}
       {hasFeature('chatbot') && settings.landingPage.showChatbot && <section id="assistant" className="max-w-7xl mx-auto px-4 py-8"><div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-slate-800 bg-slate-900 p-5"><div className="max-w-2xl"><h2 className="text-xl font-bold">{settings.chatbot?.assistantName || 'A question before you decide?'}</h2><p className="mt-2 text-sm text-slate-400">Ask about this business's actual catalog and contacts. Confirm availability and terms directly; the assistant does not take payment, reserve stock or confirm appointments.</p></div><div className="mt-3 flex flex-wrap gap-1.5">{(settings.chatbot?.quickPrompts || []).slice(0, 4).map((prompt) => <span key={prompt} className="rounded-full border border-teal-800 px-2.5 py-1 text-[10px] text-teal-300">{prompt}</span>)}</div><AIChatbotWidget surface="business" inquiryLead={activeInquiryLead} inlineLauncher /></div></section>}
+
+      {/* BUSINESS FAQs */}
+      <section id="business-faqs" className="max-w-7xl mx-auto px-4 py-14 scroll-mt-20">
+        <div className="text-center max-w-3xl mx-auto mb-10">
+          <span className="text-xs uppercase font-extrabold tracking-widest text-sky-400 bg-sky-500/10 border border-sky-500/30 px-3 py-1 rounded-full inline-flex items-center gap-1.5">
+            <HelpCircle className="w-4 h-4" /> FAQs — {displayCompany.name}
+          </span>
+          <h2 className="mt-3 text-2xl sm:text-3xl font-black text-slate-100 tracking-tight">Common Questions</h2>
+          <p className="mt-3 text-sm text-slate-400 leading-relaxed">Answers about orders, delivery, payments and returns. For anything else, use the contacts below or WhatsApp us directly.</p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-5xl mx-auto">
+          {[
+            { q: `How do I place an order with ${displayCompany.name}?`, a: `Browse our Featured or Catalog sections, click Request Quote on any item, and submit your details. We receive your inquiry instantly and contact you via ${displayCompany.tel1 ? `phone ${displayCompany.tel1}` : 'phone'}${displayCompany.whatsapp ? ` or WhatsApp ${displayCompany.whatsapp}` : ''} to confirm availability, pricing and next steps. No payment is taken on this preview.` , icon: ShoppingBag },
+            { q: 'Do you deliver?', a: `Delivery availability, fees and timing depend on your location and order size. ${displayCompany.location ? `We operate from ${displayCompany.location} —` : ''} contact us with your delivery address for an accurate quote. Logistics partners are coordinated for reliable fulfilment.`, icon: Truck },
+            { q: 'How do I know the price is current?', a: `Prices shown are live from our Inventory (SKU and category listed). Confirm the final total before commitment — promotions, taxes and stock levels can change.`, icon: DollarSign },
+            { q: 'Can I request a service, not a product?', a: `Yes — ${serviceCount} of our ${displayProducts.length} listings are services (per ${displayProducts.find(p=>p.type==='service') ? serviceUnitLabel(displayProducts.find(p=>p.type==='service')!) : 'hour/day/project'} etc.). Share your scope/timing and we will quote accordingly.`, icon: Layers },
+            { q: 'How are reviews verified?', a: 'Only approved reviews from real customers appear here, with ratings and locations. We never fabricate testimonials — authenticity builds trust.', icon: Star },
+            { q: 'What payment methods do you accept?', a: 'Payment terms are agreed directly with us — we discuss cash, mobile-money, card or transfer options after confirming your order. This page does not collect payments.', icon: CheckCircle2 },
+            { q: `What are your hours?`, a: displayCompany.operatingHours ? `We operate ${displayCompany.operatingHours}. Messages outside hours are answered on the next working period.` : 'Contact us for current operating hours — we respond promptly during business periods.', icon: Clock },
+            { q: 'How do I contact you fastest?', a: `${displayCompany.whatsapp ? `WhatsApp ${displayCompany.whatsapp} is fastest.` : ''} ${displayCompany.tel1 ? ` Call ${displayCompany.tel1} for urgent queries.` : ''} Email ${displayCompany.email || 'us via the contact section'} also works for detailed requests.`, icon: MessageSquare },
+          ].map(item => {
+            const Icon = item.icon;
+            return (
+              <details key={item.q} className="group rounded-2xl border border-slate-800 bg-slate-900 p-5 open:border-sky-500/40 open:bg-slate-900/90 transition">
+                <summary className="flex items-center gap-3 cursor-pointer list-none">
+                  <span className="w-9 h-9 rounded-xl bg-slate-800 border border-slate-700 text-sky-300 flex items-center justify-center shrink-0 group-open:bg-sky-500/15 group-open:border-sky-500/30">
+                    <Icon className="w-4 h-4" />
+                  </span>
+                  <span className="text-sm font-bold text-slate-100 flex-1 text-left">{item.q}</span>
+                  <ChevronDown className="w-4 h-4 text-slate-400 group-open:rotate-180 transition" />
+                </summary>
+                <p className="mt-3 ml-12 text-xs text-slate-400 leading-relaxed border-t border-slate-800 pt-3">{item.a}</p>
+              </details>
+            );
+          })}
+        </div>
+      </section>
 
       <section id="contact" className="max-w-7xl mx-auto px-4 py-12 scroll-mt-20">
         <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-10 shadow-xl">

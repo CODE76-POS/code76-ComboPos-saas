@@ -50,6 +50,20 @@ import {
   FileUp,
   MailCheck,
   Fingerprint,
+  Building2,
+  Globe,
+  Target,
+  Heart,
+  Lightbulb,
+  Sparkles,
+  BadgeCheck,
+  BookOpen,
+  MessageCircle,
+  ChevronDown,
+  Info,
+  Compass,
+  Layers,
+  Gem,
 } from 'lucide-react';
 import { AIChatbotWidget } from './AIChatbotWidget.tsx';
 import { SecurityQuestionFields } from '../common/SecurityQuestionFields.tsx';
@@ -296,6 +310,8 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
             { id: 'platforms', label: 'Over 15+ Platforms/Features' },
             { id: 'plans', label: 'Plans & Pricing' },
             { id: 'contact', label: 'Contact Sales' },
+            { id: 'about-us', label: 'About Us' },
+            { id: 'faqs', label: 'FAQs' },
             { id: 'portal-access', label: 'Sign In / Register' },
           ]}
         />
@@ -315,13 +331,12 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
               The Complete Modern POS Software Built for High-Velocity Business
             </h1>
 
-            {/* Requested Enterprise Paragraph */}
+            {/* Requested Enterprise Paragraph - Combined with same style/color */}
             <p className="text-sm sm:text-base text-slate-300 leading-relaxed max-w-2xl font-medium">
-              CODE76 POS is an All-in-One Business ToolKit, enterprise-grade Point of Sale and ERP management suite crafted specifically for supermarkets, pharmacies, restaurants, wholesale distributors, and retail businesses. From multi-split checkouts to automated stock deduction and compliance audit trails, we empower businesses with uncompromised speed and transparency.
+              CODE76 POS is an All-in-One Business ToolKit, enterprise-grade Point of Sale and ERP management suite crafted specifically for supermarkets, pharmacies, restaurants, wholesale distributors, and retail businesses. From multi-split checkouts to automated stock deduction and compliance audit trails, we empower businesses with uncompromised speed and transparency. Bring products, services, checkouts, Data Protection and business records into one workspace.
             </p>
 
             <div className="space-y-3 max-w-2xl text-sm sm:text-base text-slate-400 leading-relaxed">
-              <p>Bring products, services, checkouts, Data Protection and business records into one workspace.</p>
               <p className="font-semibold text-slate-300">The Best Part about CODE76 POS, you can run business stimulation operation using the built-in Demo Data feature in just 5 super-easy steps right now for free:</p>
               <ol className="list-decimal list-inside space-y-1.5 text-xs sm:text-sm bg-slate-900/80 border border-slate-800 rounded-xl p-4">
                 <li><span className="font-bold text-teal-300">Step 1:</span> Go to free plan and register an account.</li>
@@ -330,7 +345,7 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
                 <li><span className="font-bold text-teal-300">Step 4:</span> Go to the top side of the navbar menu click <span className="font-mono text-slate-200 bg-slate-800 px-1.5 py-0.5 rounded">Demo Data</span>.</li>
                 <li><span className="font-bold text-teal-300">Step 5:</span> On the Demo Data pop up widget select or tick <span className="italic text-slate-300">" I understand ..."</span> button and finally click <span className="font-bold text-emerald-300">"Load confirmed demo workspace"</span> button.</li>
               </ol>
-              <p className="text-emerald-300 font-bold text-sm">That's it!!! Now you get some dummy/demo data to practice running a business using CODE76 POS. And dont worry you can delete the entire demo data with delete all settings and start afresh with your own business data.</p>
+              <p className="text-emerald-300 font-bold text-sm">That's it!!! Now you get some dummy/demo data to practice running a business operation using CODE76 POS. And dont worry you can delete the entire demo data with delete all settings and start afresh with your own business data.</p>
               <div className="bg-slate-900/60 border border-teal-800/50 rounded-xl p-4">
                 <p className="font-semibold text-slate-200 text-sm mb-2">With demo data feature:</p>
                 <ul className="list-disc list-inside space-y-1 text-xs sm:text-sm text-slate-300">
@@ -554,7 +569,7 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
                   />
                 ) : (
                   <p className="rounded-xl border border-slate-800 bg-slate-900/70 p-2.5 text-[10px] leading-relaxed text-slate-400">
-                    💡 <em>Default master admin password for <code>code76pos@gmail.com</code> is <code>7676</code>.</em>
+                    💡 <em>Authorized demo access available for reviewers — contact your system administrator for secure credentials.</em>
                   </p>
                 )}
 
@@ -1221,7 +1236,166 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
         </div>
       </section>
 
-      {/* 8. PUBLIC CORPORATE FOOTER */}
+      {/* 8. ABOUT US - CODE76 STORY */}
+      <section id="about-us" className="max-w-7xl mx-auto px-4 py-16 scroll-mt-20">
+        <div className="text-center max-w-3xl mx-auto mb-12">
+          <span className="text-xs uppercase font-extrabold tracking-widest text-indigo-400 bg-indigo-500/10 border border-indigo-500/30 px-3 py-1 rounded-full inline-flex items-center gap-1.5">
+            <Building2 className="w-4 h-4" /> About CODE76 POS
+          </span>
+          <h2 className="mt-3 text-2xl sm:text-4xl font-black text-slate-100 tracking-tight">
+            Built for Businesses That Refuse to Compromise
+          </h2>
+          <p className="mt-3 text-sm text-slate-300 leading-relaxed font-medium">
+            CODE76 POS was founded to give every supermarket, pharmacy, restaurant and retailer the same enterprise-grade tools previously reserved for large chains — without complexity or hardware lock-in.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-10">
+          <div className="lg:col-span-7 space-y-6">
+            <div className="rounded-3xl border border-slate-800 bg-gradient-to-br from-slate-900 via-slate-900 to-indigo-950/20 p-6 sm:p-8 shadow-xl">
+              <div className="flex items-center gap-3 mb-4">
+                <span className="w-10 h-10 rounded-xl bg-indigo-500/20 border border-indigo-500/30 text-indigo-300 flex items-center justify-center">
+                  <BookOpen className="w-5 h-5" />
+                </span>
+                <h3 className="text-lg font-black text-slate-100">Who We Are</h3>
+              </div>
+              <p className="text-sm text-slate-300 leading-relaxed">
+                We are <strong className="text-white">CODE76 POS Systems Inc.</strong> — a team of retail operators, engineers and support specialists who have run stores, closed tills, reconciled stock and answered angry customers. We built CODE76 POS because generic registers leak cash, hide stock and slow queues. Our platform unifies sales, inventory, staff, expenses and analytics into one secure workspace.
+              </p>
+              <p className="text-sm text-slate-400 leading-relaxed mt-3">
+                From Nairobi to global deployments, we power daily operations for businesses that value speed, transparency and data ownership. Every feature — from multi-split M-Pesa/Visa handling to AES-256 backups — was shaped by real shop-floor pain.
+              </p>
+              <div className="mt-6 grid grid-cols-3 gap-3 text-center">
+                <div className="rounded-2xl bg-slate-950 border border-slate-800 p-4">
+                  <div className="text-xl font-black text-teal-300">15+</div>
+                  <div className="text-[10px] uppercase font-bold tracking-wider text-slate-400">Platforms</div>
+                </div>
+                <div className="rounded-2xl bg-slate-950 border border-slate-800 p-4">
+                  <div className="text-xl font-black text-emerald-300">99.9%</div>
+                  <div className="text-[10px] uppercase font-bold tracking-wider text-slate-400">Uptime</div>
+                </div>
+                <div className="rounded-2xl bg-slate-950 border border-slate-800 p-4">
+                  <div className="text-xl font-black text-indigo-300">24/7</div>
+                  <div className="text-[10px] uppercase font-bold tracking-wider text-slate-400">Secure Vault</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="rounded-2xl border border-teal-800/40 bg-teal-950/20 p-5">
+                <div className="flex items-center gap-2 mb-2">
+                  <Target className="w-5 h-5 text-teal-400" />
+                  <h4 className="font-bold text-sm text-slate-100">Our Mission</h4>
+                </div>
+                <p className="text-xs text-slate-300 leading-relaxed">To make powerful retail operations simple, secure and affordable — so any business can sell faster, track accurately and grow profitably without IT complexity.</p>
+              </div>
+              <div className="rounded-2xl border border-sky-800/40 bg-sky-950/20 p-5">
+                <div className="flex items-center gap-2 mb-2">
+                  <Compass className="w-5 h-5 text-sky-400" />
+                  <h4 className="font-bold text-sm text-slate-100">Our Vision</h4>
+                </div>
+                <p className="text-xs text-slate-300 leading-relaxed">A world where every store — from kiosk to hypermarket — runs on transparent, owner-controlled data that never gets lost, leaked or locked.</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="lg:col-span-5">
+            <div className="rounded-3xl border border-slate-800 bg-slate-900 p-6 shadow-xl h-full">
+              <div className="flex items-center gap-3 mb-5">
+                <span className="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/30 text-amber-300 flex items-center justify-center">
+                  <Gem className="w-5 h-5" />
+                </span>
+                <h3 className="text-base font-black text-slate-100">Core Values</h3>
+              </div>
+              <div className="grid grid-cols-1 gap-3">
+                {[
+                  { icon: ShieldCheck, color: 'text-emerald-400', bg: 'bg-emerald-500/15', border: 'border-emerald-500/30', title: 'Security First', desc: 'AES-256, RBAC and audit trails by default.' },
+                  { icon: Heart, color: 'text-rose-400', bg: 'bg-rose-500/15', border: 'border-rose-500/30', title: 'Customer Obsession', desc: 'Built from shop-floor frustrations, not boardrooms.' },
+                  { icon: Lightbulb, color: 'text-amber-400', bg: 'bg-amber-500/15', border: 'border-amber-500/30', title: 'Innovation', desc: 'Offline-first, split-tender, service units — solved early.' },
+                  { icon: BadgeCheck, color: 'text-sky-400', bg: 'bg-sky-500/15', border: 'border-sky-500/30', title: 'Integrity', desc: 'No hidden fees, no data hostage, no fake stock.' },
+                  { icon: Globe, color: 'text-teal-400', bg: 'bg-teal-500/15', border: 'border-teal-500/30', title: 'Ownership', desc: 'Your business data stays yours — always exportable.' },
+                  { icon: TrendingUp, color: 'text-indigo-400', bg: 'bg-indigo-500/15', border: 'border-indigo-500/30', title: 'Growth', desc: 'Free to Pro to Max — scale without re-platforming.' },
+                ].map(v => {
+                  const Icon = v.icon;
+                  return (
+                    <div key={v.title} className="flex gap-3 rounded-xl border border-slate-800 bg-slate-950 p-3">
+                      <span className={`w-9 h-9 rounded-lg ${v.bg} border ${v.border} ${v.color} flex items-center justify-center shrink-0`}>
+                        <Icon className="w-4 h-4" />
+                      </span>
+                      <div>
+                        <div className="text-xs font-bold text-slate-100">{v.title}</div>
+                        <div className="text-[11px] text-slate-400 leading-relaxed">{v.desc}</div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 9. FAQs - NEAR FOOTER */}
+      <section id="faqs" className="max-w-7xl mx-auto px-4 py-16 scroll-mt-20">
+        <div className="text-center max-w-3xl mx-auto mb-10">
+          <span className="text-xs uppercase font-extrabold tracking-widest text-amber-400 bg-amber-500/10 border border-amber-500/30 px-3 py-1 rounded-full inline-flex items-center gap-1.5">
+            <HelpCircle className="w-4 h-4" /> Frequently Asked Questions
+          </span>
+          <h2 className="mt-3 text-2xl sm:text-4xl font-black text-slate-100 tracking-tight">
+            Everything You Want to Know
+          </h2>
+          <p className="mt-3 text-sm text-slate-400 leading-relaxed">
+            Quick answers about pricing, security, offline use, imports and more. Still stuck? Ask our AI or contact <span className="text-teal-300 font-semibold">code76pos@gmail.com</span>.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-5xl mx-auto">
+          {[
+            { q: 'Is CODE76 POS Free?', a: 'Yes — start on Free with core POS, inventory and sales. Upgrade to Pro or Max only when you need advanced analytics, multi-branch and team-service features. Or go lifetime once. No card required to try with Demo Data.', icon: DollarSign },
+            { q: 'How secure is my business data with CODE76 POS?', a: 'Your workspace is isolated and encrypted. We enforce login restrictions, role-based privileges, session locks, AES-256 backups and immutable audit logs. Exports (PDF/Excel) and cloud vault restores keep you in control — see My Business Data Secured for details.', icon: ShieldCheck },
+            { q: 'Can I work offline?', a: 'Absolutely. Sales, inventory and receipts work offline-first and sync when you reconnect. Local-first vault ensures no sale is lost during internet downtime.', icon: Smartphone },
+            { q: 'Do I need special hardware?', a: 'No lock-in. Use any barcode scanner, 80mm/58mm ESC/POS thermal printer, and any browser device. Bring your own till — we adapt.', icon: Monitor },
+            { q: 'How do I import my existing products?', a: 'Bulk-import via Excel/CSV (.xlsx, .csv) with validation and duplicates check, or export any table to Excel for your accountant. No retyping thousands of SKUs.', icon: FileSpreadsheet },
+            { q: 'Can I manage multiple branches & staff?', a: 'Yes. Assign 2 roles per member, track shifts, working days and payroll, and enforce granular RBAC (price edits, discounts, refunds, backups). Branch/company directory keeps vendors, transporters and clients organized.', icon: Users },
+            { q: 'What if I lose my device or data?', a: 'One-click restore from encrypted local or cloud backups. Automated BackUp operations with SHA-256 checksums verify integrity, plus you can email backups to owners/accountants automatically.', icon: HardDrive },
+            { q: 'How do payments work (M-Pesa, cards, cash)?', a: 'Sub-second multi-split checkout: combine Cash + M-Pesa + Visa/MC + Bank transfer in one sale with auto change, discounts and debt ledgering. No payment is taken on the landing page itself.', icon: Zap },
+            { q: 'Will you lock or leak my data?', a: 'Never. Your data is yours — always exportable (PDF/Excel), emailable and restorable. No hostage, no hidden fees, no third-party resale.', icon: Lock },
+            { q: 'How do I get started right now?', a: 'Use Demo Data: register Free → skip setup wizard → click Demo Data in the top navbar → tick I understand → Load confirmed demo workspace. You instantly get dummy data to practice. Delete all settings anytime to start fresh.', icon: Sparkles },
+          ].map(item => {
+            const Icon = item.icon;
+            return (
+              <details key={item.q} className="group rounded-2xl border border-slate-800 bg-slate-900 p-5 open:border-teal-500/40 open:bg-slate-900/90 transition">
+                <summary className="flex items-center gap-3 cursor-pointer list-none">
+                  <span className="w-9 h-9 rounded-xl bg-slate-800 border border-slate-700 text-teal-300 flex items-center justify-center shrink-0 group-open:bg-teal-500/15 group-open:border-teal-500/30 group-open:text-teal-300">
+                    <Icon className="w-4 h-4" />
+                  </span>
+                  <span className="text-sm font-bold text-slate-100 flex-1 text-left">{item.q}</span>
+                  <ChevronDown className="w-4 h-4 text-slate-400 group-open:rotate-180 transition" />
+                </summary>
+                <p className="mt-3 ml-12 text-xs text-slate-400 leading-relaxed border-t border-slate-800 pt-3">{item.a}</p>
+              </details>
+            );
+          })}
+        </div>
+
+        <div className="mt-8 max-w-5xl mx-auto rounded-2xl border border-teal-800/50 bg-gradient-to-r from-teal-950/30 via-slate-900 to-indigo-950/20 p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <span className="w-10 h-10 rounded-xl bg-teal-500/20 border border-teal-500/30 text-teal-300 flex items-center justify-center">
+              <MessageCircle className="w-5 h-5" />
+            </span>
+            <div>
+              <div className="text-sm font-bold text-slate-100">Still have questions?</div>
+              <div className="text-xs text-slate-400">Chat with CODE76 AI or email our engineering desk.</div>
+            </div>
+          </div>
+          <div className="flex gap-2">
+            <a href="#product-help" className="px-4 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold transition">Ask AI Assistant</a>
+            <a href="#contact" className="px-4 py-2 rounded-xl border border-slate-700 bg-slate-950 hover:bg-slate-900 text-slate-200 text-xs font-bold transition">Contact Sales</a>
+          </div>
+        </div>
+      </section>
+
+      {/* 10. PUBLIC CORPORATE FOOTER */}
       <footer className="border-t border-slate-800 bg-slate-950 mt-12 px-4 py-10">
         <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-8">
           <div>
