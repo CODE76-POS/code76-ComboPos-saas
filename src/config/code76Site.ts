@@ -13,8 +13,8 @@ const CODE76_WEBSITE_SETTINGS = {
   heroSubtitle: 'Explore sales, service inventory, business records and clearly scoped team assistance. Choose the tools and plan that fit your next step.',
   featuredCount: 6, slideshowSpeedMs: 4000, showSocialProof: true, showChatbot: true,
   referralBonusText: 'Referral assistance and any rewards are agreed with the CODE76 team; no cash or credit is issued automatically.',
-  topReferrersLimit: 5, showPromoCountdown: false, customInstagram: '@code76_pos', customTwitter: '@code76pos',
-  customWhatsappDirect: '+18007607676', shareableLinkSlogan: 'Exclusive Enterprise Commercial POS & ERP Hardware Special',
+  topReferrersLimit: 5, showPromoCountdown: false, customInstagram: '@code76_pos', customTwitter: '',
+  customWhatsappDirect: '+254796003614', shareableLinkSlogan: 'Exclusive Enterprise Commercial POS & ERP Hardware Special',
 };
 
 export const CODE76_SITE = Object.freeze({
