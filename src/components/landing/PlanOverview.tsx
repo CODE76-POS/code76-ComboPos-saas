@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { PLAN_INFO, type PlanTier } from '../../utils/plans.ts';
 import { PlanPrice } from '../common/PlanPrice.tsx';
-import { TEAM_SERVICE_SCOPE } from '../../config/teamServices.ts';
 import { TierCheckoutModal } from '../modals/TierCheckoutModal.tsx';
 import { ShieldCheck, Zap } from 'lucide-react';
 
@@ -91,17 +90,17 @@ export function PlanOverview() {
         data-pricing-tier="lifetime"
         className="mt-6 rounded-3xl border-2 border-teal-500/60 bg-gradient-to-r from-slate-900 via-teal-950/40 to-slate-900 p-6 sm:p-8 shadow-2xl relative overflow-hidden"
       >
-        <div className="sm:absolute sm:top-0 sm:right-0 bg-gradient-to-l from-teal-500 to-emerald-500 text-slate-950 text-[11px] font-black uppercase px-4 py-1.5 sm:rounded-bl-2xl shadow-md tracking-wider inline-block mb-4 sm:mb-0">
+        <div className="lg:absolute lg:top-0 lg:right-0 bg-gradient-to-l from-teal-500 to-emerald-500 text-slate-950 text-[11px] font-black uppercase px-4 py-1.5 lg:rounded-bl-2xl shadow-md tracking-wider inline-block mb-4 lg:mb-0">
           ★ Lifetime Unlimited Ownership · Best Value
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-          <div className="lg:col-span-4 space-y-2">
-            <div className="flex items-center gap-2">
-              <h3 className="text-2xl sm:text-3xl font-black text-slate-100">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center lg:pt-2">
+          <div className="lg:col-span-4 space-y-2 min-w-0">
+            <div className="flex flex-wrap items-center gap-2 min-w-0">
+              <h3 className="text-2xl sm:text-3xl font-black text-slate-100 break-words">
                 {PLAN_INFO['lifetime'].name}
               </h3>
-              <span className="rounded-full bg-teal-500/20 text-teal-300 border border-teal-500/40 px-2.5 py-0.5 text-xs font-bold">
+              <span className="rounded-full bg-teal-500/20 text-teal-300 border border-teal-500/40 px-2.5 py-0.5 text-xs font-bold shrink-0">
                 Pay Once, Keep Forever
               </span>
             </div>
@@ -151,12 +150,9 @@ export function PlanOverview() {
         </div>
       </article>
 
-      <div className="mt-5 grid md:grid-cols-2 gap-3 text-xs text-slate-400">
-        <p className="rounded-xl border border-slate-800 p-4">
+      <div className="mt-5 grid gap-3 text-xs text-slate-400">
+        <p className="rounded-xl border border-slate-800 p-4 leading-relaxed">
           Transparent billing: USD/month for Free, Starter, Pro and Max; Lifetime is one-time payment with permanent licensing. Built-in Selar &amp; Gumroad resilient gateways ensure smooth activation.
-        </p>
-        <p className="rounded-xl border border-slate-800 p-4">
-          {TEAM_SERVICE_SCOPE} Lifetime tier includes perpetual software updates, dedicated CODE76 engineering assistance, and full cryptographic license verification.
         </p>
       </div>
 

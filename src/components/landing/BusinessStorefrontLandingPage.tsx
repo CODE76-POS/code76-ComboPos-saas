@@ -275,7 +275,7 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
   if (!currentUser) return null;
 
   return (
-    <div className="business-landing-page min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-teal-500 selection:text-white pb-24">
+    <div className="business-landing-page min-h-screen w-full max-w-full overflow-x-hidden bg-slate-950 text-slate-100 font-sans selection:bg-teal-500 selection:text-white pb-24">
       {/* Top Announcement Bar */}
       {hasFeature('referrals') && settings.landingPage.referralBonusText.trim() && <div className="bg-gradient-to-r from-teal-900 via-slate-900 to-emerald-950 border-b border-teal-800/40 text-center py-2 px-4 text-xs font-medium text-teal-200">
         <span className="inline-flex items-center gap-2">
@@ -1020,15 +1020,15 @@ export const BusinessStorefrontLandingPage: React.FC = () => {
           ].map(item => {
             const Icon = item.icon;
             return (
-              <details key={item.q} className="group rounded-2xl border border-slate-800 bg-slate-900 p-5 open:border-sky-500/40 open:bg-slate-900/90 transition">
-                <summary className="flex items-center gap-3 cursor-pointer list-none">
+              <details key={item.q} className="group rounded-2xl border border-slate-800 bg-slate-900 p-4 sm:p-5 open:border-sky-500/40 open:bg-slate-900/90 transition min-w-0 overflow-hidden">
+                <summary className="flex items-center gap-3 cursor-pointer list-none min-w-0">
                   <span className="w-9 h-9 rounded-xl bg-slate-800 border border-slate-700 text-sky-300 flex items-center justify-center shrink-0 group-open:bg-sky-500/15 group-open:border-sky-500/30">
-                    <Icon className="w-4 h-4" />
+                    <Icon className="w-4 h-4 shrink-0" />
                   </span>
-                  <span className="text-sm font-bold text-slate-100 flex-1 text-left">{item.q}</span>
-                  <ChevronDown className="w-4 h-4 text-slate-400 group-open:rotate-180 transition" />
+                  <span className="text-sm font-bold text-slate-100 flex-1 text-left min-w-0 break-words">{item.q}</span>
+                  <ChevronDown className="w-4 h-4 text-slate-400 group-open:rotate-180 transition shrink-0" />
                 </summary>
-                <p className="mt-3 ml-12 text-xs text-slate-400 leading-relaxed border-t border-slate-800 pt-3">{item.a}</p>
+                <p className="mt-3 sm:ml-12 text-xs text-slate-400 leading-relaxed border-t border-slate-800 pt-3 break-words">{item.a}</p>
               </details>
             );
           })}

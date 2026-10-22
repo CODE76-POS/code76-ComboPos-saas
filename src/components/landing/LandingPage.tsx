@@ -208,7 +208,7 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
   };
 
   return (
-    <div className="public-landing-page min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-teal-500 selection:text-white pb-24">
+    <div className="public-landing-page min-h-screen w-full max-w-full overflow-x-hidden bg-slate-950 text-slate-100 font-sans selection:bg-teal-500 selection:text-white pb-24">
       <PublicLandingMetadata protectedEntry={requiresSignIn} />
 
       {/* Security Interception Banner if unauthorized /pos request occurred */}
@@ -358,46 +358,46 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
             </div>
 
             {/* Interactive Questions Grid - Neon Clickable Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1 min-w-0">
               <a
                 href="#benefits"
                 onClick={(e) => { e.preventDefault(); document.getElementById('benefits')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }}
-                className="group flex items-center gap-3 bg-slate-900/80 p-4 rounded-xl border border-teal-500/30 hover:border-teal-400 hover:shadow-[0_0_18px_rgba(20,184,166,0.45)] hover:bg-slate-900 transition-all cursor-pointer"
+                className="group flex items-center gap-3 bg-slate-900/80 p-3 sm:p-4 rounded-xl border border-teal-500/30 hover:border-teal-400 hover:shadow-[0_0_18px_rgba(20,184,166,0.45)] hover:bg-slate-900 transition-all cursor-pointer min-w-0 overflow-hidden"
               >
                 <span className="w-9 h-9 rounded-lg bg-teal-500/15 border border-teal-500/30 text-teal-300 flex items-center justify-center shrink-0 group-hover:bg-teal-500/25 group-hover:shadow-[0_0_10px_rgba(20,184,166,0.5)] transition-all">
-                  <HelpCircle className="w-5 h-5" />
+                  <HelpCircle className="w-5 h-5 shrink-0" />
                 </span>
-                <span className="text-xs font-bold text-slate-200 group-hover:text-teal-200 group-hover:drop-shadow-[0_0_6px_rgba(20,184,166,0.8)] transition-all">Why Choose CODE76 POS ?</span>
+                <span className="text-xs font-bold text-slate-200 group-hover:text-teal-200 group-hover:drop-shadow-[0_0_6px_rgba(20,184,166,0.8)] transition-all min-w-0 flex-1 break-words">Why Choose CODE76 POS ?</span>
               </a>
               <a
                 href="#data-secured"
                 onClick={(e) => { e.preventDefault(); document.getElementById('data-secured')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }}
-                className="group flex items-center gap-3 bg-slate-900/80 p-4 rounded-xl border border-emerald-500/30 hover:border-emerald-400 hover:shadow-[0_0_18px_rgba(16,185,129,0.45)] hover:bg-slate-900 transition-all cursor-pointer"
+                className="group flex items-center gap-3 bg-slate-900/80 p-3 sm:p-4 rounded-xl border border-emerald-500/30 hover:border-emerald-400 hover:shadow-[0_0_18px_rgba(16,185,129,0.45)] hover:bg-slate-900 transition-all cursor-pointer min-w-0 overflow-hidden"
               >
                 <span className="w-9 h-9 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 flex items-center justify-center shrink-0 group-hover:bg-emerald-500/25 group-hover:shadow-[0_0_10px_rgba(16,185,129,0.5)] transition-all">
-                  <ShieldCheck className="w-5 h-5" />
+                  <ShieldCheck className="w-5 h-5 shrink-0" />
                 </span>
-                <span className="text-xs font-bold text-slate-200 group-hover:text-emerald-200 group-hover:drop-shadow-[0_0_6px_rgba(16,185,129,0.8)] transition-all">How Secure is my Business Data with CODE76 POS ?</span>
+                <span className="text-xs font-bold text-slate-200 group-hover:text-emerald-200 group-hover:drop-shadow-[0_0_6px_rgba(16,185,129,0.8)] transition-all min-w-0 flex-1 break-words">How Secure is my Business Data with CODE76 POS ?</span>
               </a>
               <a
                 href="#platforms"
                 onClick={(e) => { e.preventDefault(); document.getElementById('platforms')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }}
-                className="group flex items-center gap-3 bg-slate-900/80 p-4 rounded-xl border border-cyan-500/30 hover:border-cyan-400 hover:shadow-[0_0_18px_rgba(6,182,212,0.45)] hover:bg-slate-900 transition-all cursor-pointer"
+                className="group flex items-center gap-3 bg-slate-900/80 p-3 sm:p-4 rounded-xl border border-cyan-500/30 hover:border-cyan-400 hover:shadow-[0_0_18px_rgba(6,182,212,0.45)] hover:bg-slate-900 transition-all cursor-pointer min-w-0 overflow-hidden"
               >
                 <span className="w-9 h-9 rounded-lg bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 flex items-center justify-center shrink-0 group-hover:bg-cyan-500/25 group-hover:shadow-[0_0_10px_rgba(6,182,212,0.5)] transition-all">
-                  <Database className="w-5 h-5" />
+                  <Database className="w-5 h-5 shrink-0" />
                 </span>
-                <span className="text-xs font-bold text-slate-200 group-hover:text-cyan-200 group-hover:drop-shadow-[0_0_6px_rgba(6,182,212,0.8)] transition-all">What Other Problems &amp; How CODE76 POS platforms/features solves them ?</span>
+                <span className="text-xs font-bold text-slate-200 group-hover:text-cyan-200 group-hover:drop-shadow-[0_0_6px_rgba(6,182,212,0.8)] transition-all min-w-0 flex-1 break-words">What Other Problems &amp; How CODE76 POS platforms/features solves them ?</span>
               </a>
               <a
                 href="#plans"
                 onClick={(e) => { e.preventDefault(); document.getElementById('plans')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }}
-                className="group flex items-center gap-3 bg-slate-900/80 p-4 rounded-xl border border-amber-500/30 hover:border-amber-400 hover:shadow-[0_0_18px_rgba(245,158,11,0.45)] hover:bg-slate-900 transition-all cursor-pointer"
+                className="group flex items-center gap-3 bg-slate-900/80 p-3 sm:p-4 rounded-xl border border-amber-500/30 hover:border-amber-400 hover:shadow-[0_0_18px_rgba(245,158,11,0.45)] hover:bg-slate-900 transition-all cursor-pointer min-w-0 overflow-hidden"
               >
                 <span className="w-9 h-9 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-300 flex items-center justify-center shrink-0 group-hover:bg-amber-500/25 group-hover:shadow-[0_0_10px_rgba(245,158,11,0.5)] transition-all">
-                  <DollarSign className="w-5 h-5" />
+                  <DollarSign className="w-5 h-5 shrink-0" />
                 </span>
-                <span className="text-xs font-bold text-slate-200 group-hover:text-amber-200 group-hover:drop-shadow-[0_0_6px_rgba(245,158,11,0.8)] transition-all">Is CODE76 POS Free ?</span>
+                <span className="text-xs font-bold text-slate-200 group-hover:text-amber-200 group-hover:drop-shadow-[0_0_6px_rgba(245,158,11,0.8)] transition-all min-w-0 flex-1 break-words">Is CODE76 POS Free ?</span>
               </a>
             </div>
 
@@ -1017,14 +1017,14 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
                   </div>
                 </div>
 
-                <div className="pt-4 mt-3 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-400 gap-2">
-                  <span className="text-teal-400/80 font-medium">✓ Granular RBAC Controlled</span>
-                  <span className="flex items-center gap-1.5 shrink-0">
-                    <a href="#plans" className="text-teal-300 hover:text-teal-200 font-bold hover:underline">
+                <div className="pt-4 mt-3 border-t border-slate-800/80 flex flex-wrap items-center justify-between text-[11px] text-slate-400 gap-y-2 gap-x-2 min-w-0">
+                  <span className="text-teal-400/80 font-medium shrink-0">✓ Granular RBAC Controlled</span>
+                  <span className="flex flex-wrap items-center gap-1.5 min-w-0">
+                    <a href="#plans" className="text-teal-300 hover:text-teal-200 font-bold hover:underline whitespace-nowrap">
                       Get Started Now. For Free !!! &rarr;
                     </a>
                     <span className="text-slate-500">or</span>
-                    <a href="#portal-access" className="text-teal-300 hover:text-teal-200 font-bold hover:underline">
+                    <a href="#portal-access" className="text-teal-300 hover:text-teal-200 font-bold hover:underline whitespace-nowrap">
                       Login POS &rarr;
                     </a>
                   </span>
@@ -1265,18 +1265,18 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
               <p className="text-sm text-slate-400 leading-relaxed mt-3">
                 From Nairobi to global deployments, we power daily operations for businesses that value speed, transparency and data ownership. Every feature — from multi-split M-Pesa/Visa handling to AES-256 backups — was shaped by real shop-floor pain.
               </p>
-              <div className="mt-6 grid grid-cols-3 gap-3 text-center">
-                <div className="rounded-2xl bg-slate-950 border border-slate-800 p-4">
-                  <div className="text-xl font-black text-teal-300">15+</div>
-                  <div className="text-[10px] uppercase font-bold tracking-wider text-slate-400">Platforms</div>
+              <div className="mt-6 grid grid-cols-3 gap-2 sm:gap-3 text-center min-w-0">
+                <div className="rounded-2xl bg-slate-950 border border-slate-800 p-3 sm:p-4 min-w-0 overflow-hidden">
+                  <div className="text-lg sm:text-xl font-black text-teal-300 break-words">15+</div>
+                  <div className="text-[9px] sm:text-[10px] uppercase font-bold tracking-wider text-slate-400 break-words">Platforms</div>
                 </div>
-                <div className="rounded-2xl bg-slate-950 border border-slate-800 p-4">
-                  <div className="text-xl font-black text-emerald-300">99.9%</div>
-                  <div className="text-[10px] uppercase font-bold tracking-wider text-slate-400">Uptime</div>
+                <div className="rounded-2xl bg-slate-950 border border-slate-800 p-3 sm:p-4 min-w-0 overflow-hidden">
+                  <div className="text-lg sm:text-xl font-black text-emerald-300 break-words">99.9%</div>
+                  <div className="text-[9px] sm:text-[10px] uppercase font-bold tracking-wider text-slate-400 break-words">Uptime</div>
                 </div>
-                <div className="rounded-2xl bg-slate-950 border border-slate-800 p-4">
-                  <div className="text-xl font-black text-indigo-300">24/7</div>
-                  <div className="text-[10px] uppercase font-bold tracking-wider text-slate-400">Secure Vault</div>
+                <div className="rounded-2xl bg-slate-950 border border-slate-800 p-3 sm:p-4 min-w-0 overflow-hidden">
+                  <div className="text-lg sm:text-xl font-black text-indigo-300 break-words">24/7</div>
+                  <div className="text-[9px] sm:text-[10px] uppercase font-bold tracking-wider text-slate-400 break-words">Secure Vault</div>
                 </div>
               </div>
             </div>
@@ -1364,15 +1364,15 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
           ].map(item => {
             const Icon = item.icon;
             return (
-              <details key={item.q} className="group rounded-2xl border border-slate-800 bg-slate-900 p-5 open:border-teal-500/40 open:bg-slate-900/90 transition">
-                <summary className="flex items-center gap-3 cursor-pointer list-none">
+              <details key={item.q} className="group rounded-2xl border border-slate-800 bg-slate-900 p-4 sm:p-5 open:border-teal-500/40 open:bg-slate-900/90 transition min-w-0 overflow-hidden">
+                <summary className="flex items-center gap-3 cursor-pointer list-none min-w-0">
                   <span className="w-9 h-9 rounded-xl bg-slate-800 border border-slate-700 text-teal-300 flex items-center justify-center shrink-0 group-open:bg-teal-500/15 group-open:border-teal-500/30 group-open:text-teal-300">
-                    <Icon className="w-4 h-4" />
+                    <Icon className="w-4 h-4 shrink-0" />
                   </span>
-                  <span className="text-sm font-bold text-slate-100 flex-1 text-left">{item.q}</span>
-                  <ChevronDown className="w-4 h-4 text-slate-400 group-open:rotate-180 transition" />
+                  <span className="text-sm font-bold text-slate-100 flex-1 text-left min-w-0 break-words">{item.q}</span>
+                  <ChevronDown className="w-4 h-4 text-slate-400 group-open:rotate-180 transition shrink-0" />
                 </summary>
-                <p className="mt-3 ml-12 text-xs text-slate-400 leading-relaxed border-t border-slate-800 pt-3">{item.a}</p>
+                <p className="mt-3 sm:ml-12 text-xs text-slate-400 leading-relaxed border-t border-slate-800 pt-3 break-words">{item.a}</p>
               </details>
             );
           })}
@@ -1396,8 +1396,8 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
       </section>
 
       {/* 10. PUBLIC CORPORATE FOOTER */}
-      <footer className="border-t border-slate-800 bg-slate-950 mt-12 px-4 py-10">
-        <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-8">
+      <footer className="border-t border-slate-800 bg-slate-950 mt-12 px-4 py-10 overflow-hidden">
+        <div className="max-w-7xl mx-auto grid sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8 min-w-0">
           <div>
             <div className="flex items-center gap-3">
               <img src={brandAssetUrl()} alt="CODE76 POS logo" className="w-12 h-12 rounded-xl object-contain" />
