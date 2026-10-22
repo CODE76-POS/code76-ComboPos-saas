@@ -5,6 +5,7 @@ import {buildDebtHandlingHistory} from '../../utils/debt.ts';
 import type {SaleTransaction} from '../../types/index.ts';
 import {X,FileText,Mail,Send,Copy,CheckCircle2} from 'lucide-react';
 import {directoryName} from '../../utils/directory.ts';
+import {sendUnifiedEmail} from '../../utils/emailService.ts';
 
 export const DebtHistoryEmailModal:React.FC<{sale:SaleTransaction|null;onClose:()=>void}>=({sale,onClose})=>{
   const {sales,company,settings,hasFeature,emailDebtHistory,companyMembers,relatedCompanies}=usePOS();
@@ -34,18 +35,14 @@ export const DebtHistoryEmailModal:React.FC<{sale:SaleTransaction|null;onClose:(
       const selected=candidates.filter(c=>recipients.includes(c.id)).map(c=>({email:c.email,name:c.name}));
       emailDebtHistory(live.id,selected);
       for (const rec of selected) {
-        fetch('/api/email/send', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            fromName: company.name,
-            fromEmail: 'code76pos@gmail.com',
-            to: rec.email,
-            subject,
-            message: body,
-            company: company.name,
-            category: 'debt_history',
-          }),
+        await sendUnifiedEmail({
+          fromName: company.name,
+          fromEmail: 'code76pos@gmail.com',
+          to: rec.email,
+          subject,
+          message: body,
+          company: company.name,
+          category: 'debt_history',
         }).catch(() => {});
       }
       setSent(true); setError('');

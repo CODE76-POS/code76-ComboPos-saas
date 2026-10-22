@@ -2,6 +2,7 @@ import { appDialogs } from '../../utils/appDialogs.ts';
 import { CODE76_CREDIT_TEXT } from '../../config/code76Brand.ts';
 import { useRegionalFormat } from '../../hooks/useRegionalFormat.ts';
 import { copyTextToClipboard } from '../../utils/clipboard.ts';
+import { sendUnifiedEmail } from '../../utils/emailService.ts';
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { usePOS } from '../../context/POSContext.tsx';
 import {
@@ -301,22 +302,17 @@ export const EmailExportModal: React.FC<EmailExportModalProps> = ({
 
     setIsSending(true);
     try {
-      const res = await fetch('/api/email/send', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          fromName: currentUser?.name || company.name || 'CODE76 Operator',
-          fromEmail: currentUser?.email || 'code76pos@gmail.com',
-          to: effectiveEmail,
-          subject: emailSubject,
-          message: `${emailMessage}\n\n================ ATTACHED REPORT TEXT ================\n\n${generatedTextDocument}`,
-          company: company.name,
-          category: 'export_report',
-        }),
+      const result = await sendUnifiedEmail({
+        fromName: currentUser?.name || company.name || 'CODE76 Operator',
+        fromEmail: currentUser?.email || 'code76pos@gmail.com',
+        to: effectiveEmail,
+        subject: emailSubject,
+        message: `${emailMessage}\n\n================ ATTACHED REPORT TEXT ================\n\n${generatedTextDocument}`,
+        company: company.name,
+        category: 'export_report',
       });
-      const data = await res.json();
       setSendSuccess(true);
-      logAuditAction('Dispatched Report Email', `Dispatched ${moduleName} export to ${effectiveEmail} (${data.jobId || 'MSG'}).`);
+      logAuditAction('Dispatched Report Email', `Dispatched ${moduleName} export to ${effectiveEmail} (${result.jobId}). Status: ${result.status}`);
     } catch {
       setSendSuccess(true);
       logAuditAction('Email Draft Prepared', `Prepared ${moduleName} ${isSingleRow ? 'record' : 'ledger'} export for ${effectiveName}.`);

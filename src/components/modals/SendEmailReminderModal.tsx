@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { usePOS } from '../../context/POSContext.tsx';
 import { Mail, Send, X, CheckCircle2, HeartHandshake, Eye } from 'lucide-react';
 import { SaleTransaction } from '../../types/index.ts';
+import { sendUnifiedEmail } from '../../utils/emailService.ts';
 
 interface SendEmailReminderModalProps {
   sale: SaleTransaction | null;
@@ -49,18 +50,14 @@ export const SendEmailReminderModal: React.FC<SendEmailReminderModalProps> = ({ 
       ? sale.customerContact
       : 'code76pos@gmail.com';
 
-    fetch('/api/email/send', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        fromName: company.name,
-        fromEmail: 'code76pos@gmail.com',
-        to: targetEmail,
-        subject,
-        message: body,
-        company: company.name,
-        category: 'customer_followup',
-      }),
+    sendUnifiedEmail({
+      fromName: company.name,
+      fromEmail: 'code76pos@gmail.com',
+      to: targetEmail,
+      subject,
+      message: body,
+      company: company.name,
+      category: 'customer_followup',
     }).catch(() => {});
 
     logAuditAction(

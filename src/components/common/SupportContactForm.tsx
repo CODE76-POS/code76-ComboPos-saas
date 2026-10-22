@@ -1,24 +1,35 @@
 import React,{useEffect,useRef,useState} from 'react';
 import {CODE76_BRAND} from '../../config/code76Brand.ts';
-export function supportDraftUrl(name:string,email:string,subject:string,message:string){return `${CODE76_BRAND.emailUrl}?subject=${encodeURIComponent(`[CODE76 POS Support] ${subject}`)}&body=${encodeURIComponent(`Name: ${name}\nReply email: ${email}\n\n${message}`)}`;}
+import { sendUnifiedEmail, createAntiSpamMailto } from '../../utils/emailService.ts';
+export function supportDraftUrl(name:string,email:string,subject:string,message:string){
+  return createAntiSpamMailto({
+    fromName: name,
+    fromEmail: email,
+    subject: subject || 'Support Request',
+    message: message || '',
+    category: 'support_ticket',
+  });
+}
 export function SupportContactForm({initialName='',initialEmail=''}:{initialName?:string;initialEmail?:string}){
  const [name,setName]=useState(initialName),[email,setEmail]=useState(initialEmail),[subject,setSubject]=useState(''),[message,setMessage]=useState(''),[trap,setTrap]=useState('');
  const [configured,setConfigured]=useState<boolean|null>(null),[sending,setSending]=useState(false),[notice,setNotice]=useState('');const requestId=useRef(crypto.randomUUID());const form=useRef<HTMLFormElement>(null);
- useEffect(()=>{let active=true;fetch('/api/support/status').then(response=>response.ok?response.json():Promise.reject()).then(data=>{if(active)setConfigured(data.configured===true);}).catch(()=>{if(active)setConfigured(false);});return()=>{active=false;};},[]);
+ useEffect(()=>{let active=true;fetch('/api/email/status').then(response=>response.ok?response.json():Promise.reject()).then(data=>{if(active)setConfigured(data.configured===true);}).catch(()=>{if(active)setConfigured(false);});return()=>{active=false;};},[]);
   const submit=async(event:React.FormEvent)=>{
     event.preventDefault();
     if(sending)return;
+    if(trap)return; // Bot trap
     setSending(true);
     setNotice('');
     try {
-      const response=await fetch('/api/support/contact',{
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({requestId:requestId.current,name,email,subject,message,website:trap})
+      const result = await sendUnifiedEmail({
+        fromName: name.trim(),
+        fromEmail: email.trim(),
+        subject: subject.trim(),
+        message: message.trim(),
+        category: 'support_ticket',
+        metadata: { requestId: requestId.current },
       });
-      const data=await response.json();
-      if(!response.ok)throw new Error(data.error||'The message could not be accepted.');
-      setNotice(`${data.message} (Reference: ${data.reference || requestId.current})`);
+      setNotice(`${result.message} (Reference: ${result.jobId})`);
       requestId.current=crypto.randomUUID();
       setMessage('');
     } catch(error) {

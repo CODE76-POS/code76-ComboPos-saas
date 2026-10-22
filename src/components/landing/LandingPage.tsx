@@ -9,6 +9,7 @@ import { usePOS } from '../../context/POSContext.tsx';
 import { useCode76Site } from '../../context/Code76SiteContext.tsx';
 import { CODE76_SITE } from '../../config/code76Site.ts';
 import { PublicLandingMetadata } from './PublicLandingMetadata.tsx';
+import { sendUnifiedEmail } from '../../utils/emailService.ts';
 import {
   ShieldCheck,
   CheckCircle2,
@@ -137,26 +138,20 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
     });
 
     try {
-      const res = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: contactName.trim(),
-          email: contactEmail.trim(),
-          phone: contactPhone.trim(),
-          company: contactCompany.trim(),
-          subject: contactSubject.trim() || 'General Inquiry',
-          message: contactMessage.trim(),
-        }),
+      const result = await sendUnifiedEmail({
+        fromName: contactName.trim(),
+        fromEmail: contactEmail.trim(),
+        phone: contactPhone.trim(),
+        company: contactCompany.trim(),
+        subject: contactSubject.trim() || 'General Inquiry',
+        message: contactMessage.trim(),
+        category: 'landing_inquiry',
       });
 
-      const data = await res.json();
       setContactResponse({
-        inquiryId: data.inquiryId || `INQ-${Date.now().toString(36).toUpperCase()}`,
-        mailtoUrl:
-          data.mailtoUrl ||
-          `mailto:code76pos@gmail.com?subject=${encodeURIComponent(contactSubject || 'Inquiry')}&body=${encodeURIComponent(contactMessage)}`,
-        smtpDispatched: !!data.smtpDispatched,
+        inquiryId: result.jobId,
+        mailtoUrl: result.mailtoUrl,
+        smtpDispatched: result.smtpDispatched,
       });
     } catch {
       const fallbackMailto = `mailto:code76pos@gmail.com?subject=${encodeURIComponent(
