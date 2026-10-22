@@ -1,7 +1,7 @@
-import type {PaymentMethod,SaleTransaction} from '../types/index.ts';
+import type {PaymentMethod,SaleTransaction,DebtReminderRecord} from '../types/index.ts';
 import {PAYMENT_METHODS,canonicalPaymentMethod} from '../config/paymentMethods.ts';
-export interface DebtPaymentRecord {id:string;amount:number;method:PaymentMethod;reference:string;timestamp:string;recordedBy:string;balanceBefore:number;balanceAfter:number}
-export interface DebtPaymentOptions {paymentId?:string;reference?:string;recordedBy?:string;timestamp?:string}
+export interface DebtPaymentRecord {id:string;amount:number;method:PaymentMethod;reference:string;timestamp:string;recordedBy:string;balanceBefore:number;balanceAfter:number;handlerId?:string;handlerName?:string;note?:string}
+export interface DebtPaymentOptions {paymentId?:string;reference?:string;recordedBy?:string;timestamp?:string;handlerId?:string;handlerName?:string;note?:string}
 const toCents=(n:number)=>{if(!Number.isFinite(n)||n<0||!Number.isSafeInteger(Math.round(n*100)))throw new Error('The amount is outside the supported range.');return Math.round(n*100);};
 export function outstandingBalance(sale:SaleTransaction):number {
  const total=toCents(sale.netTotal),paid=toCents(sale.amountPaid),stored=toCents(sale.debtAmount);
@@ -20,10 +20,42 @@ export function applyDebtPayment(sale:SaleTransaction,amount:number,method:strin
  if(!PAYMENT_METHODS.includes(method as PaymentMethod)&&method!=='Card'&&method!=='Bank Wire')throw new Error('Select a supported payment channel.');
  const channel=canonicalPaymentMethod(method);if(channel==='Credit / Debt')throw new Error('Credit/debt cannot repay an existing debt. Select an actual payment channel.');
  const reference=(options.reference||'').trim();if(reference.length>120)throw new Error('Keep the payment reference within 120 characters.');
+ const note=(options.note||'').trim();if(note.length>280)throw new Error('Keep the payment note within 280 characters.');
  const timestamp=options.timestamp||new Date().toISOString();if(!Number.isFinite(Date.parse(timestamp)))throw new Error('The payment timestamp is invalid.');
  const paid=(toCents(sale.amountPaid)+cents)/100,balanceAfter=(toCents(remaining)-cents)/100;
- const payment:DebtPaymentRecord={id,amount:cents/100,method:channel,reference,timestamp,recordedBy:options.recordedBy||'User',balanceBefore:remaining,balanceAfter};
- return {duplicate:false,payment,sale:{...sale,amountPaid:paid,debtAmount:balanceAfter,status:balanceAfter===0?'completed':'debt_partial',debtSettledDate:balanceAfter===0?timestamp:undefined,payments:[...sale.payments,{method:channel,amount:cents/100,referenceNo:reference||undefined}],debtPayments:[...(sale.debtPayments||[]),payment]}};
+ const payment:DebtPaymentRecord={id,amount:cents/100,method:channel,reference,timestamp,recordedBy:options.recordedBy||'User',balanceBefore:remaining,balanceAfter,handlerId:options.handlerId,handlerName:options.handlerName,note:note||undefined};
+ return {duplicate:false,payment,sale:{...sale,amountPaid:paid,debtAmount:balanceAfter,status:balanceAfter===0?'completed':'debt_partial',debtSettledDate:balanceAfter===0?timestamp:undefined,debtClearedAt:balanceAfter===0?timestamp:sale.debtClearedAt,payments:[...sale.payments,{method:channel,amount:cents/100,referenceNo:reference||undefined}],debtPayments:[...(sale.debtPayments||[]),payment]}};
+}
+
+export interface DebtSplitInput { amount:number; method:string; reference?:string; note?:string; }
+
+/** Apply multiple payment splits atomically — validates total, then applies sequentially. */
+export function applyDebtPayments(sale:SaleTransaction, splits:DebtSplitInput[], options:{recordedBy?:string; handlerId?:string; handlerName?:string; basePaymentId?:string; timestamp?:string}={}):{sale:SaleTransaction; payments:DebtPaymentRecord[]}{
+  if(!splits.length) throw new Error('Add at least one payment split.');
+  if(splits.length>6) throw new Error('A single debt collection can include at most 6 payment splits.');
+  const remaining=outstandingBalance(sale);
+  const totalCents=splits.reduce((sum,s)=>sum+toCents(s.amount),0);
+  if(totalCents<=0) throw new Error('Enter a paid amount greater than zero.');
+  if(totalCents>toCents(remaining)) throw new Error(`Combined payment ${ (totalCents/100).toFixed(2)} exceeds outstanding balance ${remaining.toFixed(2)}.`);
+  // validate each split method/reference
+  for(const s of splits){
+    if(!PAYMENT_METHODS.includes(s.method as PaymentMethod)&&s.method!=='Card'&&s.method!=='Bank Wire') throw new Error('Select a supported payment channel for each split.');
+    if(canonicalPaymentMethod(s.method)==='Credit / Debt') throw new Error('Credit/debt cannot repay an existing debt.');
+    const r=(s.reference||'').trim(); if(r.length>120) throw new Error('Keep payment references within 120 characters.');
+    const n=(s.note||'').trim(); if(n.length>280) throw new Error('Keep payment notes within 280 characters.');
+  }
+  let current=sale;
+  const created:DebtPaymentRecord[]=[];
+  const baseId=options.basePaymentId||crypto.randomUUID();
+  for(let i=0;i<splits.length;i++){
+    const s=splits[i];
+    const id = splits.length===1 ? baseId : `${baseId}-${i+1}`;
+    const result=applyDebtPayment(current,s.amount,s.method,{paymentId:id, reference:s.reference, recordedBy:options.recordedBy, timestamp:options.timestamp, handlerId:options.handlerId, handlerName:options.handlerName, note:s.note});
+    if(result.duplicate) throw new Error('Duplicate payment identifier — retry with a fresh collection.');
+    current=result.sale;
+    created.push(result.payment);
+  }
+  return {sale:current, payments:created};
 }
 
 // ---------------------------------------------------------------------------
@@ -105,6 +137,64 @@ export function receivablesSummary(sales: SaleTransaction[], todayISO: string): 
     buckets,
     customers,
   };
+}
+
+/** Friendly reminder draft builder */
+export function buildDebtReminder(input:{
+  sale:SaleTransaction;
+  companyName:string;
+  currency:string;
+  handlerName?:string;
+  companyTel?:string;
+  todayISO:string;
+}):{subject:string; body:string}{
+  const bal=input.sale.debtAmount;
+  const due=input.sale.debtDueDate ? ` due ${input.sale.debtDueDate}`:'';
+  const overdueDays=daysPastDue(input.sale, input.todayISO);
+  const overdueNote = overdueDays!==null && overdueDays>0 ? ` It is ${overdueDays} day${overdueDays===1?'':'s'} past the agreed due date.` : '';
+  const handlerNote = input.handlerName ? `\nYour contact for this invoice is ${input.handlerName}${input.companyTel?` (${input.companyTel})`:''}.`:'';
+  const subject = overdueDays!==null && overdueDays>0
+    ? `Friendly reminder: ${input.sale.receiptNo} past due — ${input.currency} ${bal.toFixed(2)} outstanding`
+    : `Friendly reminder: outstanding balance for ${input.sale.receiptNo}`;
+  const body = `Dear ${input.sale.customerName || 'Valued Customer'},\n\nI hope you are well. This is a friendly reminder regarding receipt ${input.sale.receiptNo} issued on ${input.sale.timestamp.slice(0,10)}.\n\nOutstanding balance: ${input.currency} ${bal.toFixed(2)}${due}.\nTotal: ${input.currency} ${input.sale.netTotal.toFixed(2)} · Paid to date: ${input.currency} ${input.sale.amountPaid.toFixed(2)}.${overdueNote}${handlerNote}\n\nIf you have already settled this balance in the last few days, please disregard this reminder and accept our thanks. Otherwise, we would appreciate your kind assistance in clearing the remaining amount at your earliest convenience.\n\nThank you for choosing ${input.companyName}.\n\nWarm regards,\n${input.handlerName || input.companyName}\n${input.companyTel || ''}\n\n— This is a recorded bookkeeping reminder only; no funds were moved by the app. Please review with your handler before acting.`;
+  return {subject, body};
+}
+
+/** Full debt handling history as text for email/copy */
+export function buildDebtHandlingHistory(input:{
+  sale:SaleTransaction;
+  companyName:string;
+  currency:string;
+  issuedAt:string;
+}):string{
+  const s=input.sale;
+  const lines:string[]=[];
+  lines.push(`${input.companyName} — DEBT HANDLING HISTORY`);
+  lines.push(`Receipt: ${s.receiptNo} · Customer: ${s.customerName || 'Walk-in'} · Issued: ${s.timestamp.slice(0,10)}`);
+  lines.push(`Net total: ${input.currency} ${s.netTotal.toFixed(2)} · Paid: ${input.currency} ${s.amountPaid.toFixed(2)} · Balance: ${input.currency} ${s.debtAmount.toFixed(2)}`);
+  lines.push(`Status: ${s.status}${s.debtDueDate?` · Due: ${s.debtDueDate}`:''}${s.debtSettledDate?` · Settled: ${s.debtSettledDate.slice(0,10)}`:''}`);
+  if(s.debtHandlerName) lines.push(`Responsible handler: ${s.debtHandlerName}${s.debtAssignedAt?` (assigned ${s.debtAssignedAt.slice(0,10)} by ${s.debtAssignedBy||'system'})`:''}`);
+  if(s.debtClearedAt) lines.push(`Debt cleared at: ${s.debtClearedAt.slice(0,10)}`);
+  lines.push('-'.repeat(56));
+  if(s.debtPayments?.length){
+    lines.push(`Repayment history (${s.debtPayments.length}):`);
+    for(const p of s.debtPayments){
+      lines.push(` • ${p.timestamp.slice(0,16).replace('T',' ')} · ${input.currency} ${p.amount.toFixed(2)} via ${p.method} · Bal ${input.currency} ${p.balanceBefore.toFixed(2)} → ${p.balanceAfter.toFixed(2)} · by ${p.recordedBy}${p.handlerName?` (handler ${p.handlerName})`:''}${p.reference?` · ref ${p.reference}`:''}${p.note?` · ${p.note}`:''}`);
+    }
+  } else {
+    lines.push('No repayments recorded yet.');
+  }
+  if(s.debtReminderHistory?.length){
+    lines.push('');
+    lines.push(`Reminder history (${s.debtReminderHistory.length}):`);
+    for(const r of s.debtReminderHistory){
+      lines.push(` • ${r.sentAt.slice(0,16).replace('T',' ')} · to ${r.recipientName} <${r.recipientEmail}> · ${r.subject} · by ${r.sentBy}${r.ccEmails?.length?` · cc ${r.ccEmails.join(', ')}`:''}`);
+    }
+  }
+  lines.push('-'.repeat(56));
+  lines.push(`Outstanding balance: ${input.currency} ${s.debtAmount.toFixed(2)}`);
+  lines.push(`Generated: ${input.issuedAt} — bookkeeping record only.`);
+  return lines.join('\n')+'\n';
 }
 
 /** Plain-text customer statement suitable for TXT download, email or WhatsApp. */

@@ -1,6 +1,6 @@
 import { calendarDate } from '../utils/regional.ts';
 import {createDemoWorkspace} from '../data/demoWorkspace.ts';
-import {applyDebtPayment,type DebtPaymentOptions} from '../utils/debt.ts';
+import {applyDebtPayment,applyDebtPayments,type DebtPaymentOptions,type DebtSplitInput,buildDebtReminder,buildDebtHandlingHistory} from '../utils/debt.ts';
 import { TEAM_SERVICES } from '../config/teamServices.ts';
 import { invoiceDraftTotals } from '../utils/invoiceDraft.ts';
 import { directoryFeature, hasPlanFeature, planTier, requirePlanFeature, PLAN_TIERS, type Feature } from '../utils/plans.ts';
@@ -146,6 +146,10 @@ interface POSContextType {
   hasPrivilege: (permission: PrivilegeKey) => boolean;
   addSale: (sale: Omit<SaleTransaction, 'id' | 'receiptNo' | 'timestamp'>) => SaleTransaction;
   settleDebt: (saleId: string, amount: number, method: string, options?:DebtPaymentOptions) => SaleTransaction;
+  settleDebtMultiple: (saleId: string, splits: DebtSplitInput[], options?: Omit<DebtPaymentOptions,'paymentId'|'reference'> & { basePaymentId?: string }) => SaleTransaction;
+  assignDebtHandler: (saleId: string, handlerId: string | null) => SaleTransaction;
+  recordDebtReminder: (saleId: string, reminder: { recipientEmail: string; recipientName: string; ccEmails?: string[]; subject: string; bodyPreview: string; channel: 'email' | 'copy' }) => SaleTransaction;
+  emailDebtHistory: (saleId: string, recipients: { email: string; name: string }[]) => string;
   addPerson: (category: PersonRecord['category'], person: Omit<PersonRecord, 'id' | 'createdAt'>) => PersonRecord;
   updatePerson: (category: PersonRecord['category'], person: PersonRecord) => void;
   deletePerson: (category: PersonRecord['category'], id: string) => void;
@@ -586,7 +590,7 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // Record an already-received payment, never a new sale or money transfer.
   const settleDebt=(saleId:string,amount:number,method:string,options:DebtPaymentOptions={}):SaleTransaction=>{
     requirePlanFeature(settings,'debts');
-    if(!hasPrivilege('canSell')&&!hasPrivilege('canViewInvoices'))throw new Error('Recording debt collections requires Sales or Invoices role permission.');
+    if(!hasPrivilege('canSettleDebt')&&!hasPrivilege('canSell')&&!hasPrivilege('canViewInvoices'))throw new Error('Recording debt collections requires Sales, Invoices or Debt-settlement permission.');
     const original=salesRef.current.find(sale=>sale.id===saleId);if(!original)throw new Error('The original sale no longer exists.');
     const linked=invoices.find(invoice=>invoice.type==='sales'&&(invoice.id===original.invoiceId||invoice.saleId===saleId));
     if(linked&&(Math.abs(linked.total-original.netTotal)>0.01||Math.abs(linked.amountPaid-original.amountPaid)>0.01))throw new Error('The linked invoice and sale balances disagree. Review the original records before collecting another payment.');
@@ -594,8 +598,64 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     if(result.duplicate)return result.sale;
     salesRef.current=salesRef.current.map(sale=>sale.id===saleId?result.sale:sale);setSales(salesRef.current);
     setInvoices(previous=>previous.map(invoice=>invoice.type==='sales'&&(invoice.id===original.invoiceId||invoice.saleId===saleId)?{...invoice,amountPaid:result.sale.amountPaid,status:result.sale.debtAmount===0?'paid':invoice.dueDate<calendarDate(new Date(),settings)?'overdue':'pending'}:invoice));
-    logAuditAction('Recorded Debt Payment',`Recorded ${result.payment.amount} ${company.currency} for ${original.receiptNo}; remaining ${result.sale.debtAmount}. Bookkeeping only; no transfer initiated.`);
+    const isClearedDebt=result.sale.debtAmount===0;
+    if(isClearedDebt) logAuditAction('Debt cleared',`Debt for ${original.receiptNo} fully settled (${result.payment.method} ${result.payment.amount.toFixed(2)} ${company.currency}). Remaining ${result.sale.debtAmount}.`);
+    else logAuditAction('Recorded Debt Payment',`Recorded ${result.payment.amount} ${company.currency} for ${original.receiptNo}; remaining ${result.sale.debtAmount}. Bookkeeping only; no transfer initiated.`);
     return result.sale;
+  };
+
+  const settleDebtMultiple=(saleId:string,splits:DebtSplitInput[],options:Omit<DebtPaymentOptions,'paymentId'|'reference'> & {basePaymentId?:string}={}):SaleTransaction=>{
+    requirePlanFeature(settings,'debts');
+    if(!hasPrivilege('canSettleDebt')&&!hasPrivilege('canSell')&&!hasPrivilege('canViewInvoices'))throw new Error('Recording debt collections requires Sales, Invoices or Debt-settlement permission.');
+    const original=salesRef.current.find(sale=>sale.id===saleId);if(!original)throw new Error('The original sale no longer exists.');
+    const linked=invoices.find(invoice=>invoice.type==='sales'&&(invoice.id===original.invoiceId||invoice.saleId===saleId));
+    if(linked&&(Math.abs(linked.total-original.netTotal)>0.01||Math.abs(linked.amountPaid-original.amountPaid)>0.01))throw new Error('The linked invoice and sale balances disagree. Review the original records before collecting another payment.');
+    const result=applyDebtPayments(original,splits,{recordedBy:currentUser?.name||'User',handlerId:options.handlerId,handlerName:options.handlerName,basePaymentId:options.basePaymentId,timestamp:options.timestamp});
+    salesRef.current=salesRef.current.map(sale=>sale.id===saleId?result.sale:sale);setSales(salesRef.current);
+    const isCleared=result.sale.debtAmount===0;
+    setInvoices(previous=>previous.map(invoice=>invoice.type==='sales'&&(invoice.id===original.invoiceId||invoice.saleId===saleId)?{...invoice,amountPaid:result.sale.amountPaid,status:isCleared?'paid':invoice.dueDate<calendarDate(new Date(),settings)?'overdue':'pending'}:invoice));
+    if(isCleared) logAuditAction('Debt cleared',`Debt for ${original.receiptNo} fully settled with ${result.payments.length} split(s) totalling ${result.payments.reduce((a,p)=>a+p.amount,0).toFixed(2)} ${company.currency}. Remaining ${result.sale.debtAmount}.`);
+    else logAuditAction('Recorded Debt Payment (multi)',`Recorded ${result.payments.length} splits totalling ${result.payments.reduce((a,p)=>a+p.amount,0).toFixed(2)} ${company.currency} for ${original.receiptNo}; remaining ${result.sale.debtAmount}.`);
+    return result.sale;
+  };
+
+  const assignDebtHandler=(saleId:string,handlerId:string|null):SaleTransaction=>{
+    requirePlanFeature(settings,'debts');
+    if(!hasPrivilege('canSell')&&!hasPrivilege('canSettleDebt')&&!hasPrivilege('canViewInvoices'))throw new Error('Assigning a debt handler requires Sales, Invoices or Debt permission.');
+    const original=salesRef.current.find(sale=>sale.id===saleId);if(!original)throw new Error('Sale not found.');
+    if(!handlerId){
+      const cleared={...original,debtHandlerId:undefined,debtHandlerName:undefined,debtAssignedAt:undefined,debtAssignedBy:undefined};
+      salesRef.current=salesRef.current.map(s=>s.id===saleId?cleared:s);setSales(salesRef.current);
+      logAuditAction('Debt handler unassigned',`Removed responsible handler from ${original.receiptNo} by ${currentUser?.name||'User'}.`);
+      return cleared;
+    }
+    const member=directoriesRef.current.companyMembers.find(m=>canonicalDirectoryId(m.id)===canonicalDirectoryId(handlerId))||directoriesRef.current.relatedCompanies.find(m=>canonicalDirectoryId(m.id)===canonicalDirectoryId(handlerId));
+    if(!member) throw new Error('Select a valid company member or related company.');
+    const name=directoryName(member);
+    const now=new Date().toISOString();
+    const updated:SaleTransaction={...original,debtHandlerId:member.id,debtHandlerName:name,debtAssignedAt:now,debtAssignedBy:currentUser?.name||'User'};
+    salesRef.current=salesRef.current.map(s=>s.id===saleId?updated:s);setSales(salesRef.current);
+    logAuditAction('Debt handler assigned',`Assigned ${name} to handle debt for ${original.receiptNo}; remaining ${original.debtAmount} ${company.currency}.`);
+    return updated;
+  };
+
+  const recordDebtReminder=(saleId:string,reminder:{recipientEmail:string;recipientName:string;ccEmails?:string[];subject:string;bodyPreview:string;channel:'email'|'copy'}):SaleTransaction=>{
+    if(!hasFeature('email')) throw new Error('Email reminders require the email feature.');
+    const original=salesRef.current.find(sale=>sale.id===saleId);if(!original)throw new Error('Sale not found.');
+    if(!original.debtAmount || original.debtAmount<=0) throw new Error('This sale has no outstanding debt to remind about.');
+    const entry={id:`reminder-${Date.now()}-${Math.floor(Math.random()*1000)}`,sentAt:new Date().toISOString(),sentBy:currentUser?.name||'User',recipientEmail:reminder.recipientEmail,recipientName:reminder.recipientName,ccEmails:reminder.ccEmails,subject:reminder.subject,bodyPreview:reminder.bodyPreview.slice(0,280),channel:reminder.channel,dueDate:original.debtDueDate} as import('../types/index.ts').DebtReminderRecord;
+    const updated:SaleTransaction={...original,debtReminderCount:(original.debtReminderCount||0)+1,debtLastReminderAt:entry.sentAt,debtReminderHistory:[entry,...(original.debtReminderHistory||[])].slice(0,50)};
+    salesRef.current=salesRef.current.map(s=>s.id===saleId?updated:s);setSales(salesRef.current);
+    logAuditAction('Debt reminder prepared',`Prepared ${reminder.channel} reminder for ${original.receiptNo} to ${reminder.recipientName} <${reminder.recipientEmail}>${reminder.ccEmails?.length?` cc ${reminder.ccEmails.join(', ')}`:''}. Subject: ${reminder.subject}`);
+    return updated;
+  };
+
+  const emailDebtHistory=(saleId:string,recipients:{email:string;name:string}[]):string=>{
+    if(!hasFeature('email')) throw new Error('Email history requires the email feature.');
+    const sale=salesRef.current.find(s=>s.id===saleId);if(!sale) throw new Error('Sale not found.');
+    const history=buildDebtHandlingHistory({sale,companyName:company.name,currency:company.currency||settings.payments.defaultCurrency,issuedAt:new Date().toISOString()});
+    logAuditAction('Debt history emailed',`Emailed debt handling history for ${sale.receiptNo} to ${recipients.map(r=> r.name+' <'+r.email+'>').join(', ')} by ${currentUser?.name||'User'}.`);
+    return history;
   };
 
   // Stable identities project into selected directories; historical snapshots remain immutable.
@@ -1325,6 +1385,10 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         hasPrivilege,
         addSale,
         settleDebt,
+        settleDebtMultiple,
+        assignDebtHandler,
+        recordDebtReminder,
+        emailDebtHistory,
         addPerson,
         updatePerson,
         deletePerson,

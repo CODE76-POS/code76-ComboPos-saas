@@ -2,7 +2,6 @@ import { appDialogs } from '../../utils/appDialogs.ts';
 import { downloadBlob } from '../../utils/receiptFiles.ts';
 import { buildCustomerStatement, receivablesSummary, debtAgingBucket, DEBT_AGING_BUCKETS, type DebtAgingBucket } from '../../utils/debt.ts';
 import { copyText } from '../../utils/receiptFiles.ts';
-import { serializeCsvRows } from '../../utils/csv.ts';
 import { withExportCredit } from '../../config/code76Brand.ts';
 import { calendarDate } from '../../utils/regional.ts';
 import { useRegionalFormat } from '../../hooks/useRegionalFormat.ts';
@@ -31,9 +30,14 @@ import {
   Copy,
   MessageCircle,
   BellRing,
+  UserCheck,
+  ClipboardList,
+  ShieldCheck,
 } from 'lucide-react';
 import { SaleTransaction } from '../../types/index.ts';
 import { DebtPaymentModal } from '../modals/DebtPaymentModal.tsx';
+import { DebtReminderModal } from '../modals/DebtReminderModal.tsx';
+import { DebtHistoryEmailModal } from '../modals/DebtHistoryEmailModal.tsx';
 import { SendEmailReminderModal } from '../modals/SendEmailReminderModal.tsx';
 import { printPDFReport } from '../../utils/exportUtils.ts';
 import { EmailExportModal } from '../modals/EmailExportModal.tsx';
@@ -46,6 +50,8 @@ export const SalesHistoryPlatform: React.FC = () => {
   const [selectedSaleDetail, setSelectedSaleDetail] = useState<SaleTransaction | null>(null);
   const [debtModalSale, setDebtModalSale] = useState<SaleTransaction | null>(null);
   const [emailModalSale, setEmailModalSale] = useState<SaleTransaction | null>(null);
+  const [reminderSale, setReminderSale] = useState<SaleTransaction | null>(null);
+  const [historySale, setHistorySale] = useState<SaleTransaction | null>(null);
 
   // Universal Email Export Modal State (.txt, .pdf, and .csv formats)
   const [universalEmailModalOpen, setUniversalEmailModalOpen] = useState(false);
@@ -53,14 +59,15 @@ export const SalesHistoryPlatform: React.FC = () => {
 
   const salesExportColumns = [
     { header: 'Receipt #', dataKey: 'receiptNo' },
+    { header: 'Status', dataKey: 'status' },
     { header: 'Category', dataKey: 'saleCategory' },
     { header: 'Date', dataKey: 'date' },
     { header: 'Customer', dataKey: 'customer' },
     { header: 'Cashier', dataKey: 'cashier' },
+    { header: 'Handler', dataKey: 'handler' },
     { header: 'Net Total ($)', dataKey: 'netTotal' },
     { header: 'Paid ($)', dataKey: 'paid' },
     { header: 'Debt ($)', dataKey: 'debt' },
-    { header: 'Status', dataKey: 'status' },
   ];
 
   const handleOpenBulkEmail = () => {
@@ -101,6 +108,7 @@ export const SalesHistoryPlatform: React.FC = () => {
       s.cashierName.toLowerCase().includes(q) ||
       (s.invoiceId && s.invoiceId.toLowerCase().includes(q)) ||
       (s.notes && s.notes.toLowerCase().includes(q)) ||
+      (s.debtHandlerName && s.debtHandlerName.toLowerCase().includes(q)) ||
       (s.saleType && s.saleType.toLowerCase().replace('_', ' ').includes(q)) ||
       (q === 'invoice' && s.saleType === 'sales_invoice') ||
       (q === 'sales invoice' && s.saleType === 'sales_invoice') ||
@@ -155,6 +163,7 @@ export const SalesHistoryPlatform: React.FC = () => {
         { label: 'Receipt No', value: sale.receiptNo },
         { label: 'Customer', value: sale.customerName },
         { label: 'Cashier', value: sale.cashierName },
+        { label: 'Handler', value: sale.debtHandlerName || 'Unassigned' },
         { label: 'Net Total', value: `$${sale.netTotal.toFixed(2)}` },
         { label: 'Amount Paid', value: `$${sale.amountPaid.toFixed(2)}` },
         { label: 'Debt Remaining', value: `$${sale.debtAmount.toFixed(2)}` },
@@ -170,27 +179,29 @@ export const SalesHistoryPlatform: React.FC = () => {
       company,
       [
         { header: 'Receipt No', dataKey: 'receiptNo' },
+        { header: 'Status', dataKey: 'status' },
         { header: 'Category / Type', dataKey: 'saleCategory' },
         { header: 'Date', dataKey: 'date' },
         { header: 'Customer', dataKey: 'customer' },
         { header: 'Cashier', dataKey: 'cashier' },
+        { header: 'Handler', dataKey: 'handler' },
         { header: 'Referred By', dataKey: 'referrer' },
         { header: 'Net Total ($)', dataKey: 'netTotal' },
         { header: 'Paid ($)', dataKey: 'paid' },
         { header: 'Debt ($)', dataKey: 'debt' },
-        { header: 'Status', dataKey: 'status' },
       ],
       filteredSales.map((s) => ({
         receiptNo: s.receiptNo,
+        status: s.status === 'completed' ? 'Completed / Cleared' : s.status === 'debt_partial' ? 'Partial' : s.status,
         saleCategory: s.saleType === 'sales_invoice' ? 'Sales Invoice' : 'Normal Sale',
         date: regionalFormat.date(s.timestamp),
         customer: s.customerName,
         cashier: s.cashierName,
+        handler: s.debtHandlerName || '—',
         referrer: s.referredBy?.role || 'Direct',
         netTotal: s.netTotal.toFixed(2),
         paid: s.amountPaid.toFixed(2),
         debt: s.debtAmount.toFixed(2),
-        status: s.saleType === 'sales_invoice' ? (s.status === 'completed' ? 'Paid' : 'Debt') : s.status,
       }))
     );
   };
@@ -211,7 +222,7 @@ export const SalesHistoryPlatform: React.FC = () => {
             </button>
           </div>
           <p className="text-xs text-slate-400">
-            Audit past transactions, view products sold, collect debt balances, capture customer testimonials, and send polite appreciation emails.
+            Audit past transactions, track debt aging, assign handlers, record multi-payments, send friendly reminders, and share handling history.
           </p>
         </div>
 
@@ -240,10 +251,10 @@ export const SalesHistoryPlatform: React.FC = () => {
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
             <h2 className="flex items-center gap-2 text-sm font-black text-slate-100"><Wallet className="h-4 w-4 text-amber-400" />Receivables & debt aging</h2>
-            <p className="mt-1 text-[11px] text-slate-400">Aging uses each sale’s recorded due date and today’s company-calendar date ({today}). Balances update when a repayment is recorded.</p>
+            <p className="mt-1 text-[11px] text-slate-400">Aging uses each sale’s recorded due date and today’s company-calendar date ({today}). Balances update when a repayment is recorded. Past-due reminders use email feature gate.</p>
           </div>
           <span className="rounded-full border border-amber-800 bg-amber-950/30 px-2.5 py-1 text-[10px] font-bold text-amber-200">
-            {receivables.count} open · {receivables.overdueCount} overdue
+            {receivables.count} open · {receivables.overdueCount} overdue · {receivables.customers.length} customer(s)
           </span>
         </div>
 
@@ -261,7 +272,7 @@ export const SalesHistoryPlatform: React.FC = () => {
           <div className="rounded-xl border border-sky-900 bg-sky-950/20 p-3">
             <p className="text-[10px] uppercase font-bold text-sky-400">Due within 7 days</p>
             <p className="mt-1 text-lg font-black text-sky-300">{currency} {receivables.dueSoonAmount.toFixed(2)}</p>
-            <p className="text-[10px] text-sky-400/80">Plan a reminder, not an automatic message.</p>
+            <p className="text-[10px] text-sky-400/80">Send a friendly reminder.</p>
           </div>
           <div className="rounded-xl border border-slate-800 bg-slate-950 p-3">
             <p className="text-[10px] uppercase font-bold text-slate-500">No due date</p>
@@ -352,7 +363,7 @@ export const SalesHistoryPlatform: React.FC = () => {
                 disabled={!statementCustomer}
                 onClick={async () => {
                   const rows = sales.filter((sale) => (sale.customerName || 'Walk-in Customer') === statementCustomer && sale.debtAmount > 0);
-                  const message = `Hello ${statementCustomer}, a reminder from ${company.name}: ${rows.length} receipt(s) show ${currency} ${rows.reduce((sum, sale) => sum + sale.debtAmount, 0).toFixed(2)} outstanding. Please contact us to confirm the balance. (Prepared locally — not sent automatically.)`;
+                  const message = `Hello ${statementCustomer}, a friendly reminder from ${company.name}: ${rows.length} receipt(s) show ${currency} ${rows.reduce((sum, sale) => sum + sale.debtAmount, 0).toFixed(2)} outstanding. Please contact us to confirm the balance. (Prepared locally — not sent automatically.)`;
                   const copied = await copyText(message);
                   logAuditAction('Debt reminder prepared', `Prepared a reminder draft for ${statementCustomer}; nothing was sent.`);
                   await appDialogs.alert({ title: copied ? 'Reminder draft copied' : 'Clipboard blocked', message: copied ? 'Paste it into WhatsApp, SMS or email. Review the balance with the customer before sending.' : 'Allow clipboard access to copy the reminder draft.', tone: copied ? 'success' : 'warning' });
@@ -372,7 +383,7 @@ export const SalesHistoryPlatform: React.FC = () => {
           <Search className="w-4 h-4 absolute left-3 top-3 text-slate-500" />
           <input
             type="text"
-            placeholder="Search receipt #, customer, cashier, invoice..."
+            placeholder="Search receipt #, customer, cashier, handler, invoice..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-4 py-2 text-xs text-slate-200 focus:outline-none focus:border-teal-500"
@@ -434,12 +445,13 @@ export const SalesHistoryPlatform: React.FC = () => {
       {/* Notice: ACTION COLUMN ON BOTH START AND END OF TABLE as explicitly required! */}
       <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs min-w-[1100px]">
+          <table className="w-full text-left text-xs min-w-[1280px]">
             <thead className="bg-slate-950/80 border-b border-slate-800 text-[11px] uppercase font-bold text-slate-400">
               <tr>
                 {/* START ACTION COLUMN */}
                 <th className="py-3 px-3 text-center w-28 text-teal-400">Actions (Start)</th>
                 <th className="py-3 px-3">Receipt / Inv #</th>
+                <th className="py-3 px-3 text-center">Status</th>
                 <th className="py-3 px-3 text-center">Category / Type</th>
                 <th className="py-3 px-3">Date / Time</th>
                 <th className="py-3 px-3">Customer</th>
@@ -448,7 +460,7 @@ export const SalesHistoryPlatform: React.FC = () => {
                 <th className="py-3 px-3 text-right">Net Total</th>
                 <th className="py-3 px-3 text-right">Paid</th>
                 <th className="py-3 px-3 text-right">Debt</th>
-                <th className="py-3 px-3 text-center">Status</th>
+                <th className="py-3 px-3 text-center">Handler</th>
                 <th className="py-3 px-3 text-center">Follow-ups</th>
                 {/* END ACTION COLUMN */}
                 <th className="py-3 px-3 text-center w-28 text-teal-400">Actions (End)</th>
@@ -457,7 +469,7 @@ export const SalesHistoryPlatform: React.FC = () => {
             <tbody className="divide-y divide-slate-800 text-slate-200">
               {filteredSales.length === 0 ? (
                 <tr>
-                  <td colSpan={13} className="py-8 text-center text-slate-500">
+                  <td colSpan={14} className="py-8 text-center text-slate-500">
                     No transactions match the selected criteria.
                   </td>
                 </tr>
@@ -496,6 +508,29 @@ export const SalesHistoryPlatform: React.FC = () => {
                       {sale.saleType === 'sales_invoice' && (
                         <div className="text-[10px] text-indigo-400 font-mono">Invoice B2B</div>
                       )}
+                    </td>
+
+                    <td className="py-2.5 px-3 text-center">
+                      <span
+                        className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider inline-flex items-center gap-1 ${
+                          sale.status === 'completed'
+                            ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                            : sale.status === 'debt_partial'
+                            ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
+                            : 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
+                        }`}
+                      >
+                        {sale.status === 'completed' && <ShieldCheck className="w-3 h-3"/>}
+                        {sale.saleType === 'sales_invoice'
+                          ? sale.status === 'completed'
+                            ? 'Paid (Invoice)'
+                            : sale.status === 'debt_partial'
+                            ? 'Debt (Partial)'
+                            : 'Debt (Unpaid)'
+                          : sale.status.replace('_', ' ')}
+                      </span>
+                      {sale.debtAmount===0 && sale.debtClearedAt && <div className="text-[9px] text-emerald-400 mt-0.5">Cleared {sale.debtClearedAt.slice(0,10)}</div>}
+                      {sale.debtDueDate && sale.debtAmount>0 && <div className="text-[9px] text-slate-500">Due {sale.debtDueDate}</div>}
                     </td>
 
                     {/* Category Column */}
@@ -543,41 +578,59 @@ export const SalesHistoryPlatform: React.FC = () => {
                           {currency} {sale.debtAmount.toFixed(2)}
                         </span>
                       ) : (
-                        <span className="text-slate-500">$0.00</span>
+                        <span className="text-emerald-400 font-bold">Cleared</span>
                       )}
                     </td>
 
                     <td className="py-2.5 px-3 text-center">
-                      <span
-                        className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
-                          sale.status === 'completed'
-                            ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
-                            : sale.status === 'debt_partial'
-                            ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
-                            : 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
-                        }`}
-                      >
-                        {sale.saleType === 'sales_invoice'
-                          ? sale.status === 'completed'
-                            ? 'Paid (Invoice)'
-                            : sale.status === 'debt_partial'
-                            ? 'Debt (Partial)'
-                            : 'Debt (Unpaid)'
-                          : sale.status.replace('_', ' ')}
-                      </span>
+                      {sale.debtHandlerName ? (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-slate-800 border border-slate-700 text-[10px] font-semibold text-slate-200"><UserCheck className="w-3 h-3 text-teal-400"/>{sale.debtHandlerName}</span>
+                      ) : sale.debtAmount>0 ? (
+                        <span className="text-[10px] text-slate-500">Unassigned</span>
+                      ) : (
+                        <span className="text-[10px] text-slate-600">—</span>
+                      )}
+                      {sale.debtReminderCount ? <div className="text-[9px] text-amber-400 mt-0.5">{sale.debtReminderCount} reminder(s)</div>:null}
                     </td>
 
-                    {/* Follow-up actions: Debt, Review, Appreciation Email */}
+                    {/* Follow-up actions: Debt, Review, Appreciation Email, Reminder, History */}
                     <td className="py-2.5 px-3 text-center">
-                      <div className="flex items-center justify-center gap-1">
+                      <div className="flex items-center justify-center gap-1 flex-wrap">
                         {hasFeature('debts') && sale.debtAmount > 0 && canSettleDebt && (
                           <button
                             onClick={() => setDebtModalSale(sale)}
-                            title="Collect Debt Payment"
+                            title="Collect Debt Payment (multi-payment)"
                             className="px-2 py-1 rounded-md bg-rose-600/30 hover:bg-rose-600/50 text-rose-300 border border-rose-500/40 text-[10px] font-semibold flex items-center gap-1 cursor-pointer"
                           >
                             <DollarSign className="w-3 h-3" />
                             Pay Debt
+                          </button>
+                        )}
+                        {hasFeature('debts') && sale.debtAmount>0 && (
+                          <button
+                            onClick={() => setDebtModalSale(sale)}
+                            title="Assign handler"
+                            className="p-1 rounded-md bg-slate-700 hover:bg-slate-600 text-slate-300 border border-slate-600 cursor-pointer"
+                          >
+                            <UserCheck className="w-3.5 h-3.5" />
+                          </button>
+                        )}
+                        {hasFeature('email') && sale.debtAmount>0 && (
+                          <button
+                            onClick={() => setReminderSale(sale)}
+                            title="Send friendly reminder (past due / uncleared)"
+                            className="p-1 rounded-md bg-amber-500/20 hover:bg-amber-500/40 text-amber-300 border border-amber-500/30 cursor-pointer"
+                          >
+                            <BellRing className="w-3.5 h-3.5" />
+                          </button>
+                        )}
+                        {(sale.debtPayments?.length||sale.debtReminderHistory?.length||sale.debtHandlerName) && (
+                          <button
+                            onClick={() => setHistorySale(sale)}
+                            title="View & email handling history to team / related companies"
+                            className="p-1 rounded-md bg-sky-500/20 hover:bg-sky-500/40 text-sky-300 border border-sky-500/30 cursor-pointer"
+                          >
+                            <ClipboardList className="w-3.5 h-3.5" />
                           </button>
                         )}
 
@@ -705,7 +758,9 @@ export const SalesHistoryPlatform: React.FC = () => {
               </div>
             </div>
 
-            {!!selectedSaleDetail.debtPayments?.length&&<section className="mt-4 rounded-xl border border-teal-900 p-3"><h4 className="font-bold text-sm">Recorded repayments</h4>{selectedSaleDetail.debtPayments.map(payment=><p key={payment.id} className="mt-2 text-xs text-slate-400">{regionalFormat.dateTime(payment.timestamp)} · {currency} {payment.amount.toFixed(2)} · {payment.method} · {payment.reference||'No reference'} · Balance after: {currency} {payment.balanceAfter.toFixed(2)}</p>)}</section>}
+            {!!selectedSaleDetail.debtPayments?.length&&<section className="mt-4 rounded-xl border border-teal-900 p-3"><h4 className="font-bold text-sm">Recorded repayments</h4>{selectedSaleDetail.debtPayments.map(payment=><p key={payment.id} className="mt-2 text-xs text-slate-400">{regionalFormat.dateTime(payment.timestamp)} · {currency} {payment.amount.toFixed(2)} · {payment.method} · {payment.reference||'No reference'}{payment.handlerName?` · handler ${payment.handlerName}`:''} · Balance after: {currency} {payment.balanceAfter.toFixed(2)}</p>)}</section>}
+            {selectedSaleDetail.debtHandlerName&&<p className="mt-3 text-xs text-slate-400">Handler: <strong>{selectedSaleDetail.debtHandlerName}</strong> {selectedSaleDetail.debtAssignedAt?`· assigned ${regionalFormat.dateTime(selectedSaleDetail.debtAssignedAt)}`:''}</p>}
+            {!!selectedSaleDetail.debtReminderHistory?.length&&<section className="mt-3 rounded-xl border border-amber-900 p-3"><h4 className="font-bold text-sm">Reminders sent</h4>{selectedSaleDetail.debtReminderHistory.map(r=><p key={r.id} className="mt-1 text-xs text-slate-400">{regionalFormat.dateTime(r.sentAt)} → {r.recipientName} &lt;{r.recipientEmail}&gt; · {r.subject}</p>)}</section>}
             <div className="flex justify-end gap-2 mt-4">
               <button
                 onClick={() => {
@@ -734,6 +789,16 @@ export const SalesHistoryPlatform: React.FC = () => {
           sale={debtModalSale}
           onClose={() => setDebtModalSale(null)}
         />
+      )}
+
+      {/* Debt Reminder Modal */}
+      {reminderSale && (
+        <DebtReminderModal sale={reminderSale} onClose={() => setReminderSale(null)} />
+      )}
+
+      {/* Debt History Email Modal */}
+      {historySale && (
+        <DebtHistoryEmailModal sale={historySale} onClose={() => setHistorySale(null)} />
       )}
 
       {/* Send Email Reminder Modal */}
@@ -765,25 +830,27 @@ export const SalesHistoryPlatform: React.FC = () => {
           selectedSaleForUniversalEmail
             ? {
                 receiptNo: selectedSaleForUniversalEmail.receiptNo,
+                status: selectedSaleForUniversalEmail.status.toUpperCase(),
                 saleCategory: selectedSaleForUniversalEmail.saleType === 'sales_invoice' ? 'Sales Invoice' : 'Normal Sale',
                 date: regionalFormat.dateTime(selectedSaleForUniversalEmail.timestamp),
                 customer: selectedSaleForUniversalEmail.customerName,
                 cashier: selectedSaleForUniversalEmail.cashierName,
+                handler: selectedSaleForUniversalEmail.debtHandlerName || '—',
                 netTotal: `$${selectedSaleForUniversalEmail.netTotal.toFixed(2)}`,
                 paid: `$${selectedSaleForUniversalEmail.amountPaid.toFixed(2)}`,
                 debt: `$${selectedSaleForUniversalEmail.debtAmount.toFixed(2)}`,
-                status: selectedSaleForUniversalEmail.status.toUpperCase(),
               }
             : filteredSales.map((s) => ({
                 receiptNo: s.receiptNo,
+                status: s.status,
                 saleCategory: s.saleType === 'sales_invoice' ? 'Sales Invoice' : 'Normal Sale',
                 date: regionalFormat.date(s.timestamp),
                 customer: s.customerName,
                 cashier: s.cashierName,
+                handler: s.debtHandlerName || '—',
                 netTotal: s.netTotal.toFixed(2),
                 paid: s.amountPaid.toFixed(2),
                 debt: s.debtAmount.toFixed(2),
-                status: s.status,
               }))
         }
         metadata={
@@ -792,6 +859,7 @@ export const SalesHistoryPlatform: React.FC = () => {
                 { label: 'Receipt No', value: selectedSaleForUniversalEmail.receiptNo },
                 { label: 'Customer', value: selectedSaleForUniversalEmail.customerName },
                 { label: 'Cashier Staff', value: selectedSaleForUniversalEmail.cashierName },
+                { label: 'Handler', value: selectedSaleForUniversalEmail.debtHandlerName || 'Unassigned' },
                 { label: 'Net Total', value: `$${selectedSaleForUniversalEmail.netTotal.toFixed(2)}` },
                 { label: 'Amount Paid', value: `$${selectedSaleForUniversalEmail.amountPaid.toFixed(2)}` },
                 { label: 'Outstanding Balance', value: `$${selectedSaleForUniversalEmail.debtAmount.toFixed(2)}` },

@@ -191,6 +191,19 @@ export interface ExtraCharge {
   description?: string;
 }
 
+export interface DebtReminderRecord {
+  id: string;
+  sentAt: string;
+  sentBy: string;
+  recipientEmail: string;
+  recipientName: string;
+  ccEmails?: string[];
+  subject: string;
+  bodyPreview: string;
+  channel: 'email' | 'copy';
+  dueDate?: string;
+}
+
 export interface SaleTransaction {
   id: string;
   receiptNo: string;
@@ -213,6 +226,14 @@ export interface SaleTransaction {
   debtSettledDate?: string;
   debtDueDate?: string;
   debtPayments?: import('../utils/debt.ts').DebtPaymentRecord[];
+  debtHandlerId?: string;
+  debtHandlerName?: string;
+  debtAssignedAt?: string;
+  debtAssignedBy?: string;
+  debtClearedAt?: string;
+  debtReminderCount?: number;
+  debtLastReminderAt?: string;
+  debtReminderHistory?: DebtReminderRecord[];
   referredBy?: {
     id: string;
     name: string;
