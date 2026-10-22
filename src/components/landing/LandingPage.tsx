@@ -10,6 +10,8 @@ import { useCode76Site } from '../../context/Code76SiteContext.tsx';
 import { CODE76_SITE } from '../../config/code76Site.ts';
 import { PublicLandingMetadata } from './PublicLandingMetadata.tsx';
 import { sendUnifiedEmail } from '../../utils/emailService.ts';
+import { TierCheckoutModal } from '../modals/TierCheckoutModal.tsx';
+import type { PlanTier } from '../../types/index.ts';
 import {
   ShieldCheck,
   CheckCircle2,
@@ -26,6 +28,7 @@ import {
   UserPlus,
   AlertCircle,
   Zap,
+  CreditCard,
   BarChart3,
   Receipt,
   Check,
@@ -90,6 +93,8 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
   );
   const [authError, setAuthError] = useState('');
   const [authSuccess, setAuthSuccess] = useState('');
+  const [authSelectedTier, setAuthSelectedTier] = useState<PlanTier>('free');
+  const [activeCheckoutTier, setActiveCheckoutTier] = useState<PlanTier | null>(null);
 
   // Track page visit once on mount
   useEffect(() => {
@@ -192,11 +197,18 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
         : loginUser(authEmail.trim(), authPassword);
 
     if (res.success) {
-      setAuthSuccess(
-        authMode === 'register'
-          ? `Account created for ${authFullName || authEmail}! Launching CODE76 POS...`
-          : 'Authentication successful! Launching CODE76 POS terminal...'
-      );
+      if (authMode === 'register' && authSelectedTier !== 'free') {
+        setAuthSuccess(`Account created for ${authFullName || authEmail}! Directing to ${authSelectedTier.toUpperCase()} payment portal...`);
+        setTimeout(() => {
+          setActiveCheckoutTier(authSelectedTier);
+        }, 300);
+      } else {
+        setAuthSuccess(
+          authMode === 'register'
+            ? `Account created for ${authFullName || authEmail}! Launching CODE76 POS...`
+            : 'Authentication successful! Launching CODE76 POS terminal...'
+        );
+      }
     } else {
       setAuthError(res.message);
     }
@@ -556,12 +568,29 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
                 </div>
 
                 {authMode === 'register' ? (
-                  <SecurityQuestionFields
-                    value={authSecurity}
-                    onChange={setAuthSecurity}
-                    label="Recovery Question"
-                    hint="Choose one question so you can recover access or reset credentials safely."
-                  />
+                  <>
+                    <div>
+                      <label className="block text-slate-300 font-semibold mb-1">Target Activation Plan</label>
+                      <select
+                        value={authSelectedTier}
+                        onChange={(e) => setAuthSelectedTier(e.target.value as PlanTier)}
+                        className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-slate-100 focus:outline-none focus:border-teal-500 font-medium"
+                      >
+                        <option value="free">Free Plan — Standard POS ($0/mo)</option>
+                        <option value="starter">Starter Plan — Payroll &amp; Marketing ($19/mo)</option>
+                        <option value="pro">Pro Plan — Complete Suite &amp; Bot ($49/mo)</option>
+                        <option value="max">Max Plan — Software + Dedicated Team ($129/mo)</option>
+                        <option value="lifetime">Lifetime License — Unlimited Ownership ($399 once)</option>
+                      </select>
+                    </div>
+
+                    <SecurityQuestionFields
+                      value={authSecurity}
+                      onChange={setAuthSecurity}
+                      label="Recovery Question"
+                      hint="Choose one question so you can recover access or reset credentials safely."
+                    />
+                  </>
                 ) : (
                   <p className="rounded-xl border border-slate-800 bg-slate-900/70 p-2.5 text-[10px] leading-relaxed text-slate-400">
                     💡 <em>Authorized demo access available for reviewers — contact your system administrator for secure credentials.</em>
@@ -572,8 +601,24 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
                   type="submit"
                   className="w-full py-3 rounded-xl bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 text-white font-extrabold text-xs shadow-lg shadow-teal-600/30 transition flex items-center justify-center gap-2 cursor-pointer mt-2"
                 >
-                  {authMode === 'login' ? <LogIn className="w-4 h-4" /> : <UserPlus className="w-4 h-4" />}
-                  <span>{authMode === 'login' ? 'Sign In & Enter POS' : 'Register Account & Launch POS'}</span>
+                  {authMode === 'login' ? (
+                    <>
+                      <LogIn className="w-4 h-4" />
+                      <span>Sign In &amp; Enter POS</span>
+                    </>
+                  ) : authSelectedTier === 'free' ? (
+                    <>
+                      <UserPlus className="w-4 h-4" />
+                      <span>Register Account &amp; Launch Free POS</span>
+                    </>
+                  ) : (
+                    <>
+                      <CreditCard className="w-4 h-4" />
+                      <span>Register &amp; Proceed to {authSelectedTier.toUpperCase()} Payment ($
+                        {authSelectedTier === 'lifetime' ? 399 : authSelectedTier === 'max' ? 129 : authSelectedTier === 'starter' ? 19 : 49}
+                      ) &rarr;</span>
+                    </>
+                  )}
                 </button>
 
                 <div className="text-[10px] text-center text-slate-500 pt-1">
@@ -1456,6 +1501,14 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
           </p>
         </div>
       </footer>
+
+      {activeCheckoutTier && (
+        <TierCheckoutModal
+          isOpen={!!activeCheckoutTier}
+          onClose={() => setActiveCheckoutTier(null)}
+          selectedTier={activeCheckoutTier}
+        />
+      )}
     </div>
   );
 };

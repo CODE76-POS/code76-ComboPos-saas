@@ -1,11 +1,12 @@
-import { PLAN_INFO, planTier } from '../../utils/plans.ts';
+import { PLAN_INFO, planTier, type PlanTier } from '../../utils/plans.ts';
 import { accessHistoryPermissions } from '../../utils/accessHistory.ts';
 import React, { useEffect, useRef, useState } from 'react';
 import { usePOS } from '../../context/POSContext.tsx';
-import { Lock, Mail, Shield, X, UserPlus, LogIn, CheckCircle2, AlertCircle, History, Info, Building2, KeyRound, ArrowLeft, HelpCircle, Key, Copy, Check, Sparkles } from 'lucide-react';
+import { Lock, Mail, Shield, X, UserPlus, LogIn, CheckCircle2, AlertCircle, History, Info, Building2, KeyRound, ArrowLeft, HelpCircle, Key, Copy, Check, Sparkles, CreditCard } from 'lucide-react';
 import { SecurityQuestionFields } from '../common/SecurityQuestionFields.tsx';
 import { RECOVERY_QUESTION_COUNT, type RecoveryProfile, type SecurityDraft } from '../../utils/accounts.ts';
 import { getStoredLicense, calculateLicenseDetails } from '../../utils/licenseManager.ts';
+import { TierCheckoutModal } from './TierCheckoutModal.tsx';
 
 type AuthMode = 'login' | 'register' | 'recover';
 type RecoveryStep = 'identify' | 'questions' | 'reset' | 'done';
@@ -28,6 +29,8 @@ export const LoginModal: React.FC = () => {
   const [errorMsg, setErrorMsg] = useState<string>('');
   const [successMsg, setSuccessMsg] = useState<string>('');
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
+  const [registerPlanTier, setRegisterPlanTier] = useState<PlanTier>('free');
+  const [checkoutTierModal, setCheckoutTierModal] = useState<PlanTier | null>(null);
 
   const activeTier = planTier(settings);
   const currentLicense = currentUser
@@ -112,6 +115,14 @@ export const LoginModal: React.FC = () => {
       }
       const result = registerUser({ companyName, adminName: fullName, email, password, security });
       if (!result.success) { setErrorMsg(result.message); return; }
+      if (registerPlanTier !== 'free') {
+        setSuccessMsg(`Account created! Directing to ${registerPlanTier.toUpperCase()} payment portal...`);
+        setTimeout(() => {
+          setLoginModalOpen(false);
+          setCheckoutTierModal(registerPlanTier);
+        }, 500);
+        return;
+      }
       setSuccessMsg(result.message);
       setTimeout(() => {
         setSuccessMsg('');
@@ -363,6 +374,22 @@ export const LoginModal: React.FC = () => {
                   />
                   <p className="mt-1 text-[10px] text-slate-500">The person who registers and pays for CODE76 POS becomes this business's administrator.</p>
                 </div>
+                <div>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1 flex items-center gap-1.5">
+                    <Sparkles className="w-3.5 h-3.5 text-teal-400" /> Target Plan Selection
+                  </label>
+                  <select
+                    value={registerPlanTier}
+                    onChange={(e) => setRegisterPlanTier(e.target.value as PlanTier)}
+                    className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-teal-500"
+                  >
+                    <option value="free">Free Plan — Standard POS ($0/mo)</option>
+                    <option value="starter">Starter Plan — Payroll &amp; Marketing ($19/mo)</option>
+                    <option value="pro">Pro Plan — Complete Suite &amp; Bot ($49/mo)</option>
+                    <option value="max">Max Plan — Software + Dedicated Team ($129/mo)</option>
+                    <option value="lifetime">Lifetime License — Unlimited Ownership ($399 once)</option>
+                  </select>
+                </div>
               </>
             )}
 
@@ -504,14 +531,22 @@ export const LoginModal: React.FC = () => {
                   type="submit"
                   className="px-5 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-sm font-semibold shadow-lg shadow-teal-600/30 transition flex items-center gap-2 cursor-pointer"
                 >
-                  {mode === 'login' ? <LogIn className="w-4 h-4" /> : mode === 'register' ? <UserPlus className="w-4 h-4" /> : <KeyRound className="w-4 h-4" />}
-                  {mode === 'login' ? 'Sign In' : mode === 'register' ? 'Register Business' : recoveryStep === 'identify' ? 'Find My Account' : recoveryStep === 'questions' ? 'Verify Answers' : 'Set New Password'}
+                  {mode === 'login' ? <LogIn className="w-4 h-4" /> : mode === 'register' ? (registerPlanTier === 'free' ? <UserPlus className="w-4 h-4" /> : <CreditCard className="w-4 h-4" />) : <KeyRound className="w-4 h-4" />}
+                  {mode === 'login' ? 'Sign In' : mode === 'register' ? (registerPlanTier === 'free' ? 'Register Business' : `Register & Proceed to ${registerPlanTier.toUpperCase()} Payment`) : recoveryStep === 'identify' ? 'Find My Account' : recoveryStep === 'questions' ? 'Verify Answers' : 'Set New Password'}
                 </button>
               )}
             </div>
           </form>
         )}
       </div>
+
+      {checkoutTierModal && (
+        <TierCheckoutModal
+          isOpen={!!checkoutTierModal}
+          onClose={() => setCheckoutTierModal(null)}
+          selectedTier={checkoutTierModal}
+        />
+      )}
     </div>
   );
 };
