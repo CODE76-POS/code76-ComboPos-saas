@@ -1002,14 +1002,17 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
                   </div>
                 </div>
 
-                <div className="pt-4 mt-3 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-400">
+                <div className="pt-4 mt-3 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-400 gap-2">
                   <span className="text-teal-400/80 font-medium">✓ Granular RBAC Controlled</span>
-                  <a
-                    href="#portal-access"
-                    className="text-teal-300 hover:text-teal-200 font-bold hover:underline"
-                  >
-                    Open in POS &rarr;
-                  </a>
+                  <span className="flex items-center gap-1.5 shrink-0">
+                    <a href="#plans" className="text-teal-300 hover:text-teal-200 font-bold hover:underline">
+                      Get Started Now. For Free !!! &rarr;
+                    </a>
+                    <span className="text-slate-500">or</span>
+                    <a href="#portal-access" className="text-teal-300 hover:text-teal-200 font-bold hover:underline">
+                      Login POS &rarr;
+                    </a>
+                  </span>
                 </div>
               </article>
             );
