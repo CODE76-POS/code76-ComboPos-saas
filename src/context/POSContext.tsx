@@ -177,7 +177,14 @@ interface POSContextType {
     notes?: string
   ) => InvoiceItem;
   loginUser: (email: string, pass: string, role?: UserRole) => { success: boolean; message: string };
-  registerUser: (input: BusinessRegistrationInput) => { success: boolean; message: string };
+  registerUser: (input: BusinessRegistrationInput) => {
+    success: boolean;
+    message: string;
+    workspaceId?: string;
+    email?: string;
+    adminName?: string;
+    companyName?: string;
+  };
   logoutUser: () => void;
   /** Business workspace for the signed-in session; null while signed out. */
   workspace: WorkspaceRecord | null;
@@ -193,7 +200,10 @@ interface POSContextType {
     licenseKey: string,
     productKey: string,
     expiresAt: string,
-    gateway?: string
+    gateway?: string,
+    targetWorkspaceId?: string,
+    targetCompanyName?: string,
+    targetEmail?: string
   ) => void;
 }
 
@@ -1118,7 +1128,7 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setLandingMetrics(next.landingMetrics || EMPTY_BUSINESS_METRICS);
     setSettings(mergeAppSettings(
       INITIAL_SETTINGS,
-      data ? next.settings : { ...INITIAL_SETTINGS, planTier: record.planTier },
+      data ? { ...next.settings, planTier: record.planTier || next.settings?.planTier } : { ...INITIAL_SETTINGS, planTier: record.planTier },
     ));
   };
 
@@ -1128,7 +1138,8 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     if (previousId && previousId !== record.id) {
       writeWorkspaceData(previousId, snapshotWorkspace());
     }
-    applyWorkspaceData(readWorkspaceData(record.id), record);
+    const existingWorkspaceData = readWorkspaceData(record.id);
+    applyWorkspaceData(existingWorkspaceData, record);
 
     workspaceIdRef.current = record.id;
     setWorkspaceId(record.id);
@@ -1144,6 +1155,11 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         record.createdAt,
         record.licenseExpiresAt
       );
+
+    // Ensure settings.planTier matches the workspace/stored license tier upon login
+    if (storedLic.tier) {
+      setSettings((prev) => ({ ...prev, planTier: storedLic.tier }));
+    }
 
     const auth: AuthUser = {
       id: account.id,
@@ -1161,6 +1177,10 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setCurrentUser(auth);
     setActiveView('pos');
     setLoginModalOpen(false);
+    if (!record.isDemo && !(existingWorkspaceData?.company as CompanyData | undefined)?.isConfiguredByMerchant) {
+      setHasDismissedCompanyQA(false);
+      setCompanyQAModalOpen(true);
+    }
     setAuditLogs((previous) => [{
       id: `log-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
       timestamp: new Date().toISOString(),
@@ -1174,47 +1194,42 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     refreshAccounts();
   };
 
-  const registerUser = (input: BusinessRegistrationInput): { success: boolean; message: string } => {
+  const registerUser = (input: BusinessRegistrationInput): {
+    success: boolean;
+    message: string;
+    workspaceId?: string;
+    email?: string;
+    adminName?: string;
+    companyName?: string;
+  } => {
     const result = registerBusiness(input);
     if (!result.success || !result.value) {
       return { success: false, message: result.message };
     }
     const { account, workspace: record } = result.value;
-    const previousId = workspaceIdRef.current;
-    if (previousId) writeWorkspaceData(previousId, snapshotWorkspace());
-    applyWorkspaceData(null, record);
-    workspaceIdRef.current = record.id;
-    setWorkspaceId(record.id);
-    writeActiveWorkspaceId(record.id);
 
     const initialLic = calculateLicenseDetails('free', record.companyName, account.email);
     saveStoredLicense(record.id, initialLic);
-
-    setCurrentUser({
-      id: account.id, email: account.email, name: account.name,
-      roles: account.roles, isAdmin: true, workspaceId: record.id,
+    updateWorkspaceLicense(record.id, {
+      planTier: 'free',
       licenseKey: initialLic.licenseKey,
       productKey: initialLic.productKey,
-      tier: initialLic.tier,
       licenseExpiresAt: initialLic.expiresAt,
       licenseStatus: initialLic.status,
     });
-    setActiveView('pos');
-    setLoginModalOpen(false);
-    setHasDismissedCompanyQA(false);
-    setCompanyQAModalOpen(true);
-    setAuditLogs([{
-      id: `log-${Date.now()}-1`,
-      timestamp: new Date().toISOString(),
-      userId: account.id,
-      userName: account.name,
-      userRole: account.roles[0],
-      action: 'Business Workspace Registered',
-      details: `${record.companyName} created. ${account.email} is the administrator. Initial Free license: ${initialLic.licenseKey}`,
-      ipOrDevice: `${navigator.platform || 'Device'} (${navigator.userAgent.slice(0, 32)})`,
-    }]);
+
+    // IMPORTANT: Do NOT auto-login (setCurrentUser) or redirect into the POS platform (setActiveView('pos'))!
+    // Users registering for a paid tier must be directed to the real payment gateway next,
+    // and users must explicitly sign in with their registered credentials to enter the POS platform.
     refreshAccounts();
-    return { success: true, message: `${record.companyName} is ready. ${account.name} is the administrator — create staff logins under Company Members or Settings → Team access.` };
+    return {
+      success: true,
+      message: `${record.companyName} account registered for ${account.name} (${account.email}).`,
+      workspaceId: record.id,
+      email: account.email,
+      adminName: account.name,
+      companyName: record.companyName,
+    };
   };
 
   const loginUser = (email: string, pass: string, role?: UserRole): { success: boolean; message: string } => {
@@ -1352,11 +1367,16 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     licenseKey: string,
     productKey: string,
     expiresAt: string,
-    gateway: string = 'selar'
+    gateway: string = 'selar',
+    targetWorkspaceId?: string,
+    targetCompanyName?: string,
+    targetEmail?: string
   ) => {
-    const wsId = workspaceIdRef.current || currentUser?.workspaceId || DEFAULT_WORKSPACE_ID;
-    const wsName = workspaceRecord?.companyName || company.name || 'Business Workspace';
-    const adminEmail = currentUser?.email || 'admin@business.com';
+    const wsId = targetWorkspaceId || workspaceIdRef.current || currentUser?.workspaceId || DEFAULT_WORKSPACE_ID;
+    const store = ensureAccountStore();
+    const targetRecord = store.workspaces[wsId];
+    const wsName = targetCompanyName || targetRecord?.companyName || workspaceRecord?.companyName || company.name || 'Business Workspace';
+    const adminEmail = targetEmail || targetRecord?.ownerEmail || currentUser?.email || 'admin@business.com';
     const status: 'active' | 'grace_period' | 'expired' | 'perpetual' = tier === 'lifetime' ? 'perpetual' : 'active';
 
     const licDetails = calculateLicenseDetails(
@@ -1379,22 +1399,32 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       licenseStatus: status,
     });
 
-    setSettings((prev) => ({ ...prev, planTier: tier }));
+    const existingData = readWorkspaceData(wsId);
+    if (existingData) {
+      writeWorkspaceData(wsId, {
+        ...existingData,
+        settings: { ...((existingData.settings as Record<string, unknown>) || {}), planTier: tier },
+      });
+    }
+
     refreshAccounts();
 
-    setCurrentUser((prev) => prev ? {
-      ...prev,
-      tier,
-      licenseKey,
-      productKey,
-      licenseExpiresAt: expiresAt,
-      licenseStatus: status,
-    } : null);
+    if (currentUser && (currentUser.workspaceId === wsId || !targetWorkspaceId)) {
+      setSettings((prev) => ({ ...prev, planTier: tier }));
+      setCurrentUser((prev) => prev ? {
+        ...prev,
+        tier,
+        licenseKey,
+        productKey,
+        licenseExpiresAt: expiresAt,
+        licenseStatus: status,
+      } : null);
 
-    logAuditAction(
-      'Updated Workspace Plan & License',
-      `Activated ${tier.toUpperCase()} license (${licenseKey}) via ${gateway}. Product Key: ${productKey}. Expiration: ${expiresAt}`
-    );
+      logAuditAction(
+        'Updated Workspace Plan & License',
+        `Activated ${tier.toUpperCase()} license (${licenseKey}) via ${gateway}. Product Key: ${productKey}. Expiration: ${expiresAt}`
+      );
+    }
   };
 
   return (

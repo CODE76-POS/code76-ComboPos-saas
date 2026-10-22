@@ -10,7 +10,7 @@ import { useCode76Site } from '../../context/Code76SiteContext.tsx';
 import { CODE76_SITE } from '../../config/code76Site.ts';
 import { PublicLandingMetadata } from './PublicLandingMetadata.tsx';
 import { sendUnifiedEmail } from '../../utils/emailService.ts';
-import { TierCheckoutModal } from '../modals/TierCheckoutModal.tsx';
+import { TierCheckoutModal, type PreRegisteredAccount } from '../modals/TierCheckoutModal.tsx';
 import type { PlanTier } from '../../types/index.ts';
 import {
   ShieldCheck,
@@ -95,6 +95,25 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
   const [authSuccess, setAuthSuccess] = useState('');
   const [authSelectedTier, setAuthSelectedTier] = useState<PlanTier>('free');
   const [activeCheckoutTier, setActiveCheckoutTier] = useState<PlanTier | null>(null);
+  const [preRegisteredAccount, setPreRegisteredAccount] = useState<PreRegisteredAccount | null>(null);
+
+  // Listen for checkout completion directing user to Sign In with pre-filled email
+  useEffect(() => {
+    const handleOpenLogin = (event: Event) => {
+      const custom = event as CustomEvent<{ email?: string; tier?: string }>;
+      setAuthMode('login');
+      if (custom.detail?.email) {
+        setAuthEmail(custom.detail.email);
+      }
+      setAuthPassword('');
+      setAuthError('');
+      setAuthSuccess(
+        `License activated! Please sign in with your password below to enter your upgraded POS workspace.`
+      );
+    };
+    window.addEventListener('code76:open-login', handleOpenLogin);
+    return () => window.removeEventListener('code76:open-login', handleOpenLogin);
+  }, []);
 
   // Track page visit once on mount
   useEffect(() => {
@@ -185,30 +204,46 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
       return;
     }
 
-    const res =
-      authMode === 'register'
-        ? registerUser({
-            companyName: authCompanyName,
-            adminName: authFullName,
-            email: authEmail.trim(),
-            password: authPassword,
-            security: authSecurity,
-          })
-        : loginUser(authEmail.trim(), authPassword);
+    if (authMode === 'register') {
+      const res = registerUser({
+        companyName: authCompanyName,
+        adminName: authFullName,
+        email: authEmail.trim(),
+        password: authPassword,
+        security: authSecurity,
+      });
 
-    if (res.success) {
-      if (authMode === 'register' && authSelectedTier !== 'free') {
-        setAuthSuccess(`Account created for ${authFullName || authEmail}! Directing to ${authSelectedTier.toUpperCase()} payment portal...`);
-        setTimeout(() => {
+      if (res.success) {
+        if (authSelectedTier !== 'free') {
+          const regAccount: PreRegisteredAccount = {
+            workspaceId: res.workspaceId || `ws-${Date.now()}`,
+            email: res.email || authEmail.trim(),
+            adminName: res.adminName || authFullName.trim(),
+            companyName: res.companyName || authCompanyName.trim(),
+          };
+          setPreRegisteredAccount(regAccount);
           setActiveCheckoutTier(authSelectedTier);
-        }, 300);
+          setAuthMode('login');
+          setAuthPassword('');
+          setAuthSuccess(
+            `Account registered for ${regAccount.companyName}! Complete your ${authSelectedTier.toUpperCase()} payment in the checkout window, then sign in here.`
+          );
+        } else {
+          setAuthMode('login');
+          setAuthPassword('');
+          setAuthSuccess(
+            `Business account created for ${authCompanyName || authEmail}! Please sign in below with your email and password to enter your POS workspace.`
+          );
+        }
       } else {
-        setAuthSuccess(
-          authMode === 'register'
-            ? `Account created for ${authFullName || authEmail}! Launching CODE76 POS...`
-            : 'Authentication successful! Launching CODE76 POS terminal...'
-        );
+        setAuthError(res.message);
       }
+      return;
+    }
+
+    const res = loginUser(authEmail.trim(), authPassword);
+    if (res.success) {
+      setAuthSuccess('Authentication successful! Launching CODE76 POS terminal...');
     } else {
       setAuthError(res.message);
     }
@@ -609,7 +644,7 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
                   ) : authSelectedTier === 'free' ? (
                     <>
                       <UserPlus className="w-4 h-4" />
-                      <span>Register Account &amp; Launch Free POS</span>
+                      <span>Register Free Business Account</span>
                     </>
                   ) : (
                     <>
@@ -1505,8 +1540,12 @@ export const LandingPage: React.FC<{ requiresSignIn?: boolean }> = ({ requiresSi
       {activeCheckoutTier && (
         <TierCheckoutModal
           isOpen={!!activeCheckoutTier}
-          onClose={() => setActiveCheckoutTier(null)}
+          onClose={() => {
+            setActiveCheckoutTier(null);
+            setPreRegisteredAccount(null);
+          }}
           selectedTier={activeCheckoutTier}
+          preRegisteredAccount={preRegisteredAccount}
         />
       )}
     </div>

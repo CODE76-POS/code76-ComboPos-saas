@@ -6,7 +6,7 @@ import { Lock, Mail, Shield, X, UserPlus, LogIn, CheckCircle2, AlertCircle, Hist
 import { SecurityQuestionFields } from '../common/SecurityQuestionFields.tsx';
 import { RECOVERY_QUESTION_COUNT, type RecoveryProfile, type SecurityDraft } from '../../utils/accounts.ts';
 import { getStoredLicense, calculateLicenseDetails } from '../../utils/licenseManager.ts';
-import { TierCheckoutModal } from './TierCheckoutModal.tsx';
+import { TierCheckoutModal, type PreRegisteredAccount } from './TierCheckoutModal.tsx';
 
 type AuthMode = 'login' | 'register' | 'recover';
 type RecoveryStep = 'identify' | 'questions' | 'reset' | 'done';
@@ -31,6 +31,7 @@ export const LoginModal: React.FC = () => {
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const [registerPlanTier, setRegisterPlanTier] = useState<PlanTier>('free');
   const [checkoutTierModal, setCheckoutTierModal] = useState<PlanTier | null>(null);
+  const [preRegisteredAccount, setPreRegisteredAccount] = useState<PreRegisteredAccount | null>(null);
 
   const activeTier = planTier(settings);
   const currentLicense = currentUser
@@ -116,18 +117,21 @@ export const LoginModal: React.FC = () => {
       const result = registerUser({ companyName, adminName: fullName, email, password, security });
       if (!result.success) { setErrorMsg(result.message); return; }
       if (registerPlanTier !== 'free') {
-        setSuccessMsg(`Account created! Directing to ${registerPlanTier.toUpperCase()} payment portal...`);
-        setTimeout(() => {
-          setLoginModalOpen(false);
-          setCheckoutTierModal(registerPlanTier);
-        }, 500);
+        setPreRegisteredAccount({
+          workspaceId: result.workspaceId || `ws-${Date.now()}`,
+          email: result.email || email.trim(),
+          adminName: result.adminName || fullName.trim(),
+          companyName: result.companyName || companyName.trim(),
+        });
+        setCheckoutTierModal(registerPlanTier);
+        setMode('login');
+        setPassword('');
+        setSuccessMsg(`Account created! Complete your ${registerPlanTier.toUpperCase()} payment, then sign in.`);
         return;
       }
-      setSuccessMsg(result.message);
-      setTimeout(() => {
-        setSuccessMsg('');
-        setLoginModalOpen(false);
-      }, 1400);
+      setMode('login');
+      setPassword('');
+      setSuccessMsg(`${result.message} Please sign in with your email and password.`);
       return;
     }
 
@@ -543,8 +547,12 @@ export const LoginModal: React.FC = () => {
       {checkoutTierModal && (
         <TierCheckoutModal
           isOpen={!!checkoutTierModal}
-          onClose={() => setCheckoutTierModal(null)}
+          onClose={() => {
+            setCheckoutTierModal(null);
+            setPreRegisteredAccount(null);
+          }}
           selectedTier={checkoutTierModal}
+          preRegisteredAccount={preRegisteredAccount}
         />
       )}
     </div>

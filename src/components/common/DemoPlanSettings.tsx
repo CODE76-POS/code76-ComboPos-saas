@@ -165,32 +165,44 @@ export function DemoPlanSettings() {
             </div>
 
             <div className="pt-3 border-t border-slate-800/80 space-y-2">
-              <button
-                type="button"
-                aria-label={`Select ${PLAN_INFO[tier].name} demo plan`}
-                disabled={!currentUser?.isAdmin || selected === tier}
-                className="w-full rounded-xl bg-teal-700 hover:bg-teal-600 px-3 py-2 text-xs font-bold text-white transition disabled:opacity-40 cursor-pointer"
-                onClick={() => {
-                  try {
-                    setDemoPlan(tier);
-                    setNotice(`${PLAN_INFO[tier].name} plan applied to workspace. Existing records retained.`);
-                  } catch (error) {
-                    setNotice(String(error));
-                  }
-                }}
-              >
-                {selected === tier ? 'Active Workspace Plan' : `Activate ${PLAN_INFO[tier].name} Plan`}
-              </button>
-
-              {tier !== 'free' && (
+              {tier === 'free' ? (
                 <button
                   type="button"
-                  onClick={() => setCheckoutModalTier(tier)}
-                  className="w-full rounded-xl bg-slate-800 hover:bg-slate-700 px-3 py-1.5 text-[11px] font-semibold text-teal-300 border border-slate-700 transition cursor-pointer flex items-center justify-center gap-1"
+                  aria-label={`Select ${PLAN_INFO[tier].name} demo plan`}
+                  disabled={!currentUser?.isAdmin || selected === tier}
+                  className="w-full rounded-xl bg-slate-800 hover:bg-slate-700 px-3 py-2 text-xs font-bold text-slate-200 transition disabled:opacity-40 cursor-pointer"
+                  onClick={() => {
+                    try {
+                      setDemoPlan('free');
+                      setNotice('Switched workspace to Free plan. Existing records retained.');
+                    } catch (error) {
+                      setNotice(String(error));
+                    }
+                  }}
                 >
-                  <Sparkles className="w-3 h-3 text-teal-400" />
-                  <span>Connect Billing (Selar/Gumroad)</span>
+                  {selected === 'free' ? 'Active Workspace Plan' : 'Switch to Free Plan'}
                 </button>
+              ) : (
+                <>
+                  <button
+                    type="button"
+                    aria-label={`Select ${PLAN_INFO[tier].name} demo plan`}
+                    disabled={!currentUser?.isAdmin}
+                    className={`w-full rounded-xl px-3 py-2.5 text-xs font-extrabold transition disabled:opacity-40 cursor-pointer flex items-center justify-center gap-1.5 ${
+                      selected === tier
+                        ? 'bg-emerald-950/60 border border-emerald-500/40 text-emerald-300 hover:bg-emerald-900/60'
+                        : 'bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 text-white shadow-md shadow-teal-600/20'
+                    }`}
+                    onClick={() => setCheckoutModalTier(tier)}
+                  >
+                    <Sparkles className="w-3.5 h-3.5" />
+                    <span>
+                      {selected === tier
+                        ? `Active Plan · Renew / Verify ${PLAN_INFO[tier].name} License`
+                        : `Upgrade to ${PLAN_INFO[tier].name} (Gumroad / Selar) \u2192`}
+                    </span>
+                  </button>
+                </>
               )}
             </div>
           </div>
