@@ -2,9 +2,10 @@ import { PLAN_INFO, planTier } from '../../utils/plans.ts';
 import { accessHistoryPermissions } from '../../utils/accessHistory.ts';
 import React, { useEffect, useRef, useState } from 'react';
 import { usePOS } from '../../context/POSContext.tsx';
-import { Lock, Mail, Shield, X, UserPlus, LogIn, CheckCircle2, AlertCircle, History, Info, Building2, KeyRound, ArrowLeft, HelpCircle } from 'lucide-react';
+import { Lock, Mail, Shield, X, UserPlus, LogIn, CheckCircle2, AlertCircle, History, Info, Building2, KeyRound, ArrowLeft, HelpCircle, Key, Copy, Check, Sparkles } from 'lucide-react';
 import { SecurityQuestionFields } from '../common/SecurityQuestionFields.tsx';
 import { RECOVERY_QUESTION_COUNT, type RecoveryProfile, type SecurityDraft } from '../../utils/accounts.ts';
+import { getStoredLicense, calculateLicenseDetails } from '../../utils/licenseManager.ts';
 
 type AuthMode = 'login' | 'register' | 'recover';
 type RecoveryStep = 'identify' | 'questions' | 'reset' | 'done';
@@ -14,7 +15,7 @@ const emptySecurity = (): SecurityDraft[] => Array.from({ length: RECOVERY_QUEST
 export const LoginModal: React.FC = () => {
   const {
     loginModalOpen, setLoginModalOpen, currentUser, loginUser, logoutUser, registerUser,
-    settings, setActivePlatform, hasFeature, workspace,
+    settings, setActivePlatform, hasFeature, workspace, setSettingsSection,
     lookupRecoveryAccount, verifyRecoveryAnswersFor, resetAccountPassword,
   } = usePOS();
 
@@ -26,6 +27,19 @@ export const LoginModal: React.FC = () => {
   const [security, setSecurity] = useState<SecurityDraft[]>(emptySecurity);
   const [errorMsg, setErrorMsg] = useState<string>('');
   const [successMsg, setSuccessMsg] = useState<string>('');
+  const [copiedKey, setCopiedKey] = useState<string | null>(null);
+
+  const activeTier = planTier(settings);
+  const currentLicense = currentUser
+    ? getStoredLicense(currentUser.workspaceId || 'default') ||
+      calculateLicenseDetails(activeTier, workspace?.companyName || 'Business', currentUser.email, currentUser.licenseKey, currentUser.productKey, currentUser.licenseExpiresAt)
+    : null;
+
+  const copyKey = (text: string, id: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedKey(id);
+    setTimeout(() => setCopiedKey(null), 2000);
+  };
 
   const [recoveryStep, setRecoveryStep] = useState<RecoveryStep>('identify');
   const [recoveryQuery, setRecoveryQuery] = useState('');
@@ -203,6 +217,73 @@ export const LoginModal: React.FC = () => {
                 </span>
               </div>
             </div>
+
+            {/* Official Cryptographic License & Product Key (Visible to Administrator) */}
+            {currentUser.isAdmin && currentLicense && (
+              <div className="rounded-2xl border border-teal-500/40 bg-slate-950 p-4 space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1.5 text-xs font-bold text-teal-400 uppercase tracking-wider">
+                    <Key className="w-3.5 h-3.5" />
+                    <span>Official CODE76 License Credentials</span>
+                  </div>
+                  <span className="px-2 py-0.5 text-[9px] font-extrabold uppercase rounded-full bg-teal-500/20 text-teal-300 border border-teal-500/30">
+                    {currentLicense.status === 'perpetual' ? 'PERPETUAL' : 'ACTIVE'}
+                  </span>
+                </div>
+
+                {/* License Key */}
+                <div>
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-[10px] text-slate-400 font-semibold">Unique License Key</span>
+                    <button
+                      type="button"
+                      onClick={() => copyKey(currentLicense.licenseKey, 'license')}
+                      className="px-2 py-0.5 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] font-semibold flex items-center gap-1 transition cursor-pointer"
+                    >
+                      {copiedKey === 'license' ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                      <span>{copiedKey === 'license' ? 'Copied' : 'Copy'}</span>
+                    </button>
+                  </div>
+                  <code className="block bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs font-mono font-bold text-teal-300 select-all">
+                    {currentLicense.licenseKey}
+                  </code>
+                </div>
+
+                {/* Product Key */}
+                <div>
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-[10px] text-slate-400 font-semibold">Hardware Product Key</span>
+                    <button
+                      type="button"
+                      onClick={() => copyKey(currentLicense.productKey, 'product')}
+                      className="px-2 py-0.5 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] font-semibold flex items-center gap-1 transition cursor-pointer"
+                    >
+                      {copiedKey === 'product' ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                      <span>{copiedKey === 'product' ? 'Copied' : 'Copy'}</span>
+                    </button>
+                  </div>
+                  <code className="block bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs font-mono text-slate-300 select-all">
+                    {currentLicense.productKey}
+                  </code>
+                </div>
+
+                <div className="flex items-center justify-between pt-1 border-t border-slate-800/80 text-[10px] text-slate-400">
+                  <span>Tier: <strong className="text-slate-200 uppercase">{currentLicense.tier}</strong></span>
+                  <span>Expires: <strong className="text-teal-300">{currentLicense.expiresAt === 'PERPETUAL' ? 'Never' : new Date(currentLicense.expiresAt).toLocaleDateString()}</strong></span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setLoginModalOpen(false);
+                      setSettingsSection('plans');
+                      setActivePlatform('settings');
+                    }}
+                    className="text-teal-400 hover:underline font-semibold cursor-pointer"
+                  >
+                    Manage &rarr;
+                  </button>
+                </div>
+              </div>
+            )}
 
             <p className="rounded-xl border border-slate-700 bg-slate-800/50 p-3 text-[11px] leading-relaxed text-slate-400">
               This session can only read and write <strong className="text-slate-200">{workspace?.companyName || 'this business'}</strong> records.

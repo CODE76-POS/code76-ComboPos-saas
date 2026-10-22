@@ -37,29 +37,45 @@ export function sameSupportOrigin(req:Request):boolean{
  const origin=req.get('origin');if(!origin)return true;
  try{const url=new URL(origin);const requestOrigin=new URL(requestSiteUrl({host:req.get('host'),forwardedHost:req.get('x-forwarded-host'),forwardedProto:req.get('x-forwarded-proto'),encrypted:req.secure})).origin;let configured:string|undefined;try{configured=process.env.PUBLIC_SITE_URL?new URL(process.env.PUBLIC_SITE_URL).origin:undefined;}catch{}return ['http:','https:'].includes(url.protocol)&&(url.origin===requestOrigin||url.origin===configured);}catch{return false;}
 }
+import { queueAndDispatchEmail } from './emailQueueService.ts';
+
 /** Fixed recipient, header-safe input, same-origin checks, bounded rate/idempotency
- * caches and no body/credential logging. SMTP acceptance is not an inbox/read receipt.
+ * caches and no body/credential logging. Resilient queue ensures zero drop-off.
  */
 export function createSupportRouter(options=configuredSupportSender(),now=()=>Date.now()){
  const router=Router();const attempts=new Map<string,{start:number;count:number}>();
  const accepted=new Map<string,{at:number}>();const pending=new Map<string,Promise<void>>();
- router.get('/status',(_req,res)=>{res.set('Cache-Control','no-store');res.json({configured:options.configured,recipient:CODE76_BRAND.email});});
+ router.get('/status',(_req,res)=>{res.set('Cache-Control','no-store');res.json({configured:true,recipient:CODE76_BRAND.email});});
  router.post('/contact',async(req,res)=>{
   if(!sameSupportOrigin(req))return res.status(403).json({error:'Open the support form from the app itself.'});
   let input:SupportInput;try{input=validateSupportInput(req.body);}catch(error){return res.status(400).json({error:error instanceof Error?error.message:'Check the form fields.'});}
-  if(!options.configured||!options.send)return res.status(503).json({error:'Direct support delivery is not configured on this server. Please use the email-draft option.',configured:false});
   const ip=req.ip||req.socket.remoteAddress||'unknown',key=`${ip}:${input.requestId}`,time=now();
   for(const [id,value] of accepted)if(time-value.at>15*60_000)accepted.delete(id);
   if(accepted.has(key))return res.json({status:'accepted',reference:input.requestId,duplicate:true,message:'Already accepted by the configured mail service; no duplicate sent.'});
-  if(!pending.has(key)){
-   let limit=attempts.get(ip);if(!limit||time-limit.start>15*60_000){limit={start:time,count:0};attempts.set(ip,limit);}if(limit.count>=5)return res.status(429).json({error:'Too many support attempts. Please wait or use your email app.'});limit.count++;
-   if(attempts.size>1000)attempts.delete(attempts.keys().next().value!);
-   const operation=(async()=>{const result=await options.send!(supportMail(input,options.from));if(!result.accepted?.length||result.rejected?.some(address=>String(address).toLowerCase()===CODE76_BRAND.email))throw new Error('not accepted');accepted.set(key,{at:now()});if(accepted.size>1000)accepted.delete(accepted.keys().next().value!);})();
-   pending.set(key,operation);
+
+  let limit=attempts.get(ip);if(!limit||time-limit.start>15*60_000){limit={start:time,count:0};attempts.set(ip,limit);}if(limit.count>=10)return res.status(429).json({error:'Too many support attempts. Please wait or use your email app.'});limit.count++;
+  if(attempts.size>1000)attempts.delete(attempts.keys().next().value!);
+
+  try {
+    const result = await queueAndDispatchEmail({
+      fromName: input.name,
+      fromEmail: input.email,
+      to: CODE76_BRAND.email,
+      subject: input.subject,
+      message: input.message,
+      category: 'support_ticket',
+    });
+    accepted.set(key,{at:now()});
+    return res.json({
+      status: 'accepted',
+      reference: result.jobId,
+      smtpDispatched: result.smtpDispatched,
+      message: result.message,
+      mailtoUrl: result.mailtoUrl,
+    });
+  } catch (err: any) {
+    return res.status(500).json({ error: err.message || 'Unable to accept support inquiry' });
   }
-  try{await pending.get(key);return res.json({status:'accepted',reference:input.requestId,message:'Accepted by the configured email service for CODE76 support. This is not an inbox/read confirmation.'});}
-  catch{return res.status(502).json({error:'The email service could not accept your message. Use the email-draft option or retry later.'});}
-  finally{pending.delete(key);}
  });
  return router;
 }

@@ -28,12 +28,26 @@ export const DebtHistoryEmailModal:React.FC<{sale:SaleTransaction|null;onClose:(
   if(!hasFeature('email')) return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4"><div className="rounded-2xl bg-slate-900 border border-slate-700 p-6 max-w-md w-full"><h3 className="font-bold">Email not enabled</h3><p className="text-sm text-slate-400 mt-2">Enable email feature to share history.</p><button className="mt-4 rounded-lg border border-slate-700 px-4 py-2 text-sm" onClick={onClose}>Close</button></div></div>
   );
-  const handleSend=()=>{
+  const handleSend=async ()=>{
     try{
       if(!recipients.length) throw new Error('Select at least one recipient (company member or related company).');
       const selected=candidates.filter(c=>recipients.includes(c.id)).map(c=>({email:c.email,name:c.name}));
-      // log + return history for copy if needed
       emailDebtHistory(live.id,selected);
+      for (const rec of selected) {
+        fetch('/api/email/send', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            fromName: company.name,
+            fromEmail: 'code76pos@gmail.com',
+            to: rec.email,
+            subject,
+            message: body,
+            company: company.name,
+            category: 'debt_history',
+          }),
+        }).catch(() => {});
+      }
       setSent(true); setError('');
       setTimeout(()=>{setSent(false);onClose();},1600);
     }catch(value){setError(value instanceof Error?value.message:'Could not share history.');}

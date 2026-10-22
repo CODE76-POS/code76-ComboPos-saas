@@ -1,4 +1,5 @@
 import { createSupportRouter } from './server/supportMail.ts';
+import { queueAndDispatchEmail, getQueueStatus } from './server/emailQueueService.ts';
 import { code76SiteReply, softwareOfferSummary, softwarePlanReply } from './src/utils/code76Offers.ts';
 import { TEAM_SERVICE_SCOPE } from './src/config/teamServices.ts';
 import { serviceUnitLabel } from './src/utils/serviceUnits.ts';
@@ -315,71 +316,60 @@ app.post('/api/contact', async (req, res) => {
       return res.status(400).json({ error: 'Name, email, and message are required.' });
     }
 
-    const inquiryId = `INQ-${Date.now().toString(36).toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`;
-    const inquiryRecord = {
-      id: inquiryId,
-      timestamp: new Date().toISOString(),
-      name: String(name).trim(),
-      email: String(email).trim(),
+    const result = await queueAndDispatchEmail({
+      fromName: String(name).trim(),
+      fromEmail: String(email).trim(),
       phone: phone ? String(phone).trim() : undefined,
       company: company ? String(company).trim() : undefined,
+      to: 'code76pos@gmail.com',
       subject: subject ? String(subject).trim() : 'CODE76 POS Inquiry',
       message: String(message).trim(),
-      status: 'queued_inbox' as 'dispatched_smtp' | 'queued_inbox',
-    };
-
-    // Attempt real SMTP dispatch if configured
-    let smtpDispatched = false;
-    const smtpHost = process.env.SMTP_HOST;
-    const smtpUser = process.env.SMTP_USER;
-    const smtpPass = process.env.SMTP_PASS;
-    const smtpFrom = process.env.SMTP_FROM || 'code76pos@gmail.com';
-
-    if (smtpHost && smtpUser && smtpPass) {
-      try {
-        const nodemailerModule = await import('nodemailer');
-        const transporter = nodemailerModule.default.createTransport({
-          host: smtpHost,
-          port: Number(process.env.SMTP_PORT) || 587,
-          secure: process.env.SMTP_SECURE === 'true',
-          auth: { user: smtpUser, pass: smtpPass },
-        });
-
-        await transporter.sendMail({
-          from: smtpFrom,
-          to: 'code76pos@gmail.com',
-          replyTo: `${inquiryRecord.name} <${inquiryRecord.email}>`,
-          subject: `[CODE76 Official Inquiry] ${inquiryRecord.subject} (${inquiryRecord.company || 'Direct'})`,
-          text: `Inquiry Reference: ${inquiryId}\nName: ${inquiryRecord.name}\nEmail: ${inquiryRecord.email}\nPhone: ${inquiryRecord.phone || 'N/A'}\nCompany: ${inquiryRecord.company || 'N/A'}\n\nMessage:\n${inquiryRecord.message}\n\nTimestamp: ${inquiryRecord.timestamp}`,
-        });
-        smtpDispatched = true;
-        inquiryRecord.status = 'dispatched_smtp';
-      } catch (smtpErr: any) {
-        console.warn('SMTP direct dispatch warning (fallback queue engaged):', smtpErr.message);
-      }
-    }
-
-    inquiriesLog.push(inquiryRecord);
-    if (inquiriesLog.length > 500) inquiriesLog.shift();
-
-    const mailtoSubject = encodeURIComponent(`[${inquiryId}] ${inquiryRecord.subject}`);
-    const mailtoBody = encodeURIComponent(
-      `Name: ${inquiryRecord.name}\nCompany: ${inquiryRecord.company || 'N/A'}\nPhone: ${inquiryRecord.phone || 'N/A'}\nInquiry Reference: ${inquiryId}\n\n${inquiryRecord.message}`
-    );
-    const mailtoUrl = `mailto:code76pos@gmail.com?subject=${mailtoSubject}&body=${mailtoBody}`;
+      category: 'landing_inquiry',
+    });
 
     res.json({
       success: true,
-      inquiryId,
-      smtpDispatched,
+      inquiryId: result.jobId,
+      smtpDispatched: result.smtpDispatched,
       recipient: 'code76pos@gmail.com',
-      message: 'Inquiry successfully processed and registered for CODE76 official sales desk.',
-      mailtoUrl,
+      message: result.message,
+      mailtoUrl: result.mailtoUrl,
     });
   } catch (error: any) {
     console.error('Contact route error:', error);
     res.status(500).json({ error: error.message || 'Failed to dispatch inquiry' });
   }
+});
+
+// Modular In-App Email Dispatch Endpoint (Receipts, Export Reports, Follow-Ups, Invoices)
+app.post('/api/email/send', async (req, res) => {
+  try {
+    const { fromName, fromEmail, to, subject, message, phone, company, category } = req.body || {};
+    if (!fromName || !fromEmail || !subject || !message) {
+      return res.status(400).json({ error: 'Sender name, sender email, subject, and message are required.' });
+    }
+
+    const result = await queueAndDispatchEmail({
+      fromName: String(fromName).trim(),
+      fromEmail: String(fromEmail).trim(),
+      to: to ? String(to).trim() : 'code76pos@gmail.com',
+      subject: String(subject).trim(),
+      message: String(message).trim(),
+      phone: phone ? String(phone).trim() : undefined,
+      company: company ? String(company).trim() : undefined,
+      category: category || 'export_report',
+    });
+
+    res.json(result);
+  } catch (error: any) {
+    console.error('Modular email dispatch error:', error);
+    res.status(500).json({ error: error.message || 'Failed to dispatch email' });
+  }
+});
+
+// Email Queue Telemetry & Verification Status
+app.get('/api/email/status', (_req, res) => {
+  res.json(getQueueStatus());
 });
 
 // High-Availability Multi-Gateway Checkout Endpoint (Selar -> Gumroad -> Resilient Fallback)

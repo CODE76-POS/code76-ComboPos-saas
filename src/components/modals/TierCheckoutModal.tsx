@@ -30,7 +30,7 @@ export const TierCheckoutModal: React.FC<TierCheckoutModalProps> = ({
   onClose,
   selectedTier,
 }) => {
-  const { currentUser, registerUser, company, workspace, setDemoPlan } = usePOS();
+  const { currentUser, registerUser, company, workspace, setDemoPlan, updateUserLicense } = usePOS();
 
   // Registration step states (if signed out)
   const [companyName, setCompanyName] = useState(workspace?.companyName || company.name || '');
@@ -48,9 +48,11 @@ export const TierCheckoutModal: React.FC<TierCheckoutModalProps> = ({
     productKey: string;
     amountUsd: number;
     interval: string;
+    expiresAt: string;
   } | null>(null);
 
   const [copiedKey, setCopiedKey] = useState(false);
+  const [copiedProductKey, setCopiedProductKey] = useState(false);
 
   if (!isOpen) return null;
 
@@ -108,23 +110,14 @@ export const TierCheckoutModal: React.FC<TierCheckoutModalProps> = ({
         throw new Error(data.error || 'Checkout connection was interrupted. Using local license generator.');
       }
 
-      // Save pre-provisioned authentic license locally
-      const licenseDetails = calculateLicenseDetails(
+      // Update user profile with official generated license
+      updateUserLicense(
         selectedTier,
-        activeCompany,
-        activeUserEmail,
         data.licenseKey,
         data.productKey,
-        new Date().toISOString(),
         data.expiresAt,
-        data.gateway === 'selar' ? 'selar' : data.gateway === 'gumroad' ? 'gumroad' : 'official_code76'
+        data.gateway
       );
-      saveStoredLicense(activeWsId, licenseDetails);
-
-      // Set in-app plan tier
-      try {
-        setDemoPlan(selectedTier);
-      } catch {}
 
       setCheckoutResult({
         checkoutUrl: data.checkoutUrl,
@@ -133,6 +126,7 @@ export const TierCheckoutModal: React.FC<TierCheckoutModalProps> = ({
         productKey: data.productKey,
         amountUsd: data.amountUsd,
         interval: data.interval,
+        expiresAt: data.expiresAt,
       });
     } catch (err: any) {
       console.warn('Fallback local license provision engaged:', err.message);
@@ -142,6 +136,15 @@ export const TierCheckoutModal: React.FC<TierCheckoutModalProps> = ({
         companyName || 'Business',
         email || 'admin@business.com'
       );
+
+      updateUserLicense(
+        selectedTier,
+        fallbackLicense.licenseKey,
+        fallbackLicense.productKey,
+        fallbackLicense.expiresAt,
+        'official_code76'
+      );
+
       setCheckoutResult({
         checkoutUrl: `https://selar.co/code76-${selectedTier}?email=${encodeURIComponent(email || 'client@business.com')}`,
         gateway: 'resilient_direct',
@@ -149,6 +152,7 @@ export const TierCheckoutModal: React.FC<TierCheckoutModalProps> = ({
         productKey: fallbackLicense.productKey,
         amountUsd: selectedTier === 'lifetime' ? 399 : selectedTier === 'max' ? 129 : selectedTier === 'starter' ? 19 : 49,
         interval: selectedTier === 'lifetime' ? 'one-time' : 'month',
+        expiresAt: fallbackLicense.expiresAt,
       });
     } finally {
       setIsSubmitting(false);
@@ -160,6 +164,13 @@ export const TierCheckoutModal: React.FC<TierCheckoutModalProps> = ({
     navigator.clipboard.writeText(checkoutResult.licenseKey);
     setCopiedKey(true);
     setTimeout(() => setCopiedKey(false), 2000);
+  };
+
+  const copyProductKeyToClipboard = () => {
+    if (!checkoutResult) return;
+    navigator.clipboard.writeText(checkoutResult.productKey);
+    setCopiedProductKey(true);
+    setTimeout(() => setCopiedProductKey(false), 2000);
   };
 
   return (
@@ -360,18 +371,28 @@ export const TierCheckoutModal: React.FC<TierCheckoutModalProps> = ({
               </div>
 
               <div>
-                <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5 mb-1">
-                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>System Product Key</span>
-                </label>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>Hardware &amp; System Product Key</span>
+                  </label>
+                  <button
+                    onClick={copyProductKeyToClipboard}
+                    className="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-[10px] font-bold transition flex items-center gap-1 cursor-pointer"
+                  >
+                    {copiedProductKey ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                    <span>{copiedProductKey ? 'Copied' : 'Copy'}</span>
+                  </button>
+                </div>
                 <code className="block bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs font-mono text-slate-300 select-all">
                   {checkoutResult.productKey}
                 </code>
               </div>
 
-              <div className="text-[11px] text-slate-400 flex items-center justify-between pt-1 border-t border-slate-800/80">
-                <span>Billing Interval: <strong>{checkoutResult.interval}</strong></span>
-                <span>Gateway: <strong className="capitalize">{checkoutResult.gateway.replace('_', ' ')}</strong></span>
+              <div className="text-[11px] text-slate-400 flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-800/80">
+                <span>Billing Interval: <strong className="text-slate-200">{checkoutResult.interval}</strong></span>
+                <span>Gateway: <strong className="capitalize text-teal-400">{checkoutResult.gateway.replace('_', ' ')}</strong></span>
+                <span>Expires: <strong className="text-emerald-400">{checkoutResult.expiresAt === 'PERPETUAL' ? 'PERPETUAL (Never)' : new Date(checkoutResult.expiresAt).toLocaleDateString()}</strong></span>
               </div>
             </div>
 

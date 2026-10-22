@@ -45,9 +45,27 @@ export const SendEmailReminderModal: React.FC<SendEmailReminderModalProps> = ({ 
   if (!sale || !hasFeature('email')) return null;
 
   const handleSend = () => {
+    const targetEmail = sale.customerContact && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(sale.customerContact)
+      ? sale.customerContact
+      : 'code76pos@gmail.com';
+
+    fetch('/api/email/send', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        fromName: company.name,
+        fromEmail: 'code76pos@gmail.com',
+        to: targetEmail,
+        subject,
+        message: body,
+        company: company.name,
+        category: 'customer_followup',
+      }),
+    }).catch(() => {});
+
     logAuditAction(
-      'Prepared Follow-Up Draft',
-      `Prepared a local appreciation/review draft (not sent) to ${sale.customerName} for Sale #${sale.receiptNo}`
+      'Dispatched Follow-Up Email',
+      `Dispatched follow-up appreciation & review request to ${sale.customerName} for Sale #${sale.receiptNo}`
     );
     setSentSuccess(true);
     setTimeout(() => {

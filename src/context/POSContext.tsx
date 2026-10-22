@@ -57,10 +57,11 @@ import {
   ensureAccountStore, readStore, authenticate, registerBusiness, createTeamAccount,
   updateTeamAccount, removeTeamAccount, findRecoveryProfile, verifyRecoveryAnswers,
   resetPasswordWithRecovery, writeActiveWorkspaceId,
-  readWorkspaceData, writeWorkspaceData,
+  readWorkspaceData, writeWorkspaceData, updateWorkspaceLicense, DEFAULT_WORKSPACE_ID,
   type AccountRecord, type AccountResult, type BusinessRegistrationInput,
   type RecoveryProfile, type TeamLoginInput, type TeamLoginUpdate, type WorkspaceRecord,
 } from '../utils/accounts.ts';
+import { calculateLicenseDetails, getStoredLicense, saveStoredLicense } from '../utils/licenseManager.ts';
 
 interface POSContextType {
   // Data
@@ -187,6 +188,13 @@ interface POSContextType {
   createTeamLogin: (input: Omit<TeamLoginInput, 'workspaceId'>) => { success: boolean; message: string };
   updateTeamLogin: (email: string, update: TeamLoginUpdate) => { success: boolean; message: string };
   removeTeamLogin: (email: string) => { success: boolean; message: string };
+  updateUserLicense: (
+    tier: PlanTier,
+    licenseKey: string,
+    productKey: string,
+    expiresAt: string,
+    gateway?: string
+  ) => void;
 }
 
 const POSContext = createContext<POSContextType | undefined>(undefined);
@@ -1126,6 +1134,17 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setWorkspaceId(record.id);
     writeActiveWorkspaceId(record.id);
 
+    const storedLic = getStoredLicense(record.id) ||
+      calculateLicenseDetails(
+        record.planTier || 'free',
+        record.companyName,
+        account.email,
+        record.licenseKey,
+        record.productKey,
+        record.createdAt,
+        record.licenseExpiresAt
+      );
+
     const auth: AuthUser = {
       id: account.id,
       email: account.email,
@@ -1133,6 +1152,11 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       roles: account.roles,
       isAdmin: account.isAdmin,
       workspaceId: record.id,
+      licenseKey: storedLic.licenseKey,
+      productKey: storedLic.productKey,
+      tier: storedLic.tier,
+      licenseExpiresAt: storedLic.expiresAt,
+      licenseStatus: storedLic.status,
     };
     setCurrentUser(auth);
     setActiveView('pos');
@@ -1144,7 +1168,7 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       userName: account.name,
       userRole: account.roles[0],
       action,
-      details: `${account.email} signed in to ${record.companyName} only (${account.isAdmin ? 'administrator' : 'team member'}).`,
+      details: `${account.email} signed in to ${record.companyName} (${account.isAdmin ? 'administrator' : 'team member'}). License: ${storedLic.licenseKey}`,
       ipOrDevice: `${navigator.platform || 'Device'} (${navigator.userAgent.slice(0, 32)})`,
     }, ...previous]);
     refreshAccounts();
@@ -1162,9 +1186,18 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     workspaceIdRef.current = record.id;
     setWorkspaceId(record.id);
     writeActiveWorkspaceId(record.id);
+
+    const initialLic = calculateLicenseDetails('free', record.companyName, account.email);
+    saveStoredLicense(record.id, initialLic);
+
     setCurrentUser({
       id: account.id, email: account.email, name: account.name,
       roles: account.roles, isAdmin: true, workspaceId: record.id,
+      licenseKey: initialLic.licenseKey,
+      productKey: initialLic.productKey,
+      tier: initialLic.tier,
+      licenseExpiresAt: initialLic.expiresAt,
+      licenseStatus: initialLic.status,
     });
     setActiveView('pos');
     setLoginModalOpen(false);
@@ -1177,7 +1210,7 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       userName: account.name,
       userRole: account.roles[0],
       action: 'Business Workspace Registered',
-      details: `${record.companyName} created. ${account.email} is the administrator; only this workspace's records are loaded.`,
+      details: `${record.companyName} created. ${account.email} is the administrator. Initial Free license: ${initialLic.licenseKey}`,
       ipOrDevice: `${navigator.platform || 'Device'} (${navigator.userAgent.slice(0, 32)})`,
     }]);
     refreshAccounts();
@@ -1314,6 +1347,56 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return { success: result.success, message: result.message };
   };
 
+  const updateUserLicense = (
+    tier: PlanTier,
+    licenseKey: string,
+    productKey: string,
+    expiresAt: string,
+    gateway: string = 'selar'
+  ) => {
+    const wsId = workspaceIdRef.current || currentUser?.workspaceId || DEFAULT_WORKSPACE_ID;
+    const wsName = workspaceRecord?.companyName || company.name || 'Business Workspace';
+    const adminEmail = currentUser?.email || 'admin@business.com';
+    const status: 'active' | 'grace_period' | 'expired' | 'perpetual' = tier === 'lifetime' ? 'perpetual' : 'active';
+
+    const licDetails = calculateLicenseDetails(
+      tier,
+      wsName,
+      adminEmail,
+      licenseKey,
+      productKey,
+      new Date().toISOString(),
+      expiresAt,
+      gateway === 'gumroad' ? 'gumroad' : 'selar'
+    );
+
+    saveStoredLicense(wsId, licDetails);
+    updateWorkspaceLicense(wsId, {
+      planTier: tier,
+      licenseKey,
+      productKey,
+      licenseExpiresAt: expiresAt,
+      licenseStatus: status,
+    });
+
+    setSettings((prev) => ({ ...prev, planTier: tier }));
+    refreshAccounts();
+
+    setCurrentUser((prev) => prev ? {
+      ...prev,
+      tier,
+      licenseKey,
+      productKey,
+      licenseExpiresAt: expiresAt,
+      licenseStatus: status,
+    } : null);
+
+    logAuditAction(
+      'Updated Workspace Plan & License',
+      `Activated ${tier.toUpperCase()} license (${licenseKey}) via ${gateway}. Product Key: ${productKey}. Expiration: ${expiresAt}`
+    );
+  };
+
   return (
     <POSContext.Provider
       value={{
@@ -1416,6 +1499,7 @@ export const POSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         createTeamLogin,
         updateTeamLogin,
         removeTeamLogin,
+        updateUserLicense,
         companyQAModalOpen,
         setCompanyQAModalOpen,
         hasDismissedCompanyQA,

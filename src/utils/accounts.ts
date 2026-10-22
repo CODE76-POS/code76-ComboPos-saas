@@ -65,6 +65,10 @@ export interface AccountRecord {
   lastLoginAt?: string;
   failedAttempts?: number;
   lockedUntil?: number;
+  licenseKey?: string;
+  productKey?: string;
+  licenseExpiresAt?: string;
+  licenseStatus?: 'active' | 'grace_period' | 'expired' | 'perpetual';
 }
 
 export interface WorkspaceRecord {
@@ -74,12 +78,49 @@ export interface WorkspaceRecord {
   createdAt: string;
   planTier: PlanTier;
   isDemo?: boolean;
+  licenseKey?: string;
+  productKey?: string;
+  licenseExpiresAt?: string;
+  licenseStatus?: 'active' | 'grace_period' | 'expired' | 'perpetual';
 }
 
 export interface AccountStore {
   version: 2;
   workspaces: Record<string, WorkspaceRecord>;
   accounts: Record<string, AccountRecord>;
+}
+
+export function updateWorkspaceLicense(
+  workspaceId: string,
+  updates: {
+    planTier: PlanTier;
+    licenseKey: string;
+    productKey: string;
+    licenseExpiresAt: string;
+    licenseStatus: 'active' | 'grace_period' | 'expired' | 'perpetual';
+  },
+  storage?: StorageLike
+): void {
+  const store = ensureAccountStore(storage);
+  if (store.workspaces[workspaceId]) {
+    store.workspaces[workspaceId] = {
+      ...store.workspaces[workspaceId],
+      ...updates,
+    };
+  }
+  // Also update admin accounts for this workspace
+  for (const email of Object.keys(store.accounts)) {
+    if (store.accounts[email].workspaceId === workspaceId && store.accounts[email].isAdmin) {
+      store.accounts[email] = {
+        ...store.accounts[email],
+        licenseKey: updates.licenseKey,
+        productKey: updates.productKey,
+        licenseExpiresAt: updates.licenseExpiresAt,
+        licenseStatus: updates.licenseStatus,
+      };
+    }
+  }
+  writeStore(store, storage);
 }
 
 export interface SecurityDraft {

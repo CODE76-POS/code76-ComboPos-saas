@@ -527,4 +527,9 @@ export interface AuthUser {
   isAdmin: boolean;
   /** Business workspace this session may read. Data from other workspaces is never loaded. */
   workspaceId?: string;
+  licenseKey?: string;
+  productKey?: string;
+  tier?: PlanTier;
+  licenseExpiresAt?: string;
+  licenseStatus?: 'active' | 'grace_period' | 'expired' | 'perpetual';
 }

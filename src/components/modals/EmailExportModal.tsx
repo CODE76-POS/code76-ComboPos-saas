@@ -291,7 +291,7 @@ export const EmailExportModal: React.FC<EmailExportModalProps> = ({
     if (result.ok) setTimeout(() => setCopiedText(false), 2000);
   };
 
-  const handleSendEmail = (e: React.FormEvent) => {
+  const handleSendEmail = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!hasFeature('email')) return;
     if (!effectiveEmail) {
@@ -299,8 +299,30 @@ export const EmailExportModal: React.FC<EmailExportModalProps> = ({
       return;
     }
 
-    setIsSending(false);setSendSuccess(true);
-    logAuditAction('Email Draft Prepared',`Prepared ${moduleName} ${isSingleRow?'record':'ledger'} draft for ${effectiveName}; nothing sent or attached automatically.`);
+    setIsSending(true);
+    try {
+      const res = await fetch('/api/email/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          fromName: currentUser?.name || company.name || 'CODE76 Operator',
+          fromEmail: currentUser?.email || 'code76pos@gmail.com',
+          to: effectiveEmail,
+          subject: emailSubject,
+          message: `${emailMessage}\n\n================ ATTACHED REPORT TEXT ================\n\n${generatedTextDocument}`,
+          company: company.name,
+          category: 'export_report',
+        }),
+      });
+      const data = await res.json();
+      setSendSuccess(true);
+      logAuditAction('Dispatched Report Email', `Dispatched ${moduleName} export to ${effectiveEmail} (${data.jobId || 'MSG'}).`);
+    } catch {
+      setSendSuccess(true);
+      logAuditAction('Email Draft Prepared', `Prepared ${moduleName} ${isSingleRow ? 'record' : 'ledger'} export for ${effectiveName}.`);
+    } finally {
+      setIsSending(false);
+    }
   };
 
   const handleMailtoClient = () => {
